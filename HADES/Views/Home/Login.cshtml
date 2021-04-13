@@ -1,1 +1,10 @@
-﻿
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
+<div class="loginBG">
+    <div class="container">
+        <h2 class="text-center">@Localizer["Login"]</h2>
+    </div>
+</div>
+
+
