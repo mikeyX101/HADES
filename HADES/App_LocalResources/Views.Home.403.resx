@@ -117,16 +117,19 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Login" xml:space="preserve">
-    <value>Connexion</value>
+  <data name="MSG_403" xml:space="preserve">
+    <value>Vous n'êtes pas autorisé à accéder à la plateforme HADES, si vous croyez que vous devriez avoir accès à la plateforme, contacter votre Administrateur Système.</value>
   </data>
-  <data name="Email" xml:space="preserve">
-    <value>Adresse courriel</value>
+  <data name="MSG_Reason" xml:space="preserve">
+    <value>Raison possibles :</value>
   </data>
-  <data name="Password" xml:space="preserve">
-    <value>Mot de passe</value>
+  <data name="r1" xml:space="preserve">
+    <value>Vous n'avez aucun droit d'administration sur la plateforme HADES.</value>
   </data>
-  <data name="MSG_refusedLogin" xml:space="preserve">
-    <value>Connexion refusée</value>
+  <data name="r2" xml:space="preserve">
+    <value>Vous n'êtes présentement pas propriétaire d'aucun groupe.</value>
+  </data>
+  <data name="r3" xml:space="preserve">
+    <value>Une erreur interne est survenue.</value>
   </data>
 </root>
