@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
-namespace testUML.Models
+namespace HADES.Models
 {
     [Table("UserConfig_UCF")]
     public class UserConfig
@@ -22,13 +22,7 @@ namespace testUML.Models
         public bool Notification { get; set; }
 
 
-        
-        //public int UserID { get; set; }
-        
-        //public int DefaultUserID { get; set; }
-
         public virtual DefaultUser DefaultUser { get; set; }
-        //[ForeignKey("User")]
         public virtual User User { get; set; }
         public virtual ICollection<Email> Emails { get; set; }
     }

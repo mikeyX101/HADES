@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
-namespace testUML.Models
+namespace HADES.Models
 {
     [Table("DefaultUser_DUS")]
     public class DefaultUser
