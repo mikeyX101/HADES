@@ -38,11 +38,11 @@ namespace HADES.Controllers
 
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("Home", "MainPage");
+                    return RedirectToAction("Home", "MainView");
                 }
                 else
                 {
-                    return RedirectToAction("Login", "Account");
+                    return RedirectToAction("LogIn", "Account");
                 }
             }
             ModelState.AddModelError("", Localizer["MSG_Invalid"]);
