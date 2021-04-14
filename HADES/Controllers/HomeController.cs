@@ -25,6 +25,7 @@ namespace HADES.Controllers
         // Returns the Main Application View parameter is the selected Folder
         public IActionResult MainView(/*Folder f*/)
         {
+            // Fill ViewBag with Folders and Groups to display as a TreeSet
             return View();
         }
 

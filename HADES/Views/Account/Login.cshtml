@@ -5,10 +5,10 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 <link rel="stylesheet" href="~/css/login.css" />
-<div class="align-items-center row">
-    <div class="container col">
+<div class="justify-content-sm-center">
+    <div class="container">
         <h2>@Localizer["Login"]</h2>
-
+        <hr />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <form method="post" asp-action="LogIn" asp-route-returnUrl="@Model.ReturnUrl">
             <div class="form-group row">
