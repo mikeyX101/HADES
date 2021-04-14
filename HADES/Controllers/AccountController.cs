@@ -37,7 +37,7 @@ namespace HADES.Controllers
 
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("Login", "Home");
+                    return RedirectToAction("Home", "MainPage");
                 }
                 else
                 {
