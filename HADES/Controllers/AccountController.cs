@@ -19,7 +19,7 @@ namespace HADES.Controllers
             signInManager = signInMngr;
 
             ADManager ad = new ADManager();
-            Console.WriteLine(ad.Validate());
+            Console.WriteLine(ad.getAllUsers());
         }
 
         [HttpGet]
