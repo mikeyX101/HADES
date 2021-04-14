@@ -13,7 +13,7 @@ namespace HADES.Controllers
     {
         private SignInManager<IdentityUser> signInManager;
 
-        public AccountController(SignInManager<IdentityUser> signInMngr, IStringLocalizer<HomeController> localizer) : base(localizer)
+        public AccountController(SignInManager<IdentityUser> signInMngr, IStringLocalizer<AccountController> localizer) : base(localizer)
         {
             signInManager = signInMngr;
         }
@@ -58,7 +58,7 @@ namespace HADES.Controllers
         public async Task<IActionResult> LogOut()
         {
             await signInManager.SignOutAsync();
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("LogIn", "Account");
         }
     }
 }
