@@ -8,7 +8,7 @@
 echo "Generating SSH key for the Github repository..."
 ssh-keygen -q -t rsa -b 4096 -N "" -f ~/.ssh/github_hades_rsa <<< n # Answer no if asking to overwrite
 
-# Allow gcdit to use key on Github in SSH config if file or entry doesn't exist
+# Allow git to use key on Github in SSH config if file or entry doesn't exist
 if ! [ -e ~/.ssh/config ] || ! grep -q "IdentityFile ~/.ssh/github_hades_rsa" ~/.ssh/config; then
 	echo "Modifying user SSH config to allow git to use the SSH key to Github.com..." 
 	# Formatted config
@@ -51,6 +51,12 @@ if [ $ret -ne 0 ]; then
 fi
 
 # Make scripts executable
-chmod 755 ~/hades/HADES/Scripts/*.sh
+chmod 755 ~/hades/Scripts/*.sh
+
+# Opt-out of DotNet telemetry
+if ! grep -q "export DOTNET_CLI_TELEMETRY_OPTOUT=1" ~/.bashrc; then
+	echo $'export DOTNET_CLI_TELEMETRY_OPTOUT=1\n' >> ~/.bashrc
+	source ~/.bashrc
+fi
 
 # Execute migrations
