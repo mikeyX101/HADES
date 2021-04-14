@@ -5,14 +5,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using HADES.Models;
+using Microsoft.Extensions.Localization;
 
 namespace HADES.Controllers
 {
-    public class AccountController : Controller
+    public class AccountController : LocalizedController<AccountController>
     {
         private SignInManager<IdentityUser> signInManager;
 
-        public AccountController(SignInManager<IdentityUser> signInMngr)
+        public AccountController(SignInManager<IdentityUser> signInMngr, IStringLocalizer<HomeController> localizer) : base(localizer)
         {
             signInManager = signInMngr;
         }
@@ -44,7 +45,7 @@ namespace HADES.Controllers
                     return RedirectToAction("Login", "Account");
                 }
             }
-            ModelState.AddModelError("", "Invalid username/password.");
+            ModelState.AddModelError("", Localizer["MSG_Invalid"]);
             return View(model);
         }
 
