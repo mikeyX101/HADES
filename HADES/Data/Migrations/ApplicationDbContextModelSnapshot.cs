@@ -27,18 +27,28 @@ namespace HADES.Data.Migrations
                         .HasColumnName("ADG_id")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("ADG_ACF_id")
-                        .HasColumnType("int");
+                    b.Property<int>("AppConfigId")
+                        .HasColumnType("int")
+                        .HasColumnName("ADG_ACF_id");
 
                     b.Property<string>("SamAccount")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("ADG_sam_account_name");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ADG_ACF_id");
+                    b.HasIndex("AppConfigId");
 
                     b.ToTable("AdminGroup_ADG");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AppConfigId = 1,
+                            SamAccount = "samAdmin"
+                        });
                 });
 
             modelBuilder.Entity("HADES.Models.AppConfig", b =>
@@ -50,6 +60,7 @@ namespace HADES.Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ActiveDirectory")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("ACF_active_directory");
 
@@ -66,6 +77,7 @@ namespace HADES.Data.Migrations
                         .HasColumnName("ACF_company_name");
 
                     b.Property<string>("DefaultLanguage")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("ACF_default_language");
 
@@ -84,6 +96,16 @@ namespace HADES.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("AppConfig_ACF");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ActiveDirectory = "",
+                            DefaultLanguage = "fr",
+                            LogDeleteFrequency = 30,
+                            LogMaxFileSize = 10
+                        });
                 });
 
             modelBuilder.Entity("HADES.Models.DefaultUser", b =>
@@ -94,29 +116,42 @@ namespace HADES.Data.Migrations
                         .HasColumnName("DUS_id")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("DUS_ROL_id")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("DUS_UCF_id")
-                        .HasColumnType("int");
-
                     b.Property<string>("Password")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("DUS_password_hash");
 
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int")
+                        .HasColumnName("DUS_ROL_id");
+
+                    b.Property<int>("UserConfigId")
+                        .HasColumnType("int")
+                        .HasColumnName("DUS_UCF_id");
+
                     b.Property<string>("UserName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("DUS_username");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DUS_ROL_id");
+                    b.HasIndex("RoleId");
 
-                    b.HasIndex("DUS_UCF_id")
-                        .IsUnique()
-                        .HasFilter("[DUS_UCF_id] IS NOT NULL");
+                    b.HasIndex("UserConfigId")
+                        .IsUnique();
 
                     b.ToTable("DefaultUser_DUS");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Password = "password",
+                            RoleId = 1,
+                            UserConfigId = 1,
+                            UserName = "user1"
+                        });
                 });
 
             modelBuilder.Entity("HADES.Models.Email", b =>
@@ -128,20 +163,13 @@ namespace HADES.Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Address")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("EMA_email");
-
-                    b.Property<int?>("EMA_UCF_id")
-                        .HasColumnType("int");
 
                     b.Property<bool>("ExpirationDate")
                         .HasColumnType("bit")
                         .HasColumnName("EMA_expiration_date");
-
-                    b.Property<bool>("GroupAdd")
-                        .ValueGeneratedOnUpdateSometimes()
-                        .HasColumnType("bit")
-                        .HasColumnName("EMA_member_add");
 
                     b.Property<bool>("GroupCreate")
                         .HasColumnType("bit")
@@ -152,7 +180,6 @@ namespace HADES.Data.Migrations
                         .HasColumnName("EMA_group_delete");
 
                     b.Property<bool>("MemberAdd")
-                        .ValueGeneratedOnUpdateSometimes()
                         .HasColumnType("bit")
                         .HasColumnName("EMA_member_add");
 
@@ -160,11 +187,39 @@ namespace HADES.Data.Migrations
                         .HasColumnType("bit")
                         .HasColumnName("EMA_member_remove");
 
+                    b.Property<int>("UserConfigId")
+                        .HasColumnType("int")
+                        .HasColumnName("EMA_UCF_id");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("EMA_UCF_id");
+                    b.HasIndex("UserConfigId");
 
                     b.ToTable("Email_EMA");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Address = "DefaultUser@google.com",
+                            ExpirationDate = true,
+                            GroupCreate = true,
+                            GroupDelete = true,
+                            MemberAdd = true,
+                            MemberRemoval = true,
+                            UserConfigId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Address = "user@google.com",
+                            ExpirationDate = true,
+                            GroupCreate = true,
+                            GroupDelete = true,
+                            MemberAdd = true,
+                            MemberRemoval = true,
+                            UserConfigId = 2
+                        });
                 });
 
             modelBuilder.Entity("HADES.Models.OwnerGroup", b =>
@@ -176,12 +231,20 @@ namespace HADES.Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("SamAccount")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("GRP_sam_account_name");
 
                     b.HasKey("Id");
 
                     b.ToTable("OwnerGroup_GRP");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            SamAccount = "samOwnerGroup"
+                        });
                 });
 
             modelBuilder.Entity("HADES.Models.OwnerGroupUser", b =>
@@ -192,24 +255,34 @@ namespace HADES.Data.Migrations
                         .HasColumnName("GRU_id")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("GRU_GRP_id")
-                        .HasColumnType("int");
+                    b.Property<int>("OwnerGroupId")
+                        .HasColumnType("int")
+                        .HasColumnName("GRU_GRP_id");
 
-                    b.Property<int?>("GRU_USE_id")
-                        .HasColumnType("int");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int")
+                        .HasColumnName("GRU_USE_id");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GRU_GRP_id");
+                    b.HasIndex("OwnerGroupId");
 
-                    b.HasIndex("GRU_USE_id");
+                    b.HasIndex("UserId");
 
                     b.ToTable("OwnerGroupUser_GRU");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            OwnerGroupId = 1,
+                            UserId = 1
+                        });
                 });
 
             modelBuilder.Entity("HADES.Models.Role", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ROL_id")
@@ -232,6 +305,7 @@ namespace HADES.Data.Migrations
                         .HasColumnName("ROL_access_event_log");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("ROL_name");
 
@@ -239,9 +313,21 @@ namespace HADES.Data.Migrations
                         .HasColumnType("bit")
                         .HasColumnName("ROL_access_users_list");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
                     b.ToTable("Role_ROL");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AdCrudAccess = true,
+                            AppConfigAccess = true,
+                            DefineOwner = true,
+                            EventLogAccess = true,
+                            Name = "role1",
+                            UserListAccess = true
+                        });
                 });
 
             modelBuilder.Entity("HADES.Models.SuperAdminGroup", b =>
@@ -252,18 +338,28 @@ namespace HADES.Data.Migrations
                         .HasColumnName("SUG_id")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("SUG_ACF_id")
-                        .HasColumnType("int");
+                    b.Property<int>("AppConfigId")
+                        .HasColumnType("int")
+                        .HasColumnName("SUG_ACF_id");
 
                     b.Property<string>("SamAccount")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("SUG_sam_account_name");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SUG_ACF_id");
+                    b.HasIndex("AppConfigId");
 
                     b.ToTable("SuperAdminGroup_SUG");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AppConfigId = 1,
+                            SamAccount = "samSuperAdmin"
+                        });
                 });
 
             modelBuilder.Entity("HADES.Models.User", b =>
@@ -274,25 +370,36 @@ namespace HADES.Data.Migrations
                         .HasColumnName("USE_id")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int")
+                        .HasColumnName("USE_ROL_id");
+
                     b.Property<string>("SamAccount")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("USE_sam_account_name");
 
-                    b.Property<int?>("USE_ROL_id")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("USE_UCF_id")
-                        .HasColumnType("int");
+                    b.Property<int>("UserConfigId")
+                        .HasColumnType("int")
+                        .HasColumnName("USE_UCF_id");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("USE_ROL_id");
+                    b.HasIndex("RoleId");
 
-                    b.HasIndex("USE_UCF_id")
-                        .IsUnique()
-                        .HasFilter("[USE_UCF_id] IS NOT NULL");
+                    b.HasIndex("UserConfigId")
+                        .IsUnique();
 
                     b.ToTable("User_USE");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            RoleId = 1,
+                            SamAccount = "user2",
+                            UserConfigId = 2
+                        });
                 });
 
             modelBuilder.Entity("HADES.Models.UserConfig", b =>
@@ -304,6 +411,7 @@ namespace HADES.Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Language")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("UCF_language");
 
@@ -312,12 +420,29 @@ namespace HADES.Data.Migrations
                         .HasColumnName("UCF_notification");
 
                     b.Property<string>("ThemeFile")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("UCF_theme_file");
 
                     b.HasKey("Id");
 
                     b.ToTable("UserConfig_UCF");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Language = "fr",
+                            Notification = true,
+                            ThemeFile = "dark"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Language = "fr",
+                            Notification = true,
+                            ThemeFile = "light"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -524,7 +649,9 @@ namespace HADES.Data.Migrations
                 {
                     b.HasOne("HADES.Models.AppConfig", "AppConfig")
                         .WithMany("AdminGroups")
-                        .HasForeignKey("ADG_ACF_id");
+                        .HasForeignKey("AppConfigId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("AppConfig");
                 });
@@ -533,11 +660,15 @@ namespace HADES.Data.Migrations
                 {
                     b.HasOne("HADES.Models.Role", "Role")
                         .WithMany("DefaultUsers")
-                        .HasForeignKey("DUS_ROL_id");
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("HADES.Models.UserConfig", "UserConfig")
                         .WithOne("DefaultUser")
-                        .HasForeignKey("HADES.Models.DefaultUser", "DUS_UCF_id");
+                        .HasForeignKey("HADES.Models.DefaultUser", "UserConfigId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Role");
 
@@ -548,7 +679,9 @@ namespace HADES.Data.Migrations
                 {
                     b.HasOne("HADES.Models.UserConfig", "UserConfig")
                         .WithMany("Emails")
-                        .HasForeignKey("EMA_UCF_id");
+                        .HasForeignKey("UserConfigId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("UserConfig");
                 });
@@ -557,11 +690,15 @@ namespace HADES.Data.Migrations
                 {
                     b.HasOne("HADES.Models.OwnerGroup", "OwnerGroup")
                         .WithMany("OwnerGroupUsers")
-                        .HasForeignKey("GRU_GRP_id");
+                        .HasForeignKey("OwnerGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("HADES.Models.User", "User")
                         .WithMany("OwnerGroupUsers")
-                        .HasForeignKey("GRU_USE_id");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("OwnerGroup");
 
@@ -572,7 +709,9 @@ namespace HADES.Data.Migrations
                 {
                     b.HasOne("HADES.Models.AppConfig", "AppConfig")
                         .WithMany("SuperAdminGroups")
-                        .HasForeignKey("SUG_ACF_id");
+                        .HasForeignKey("AppConfigId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("AppConfig");
                 });
@@ -581,11 +720,15 @@ namespace HADES.Data.Migrations
                 {
                     b.HasOne("HADES.Models.Role", "Role")
                         .WithMany("Users")
-                        .HasForeignKey("USE_ROL_id");
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("HADES.Models.UserConfig", "UserConfig")
                         .WithOne("User")
-                        .HasForeignKey("HADES.Models.User", "USE_UCF_id");
+                        .HasForeignKey("HADES.Models.User", "UserConfigId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Role");
 

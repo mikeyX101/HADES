@@ -36,6 +36,112 @@ namespace HADES.Data
             modelBuilder.Entity<User>().ToTable("User_USE");
             modelBuilder.Entity<UserConfig>().ToTable("UserConfig_UCF");
 
+
+            modelBuilder.Entity<Role>().HasData(new Role
+            {
+                Id = 1,
+                Name = "role1",
+                AppConfigAccess = true,
+                EventLogAccess = true,
+                UserListAccess = true,
+                DefineOwner = true,
+                AdCrudAccess = true
+            }
+            );
+            modelBuilder.Entity<UserConfig>().HasData(new UserConfig
+            {
+                Id = 1,
+                Language = "fr",
+                ThemeFile = "dark",
+                Notification = true
+            },
+            new UserConfig
+            {
+                Id = 2,
+                Language = "fr",
+                ThemeFile = "light",
+                Notification = true
+            });
+
+            modelBuilder.Entity<Email>().HasData(new Email
+            {
+                Id = 1,
+                Address = "DefaultUser@google.com",
+                ExpirationDate = true,
+                GroupCreate = true,
+                GroupDelete = true,
+                MemberRemoval = true,
+                MemberAdd = true,
+                UserConfigId = 1
+            },
+            new Email
+            {
+                Id = 2,
+                Address = "user@google.com",
+                ExpirationDate = true,
+                GroupCreate = true,
+                GroupDelete = true,
+                MemberRemoval = true,
+                MemberAdd = true,
+                UserConfigId = 2
+            });
+
+            modelBuilder.Entity<DefaultUser>().HasData(new DefaultUser
+            {
+                Id = 1,
+                UserName = "user1",
+                Password = "password",
+                RoleId = 1,
+                UserConfigId = 1
+            });
+
+            modelBuilder.Entity<OwnerGroup>().HasData(new OwnerGroup
+            {
+                Id = 1,
+                SamAccount = "samOwnerGroup"
+            });
+
+            modelBuilder.Entity<OwnerGroupUser>().HasData(new OwnerGroupUser
+            {
+                Id = 1,
+                UserId = 1,
+                OwnerGroupId = 1
+            });
+
+            modelBuilder.Entity<User>().HasData(new User
+            {
+                Id = 1,
+                SamAccount = "user2",
+                RoleId = 1,
+                UserConfigId = 2
+            });
+
+            modelBuilder.Entity<AppConfig>().HasData(new AppConfig
+            {
+                Id = 1,
+                ActiveDirectory = "",
+                CompanyName = null,
+                CompanyLogoFile = null,
+                CompanyBackgroundFile = null,
+                DefaultLanguage = "fr",
+                SMTP = null,
+                LogDeleteFrequency = 30,
+                LogMaxFileSize = 10
+            });
+
+            modelBuilder.Entity<SuperAdminGroup>().HasData(new SuperAdminGroup
+            {
+                Id = 1,
+                SamAccount = "samSuperAdmin",
+                AppConfigId = 1
+            });
+
+            modelBuilder.Entity<AdminGroup>().HasData(new AdminGroup
+            {
+                Id = 1,
+                SamAccount = "samAdmin",
+                AppConfigId = 1
+            });
         }
     }
 }
