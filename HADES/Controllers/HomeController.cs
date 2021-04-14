@@ -1,4 +1,5 @@
 ﻿using HADES.Models;
+using HADES.Util;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -14,7 +15,8 @@ namespace HADES.Controllers
 
 		public HomeController()
 		{
-			
+			ADManager ad = new ADManager();
+			Console.WriteLine(ad.Validate());
 		}
 
 		public IActionResult Login()
