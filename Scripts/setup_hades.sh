@@ -58,5 +58,3 @@ if ! grep -q "export DOTNET_CLI_TELEMETRY_OPTOUT=1" ~/.bashrc; then
 	echo $'export DOTNET_CLI_TELEMETRY_OPTOUT=1\n' >> ~/.bashrc
 	source ~/.bashrc
 fi
-
-# Execute migrations
