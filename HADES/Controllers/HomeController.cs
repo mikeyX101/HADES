@@ -17,20 +17,6 @@ namespace HADES.Controllers
 
         }
 
-        // Redirects the User to either the root OU or the Login page depending on the session state.
-        public IActionResult Redirect()
-        {
-            if (true)
-            {
-                return RedirectToAction("Login");
-            }
-            else
-            {
-                return RedirectToAction("MainView");
-            }
-
-        }
-
         public IActionResult Login()
         {
             return View();
