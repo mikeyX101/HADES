@@ -30,13 +30,18 @@ namespace HADES
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
+			services.AddRouting(options => options.LowercaseUrls = true);
+
+			services.AddMemoryCache();
+			services.AddSession();
+
 			services.AddDbContext<ApplicationDbContext>(options =>
 				options.UseSqlServer(
 					Configuration.GetConnectionString("DefaultConnection")));
 			services.AddDatabaseDeveloperPageExceptionFilter();
 
-			services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-				.AddEntityFrameworkStores<ApplicationDbContext>();
+			services.AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<ApplicationDbContext>()
+			  .AddDefaultTokenProviders();
 			services.AddControllersWithViews();
 
 			#region Localization Setup
@@ -108,6 +113,8 @@ namespace HADES
 			app.UseAuthentication();
 			app.UseAuthorization();
 
+			app.UseSession();
+
 			// Apply localization service to app
 			IOptions<RequestLocalizationOptions> options = app.ApplicationServices.GetService<IOptions<RequestLocalizationOptions>>();
 			app.UseRequestLocalization(options.Value);
@@ -119,6 +126,8 @@ namespace HADES
 					pattern: "{controller=Home}/{action=Login}");
 				endpoints.MapRazorPages();
 			});
+
+			ApplicationDbContext.CreateAdminUser(app.ApplicationServices).GetAwaiter().GetResult();
 		}
 	}
 }
