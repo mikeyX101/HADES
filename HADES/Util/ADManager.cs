@@ -26,7 +26,8 @@ namespace HADES.Util
         {
             // Console.WriteLine(authenticate("CN=Etu001,CN=Users,CN=ADLDS,DC=H21-420-6D9-EQ1,DC=lan", "Toto1234!"));
             //Console.WriteLine(getAllUsers());
-            Console.WriteLine(getRoot());
+            //Console.WriteLine(getRoot());
+            //modifyOU("omg", "testOmg");
         }
 
         // Champ dans le formulaire
@@ -69,7 +70,8 @@ namespace HADES.Util
 
 
         //Authenticate the user in the Active Directory
-        public bool authenticate(string username, string password) {
+        public bool authenticate(string username, string password)
+        {
             //Creating an LdapConnection instance
             LdapConnection connection = new LdapConnection();
             try
@@ -89,7 +91,7 @@ namespace HADES.Util
             }
         }
 
-
+        // Get all User from the baseDN in the Active directory
         public List<string> getAllUsers()
         {
             List<string> users = new List<string>();
@@ -97,7 +99,7 @@ namespace HADES.Util
             //Creating an LdapConnection instance
             LdapConnection connection = createConnection();
             LdapSearchResults lsc = (LdapSearchResults)connection.Search(baseDN, LdapConnection.ScopeSub, connectionFilter, null, false);
-            
+
             while (lsc.HasMore())
             {
                 LdapEntry nextEntry = null;
@@ -115,21 +117,21 @@ namespace HADES.Util
 
                 users.Add(nextEntry.Dn);
                 Console.WriteLine("\n" + nextEntry.Dn);
-          
+
                 // This part is to get ALL Attributes of the user
-               /* // Get the attribute set of the entry
-                LdapAttributeSet attributeSet = nextEntry.GetAttributeSet();
-                System.Collections.IEnumerator ienum = attributeSet.GetEnumerator();
+                /* // Get the attribute set of the entry
+                 LdapAttributeSet attributeSet = nextEntry.GetAttributeSet();
+                 System.Collections.IEnumerator ienum = attributeSet.GetEnumerator();
 
-                // Parse through the attribute set to get the attributes and the corresponding values
+                 // Parse through the attribute set to get the attributes and the corresponding values
 
-                while (ienum.MoveNext())
-                {
-                    LdapAttribute attribute = (LdapAttribute)ienum.Current;
-                    string attributeName = attribute.Name;
-                    string attributeVal = attribute.StringValue;
-                    Console.WriteLine(attributeName + "value:" + attributeVal);
-                }*/
+                 while (ienum.MoveNext())
+                 {
+                     LdapAttribute attribute = (LdapAttribute)ienum.Current;
+                     string attributeName = attribute.Name;
+                     string attributeVal = attribute.StringValue;
+                     Console.WriteLine(attributeName + "value:" + attributeVal);
+                 }*/
             }
 
             return users;
@@ -179,5 +181,87 @@ namespace HADES.Util
             }
             return root;
         }
+
+
+        public string createOU(string name)
+        {
+
+            LdapConnection connection = createConnection();
+            try
+            {
+                //Creates the List attributes of the entry and add them to attribute
+                LdapAttributeSet attributeSet = new LdapAttributeSet();
+                attributeSet.Add(new LdapAttribute("objectclass", "container"));
+                attributeSet.Add(new LdapAttribute("CN", name));
+                // DN of the entry to be added
+                string dn = "CN=" + name + "," + rootOU;
+                LdapEntry newEntry = new LdapEntry(dn, attributeSet);
+                //Add the entry to the directory
+                connection.Add(newEntry);
+                return "Folder created !";
+            }
+            catch (Exception e)
+            {
+                return " Cannot create the folder: " + e.Message;
+            }
+        }
+
+        public void modifyOU(string name, string newName )
+        {
+            LdapConnection connection = createConnection();
+
+            List<LdapModification> modList = new List<LdapModification>();
+            
+            // Add a new value to the description attribute
+            LdapAttribute attribute = new LdapAttribute("cn", newName);
+            modList.Add(new LdapModification(LdapModification.Add, attribute));
+
+          
+            LdapModification[] mods = new LdapModification[modList.Count];
+            Type mtype = Type.GetType("Novell.Directory.LdapModification");
+            mods = (LdapModification[])modList.ToArray();
+  
+            string dn = "CN=" + name + "," + rootOU;
+            //Modify the entry in the directory
+            connection.Modify(dn, mods);
+        }
+
+        public void deleteOU()
+        {
+
+        }
+        public string createGroup(string name, string ouName)
+        {
+            LdapConnection connection = createConnection();
+            try
+            {
+                //Creates the List attributes of the entry and add them to attribute
+                LdapAttributeSet attributeSet = new LdapAttributeSet();
+                attributeSet.Add(new LdapAttribute("objectclass", "group"));
+                attributeSet.Add(new LdapAttribute("CN", name));
+                // DN of the entry to be added
+                string dn = "CN=" + name + "," + "CN=" + ouName + "," + rootOU;
+                LdapEntry newEntry = new LdapEntry(dn, attributeSet);
+                //Add the entry to the directory
+                connection.Add(newEntry);
+                return "Group created !";
+            }
+            catch (Exception e) {
+                
+                return "Cannot create the group:" + e.Message;
+            }
+        }
+
+        public void modifyGroup()
+        {
+
+        }
+
+        public void deleteGroup()
+        {
+
+        }
+
+
     }
 }
