@@ -10,6 +10,7 @@ namespace HADES.Models
     [Table("OwnerGroupUser_GRU")]
     public class OwnerGroupUser
     {
+        [Key]
         [Required]
         [Column("GRU_id")]
         public int Id { get; set; }

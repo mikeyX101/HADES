@@ -10,6 +10,7 @@ namespace HADES.Models
     [Table("SuperAdminGroup_SUG")]
     public class SuperAdminGroup
     {
+        [Key]
         [Required]
         [Column("SUG_id")]
         public int Id { get; set; }

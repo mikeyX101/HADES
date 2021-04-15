@@ -10,6 +10,7 @@ namespace HADES.Models
     [Table("UserConfig_UCF")]
     public class UserConfig
     {
+        [Key]
         [Required]
         [Column("UCF_id")]
         public int Id { get; set; }

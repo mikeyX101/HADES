@@ -10,6 +10,7 @@ namespace HADES.Models
     [Table("Role_ROL")]
     public class Role
     {
+        [Key]
         [Required]
         [Column("ROL_id")]
         public int Id { get; set; }

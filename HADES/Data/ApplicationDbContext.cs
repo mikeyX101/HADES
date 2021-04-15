@@ -7,7 +7,7 @@ using HADES.Models;
 
 namespace HADES.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : DbContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -23,9 +23,13 @@ namespace HADES.Data
         public DbSet<User> User { get; set; }
         public DbSet<UserConfig> UserConfig { get; set; }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder options)
+           => options.UseSqlite("Data Source=DBHades.db");
+       
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
+            //base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<AdminGroup>().ToTable("AdminGroup_ADG");
             modelBuilder.Entity<AppConfig>().ToTable("AppConfig_ACF");
             modelBuilder.Entity<DefaultUser>().ToTable("DefaultUser_DUS");

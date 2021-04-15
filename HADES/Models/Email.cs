@@ -10,6 +10,7 @@ namespace HADES.Models
     [Table("Email_EMA")]
     public class Email
     {
+        [Key]
         [Required]
         [Column("EMA_id")]
         public int Id { get; set; }

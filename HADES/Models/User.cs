@@ -10,6 +10,7 @@ namespace HADES.Models
     [Table("User_USE")]
     public class User
     {
+        [Key]
         [Required]
         [Column("USE_id")]
         public int Id { get; set; }

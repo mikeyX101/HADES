@@ -10,6 +10,7 @@ namespace HADES.Models
     [Table("AppConfig_ACF")]
     public class AppConfig
     {
+        [Key]
         [Required]
         [Column("ACF_id")]
         public int Id { get; set; }
