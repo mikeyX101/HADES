@@ -34,6 +34,12 @@ sudo rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-
 echo "Installing dotnet-sdk-5.0... (Requires root, can take some time)"
 sudo yum -y install dotnet-sdk-5.0
 
+# Opt-out of DotNet telemetry
+if ! grep -q "export DOTNET_CLI_TELEMETRY_OPTOUT=1" ~/.bashrc; then
+	echo $'export DOTNET_CLI_TELEMETRY_OPTOUT=1\n' >> ~/.bashrc
+	source ~/.bashrc
+fi
+
 echo "Public key available at: ~/.ssh/github_hades_rsa.pub"
 echo "Public key: "
 cat ~/.ssh/github_hades_rsa.pub
@@ -52,9 +58,3 @@ fi
 
 # Make scripts executable
 chmod 755 ~/hades/Scripts/*.sh
-
-# Opt-out of DotNet telemetry
-if ! grep -q "export DOTNET_CLI_TELEMETRY_OPTOUT=1" ~/.bashrc; then
-	echo $'export DOTNET_CLI_TELEMETRY_OPTOUT=1\n' >> ~/.bashrc
-	source ~/.bashrc
-fi
