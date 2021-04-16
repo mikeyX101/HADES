@@ -105,6 +105,16 @@ namespace HADES
 				// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
 				app.UseHsts();
 			}
+
+			// If production build, run migrations to keep database up-to-date.
+			if (env.IsProduction())
+			{
+				using (IServiceScope scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+				{
+					scope.ServiceProvider.GetRequiredService<ApplicationDbContext>().Database.Migrate();
+				}
+			}
+
 			app.UseHttpsRedirection();
 			app.UseStaticFiles();
 

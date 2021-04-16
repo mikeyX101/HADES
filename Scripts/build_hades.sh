@@ -8,7 +8,4 @@ git pull git@github.com:ShaiLynx/HADES.git ~/hades
 
 dotnet publish ../HADES/HADES.sln -c Release -o ../HADES/bin/Release/publish/
 
-# Execute init migrations (not ready and missing arguments)
-#dotnet ef database update
-
 exit $?
