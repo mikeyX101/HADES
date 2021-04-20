@@ -8,7 +8,7 @@ using System.Web;
 namespace HADES.Models
 {
     [Table("DefaultUser_DUS")]
-    public class DefaultUser
+    public class DefaultUser : IUser
     {
         [Key]
         [Required]
@@ -34,5 +34,30 @@ namespace HADES.Models
 
         public virtual Role Role { get; set; }
         public virtual UserConfig UserConfig { get; set; }
+
+        public OwnerGroup GetGroups()
+        {
+            return null;
+        }
+
+        public int GetId()
+        {
+            return this.Id;
+        }
+
+        public string GetName()
+        {
+            return this.UserName;
+        }
+
+        public Role GetRole()
+        {
+            return this.Role;
+        }
+
+        public UserConfig GetUserConfig()
+        {
+            return this.UserConfig;
+        }
     }
 }
