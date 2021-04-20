@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using HADES.Util.Exceptions;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,9 +20,12 @@ namespace HADES.Util
         }
 
         // Attempts to login
-        // Returns true if the user connecting is a default user, false if the user connecting is an ADUser 
+        // Returns true if the user connecting is a default user, false if the user connecting is an ADUser
+        // Throws ForbiddenException or LoginException
         public bool Login(string user, string password)
         {
+            throw new ForbiddenException();
+            throw new LoginException();
             return true;
         }
     }
