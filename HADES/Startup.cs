@@ -1,9 +1,8 @@
 using HADES.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -34,6 +33,8 @@ namespace HADES
 
 			services.AddMemoryCache();
 			services.AddSession();
+
+			services.AddAuthentication().AddCookie();
 
 			services.AddDbContext<ApplicationDbContext>(options =>
 					options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
@@ -109,6 +110,8 @@ namespace HADES
 			app.UseAuthentication();
 			app.UseAuthorization();
 
+			app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = SameSiteMode.Strict, Secure = CookieSecurePolicy.Always });
+
 			app.UseSession();
 
 			// Apply localization service to app
@@ -123,7 +126,6 @@ namespace HADES
 				endpoints.MapRazorPages();
 			});
 
-			ApplicationDbContext.CreateAdminUser(app.ApplicationServices).GetAwaiter().GetResult();
 		}
 	}
 }

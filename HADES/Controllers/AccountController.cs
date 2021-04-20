@@ -15,9 +15,9 @@ namespace HADES.Controllers
         // The ConnexionUtil used by the controller
         private readonly ConnexionUtil connect;
 
-        public AccountController(SignInManager<IdentityUser> signInMngr, IStringLocalizer<AccountController> localizer) : base(localizer)
+        public AccountController(IStringLocalizer<AccountController> localizer) : base(localizer)
         {
-            connect = new ConnexionUtil(signInMngr);
+            connect = new ConnexionUtil();
 
             ADManager ad = new ADManager();
 
@@ -37,11 +37,9 @@ namespace HADES.Controllers
             {
                 // PasswordSignInAsync() logs in a user and returns an IdentityResult object.
                 // When lockoutOnFailure is set to true, Identity locks the user out if the sign in fails
-                var result = await signInManager.PasswordSignInAsync(
-                    model.Username, model.Password, isPersistent: false,
-                    lockoutOnFailure: false);
+                
 
-                if (result.Succeeded)
+                if (true)
                 {
                     return RedirectToAction("MainView", "Home");
                 }
@@ -62,7 +60,7 @@ namespace HADES.Controllers
         [HttpPost]
         public async Task<IActionResult> LogOut()
         {
-            await signInManager.SignOutAsync();
+            //await signInManager.SignOutAsync();
             return RedirectToAction("LogIn", "Account");
         }
     }

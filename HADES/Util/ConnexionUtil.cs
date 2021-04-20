@@ -1,4 +1,6 @@
-﻿using HADES.Util.Exceptions;
+﻿using HADES.Data;
+using HADES.Models;
+using HADES.Util.Exceptions;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -11,22 +13,20 @@ namespace HADES.Util
     // Updates the model to match the Active Directory User
     public class ConnexionUtil
     {
-        // SignInManager for Identity
-        private SignInManager<IdentityUser> signInMngr;
-
-        public ConnexionUtil(SignInManager<IdentityUser> signInMngr)
+        ApplicationDbContext db;
+        public ConnexionUtil()
         {
-            this.signInMngr = signInMngr;
+            db = new ApplicationDbContext();
         }
 
         // Attempts to login
         // DefaultUser, ActiveDirectory => Check if allowed to Hades
         // Returns true if the user connecting is a default user, false if the user connecting is an ADUser
         // Throws ForbiddenException or LoginException
-        public bool Login(string user, string password)
+        public async Task<bool> Login(string user, string password)
         {
             // Check Default User in BD
-
+            
             if (true)
             {
 

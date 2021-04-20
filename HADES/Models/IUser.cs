@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace HADES.Models
 {
-    interface IUser
+    public interface IUser
     {
         public int GetId();
 
@@ -15,6 +15,6 @@ namespace HADES.Models
 
         public UserConfig GetUserConfig();
 
-        public OwnerGroup GetGroups();
+        public ICollection<OwnerGroupUser> GetGroupsUser();
     }
 }

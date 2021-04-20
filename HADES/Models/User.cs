@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -32,9 +33,9 @@ namespace HADES.Models
         public virtual ICollection<OwnerGroupUser> OwnerGroupUsers { get; set; }
         public virtual UserConfig UserConfig { get; set; }
 
-        public OwnerGroup GetGroups()
+        public ICollection<OwnerGroupUser> GetGroupsUser()
         {
-            throw new NotImplementedException();
+            return this.OwnerGroupUsers;
         }
 
         public int GetId()

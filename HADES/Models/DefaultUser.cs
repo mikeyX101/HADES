@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -35,7 +36,8 @@ namespace HADES.Models
         public virtual Role Role { get; set; }
         public virtual UserConfig UserConfig { get; set; }
 
-        public OwnerGroup GetGroups()
+
+        public ICollection<OwnerGroupUser> GetGroupsUser()
         {
             return null;
         }
