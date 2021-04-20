@@ -36,12 +36,8 @@ namespace HADES
 			services.AddSession();
 
 			services.AddDbContext<ApplicationDbContext>(options =>
-				options.UseSqlServer(
-					Configuration.GetConnectionString("DefaultConnection")));
-			services.AddDatabaseDeveloperPageExceptionFilter();
+					options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
 
-			services.AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<ApplicationDbContext>()
-			  .AddDefaultTokenProviders();
 			services.AddControllersWithViews();
 
 			#region Localization Setup
