@@ -5,7 +5,7 @@
 # Script to pull the latest changes and build HADES
 
 cd ..
-git pull git@github.com:ShaiLynx/HADES.git
+git pull
 
 dotnet publish ./HADES/HADES.sln -c Release -o ./HADES/bin/Release/publish/
 
