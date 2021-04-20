@@ -51,9 +51,9 @@
                         @Localizer["MenuAdministrateur"]
                     </button>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">@Localizer["ParametreApplication"]</a>
-                        <a class="dropdown-item" href="#">@Localizer["JournalEvenements"]</a>
-                        <a class="dropdown-item" href="#">@Localizer["ListeUtilisateurs"]</a>
+                        <a class="dropdown-item" asp-action="Index" asp-controller="AppConfig" asp-area="">@Localizer["ParametreApplication"]</a>
+                        <a class="dropdown-item" asp-action="MainView" asp-controller="Home" asp-area="">@Localizer["JournalEvenements"]</a>
+                        <a class="dropdown-item" asp-action="MainView" asp-controller="Home" asp-area="">@Localizer["ListeUtilisateurs"]</a>
                     </div>
                 </div>
                 <div class="dropdown">
