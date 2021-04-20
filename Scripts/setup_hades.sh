@@ -26,6 +26,13 @@ fi
 echo "Installing git... (Requires root)"
 sudo yum -y install git
 
+# Add Nginx's package repository
+echo "Installing Nginx's package repository... (Requires root)"
+sudo yum -y install epel-release
+
+# Install Nginx (-q)
+echo "Installing Nginx... (Requires root)"
+sudo yum -y install nginx
 
 # Add Microsoft's CentOS 7 package repository (--quiet)
 sudo rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-prod.rpm

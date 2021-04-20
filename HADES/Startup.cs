@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.HttpOverrides;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -43,6 +44,19 @@ namespace HADES
 			services.AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<ApplicationDbContext>()
 			  .AddDefaultTokenProviders();
 			services.AddControllersWithViews();
+
+			#region Reverse Proxy Setup
+			services.Configure<ForwardedHeadersOptions>(options =>
+			{
+				options.ForwardLimit = 1;
+				options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+
+				options.KnownNetworks.Clear();
+				options.KnownProxies.Clear();
+				options.KnownProxies.Add(System.Net.IPAddress.Parse("127.0.0.1"));
+				
+			});
+			#endregion
 
 			#region Localization Setup
 			// Configure localization
@@ -98,10 +112,13 @@ namespace HADES
 			{
 				app.UseDeveloperExceptionPage();
 				app.UseMigrationsEndPoint();
+				app.UseForwardedHeaders();
 			}
 			else
 			{
 				app.UseExceptionHandler("/Home/Error");
+				// UseForwardedHeaders() must be executed before UseHtst().
+				app.UseForwardedHeaders();
 				// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
 				app.UseHsts();
 			}
