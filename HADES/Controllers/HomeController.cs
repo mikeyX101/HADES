@@ -14,21 +14,6 @@ namespace HADES.Controllers
     {
         public HomeController(IStringLocalizer<HomeController> localizer) : base(localizer)
         {
-
-        }
-
-        // Redirects the User to either the root OU or the Login page depending on the session state.
-        public IActionResult Redirect()
-        {
-            if (true)
-            {
-                return RedirectToAction("Login");
-            }
-            else
-            {
-                return RedirectToAction("MainView");
-            }
-
         }
 
         public IActionResult Login()
@@ -39,6 +24,7 @@ namespace HADES.Controllers
         // Returns the Main Application View parameter is the selected Folder
         public IActionResult MainView(/*Folder f*/)
         {
+            // Fill ViewBag with Folders and Groups to display as a TreeSet
             return View();
         }
 

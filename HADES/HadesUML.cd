@@ -1,0 +1,140 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="testUML.Models.AdminGroup">
+    <Position X="14.25" Y="3.75" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAQAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\AdminGroup.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="AppConfig" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="testUML.Models.AppConfig">
+    <Position X="11" Y="0.75" Width="2" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>ABECQABABAAAAEAAAEAgAABAEAAAQAAAAAggAAIJAsA=</HashCode>
+      <FileName>Models\AppConfig.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="AdminGroups" />
+      <Property Name="SuperAdminGroups" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="testUML.Models.DefaultUser">
+    <Position X="8.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAEAAAAAAAAAAAAAACAQQAAgEAAgA=</HashCode>
+      <FileName>Models\DefaultUser.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Role" />
+      <Property Name="UserConfig" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="testUML.Models.Email">
+    <Position X="3.25" Y="4" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAACAAQAkAAEAJEAAAABAAAAQAIAAEACAAQAAAAAAgA=</HashCode>
+      <FileName>Models\Email.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="UserConfig" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="testUML.Models.OwnerGroup">
+    <Position X="0.5" Y="3.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAQAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAwA=</HashCode>
+      <FileName>Models\OwnerGroup.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="OwnerGroupUsers" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="testUML.Models.OwnerGroupUser">
+    <Position X="0.5" Y="0.75" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAADAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAgA=</HashCode>
+      <FileName>Models\OwnerGroupUser.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="User" />
+      <Property Name="OwnerGroup" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="testUML.Models.Role">
+    <Position X="6" Y="0.5" Width="1.75" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAgAGAAAABAgAACAAAAAAQAAAAGEIAAAhCAAAAAAgI=</HashCode>
+      <FileName>Models\Role.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Users" />
+      <Property Name="DefaultUsers" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="testUML.Models.SuperAdminGroup">
+    <Position X="14.5" Y="0.75" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAEAAAAAAEAAAAAAAAAAAAAAAAAAgA=</HashCode>
+      <FileName>Models\SuperAdminGroup.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="AppConfig" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="testUML.Models.User">
+    <Position X="3.5" Y="0.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAQAAAAEEAAAAAAAAAAAAAAAAAQAAAAAAwA=</HashCode>
+      <FileName>Models\User.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Role" />
+      <Property Name="UserConfig" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="OwnerGroupUsers" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="testUML.Models.UserConfig">
+    <Position X="6.5" Y="4.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAjAAAACCAAAAgAAACAAAhAgAAAQAIAAAAAAAAAAgA=</HashCode>
+      <FileName>Models\UserConfig.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="DefaultUser" />
+      <Property Name="User" />
+    </ShowAsAssociation>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
