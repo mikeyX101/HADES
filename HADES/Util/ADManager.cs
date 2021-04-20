@@ -26,7 +26,7 @@ namespace HADES.Util
         public ADManager()
         {
             // Console.WriteLine(authenticate("CN=Etu001,CN=Users,CN=ADLDS,DC=H21-420-6D9-EQ1,DC=lan", "Toto1234!"));
-            Console.WriteLine(createConnection());
+           // Console.WriteLine(createConnection());
             
             //Console.WriteLine(getAllUsers());
            // Console.WriteLine(getRoot());
