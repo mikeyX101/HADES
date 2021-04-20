@@ -20,12 +20,35 @@ namespace HADES.Util
         }
 
         // Attempts to login
+        // DefaultUser, ActiveDirectory => Check if allowed to Hades
         // Returns true if the user connecting is a default user, false if the user connecting is an ADUser
         // Throws ForbiddenException or LoginException
         public bool Login(string user, string password)
         {
-            throw new ForbiddenException();
-            throw new LoginException();
+            // Check Default User in BD
+
+            if (true)
+            {
+
+            }
+            else if (true)
+            {
+                // Check Active Directory
+
+                if (true)
+                {
+                    //Check Allowed in HADES
+                }
+                else
+                {
+                    throw new ForbiddenException();
+                }
+            }
+            else
+            {
+                throw new LoginException();
+            }
+
             return true;
         }
     }
