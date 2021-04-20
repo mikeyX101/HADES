@@ -1,0 +1,21 @@
+﻿body {
+    background-image: url("../img/background.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100%;
+    background-position: center;
+}
+
+.center-screen-absolute {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    top: 50%;
+    bottom: 50%;
+    background-image: linear-gradient(lightgrey,grey);
+    border-radius : 8px;
+    border : 5px solid white;
+    width : 50%;
+}

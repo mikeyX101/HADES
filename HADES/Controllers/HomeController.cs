@@ -1,5 +1,6 @@
 ﻿using HADES.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -9,29 +10,23 @@ using System.Threading.Tasks;
 
 namespace HADES.Controllers
 {
-	public class HomeController : Controller
-	{
-		private readonly ILogger<HomeController> _logger;
+    public class HomeController : LocalizedController<HomeController>
+    {
+        public HomeController(IStringLocalizer<HomeController> localizer) : base(localizer)
+        {
+        }
 
-		public HomeController(ILogger<HomeController> logger)
-		{
-			_logger = logger;
-		}
+        public IActionResult Login()
+        {
+            return View();
+        }
 
-		public IActionResult Index()
-		{
-			return View();
-		}
+        // Returns the Main Application View parameter is the selected Folder
+        public IActionResult MainView(/*Folder f*/)
+        {
+            // Fill ViewBag with Folders and Groups to display as a TreeSet
+            return View();
+        }
 
-		public IActionResult Privacy()
-		{
-			return View();
-		}
-
-		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-		public IActionResult Error()
-		{
-			return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-		}
-	}
+    }
 }

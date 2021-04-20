@@ -1,0 +1,37 @@
+﻿To change locale to debug, add a query string called "l" and specify the locale.
+ex:
+	<url>?l=en-US
+
+Local Resources:
+
+	In views:
+
+		@using Microsoft.AspNetCore.Mvc.Localization
+		@inject IViewLocalizer Localizer
+
+		@Localizer[<key_name>]
+
+
+	In controllers: 
+
+		Make sure your controller extends our BaseController and localizer is passed to BaseController
+		ex:
+
+			public class MyController : BaseController<HomeController>
+			{
+				public MyController(<...>, IStringLocalizer<HomeController> localizer) : base(localizer)
+			}
+
+		To get localized strings, use the Localizer:
+
+			string myString = Localizer["key_name"];
+
+Global Resources:
+	Accessible in the HADES.Strings class
+
+	In razor:
+		@HADES.Strings.<key_name>
+	In controllers/code:
+		string myString = HADES.Strings.<key_name>
+
+Test branche romain sourcetree
