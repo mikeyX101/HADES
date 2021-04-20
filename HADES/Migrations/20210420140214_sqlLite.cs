@@ -2,28 +2,27 @@
 
 namespace HADES.Migrations
 {
-    public partial class sqliteMigration : Migration
+    public partial class sqlLite : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "AppConfig_ACF",
+                name: "ActiveDirectory_ADR",
                 columns: table => new
                 {
-                    ACF_id = table.Column<int>(type: "INTEGER", nullable: false)
+                    ADR_id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    ACF_active_directory = table.Column<string>(type: "TEXT", nullable: false),
-                    ACF_company_name = table.Column<string>(type: "TEXT", nullable: true),
-                    ACF_company_logo_file = table.Column<string>(type: "TEXT", nullable: true),
-                    ACF_company_background_file = table.Column<string>(type: "TEXT", nullable: true),
-                    ACF_default_language = table.Column<string>(type: "TEXT", nullable: false),
-                    ACF_SMTP = table.Column<string>(type: "TEXT", nullable: true),
-                    ACF_log_delete_frequency = table.Column<int>(type: "INTEGER", nullable: false),
-                    ACF_log_max_file_size = table.Column<int>(type: "INTEGER", nullable: false)
+                    ADR_port_number = table.Column<int>(type: "INTEGER", nullable: false),
+                    ADR_server_address = table.Column<string>(type: "TEXT", nullable: false),
+                    ADR_connection_filter = table.Column<string>(type: "TEXT", nullable: false),
+                    ADR_base_dn = table.Column<string>(type: "TEXT", nullable: false),
+                    ADR_account_dn = table.Column<string>(type: "TEXT", nullable: false),
+                    ADR_password_dn = table.Column<string>(type: "TEXT", nullable: false),
+                    ADR_sync_field = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AppConfig_ACF", x => x.ACF_id);
+                    table.PrimaryKey("PK_ActiveDirectory_ADR", x => x.ADR_id);
                 });
 
             migrationBuilder.CreateTable(
@@ -73,42 +72,28 @@ namespace HADES.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AdminGroup_ADG",
+                name: "AppConfig_ACF",
                 columns: table => new
                 {
-                    ADG_id = table.Column<int>(type: "INTEGER", nullable: false)
+                    ACF_id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    ADG_sam_account_name = table.Column<string>(type: "TEXT", nullable: false),
-                    ADG_ACF_id = table.Column<int>(type: "INTEGER", nullable: false)
+                    ACF_company_name = table.Column<string>(type: "TEXT", nullable: true),
+                    ACF_company_logo_file = table.Column<string>(type: "TEXT", nullable: true),
+                    ACF_company_background_file = table.Column<string>(type: "TEXT", nullable: true),
+                    ACF_default_language = table.Column<string>(type: "TEXT", nullable: false),
+                    ACF_SMTP = table.Column<string>(type: "TEXT", nullable: true),
+                    ACF_log_delete_frequency = table.Column<int>(type: "INTEGER", nullable: false),
+                    ACF_log_max_file_size = table.Column<int>(type: "INTEGER", nullable: false),
+                    ACF_ADR_id = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AdminGroup_ADG", x => x.ADG_id);
+                    table.PrimaryKey("PK_AppConfig_ACF", x => x.ACF_id);
                     table.ForeignKey(
-                        name: "FK_AdminGroup_ADG_AppConfig_ACF_ADG_ACF_id",
-                        column: x => x.ADG_ACF_id,
-                        principalTable: "AppConfig_ACF",
-                        principalColumn: "ACF_id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "SuperAdminGroup_SUG",
-                columns: table => new
-                {
-                    SUG_id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    SUG_sam_account_name = table.Column<string>(type: "TEXT", nullable: false),
-                    SUG_ACF_id = table.Column<int>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SuperAdminGroup_SUG", x => x.SUG_id);
-                    table.ForeignKey(
-                        name: "FK_SuperAdminGroup_SUG_AppConfig_ACF_SUG_ACF_id",
-                        column: x => x.SUG_ACF_id,
-                        principalTable: "AppConfig_ACF",
-                        principalColumn: "ACF_id",
+                        name: "FK_AppConfig_ACF_ActiveDirectory_ADR_ACF_ADR_id",
+                        column: x => x.ACF_ADR_id,
+                        principalTable: "ActiveDirectory_ADR",
+                        principalColumn: "ADR_id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -193,6 +178,46 @@ namespace HADES.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AdminGroup_ADG",
+                columns: table => new
+                {
+                    ADG_id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    ADG_sam_account_name = table.Column<string>(type: "TEXT", nullable: false),
+                    ADG_ACF_id = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AdminGroup_ADG", x => x.ADG_id);
+                    table.ForeignKey(
+                        name: "FK_AdminGroup_ADG_AppConfig_ACF_ADG_ACF_id",
+                        column: x => x.ADG_ACF_id,
+                        principalTable: "AppConfig_ACF",
+                        principalColumn: "ACF_id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SuperAdminGroup_SUG",
+                columns: table => new
+                {
+                    SUG_id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    SUG_sam_account_name = table.Column<string>(type: "TEXT", nullable: false),
+                    SUG_ACF_id = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SuperAdminGroup_SUG", x => x.SUG_id);
+                    table.ForeignKey(
+                        name: "FK_SuperAdminGroup_SUG_AppConfig_ACF_SUG_ACF_id",
+                        column: x => x.SUG_ACF_id,
+                        principalTable: "AppConfig_ACF",
+                        principalColumn: "ACF_id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "OwnerGroupUser_GRU",
                 columns: table => new
                 {
@@ -218,70 +243,16 @@ namespace HADES.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.InsertData(
-                table: "AppConfig_ACF",
-                columns: new[] { "ACF_id", "ACF_active_directory", "ACF_company_background_file", "ACF_company_logo_file", "ACF_company_name", "ACF_default_language", "ACF_log_delete_frequency", "ACF_log_max_file_size", "ACF_SMTP" },
-                values: new object[] { 1, "", null, null, null, "fr", 30, 10, null });
-
-            migrationBuilder.InsertData(
-                table: "OwnerGroup_GRP",
-                columns: new[] { "GRP_id", "GRP_sam_account_name" },
-                values: new object[] { 1, "samOwnerGroup" });
-
-            migrationBuilder.InsertData(
-                table: "Role_ROL",
-                columns: new[] { "ROL_id", "ROL_access_ad_crud", "ROL_access_app_config", "ROL_define_owner", "ROL_access_event_log", "ROL_name", "ROL_access_users_list" },
-                values: new object[] { 1, true, true, true, true, "role1", true });
-
-            migrationBuilder.InsertData(
-                table: "UserConfig_UCF",
-                columns: new[] { "UCF_id", "UCF_language", "UCF_notification", "UCF_theme_file" },
-                values: new object[] { 1, "fr", true, "dark" });
-
-            migrationBuilder.InsertData(
-                table: "UserConfig_UCF",
-                columns: new[] { "UCF_id", "UCF_language", "UCF_notification", "UCF_theme_file" },
-                values: new object[] { 2, "fr", true, "light" });
-
-            migrationBuilder.InsertData(
-                table: "AdminGroup_ADG",
-                columns: new[] { "ADG_id", "ADG_ACF_id", "ADG_sam_account_name" },
-                values: new object[] { 1, 1, "samAdmin" });
-
-            migrationBuilder.InsertData(
-                table: "DefaultUser_DUS",
-                columns: new[] { "DUS_id", "DUS_password_hash", "DUS_ROL_id", "DUS_UCF_id", "DUS_username" },
-                values: new object[] { 1, "password", 1, 1, "user1" });
-
-            migrationBuilder.InsertData(
-                table: "Email_EMA",
-                columns: new[] { "EMA_id", "EMA_email", "EMA_expiration_date", "EMA_group_create", "EMA_group_delete", "EMA_member_add", "EMA_member_remove", "EMA_UCF_id" },
-                values: new object[] { 1, "DefaultUser@google.com", true, true, true, true, true, 1 });
-
-            migrationBuilder.InsertData(
-                table: "Email_EMA",
-                columns: new[] { "EMA_id", "EMA_email", "EMA_expiration_date", "EMA_group_create", "EMA_group_delete", "EMA_member_add", "EMA_member_remove", "EMA_UCF_id" },
-                values: new object[] { 2, "user@google.com", true, true, true, true, true, 2 });
-
-            migrationBuilder.InsertData(
-                table: "SuperAdminGroup_SUG",
-                columns: new[] { "SUG_id", "SUG_ACF_id", "SUG_sam_account_name" },
-                values: new object[] { 1, 1, "samSuperAdmin" });
-
-            migrationBuilder.InsertData(
-                table: "User_USE",
-                columns: new[] { "USE_id", "USE_ROL_id", "USE_sam_account_name", "USE_UCF_id" },
-                values: new object[] { 1, 1, "user2", 2 });
-
-            migrationBuilder.InsertData(
-                table: "OwnerGroupUser_GRU",
-                columns: new[] { "GRU_id", "GRU_GRP_id", "GRU_USE_id" },
-                values: new object[] { 1, 1, 1 });
-
             migrationBuilder.CreateIndex(
                 name: "IX_AdminGroup_ADG_ADG_ACF_id",
                 table: "AdminGroup_ADG",
                 column: "ADG_ACF_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AppConfig_ACF_ACF_ADR_id",
+                table: "AppConfig_ACF",
+                column: "ACF_ADR_id",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_DefaultUser_DUS_DUS_ROL_id",
@@ -357,6 +328,9 @@ namespace HADES.Migrations
 
             migrationBuilder.DropTable(
                 name: "UserConfig_UCF");
+
+            migrationBuilder.DropTable(
+                name: "ActiveDirectory_ADR");
         }
     }
 }

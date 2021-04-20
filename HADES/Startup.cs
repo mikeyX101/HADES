@@ -20,7 +20,6 @@ namespace HADES
 		public Startup(IConfiguration configuration)
 		{
 			Configuration = configuration;
-
 		}
 
 		public IConfiguration Configuration { get; }
@@ -31,14 +30,6 @@ namespace HADES
 			services.AddDbContext<ApplicationDbContext>(options =>
 					options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
 
-            //services.AddDbContext<ApplicationDbContext>(options =>
-            //	//options.UseSqlServer(
-            //	options.UseSqlite(
-            //		Configuration.GetConnectionString("ApplicationDbContext")));
-            //services.AddDatabaseDeveloperPageExceptionFilter();
-
-    //        services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-				//.AddEntityFrameworkStores<ApplicationDbContext>();
 			services.AddControllersWithViews();
 		}
 

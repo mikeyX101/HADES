@@ -8,14 +8,60 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HADES.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210415174945_sqliteMigration")]
-    partial class sqliteMigration
+    [Migration("20210420140214_sqlLite")]
+    partial class sqlLite
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "5.0.5");
+
+            modelBuilder.Entity("HADES.Models.ActiveDirectory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("ADR_id");
+
+                    b.Property<string>("AccountDN")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("ADR_account_dn");
+
+                    b.Property<string>("BaseDN")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("ADR_base_dn");
+
+                    b.Property<string>("ConnectionFilter")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("ADR_connection_filter");
+
+                    b.Property<string>("PasswordDN")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("ADR_password_dn");
+
+                    b.Property<int>("PortNumber")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("ADR_port_number");
+
+                    b.Property<string>("ServerAddress")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("ADR_server_address");
+
+                    b.Property<string>("SyncField")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("ADR_sync_field");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ActiveDirectory_ADR");
+                });
 
             modelBuilder.Entity("HADES.Models.AdminGroup", b =>
                 {
@@ -38,14 +84,6 @@ namespace HADES.Migrations
                     b.HasIndex("AppConfigId");
 
                     b.ToTable("AdminGroup_ADG");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            AppConfigId = 1,
-                            SamAccount = "samAdmin"
-                        });
                 });
 
             modelBuilder.Entity("HADES.Models.AppConfig", b =>
@@ -55,10 +93,9 @@ namespace HADES.Migrations
                         .HasColumnType("INTEGER")
                         .HasColumnName("ACF_id");
 
-                    b.Property<string>("ActiveDirectory")
-                        .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasColumnName("ACF_active_directory");
+                    b.Property<int>("ActiveDirectoryId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("ACF_ADR_id");
 
                     b.Property<string>("CompanyBackgroundFile")
                         .HasColumnType("TEXT")
@@ -91,17 +128,10 @@ namespace HADES.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AppConfig_ACF");
+                    b.HasIndex("ActiveDirectoryId")
+                        .IsUnique();
 
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            ActiveDirectory = "",
-                            DefaultLanguage = "fr",
-                            LogDeleteFrequency = 30,
-                            LogMaxFileSize = 10
-                        });
+                    b.ToTable("AppConfig_ACF");
                 });
 
             modelBuilder.Entity("HADES.Models.DefaultUser", b =>
@@ -137,16 +167,6 @@ namespace HADES.Migrations
                         .IsUnique();
 
                     b.ToTable("DefaultUser_DUS");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Password = "password",
-                            RoleId = 1,
-                            UserConfigId = 1,
-                            UserName = "user1"
-                        });
                 });
 
             modelBuilder.Entity("HADES.Models.Email", b =>
@@ -190,30 +210,6 @@ namespace HADES.Migrations
                     b.HasIndex("UserConfigId");
 
                     b.ToTable("Email_EMA");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Address = "DefaultUser@google.com",
-                            ExpirationDate = true,
-                            GroupCreate = true,
-                            GroupDelete = true,
-                            MemberAdd = true,
-                            MemberRemoval = true,
-                            UserConfigId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Address = "user@google.com",
-                            ExpirationDate = true,
-                            GroupCreate = true,
-                            GroupDelete = true,
-                            MemberAdd = true,
-                            MemberRemoval = true,
-                            UserConfigId = 2
-                        });
                 });
 
             modelBuilder.Entity("HADES.Models.OwnerGroup", b =>
@@ -231,13 +227,6 @@ namespace HADES.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("OwnerGroup_GRP");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            SamAccount = "samOwnerGroup"
-                        });
                 });
 
             modelBuilder.Entity("HADES.Models.OwnerGroupUser", b =>
@@ -262,14 +251,6 @@ namespace HADES.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("OwnerGroupUser_GRU");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            OwnerGroupId = 1,
-                            UserId = 1
-                        });
                 });
 
             modelBuilder.Entity("HADES.Models.Role", b =>
@@ -307,18 +288,6 @@ namespace HADES.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Role_ROL");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            AdCrudAccess = true,
-                            AppConfigAccess = true,
-                            DefineOwner = true,
-                            EventLogAccess = true,
-                            Name = "role1",
-                            UserListAccess = true
-                        });
                 });
 
             modelBuilder.Entity("HADES.Models.SuperAdminGroup", b =>
@@ -342,14 +311,6 @@ namespace HADES.Migrations
                     b.HasIndex("AppConfigId");
 
                     b.ToTable("SuperAdminGroup_SUG");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            AppConfigId = 1,
-                            SamAccount = "samSuperAdmin"
-                        });
                 });
 
             modelBuilder.Entity("HADES.Models.User", b =>
@@ -380,15 +341,6 @@ namespace HADES.Migrations
                         .IsUnique();
 
                     b.ToTable("User_USE");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            RoleId = 1,
-                            SamAccount = "user2",
-                            UserConfigId = 2
-                        });
                 });
 
             modelBuilder.Entity("HADES.Models.UserConfig", b =>
@@ -415,22 +367,6 @@ namespace HADES.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("UserConfig_UCF");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Language = "fr",
-                            Notification = true,
-                            ThemeFile = "dark"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Language = "fr",
-                            Notification = true,
-                            ThemeFile = "light"
-                        });
                 });
 
             modelBuilder.Entity("HADES.Models.AdminGroup", b =>
@@ -442,6 +378,17 @@ namespace HADES.Migrations
                         .IsRequired();
 
                     b.Navigation("AppConfig");
+                });
+
+            modelBuilder.Entity("HADES.Models.AppConfig", b =>
+                {
+                    b.HasOne("HADES.Models.ActiveDirectory", "ActiveDirectory")
+                        .WithOne("AppConfig")
+                        .HasForeignKey("HADES.Models.AppConfig", "ActiveDirectoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ActiveDirectory");
                 });
 
             modelBuilder.Entity("HADES.Models.DefaultUser", b =>
@@ -521,6 +468,11 @@ namespace HADES.Migrations
                     b.Navigation("Role");
 
                     b.Navigation("UserConfig");
+                });
+
+            modelBuilder.Entity("HADES.Models.ActiveDirectory", b =>
+                {
+                    b.Navigation("AppConfig");
                 });
 
             modelBuilder.Entity("HADES.Models.AppConfig", b =>
