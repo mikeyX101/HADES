@@ -1,10 +1,12 @@
 ﻿@model LoginViewModel
 @{
     ViewBag.Title = "Login";
+    Layout = "_LayoutLogin";
 }
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 <link rel="stylesheet" href="~/css/login.css" />
+
 <div class="container center-screen-absolute">
     <div class="col text-center align-items-center">
         <h2>@Localizer["Login"]</h2>
