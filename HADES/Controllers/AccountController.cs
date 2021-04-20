@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using HADES.Models;
 using Microsoft.Extensions.Localization;
 using HADES.Util;
+using HADES.Util.Exceptions;
 
 namespace HADES.Controllers
 {
@@ -35,21 +36,37 @@ namespace HADES.Controllers
         {
             if (ModelState.IsValid)
             {
-                // PasswordSignInAsync() logs in a user and returns an IdentityResult object.
-                // When lockoutOnFailure is set to true, Identity locks the user out if the sign in fails
-                
+                try
+                {
+                    if (await connect.Login(model.Username, model.Password))
+                    {
+                        Console.WriteLine(model.Username.ToLower() + " CONNECTED"); // Change this by log
+                        return RedirectToAction("MainView", "Home");
+                    }
+                    else
+                    {
+                        Console.WriteLine("DEFAULT USER CONNECTED"); // Change this by log
+                        return RedirectToAction("MainView", "Home");
+                    }
 
-                if (true)
-                {
-                    return RedirectToAction("MainView", "Home");
                 }
-                else
+                catch (ForbiddenException)
                 {
-                    return RedirectToAction("LogIn", "Account");
+                    return RedirectToAction("AccessDenied", "Account");
                 }
+                catch (LoginException)
+                {
+                    ModelState.AddModelError("", Localizer["MSG_Invalid"]);
+                    return View(model);
+                }
+
             }
-            ModelState.AddModelError("", Localizer["MSG_Invalid"]);
-            return View(model);
+            else
+            {
+                ModelState.AddModelError("", Localizer["MSG_Invalid"]);
+                return View(model);
+            }
+
         }
 
         public ViewResult AccessDenied()

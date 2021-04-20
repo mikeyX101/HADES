@@ -14,6 +14,8 @@ namespace HADES.Util
     public class ConnexionUtil
     {
         ApplicationDbContext db;
+
+        ADManager aDManager;
         public ConnexionUtil()
         {
             db = new ApplicationDbContext();
@@ -26,18 +28,19 @@ namespace HADES.Util
         public async Task<bool> Login(string user, string password)
         {
             // Check Default User in BD
-            
+
             if (true)
             {
-
+                return false;
             }
-            else if (true)
+            else if (this.aDManager.authenticate(user,password))
             {
                 // Check Active Directory
 
                 if (true)
                 {
                     //Check Allowed in HADES
+                    return true;
                 }
                 else
                 {
@@ -48,8 +51,6 @@ namespace HADES.Util
             {
                 throw new LoginException();
             }
-
-            return true;
         }
     }
 
