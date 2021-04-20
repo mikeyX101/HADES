@@ -128,6 +128,25 @@ namespace HADES
 				}
 			}
 
+			app.Use(async (context, next) =>
+			{
+				// Request method, scheme, and path
+				Console.WriteLine("Request Method: {0}", context.Request.Method);
+				Console.WriteLine("Request Scheme: {0}", context.Request.Scheme);
+				Console.WriteLine("Request Path: {0}", context.Request.Path);
+
+				// Headers
+				foreach (var header in context.Request.Headers)
+				{
+					Console.WriteLine("Header: {0}: {1}", header.Key, header.Value);
+				}
+
+				// Connection: RemoteIp
+				Console.WriteLine("Request RemoteIp: {0}", context.Connection.RemoteIpAddress);
+
+				await next();
+			});
+
 			app.UseHttpsRedirection();
 			app.UseStaticFiles();
 
@@ -150,7 +169,7 @@ namespace HADES
 				endpoints.MapRazorPages();
 			});
 
-			ApplicationDbContext.CreateAdminUser(app.ApplicationServices).GetAwaiter().GetResult();
+			//ApplicationDbContext.CreateAdminUser(app.ApplicationServices).GetAwaiter().GetResult();
 		}
 	}
 }

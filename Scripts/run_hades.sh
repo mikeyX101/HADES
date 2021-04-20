@@ -4,5 +4,6 @@
 # Tested on CentOS 7.9.2009
 # Script to run HADES
 
-dotnet ../HADES/bin/Release/publish/HADES.dll
+cd ../HADES/bin/Release/publish/
+dotnet ./HADES.dll
 exit $?
