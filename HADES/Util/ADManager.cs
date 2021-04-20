@@ -14,7 +14,7 @@ namespace HADES.Util
         private const string accountDn = "CN=hades,CN=Users,DC=R991-AD,DC=lan";
         private const string passwordDn = "Toto123!";
         private string connectionFilter = "(&(objectClass=user)(objectCategory=person))";
-        private string rootOU = "CN-hades,CN=Users,DC=R991-AD,DC=lan";
+        private string rootOU = "OU=hades_root,DC=R991-AD,DC=lan";
 
         //Client Side
         //private const string server = "bkomstudios.com";
@@ -25,13 +25,15 @@ namespace HADES.Util
         //https://www.novell.com/documentation/developer/ldapcsharp/?page=/documentation/developer/ldapcsharp/cnet/data/bovumfi.html
         public ADManager()
         {
-            // Console.WriteLine(authenticate("hades", "Toto123!"));
-           // Console.WriteLine(createConnection());
-           
-            
-            //Console.WriteLine(getAllUsers());
-           // Console.WriteLine(getRoot());
-           //modifyOU("omg", "testOmg");
+            //Console.WriteLine(authenticate("hades", "Toto123!"));
+            //Console.WriteLine(createConnection());
+            // Console.WriteLine(getAllUsers());
+
+            List<string[]> root = getRoot();
+            Console.WriteLine(root.Count);
+            for (int i = 0; i < root.Count; i++) {
+                Console.WriteLine(root[i][0] + "      " + root[i][1] + "      " + root[i][2]);
+            }
         }
 
         // Champ dans le formulaire
@@ -80,8 +82,7 @@ namespace HADES.Util
         }
 
       
-        //Authenticate the user in the Active Directory change to authenticate with the SamAccountName(connectionFilter)
-        //https://nicolas.guelpa.me/blog/2017/02/15/dotnet-core-ldap-authentication.html
+        //Authenticate the user in the Active Directory 
         public bool authenticate(string username, string password)
         {
             //Creating an LdapConnection instance
@@ -114,11 +115,11 @@ namespace HADES.Util
                         Console.WriteLine("\n" + nextEntry.Dn);
                         userDN = nextEntry.Dn;
                         userWasFound = true;
-                    }
-                    
+                    } 
                 }
 
                 connection.Disconnect();
+
                 if (userWasFound) { 
         
                     connection = createConnection(username,password);
@@ -165,29 +166,15 @@ namespace HADES.Util
                 users.Add(nextEntry.Dn);
                 Console.WriteLine("\n" + nextEntry.Dn);
 
-                // This part is to get ALL Attributes of the user
-                /* // Get the attribute set of the entry
-                 LdapAttributeSet attributeSet = nextEntry.GetAttributeSet();
-                 System.Collections.IEnumerator ienum = attributeSet.GetEnumerator();
-
-                 // Parse through the attribute set to get the attributes and the corresponding values
-
-                 while (ienum.MoveNext())
-                 {
-                     LdapAttribute attribute = (LdapAttribute)ienum.Current;
-                     string attributeName = attribute.Name;
-                     string attributeVal = attribute.StringValue;
-                     Console.WriteLine(attributeName + "value:" + attributeVal);
-                 }*/
             }
 
             return users;
         }
 
         // Get all the OU and the Groups from the root 
-        public List<string> getRoot()
+        public List<string[]> getRoot()
         {
-            List<string> root = new List<string>();
+            List<string[]> root = new List<string[]>();
 
             //Creating an LdapConnection instance
             LdapConnection connection = createConnection();
@@ -195,6 +182,8 @@ namespace HADES.Util
 
             while (lsc.HasMore())
             {
+                string[] data = new string[3]; 
+
                 LdapEntry nextEntry = null;
                 try
                 {
@@ -202,30 +191,38 @@ namespace HADES.Util
                 }
                 catch (LdapException e)
                 {
-
                     Console.WriteLine("Error: " + e.LdapErrorMessage);
                     //Exception is thrown, go for next entry
                     continue;
                 }
 
-                Console.WriteLine("\n" + nextEntry.Dn);
-                root.Add(nextEntry.Dn);
+                // TYPE
+                LdapAttribute att = nextEntry.GetAttribute("objectClass");
+                if (att.ToString().Contains("group")) {
+                    data[0] = "group";
 
-                // This part is to get ALL Attributes of the user
-                // Get the attribute set of the entry
-                /* LdapAttributeSet attributeSet = nextEntry.GetAttributeSet();
-                 System.Collections.IEnumerator ienum = attributeSet.GetEnumerator();
+                } else if (att.ToString().Contains("organizationalUnit")) {
+                    data[0] = "ou";
+                }
 
-                 //Parse through the attribute set to get the attributes and the corresponding values
+                // PATH OF THE OBJECT
+                string[] path = nextEntry.Dn.Split(',');
+                for (int i = path.Length-1; i>= 0 ; i--) {
+                    if (path[i].Contains("DC=") || path[i].Contains("OU="+ nextEntry.GetAttribute("name").StringValue) || path[i].Contains("CN=" + nextEntry.GetAttribute("name").StringValue)) {
+                        path[i] = null;
+                    }
 
-                 while (ienum.MoveNext())
-                 {
-                     LdapAttribute attribute = (LdapAttribute)ienum.Current;
-                     string attributeName = attribute.Name;
-                     string attributeVal = attribute.StringValue;
-                     Console.WriteLine(attributeName + "value:" + attributeVal);
-                 }*/
+                    if (path[i] != null) { 
+                           data[1] += "/" + path[i].Split("=")[1];
+                    }
+                }
+         
+                //NAME
+                data[2] = nextEntry.GetAttribute("name").StringValue;
+                root.Add(data);
             }
+
+            connection.Disconnect();
             return root;
         }
 
@@ -238,10 +235,10 @@ namespace HADES.Util
             {
                 //Creates the List attributes of the entry and add them to attribute
                 LdapAttributeSet attributeSet = new LdapAttributeSet();
-                attributeSet.Add(new LdapAttribute("objectclass", "container"));
-                attributeSet.Add(new LdapAttribute("CN", name));
+                attributeSet.Add(new LdapAttribute("objectclass", "organizationalunit"));
+                attributeSet.Add(new LdapAttribute("OU", name));
                 // DN of the entry to be added
-                string dn = "CN=" + name + "," + rootOU;
+                string dn = "OU=" + name + "," + rootOU;
                 LdapEntry newEntry = new LdapEntry(dn, attributeSet);
                 //Add the entry to the directory
                 connection.Add(newEntry);
@@ -260,7 +257,7 @@ namespace HADES.Util
             List<LdapModification> modList = new List<LdapModification>();
             
             // Add a new value to the description attribute
-            LdapAttribute attribute = new LdapAttribute("cn", newName);
+            LdapAttribute attribute = new LdapAttribute("ou", newName);
             modList.Add(new LdapModification(LdapModification.Add, attribute));
 
           
@@ -268,7 +265,7 @@ namespace HADES.Util
             Type mtype = Type.GetType("Novell.Directory.LdapModification");
             mods = (LdapModification[])modList.ToArray();
   
-            string dn = "CN=" + name + "," + rootOU;
+            string dn = "OU=" + name + "," + rootOU;
             //Modify the entry in the directory
             connection.Modify(dn, mods);
         }
@@ -287,7 +284,7 @@ namespace HADES.Util
                 attributeSet.Add(new LdapAttribute("objectclass", "group"));
                 attributeSet.Add(new LdapAttribute("CN", name));
                 // DN of the entry to be added
-                string dn = "CN=" + name + "," + "CN=" + ouName + "," + rootOU;
+                string dn = "CN=" + name + "," + "OU=" + ouName + "," + rootOU;
                 LdapEntry newEntry = new LdapEntry(dn, attributeSet);
                 //Add the entry to the directory
                 connection.Add(newEntry);
