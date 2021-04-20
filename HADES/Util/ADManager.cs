@@ -8,26 +8,29 @@ namespace HADES.Util
 {
     public class ADManager
     {
-        private const string server = "sv01-bdinfo01.cegeplimoilou.lan";
-        private const int PortNumber = 50003;
-        private const string baseDN = "CN=Users,CN=ADLDS,DC=H21-420-6D9-EQ1,DC=lan";
-        private const string accountDn = "CN=0765353,CN=Users,CN=ADLDS,DC=H21-420-6D9-EQ1,DC=lan";
-        private const string passwordDn = "Toto1234!";
+        private const string server = "172.20.48.10";
+        private const int PortNumber = 389;
+        private const string baseDN = "CN=Users,DC=R991-AD,DC=lan";
+        private const string accountDn = "CN=hades,CN=Users,DC=R991-AD,DC=lan";
+        private const string passwordDn = "Toto123!";
         private string connectionFilter = "(&(objectClass=user)(objectCategory=person))";
-        private string rootOU = "CN=rootHades,CN=ADLDS,DC=H21-420-6D9-EQ1,DC=lan";
+        private string rootOU = "CN-hades,CN=Users,DC=R991-AD,DC=lan";
 
         //Client Side
         //private const string server = "bkomstudios.com";
         //private const int PortNumber = 389;
         //private const string accessPoint = "OU=BkomUsers,DC=bkomstudios,DC=com";
+        //private const string accountDn = "CN=hades,OU=ServiceAccounts,OU=BkomUsers,DC=bkomstudios,DC=com";
 
         //https://www.novell.com/documentation/developer/ldapcsharp/?page=/documentation/developer/ldapcsharp/cnet/data/bovumfi.html
         public ADManager()
         {
             // Console.WriteLine(authenticate("CN=Etu001,CN=Users,CN=ADLDS,DC=H21-420-6D9-EQ1,DC=lan", "Toto1234!"));
+            Console.WriteLine(createConnection());
+            
             //Console.WriteLine(getAllUsers());
-            //Console.WriteLine(getRoot());
-            //modifyOU("omg", "testOmg");
+           // Console.WriteLine(getRoot());
+           //modifyOU("omg", "testOmg");
         }
 
         // Champ dans le formulaire
@@ -37,7 +40,7 @@ namespace HADES.Util
         // baseDN (Ou sont les users) 
         // DN du compte (Quelle user connect CRUD AD)
         // Mot de passe du compte DN
-        // Champ de synchronisation EX: SamAccountName
+        // Champ de synchronisation pour l'authentification EX: SamAccountName
 
         // Create a connection with de DN account
         private LdapConnection createConnection()
@@ -50,16 +53,19 @@ namespace HADES.Util
                 connection.Connect(server, PortNumber);
                 Console.WriteLine("isConnected : " + connection.Connected);
                 //Bind function will Bind the user object  Credentials to the Server
-                connection.Bind(accountDn, passwordDn);
-                Console.WriteLine("isAuthenticated : " + connection.Bound);
+               // connection.Bind(accountDn, passwordDn);
+              //  Console.WriteLine("isAuthenticated : " + connection.Bound);
 
                 return connection;
+
             }
             catch (LdapException ex)
             {
-                Console.WriteLine(ex.LdapErrorMessage);
+                Console.WriteLine("Error",ex.LdapErrorMessage);
+              
                 return null;
             }
+            
         }
 
         //Dicconnect the socket in parameter
@@ -69,7 +75,8 @@ namespace HADES.Util
         }
 
 
-        //Authenticate the user in the Active Directory
+        //Authenticate the user in the Active Directory change to authenticate with the SamAccountName(connectionFilter)
+        //https://nicolas.guelpa.me/blog/2017/02/15/dotnet-core-ldap-authentication.html
         public bool authenticate(string username, string password)
         {
             //Creating an LdapConnection instance
@@ -81,7 +88,7 @@ namespace HADES.Util
                 Console.WriteLine("isConnected : " + connection.Connected);
                 //Bind function will Bind the user object  Credentials to the Server
                 connection.Bind(username, password);
-
+               
                 return connection.Bound;
             }
             catch (LdapException ex)
