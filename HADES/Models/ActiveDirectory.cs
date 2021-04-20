@@ -15,6 +15,10 @@ namespace HADES.Models
         [Required]
         public int Id { get; set; }
 
+        [Column("ADR_root_ou")]
+        [Required]
+        public string RootOu { get; set; }
+
         [Column("ADR_port_number")]
         [Required]
         public int PortNumber { get; set; }
