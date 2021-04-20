@@ -10,12 +10,13 @@ using HADES.Models;
 
 namespace HADES.Data
 {
-	public class ApplicationDbContext : IdentityDbContext
-	{
-		public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-			: base(options)
-		{
-		}
+
+    public class ApplicationDbContext : DbContext
+    {
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+            : base(options)
+        {
+        }
 
         public static async Task CreateAdminUser(IServiceProvider serviceProvider)
         {
@@ -45,13 +46,6 @@ namespace HADES.Data
                 }
             }
         }
-    }
-    public class ApplicationDbContext : DbContext
-    {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-            : base(options)
-        {
-        }
         public DbSet<AdminGroup> AdminGroup { get; set; }
         public DbSet<AppConfig> AppConfig { get; set; }
         public DbSet<DefaultUser> DefaultUser { get; set; }
@@ -64,7 +58,7 @@ namespace HADES.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
            => options.UseSqlite("Data Source=App_Data\\DBHades.db");
-       
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
