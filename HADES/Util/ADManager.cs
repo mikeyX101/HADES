@@ -18,15 +18,16 @@ namespace HADES.Util
 
         //Client Side
         //private const string server = "bkomstudios.com";
-        //private const int PortNumber = 389;
+       // private const int PortNumber = 389;
         //private const string accessPoint = "OU=BkomUsers,DC=bkomstudios,DC=com";
         //private const string accountDn = "CN=hades,OU=ServiceAccounts,OU=BkomUsers,DC=bkomstudios,DC=com";
 
         //https://www.novell.com/documentation/developer/ldapcsharp/?page=/documentation/developer/ldapcsharp/cnet/data/bovumfi.html
         public ADManager()
         {
-            // Console.WriteLine(authenticate("CN=Etu001,CN=Users,CN=ADLDS,DC=H21-420-6D9-EQ1,DC=lan", "Toto1234!"));
-            Console.WriteLine(createConnection());
+            // Console.WriteLine(authenticate("hades", "Toto123!"));
+           // Console.WriteLine(createConnection());
+           
             
             //Console.WriteLine(getAllUsers());
            // Console.WriteLine(getRoot());
@@ -43,7 +44,7 @@ namespace HADES.Util
         // Champ de synchronisation pour l'authentification EX: SamAccountName
 
         // Create a connection with de DN account
-        private LdapConnection createConnection()
+        private LdapConnection createConnection(string userDN = null, string password = null)
         {
             //Creating an LdapConnection instance
             LdapConnection connection = new LdapConnection();
@@ -52,44 +53,83 @@ namespace HADES.Util
                 //Connect function will create a socket connection to the server
                 connection.Connect(server, PortNumber);
                 Console.WriteLine("isConnected : " + connection.Connected);
+
                 //Bind function will Bind the user object  Credentials to the Server
-               // connection.Bind(accountDn, passwordDn);
-              //  Console.WriteLine("isAuthenticated : " + connection.Bound);
+                if (userDN != null && password != null)
+                {
+                    Console.WriteLine("userCredential");
+                    connection.Bind(userDN, password);
+                }
+                else {
+                    Console.WriteLine("serverCredential");
+                    connection.Bind(accountDn, passwordDn);
+                }
+               
+                Console.WriteLine("isAuthenticated : " + connection.Bound);
 
                 return connection;
 
             }
             catch (LdapException ex)
             {
-                Console.WriteLine("Error",ex.LdapErrorMessage);
+                Console.WriteLine(ex.LdapErrorMessage);
               
                 return null;
             }
             
         }
 
-        //Dicconnect the socket in parameter
-        private void disconnect(LdapConnection connection)
-        {
-            connection.Disconnect();
-        }
-
-
+      
         //Authenticate the user in the Active Directory change to authenticate with the SamAccountName(connectionFilter)
         //https://nicolas.guelpa.me/blog/2017/02/15/dotnet-core-ldap-authentication.html
         public bool authenticate(string username, string password)
         {
             //Creating an LdapConnection instance
-            LdapConnection connection = new LdapConnection();
+            LdapConnection connection = createConnection();
             try
             {
-                //Connect function will create a socket connection to the server
-                connection.Connect(server, PortNumber);
-                Console.WriteLine("isConnected : " + connection.Connected);
-                //Bind function will Bind the user object  Credentials to the Server
-                connection.Bind(username, password);
-               
-                return connection.Bound;
+                LdapSearchResults lsc = (LdapSearchResults)connection.Search(baseDN, LdapConnection.ScopeSub, connectionFilter, null, false);
+
+                string userDN = null;
+                bool userWasFound = false;
+                bool userIsAuthenticate = false;
+
+                while (lsc.HasMore() && userWasFound == false)
+                {
+                    LdapEntry nextEntry = null;
+                    try
+                    {
+                        nextEntry = lsc.Next();
+                    }
+                    catch (LdapException e)
+                    {
+
+                        Console.WriteLine("Error: " + e.LdapErrorMessage);
+                        //Exception is thrown, go for next entry
+                        continue;
+                    }
+
+                    if (nextEntry.GetAttribute("sAMAccountName").StringValue == username) {
+                        Console.WriteLine(nextEntry.GetAttribute("sAMAccountName").StringValue);
+                        Console.WriteLine("\n" + nextEntry.Dn);
+                        userDN = nextEntry.Dn;
+                        userWasFound = true;
+                    }
+                    
+                }
+
+                connection.Disconnect();
+                if (userWasFound) { 
+        
+                    connection = createConnection(username,password);
+                    if (connection != null)
+                    {
+                        userIsAuthenticate = connection.Bound;
+                    }
+                    
+                }
+
+                return userIsAuthenticate;
             }
             catch (LdapException ex)
             {
@@ -268,6 +308,8 @@ namespace HADES.Util
         {
 
         }
+
+        
 
 
     }
