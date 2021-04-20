@@ -200,7 +200,9 @@ UpgradeLog*.htm
 *.ldf
 
 # Sqlite files
-*.db 
+*.db
+*.db-shm
+*.db-wal
 
 # Business Intelligence projects
 *.rdl.data
