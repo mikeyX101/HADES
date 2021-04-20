@@ -12,14 +12,15 @@ namespace HADES.Controllers
 {
     public class AccountController : LocalizedController<AccountController>
     {
-        private SignInManager<IdentityUser> signInManager;
+        // The ConnexionUtil used by the controller
+        private readonly ConnexionUtil connect;
 
         public AccountController(SignInManager<IdentityUser> signInMngr, IStringLocalizer<AccountController> localizer) : base(localizer)
         {
-            signInManager = signInMngr;
+            connect = new ConnexionUtil(signInMngr);
 
             ADManager ad = new ADManager();
-          
+
         }
 
         [HttpGet]
