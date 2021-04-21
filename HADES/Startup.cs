@@ -31,6 +31,20 @@ namespace HADES
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
+			// Should be before anything else
+			#region Reverse Proxy Setup
+			services.Configure<ForwardedHeadersOptions>(options =>
+			{
+				options.ForwardLimit = 1;
+				options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+
+				options.KnownNetworks.Clear();
+				options.KnownProxies.Clear();
+				options.KnownProxies.Add(System.Net.IPAddress.Loopback);
+
+			});
+			#endregion
+
 			services.AddRouting(options => options.LowercaseUrls = true);
 
 			services.AddMemoryCache();
@@ -40,19 +54,6 @@ namespace HADES
 					options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
 
 			services.AddControllersWithViews();
-
-			#region Reverse Proxy Setup
-			services.Configure<ForwardedHeadersOptions>(options =>
-			{
-				options.ForwardLimit = 1;
-				options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
-
-				options.KnownNetworks.Clear();
-				options.KnownProxies.Clear();
-				options.KnownProxies.Add(System.Net.IPAddress.Parse("127.0.0.1"));
-				
-			});
-			#endregion
 
 			#region Localization Setup
 			// Configure localization
@@ -104,17 +105,16 @@ namespace HADES
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 		{
+			app.UseForwardedHeaders();
 			if (env.IsDevelopment())
 			{
 				app.UseDeveloperExceptionPage();
 				app.UseMigrationsEndPoint();
-				app.UseForwardedHeaders();
 			}
 			else
 			{
-				app.UseExceptionHandler("/Home/Error");
 				// UseForwardedHeaders() must be executed before UseHtst().
-				app.UseForwardedHeaders();
+				app.UseExceptionHandler("/Home/Error");
 				// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
 				app.UseHsts();
 			}
