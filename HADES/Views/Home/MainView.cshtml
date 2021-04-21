@@ -1,13 +1,29 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 
+@section scripts
+{
+    <link rel="stylesheet" href="~/lib/bootstrap-treeview/css/bootstrap-treeview.css">
+    <script type="text/javascript" src="~/lib/bootstrap-treeview/js/bootstrap-treeview.js"></script>
+    <script type="text/javascript" src="~/js/site.js"></script>
+}
 
 <div class="row">
     <div class="col-sm-4">
         <h3 class="mt-3">Dossier et groupes</h3>
 
         @* afficher le treeview *@
-        
+        <div id="treeview1" class="treeview"></div>
+        <div id="treeview2" class="treeview"></div>
+        <div id="treeview3" class="treeview"></div>
+        <div id="treeview4" class="treeview"></div>
+        <div id="treeview5" class="treeview"></div>
+        <div id="treeview6" class="treeview"></div>
+        <div id="treeview7" class="treeview"></div>
+        <div id="treeview8" class="treeview"></div>
+        <div id="treeview9" class="treeview"></div>
+        <div id="treeview10" class="treeview"></div>
+
     </div>
     <div class="col-sm-8">
         <h3 class="mt-3">Contenu des dossiers et des groupes</h3>
@@ -16,3 +32,4 @@
 
     </div>
 </div>
+
