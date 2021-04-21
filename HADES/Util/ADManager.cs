@@ -26,16 +26,16 @@ namespace HADES.Util
         //https://www.novell.com/documentation/developer/ldapcsharp/?page=/documentation/developer/ldapcsharp/cnet/data/bovumfi.html
         public ADManager()
         {
-            Console.WriteLine(authenticate("hades", "Toto123!"));
+            //Console.WriteLine(authenticate("hades", "Toto123!"));
             //Console.WriteLine(createConnection());
             //Console.WriteLine(getAllUsers());
 
-           /* List<string[]> root = getRoot();
+            List<string[]> root = getRoot();
             Console.WriteLine(root.Count);
             for (int i = 0; i < root.Count; i++)
             {
                 Console.WriteLine(root[i][0] + "      " + root[i][1] + "      " + root[i][2]);
-            }*/
+            }
         }
 
         // Champ dans le formulaire
@@ -229,6 +229,8 @@ namespace HADES.Util
 
                 //NAME
                 data[2] = nextEntry.GetAttribute("name").StringValue;
+
+               
                 root.Add(data);
             }
 
