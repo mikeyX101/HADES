@@ -10,6 +10,10 @@ using HADES.Util;
 using HADES.Util.Exceptions;
 using Novell.Directory.Ldap;
 using HADES.Data;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 
 namespace HADES.Controllers
 {
@@ -25,27 +29,43 @@ namespace HADES.Controllers
         }
 
         [HttpGet]
-        public IActionResult LogIn(string returnURL = "")
+        [AllowAnonymous]
+        public IActionResult LogIn()
         {
-            var model = new LoginViewModel { ReturnUrl = returnURL };
+            var model = new LoginViewModel();
             return View(model);
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> LogIn(LoginViewModel model)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    if (await connect.Login(model.Username, model.Password))
+                    IUser User = await connect.Login(model.Username, model.Password);
+                    if (!User.IsDefaultUser())
                     {
-                        Console.WriteLine(model.Username.ToLower() + " CONNECTED"); // Change this by log
+                        Console.WriteLine(User.GetName() + " CONNECTED"); // Change this by log
                         return RedirectToAction("MainView", "Home");
                     }
                     else
                     {
-                        Console.WriteLine("DEFAULT USER CONNECTED"); // Change this by log
+                        Console.WriteLine("DEFAULT USER " + User.GetName() + " CONNECTED"); // Change this by log
+
+                        var claims = new List<Claim>{
+                                new Claim("id", User.GetId().ToString())
+                        };
+
+                        var claimsIdentity = new ClaimsIdentity(
+                          claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                        var authProperties = new AuthenticationProperties();
+
+                        await HttpContext.SignInAsync(
+                          CookieAuthenticationDefaults.AuthenticationScheme,
+                          new ClaimsPrincipal(claimsIdentity),
+                          authProperties);
                         return RedirectToAction("MainView", "Home");
                     }
 
@@ -74,15 +94,16 @@ namespace HADES.Controllers
 
         }
 
+        [AllowAnonymous]
         public ViewResult AccessDenied()
         {
             return View();
         }
 
-        [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> LogOut()
         {
-            //await signInManager.SignOutAsync();
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("LogIn", "Account");
         }
     }

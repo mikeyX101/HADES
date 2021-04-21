@@ -2,12 +2,14 @@
 using HADES.Models;
 using HADES.Util.Exceptions;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace HADES.Util
 {
@@ -30,13 +32,13 @@ namespace HADES.Util
         // DefaultUser, ActiveDirectory => Check if allowed to Hades
         // Returns true if the user connecting is a default user, false if the user connecting is an ADUser
         // Throws ForbiddenException or LoginException
-        public async Task<bool> Login(string user, string password)
+        public async Task<IUser> Login(string user, string password)
         {
             // Check Default User in BD
 
             if (db.DefaultUser.SingleOrDefault((a)=> a.UserName.ToLower().Equals(user.ToLower()) && a.Password.Equals(HashPassword(password)))!=null)
             {
-                return false;
+                return db.DefaultUser.SingleOrDefault((a) => a.UserName.ToLower().Equals(user.ToLower()) && a.Password.Equals(HashPassword(password)));
             }
             else if (this.aDManager.authenticate(user, password))
             {
@@ -45,7 +47,7 @@ namespace HADES.Util
                 if (true)
                 {
                     //Check Allowed in HADES
-                    return true;
+                    return null;
                 }
                 else
                 {
@@ -75,6 +77,7 @@ namespace HADES.Util
             Console.WriteLine($"Hashed: {hashed}");
             return hashed;
         }
+
 
     }
 

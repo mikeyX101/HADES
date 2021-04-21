@@ -1,5 +1,6 @@
 ﻿using HADES.Data;
 using HADES.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -13,6 +14,7 @@ namespace HADES.Controllers
     {
 
         [HttpGet]
+        [Authorize]
         public IActionResult Index()
         {
             AppConfigViewModel viewModel = new AppConfigViewModel
@@ -24,6 +26,7 @@ namespace HADES.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult Index(AppConfigViewModel viewModel)
         {
             if (ModelState.IsValid)

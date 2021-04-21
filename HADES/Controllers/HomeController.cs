@@ -1,5 +1,6 @@
 ﻿using HADES.Models;
 using HADES.Util;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
@@ -18,18 +19,21 @@ namespace HADES.Controllers
             ADManager ad = new ADManager();
         }
 
+        [Authorize]
         public IActionResult Login()
         {
             return View();
         }
 
         // Returns the Main Application View parameter is the selected Folder
+        [Authorize]
         public IActionResult MainView(/*Folder f*/)
         {
             // Fill ViewBag with Folders and Groups to display as a TreeSet
             return View();
         }
 
+        [AllowAnonymous]
         public IActionResult Error()
         {
             return View();

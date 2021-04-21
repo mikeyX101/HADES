@@ -16,5 +16,7 @@ namespace HADES.Models
         public UserConfig GetUserConfig();
 
         public ICollection<OwnerGroupUser> GetGroupsUser();
+
+        public bool IsDefaultUser();
     }
 }
