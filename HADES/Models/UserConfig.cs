@@ -10,6 +10,13 @@ namespace HADES.Models
     [Table("UserConfig_UCF")]
     public class UserConfig
     {
+        public UserConfig()
+        {
+            Language = "fr-CA";
+            ThemeFile = "site.css";
+            Notification = false;
+        }
+
         [Key]
         [Required]
         [Column("UCF_id")]
