@@ -7,19 +7,19 @@ using System.Threading.Tasks;
 using HADES.Models;
 using Microsoft.Extensions.Localization;
 using HADES.Util;
+using HADES.Util.Exceptions;
 
 namespace HADES.Controllers
 {
     public class AccountController : LocalizedController<AccountController>
     {
-        private SignInManager<IdentityUser> signInManager;
+        // The ConnexionUtil used by the controller
+        private readonly ConnexionUtil connect;
 
-        public AccountController(SignInManager<IdentityUser> signInMngr, IStringLocalizer<AccountController> localizer) : base(localizer)
+        public AccountController(IStringLocalizer<AccountController> localizer) : base(localizer)
         {
-            signInManager = signInMngr;
+            connect = new ConnexionUtil();
 
-            ADManager ad = new ADManager();
-          
         }
 
         [HttpGet]
@@ -34,23 +34,37 @@ namespace HADES.Controllers
         {
             if (ModelState.IsValid)
             {
-                // PasswordSignInAsync() logs in a user and returns an IdentityResult object.
-                // When lockoutOnFailure is set to true, Identity locks the user out if the sign in fails
-                var result = await signInManager.PasswordSignInAsync(
-                    model.Username, model.Password, isPersistent: false,
-                    lockoutOnFailure: false);
+                try
+                {
+                    if (await connect.Login(model.Username, model.Password))
+                    {
+                        Console.WriteLine(model.Username.ToLower() + " CONNECTED"); // Change this by log
+                        return RedirectToAction("MainView", "Home");
+                    }
+                    else
+                    {
+                        Console.WriteLine("DEFAULT USER CONNECTED"); // Change this by log
+                        return RedirectToAction("MainView", "Home");
+                    }
 
-                if (result.Succeeded)
-                {
-                    return RedirectToAction("MainView", "Home");
                 }
-                else
+                catch (ForbiddenException)
                 {
-                    return RedirectToAction("LogIn", "Account");
+                    return RedirectToAction("AccessDenied", "Account");
                 }
+                catch (LoginException)
+                {
+                    ModelState.AddModelError("", Localizer["MSG_Invalid"]);
+                    return View(model);
+                }
+
             }
-            ModelState.AddModelError("", Localizer["MSG_Invalid"]);
-            return View(model);
+            else
+            {
+                ModelState.AddModelError("", Localizer["MSG_Invalid"]);
+                return View(model);
+            }
+
         }
 
         public ViewResult AccessDenied()
@@ -61,7 +75,7 @@ namespace HADES.Controllers
         [HttpPost]
         public async Task<IActionResult> LogOut()
         {
-            await signInManager.SignOutAsync();
+            //await signInManager.SignOutAsync();
             return RedirectToAction("LogIn", "Account");
         }
     }

@@ -1,4 +1,5 @@
 ﻿using HADES.Models;
+using HADES.Util;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
@@ -14,6 +15,7 @@ namespace HADES.Controllers
     {
         public HomeController(IStringLocalizer<HomeController> localizer) : base(localizer)
         {
+            ADManager ad = new ADManager();
         }
 
         public IActionResult Login()
@@ -28,5 +30,9 @@ namespace HADES.Controllers
             return View();
         }
 
+        public IActionResult Error()
+        {
+            return View();
+        }
     }
 }
