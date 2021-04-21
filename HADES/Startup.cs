@@ -113,7 +113,6 @@ namespace HADES
 				app.UseDeveloperExceptionPage();
 				app.UseMigrationsEndPoint();
 			}
-			// If production build, run migrations to keep database up-to-date.
 			else if (env.IsProduction())
 			{
 				// UseForwardedHeaders() must be executed before UseHtst().
@@ -121,30 +120,13 @@ namespace HADES
 				app.UseExceptionHandler("/Home/Error");
 				// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
 				app.UseHsts();
+
+				// If production build, run migrations to keep database up-to-date.
 				using (IServiceScope scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
 				{
 					scope.ServiceProvider.GetRequiredService<ApplicationDbContext>().Database.Migrate();
 				}
 			}
-
-			app.Use(async (context, next) =>
-			{
-				// Request method, scheme, and path
-				Console.WriteLine("Request Method: {0}", context.Request.Method);
-				Console.WriteLine("Request Scheme: {0}", context.Request.Scheme);
-				Console.WriteLine("Request Path: {0}", context.Request.Path);
-
-				// Headers
-				foreach (var header in context.Request.Headers)
-				{
-					Console.WriteLine("Header: {0}: {1}", header.Key, header.Value);
-				}
-
-				// Connection: RemoteIp
-				Console.WriteLine("Request RemoteIp: {0}", context.Connection.RemoteIpAddress);
-
-				await next();
-			});
 
 			app.UseStaticFiles();
 
