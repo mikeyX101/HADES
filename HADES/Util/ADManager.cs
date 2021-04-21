@@ -77,6 +77,7 @@ namespace HADES.Util
             }
             catch (LdapException ex)
             {
+                Console.WriteLine("LOG: " + ex.Message);
                 throw new ADException();
             }
         }
