@@ -81,8 +81,3 @@ if ! [ -d ~/hades ]; then
 	mkdir ~/hades
 fi
 git clone git@github.com:ShaiLynx/HADES.git ~/hades
-
-# Make deploy scripts executable
-if [ -d ~/hades/Scripts ]; then 
-	chmod 755 ~/hades/Scripts/*.sh
-fi
