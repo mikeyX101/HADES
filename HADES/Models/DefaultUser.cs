@@ -61,5 +61,10 @@ namespace HADES.Models
         {
             return this.UserConfig;
         }
+
+        public bool IsPassword(string password)
+        {
+            return this.Password.Equals(password);
+        }
     }
 }

@@ -8,6 +8,8 @@ using HADES.Models;
 using Microsoft.Extensions.Localization;
 using HADES.Util;
 using HADES.Util.Exceptions;
+using Novell.Directory.Ldap;
+using HADES.Data;
 
 namespace HADES.Controllers
 {
@@ -55,6 +57,11 @@ namespace HADES.Controllers
                 catch (LoginException)
                 {
                     ModelState.AddModelError("", Localizer["MSG_Invalid"]);
+                    return View(model);
+                }
+                catch (ADException)
+                {
+                    ModelState.AddModelError("", Localizer["MSG_LDAP"]);
                     return View(model);
                 }
 
