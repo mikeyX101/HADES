@@ -122,7 +122,7 @@ namespace HADES
 			{
 				endpoints.MapControllerRoute(
 					name: "default",
-					pattern: "{controller=Home}/{action=MainView}");
+					pattern: "{controller=UserConfigs}/{action=UserConfig}");
 				endpoints.MapRazorPages();
 			});
 
