@@ -2,14 +2,10 @@
 using HADES.Models;
 using HADES.Util.Exceptions;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 
 namespace HADES.Util
 {
@@ -74,6 +70,29 @@ namespace HADES.Util
             iterationCount: 10000,
             numBytesRequested: 256 / 8));
             return hashed;
+        }
+
+        // Returns the Current User or null if the Current user is not in the database/no cookie found
+        public IUser CurrentUser(Controller controller)
+        {
+            if (controller.User.Identity.IsAuthenticated)
+            {
+                int id = int.Parse(controller.User.Claims.Where(c => c.Type == "id").FirstOrDefault().Value);
+
+                if(bool.Parse(controller.User.Claims.Where(c => c.Type == "isDefault").FirstOrDefault().Value))
+                {
+                    return db.DefaultUser.Where((a)=> a.Id == id).FirstOrDefault();
+                }
+                else
+                {
+                    return db.User.Where((a) => a.Id == id).FirstOrDefault();
+                }
+                
+            }
+            else
+            {
+                return null;
+            }
         }
 
 
