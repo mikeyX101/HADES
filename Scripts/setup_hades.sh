@@ -43,13 +43,9 @@ echo "Configuring Nginx... (Requires root)"
 #    Allow HTTPD scripts and modules to connect to the network. 
 sudo setsebool -P httpd_can_network_connect 1
 
-sudo cp ./configs/nginx/nginx.config /etc/nginx/
-
 sudo firewall-cmd --permanent --zone=public --add-service=http
 sudo firewall-cmd --permanent --zone=public --add-service=https
 
-echo "Starting Nginx... (Requires root)"
-sudo systemctl enable nginx
 
 # -----------------------------------------------------------------
 #							DotNet Setup
@@ -81,3 +77,9 @@ if ! [ -d ~/hades ]; then
 	mkdir ~/hades
 fi
 git clone git@github.com:ShaiLynx/HADES.git ~/hades
+
+# Copy new Nginx config and start Nginx
+sudo cp ./configs/nginx/nginx.conf /etc/nginx/
+
+echo "Starting Nginx... (Requires root)"
+sudo systemctl enable nginx
