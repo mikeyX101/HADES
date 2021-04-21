@@ -106,23 +106,21 @@ namespace HADES
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 		{
-			app.UseForwardedHeaders();
+
 			if (env.IsDevelopment())
 			{
+				app.UseHttpsRedirection();
 				app.UseDeveloperExceptionPage();
 				app.UseMigrationsEndPoint();
 			}
-			else
+			// If production build, run migrations to keep database up-to-date.
+			else if (env.IsProduction())
 			{
 				// UseForwardedHeaders() must be executed before UseHtst().
+				app.UseForwardedHeaders();
 				app.UseExceptionHandler("/Home/Error");
 				// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
 				app.UseHsts();
-			}
-
-			// If production build, run migrations to keep database up-to-date.
-			if (env.IsProduction())
-			{
 				using (IServiceScope scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
 				{
 					scope.ServiceProvider.GetRequiredService<ApplicationDbContext>().Database.Migrate();
@@ -148,7 +146,6 @@ namespace HADES
 				await next();
 			});
 
-			app.UseHttpsRedirection();
 			app.UseStaticFiles();
 
 			app.UseRouting();
