@@ -32,6 +32,10 @@ namespace HADES.Controllers
         [AllowAnonymous]
         public IActionResult LogIn()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("MainView", "Home");
+            }
             var model = new LoginViewModel();
             return View(model);
         }
@@ -40,6 +44,10 @@ namespace HADES.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> LogIn(LoginViewModel model)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("MainView", "Home");
+            }
             if (ModelState.IsValid)
             {
                 try
@@ -55,7 +63,8 @@ namespace HADES.Controllers
                         Console.WriteLine("DEFAULT USER " + User.GetName() + " CONNECTED"); // Change this by log
 
                         var claims = new List<Claim>{
-                                new Claim("id", User.GetId().ToString())
+                                new Claim("id", User.GetId().ToString()),
+                                new Claim("isDefault", User.IsDefaultUser().ToString())
                         };
 
                         var claimsIdentity = new ClaimsIdentity(
