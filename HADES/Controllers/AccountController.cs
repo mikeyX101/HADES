@@ -21,8 +21,6 @@ namespace HADES.Controllers
         {
             connect = new ConnexionUtil();
 
-            ADManager ad = new ADManager();
-
         }
 
         [HttpGet]

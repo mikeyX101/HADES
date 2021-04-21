@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using HADES.Util.Exceptions;
 using Novell.Directory.Ldap;
 
 namespace HADES.Util
@@ -18,22 +19,23 @@ namespace HADES.Util
 
         //Client Side
         //private const string server = "bkomstudios.com";
-       // private const int PortNumber = 389;
+        //private const int PortNumber = 389;
         //private const string accessPoint = "OU=BkomUsers,DC=bkomstudios,DC=com";
         //private const string accountDn = "CN=hades,OU=ServiceAccounts,OU=BkomUsers,DC=bkomstudios,DC=com";
 
         //https://www.novell.com/documentation/developer/ldapcsharp/?page=/documentation/developer/ldapcsharp/cnet/data/bovumfi.html
         public ADManager()
         {
-            //Console.WriteLine(authenticate("hades", "Toto123!"));
+            Console.WriteLine(authenticate("hades", "Toto123!"));
             //Console.WriteLine(createConnection());
-            // Console.WriteLine(getAllUsers());
+            //Console.WriteLine(getAllUsers());
 
-            List<string[]> root = getRoot();
+           /* List<string[]> root = getRoot();
             Console.WriteLine(root.Count);
-            for (int i = 0; i < root.Count; i++) {
+            for (int i = 0; i < root.Count; i++)
+            {
                 Console.WriteLine(root[i][0] + "      " + root[i][1] + "      " + root[i][2]);
-            }
+            }*/
         }
 
         // Champ dans le formulaire
@@ -62,11 +64,12 @@ namespace HADES.Util
                     Console.WriteLine("userCredential");
                     connection.Bind(userDN, password);
                 }
-                else {
+                else
+                {
                     Console.WriteLine("serverCredential");
                     connection.Bind(accountDn, passwordDn);
                 }
-               
+
                 Console.WriteLine("isAuthenticated : " + connection.Bound);
 
                 return connection;
@@ -74,19 +77,18 @@ namespace HADES.Util
             }
             catch (LdapException ex)
             {
-                Console.WriteLine(ex.LdapErrorMessage);
-              
-                return null;
+                Console.WriteLine("LOG: " + ex.Message);
+                throw new ADException();
             }
-            
         }
 
-      
+
         //Authenticate the user in the Active Directory 
         public bool authenticate(string username, string password)
         {
             //Creating an LdapConnection instance
             LdapConnection connection = createConnection();
+           
             try
             {
                 LdapSearchResults lsc = (LdapSearchResults)connection.Search(baseDN, LdapConnection.ScopeSub, connectionFilter, null, false);
@@ -110,24 +112,26 @@ namespace HADES.Util
                         continue;
                     }
 
-                    if (nextEntry.GetAttribute("sAMAccountName").StringValue == username) {
+                    if (nextEntry.GetAttribute("sAMAccountName").StringValue == username)
+                    {
                         Console.WriteLine(nextEntry.GetAttribute("sAMAccountName").StringValue);
                         Console.WriteLine("\n" + nextEntry.Dn);
                         userDN = nextEntry.Dn;
                         userWasFound = true;
-                    } 
+                    }
                 }
 
                 connection.Disconnect();
 
-                if (userWasFound) { 
-        
-                    connection = createConnection(username,password);
+                if (userWasFound)
+                {
+
+                    connection = createConnection(username, password);
                     if (connection != null)
                     {
                         userIsAuthenticate = connection.Bound;
                     }
-                    
+
                 }
 
                 return userIsAuthenticate;
@@ -182,7 +186,7 @@ namespace HADES.Util
 
             while (lsc.HasMore())
             {
-                string[] data = new string[3]; 
+                string[] data = new string[3];
 
                 LdapEntry nextEntry = null;
                 try
@@ -198,25 +202,31 @@ namespace HADES.Util
 
                 // TYPE
                 LdapAttribute att = nextEntry.GetAttribute("objectClass");
-                if (att.ToString().Contains("group")) {
+                if (att.ToString().Contains("group"))
+                {
                     data[0] = "group";
 
-                } else if (att.ToString().Contains("organizationalUnit")) {
+                }
+                else if (att.ToString().Contains("organizationalUnit"))
+                {
                     data[0] = "ou";
                 }
 
                 // PATH OF THE OBJECT
                 string[] path = nextEntry.Dn.Split(',');
-                for (int i = path.Length-1; i>= 0 ; i--) {
-                    if (path[i].Contains("DC=") || path[i].Contains("OU="+ nextEntry.GetAttribute("name").StringValue) || path[i].Contains("CN=" + nextEntry.GetAttribute("name").StringValue)) {
+                for (int i = path.Length - 1; i >= 0; i--)
+                {
+                    if (path[i].Contains("DC=") || path[i].Contains("OU=" + nextEntry.GetAttribute("name").StringValue) || path[i].Contains("CN=" + nextEntry.GetAttribute("name").StringValue))
+                    {
                         path[i] = null;
                     }
 
-                    if (path[i] != null) { 
-                           data[1] += "/" + path[i].Split("=")[1];
+                    if (path[i] != null)
+                    {
+                        data[1] += "/" + path[i].Split("=")[1];
                     }
                 }
-         
+
                 //NAME
                 data[2] = nextEntry.GetAttribute("name").StringValue;
                 root.Add(data);
@@ -250,21 +260,21 @@ namespace HADES.Util
             }
         }
 
-        public void modifyOU(string name, string newName )
+        public void modifyOU(string name, string newName)
         {
             LdapConnection connection = createConnection();
 
             List<LdapModification> modList = new List<LdapModification>();
-            
+
             // Add a new value to the description attribute
             LdapAttribute attribute = new LdapAttribute("ou", newName);
             modList.Add(new LdapModification(LdapModification.Add, attribute));
 
-          
+
             LdapModification[] mods = new LdapModification[modList.Count];
             Type mtype = Type.GetType("Novell.Directory.LdapModification");
             mods = (LdapModification[])modList.ToArray();
-  
+
             string dn = "OU=" + name + "," + rootOU;
             //Modify the entry in the directory
             connection.Modify(dn, mods);
@@ -290,8 +300,9 @@ namespace HADES.Util
                 connection.Add(newEntry);
                 return "Group created !";
             }
-            catch (Exception e) {
-                
+            catch (Exception e)
+            {
+
                 return "Cannot create the group:" + e.Message;
             }
         }
@@ -306,7 +317,7 @@ namespace HADES.Util
 
         }
 
-        
+
 
 
     }
