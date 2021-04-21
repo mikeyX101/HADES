@@ -1,9 +1,10 @@
 using HADES.Data;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,19 +14,18 @@ using Microsoft.AspNetCore.HttpOverrides;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace HADES
 {
-	public class Startup
-	{
-		public Startup(IConfiguration configuration)
-		{
-			Configuration = configuration;
-		}
+    public class Startup
+    {
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
 
-		public IConfiguration Configuration { get; }
+        public IConfiguration Configuration { get; }
 
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
@@ -46,33 +46,41 @@ namespace HADES
 
 			services.AddRouting(options => options.LowercaseUrls = true);
 
-			services.AddMemoryCache();
-			services.AddSession();
+            services.AddMemoryCache();
+            services.AddSession();
 
-			services.AddAuthentication().AddCookie();
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
+            {
+                options.Cookie.Name = "HADES_AUTH";
+                options.LoginPath = "/Account/Login";
+                options.LogoutPath = "/Account/Logout";
+                options.AccessDeniedPath = "/Account/AccessDenied";
+            });
 
-			services.AddDbContext<ApplicationDbContext>(options =>
-					options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<ApplicationDbContext>(options =>
+                    options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
 
-			services.AddControllersWithViews();
+            services.AddControllersWithViews();
+            services.AddMvc(options => options.Filters.Add(new AuthorizeFilter()));
 
-			#region Localization Setup
-			// Configure localization
-			services.Configure<RequestLocalizationOptions>(options =>
-			{
-				// Add supported cultures here
-				IList<CultureInfo> supportedCultures = new List<CultureInfo>
-				{
-					new CultureInfo("fr-CA"),
-					new CultureInfo("en-US"),
-					new CultureInfo("es-US"),
-					new CultureInfo("pt-BR")
-				};
-				// Set default culture to fr (ServiceCulture and UICulture)
-				options.DefaultRequestCulture = new RequestCulture("fr-CA", "fr-CA");
-				options.SupportedCultures = supportedCultures;
-				options.SupportedUICultures = supportedCultures;
-				/*
+
+            #region Localization Setup
+            // Configure localization
+            services.Configure<RequestLocalizationOptions>(options =>
+            {
+                // Add supported cultures here
+                IList<CultureInfo> supportedCultures = new List<CultureInfo>
+                {
+                    new CultureInfo("fr-CA"),
+                    new CultureInfo("en-US"),
+                    new CultureInfo("es-US"),
+                    new CultureInfo("pt-BR")
+                };
+                // Set default culture to fr (ServiceCulture and UICulture)
+                options.DefaultRequestCulture = new RequestCulture("fr-CA", "fr-CA");
+                options.SupportedCultures = supportedCultures;
+                options.SupportedUICultures = supportedCultures;
+                /*
 					Culture Providers are used to know which culture to use.
 					If a provider returns null, the next provider in the list is used until a non-null result is returned.
 
@@ -83,25 +91,26 @@ namespace HADES
 
 					We should clear the default providers and only use our own.
 				*/
-				options.RequestCultureProviders.Clear();
-				options.RequestCultureProviders.Add(new CustomRequestCultureProvider(async context => {
-					// Do DB request, context is HttpContext
-					await Task.Delay(1);
+                options.RequestCultureProviders.Clear();
+                options.RequestCultureProviders.Add(new CustomRequestCultureProvider(async context =>
+                {
+                    // Do DB request, context is HttpContext
+                    await Task.Delay(1);
 
-					// TEMP Allow override from query string
-					string locale = context.Request.Query["l"].ToString() ?? "fr-CA";
-					// Return culture from request
-					return new ProviderCultureResult(locale);
-				}));
-			});
+                    // TEMP Allow override from query string
+                    string locale = context.Request.Query["l"].ToString() ?? "fr-CA";
+                    // Return culture from request
+                    return new ProviderCultureResult(locale);
+                }));
+            });
 
-			// Set resource path for localizations
-			services.AddLocalization(localOptions => { localOptions.ResourcesPath = "App_LocalResources"; });
+            // Set resource path for localizations
+            services.AddLocalization(localOptions => { localOptions.ResourcesPath = "App_LocalResources"; });
 
-			services.AddMvc().AddViewLocalization(Microsoft.AspNetCore.Mvc.Razor.LanguageViewLocationExpanderFormat.SubFolder);
-			services.AddMvc().AddDataAnnotationsLocalization();
-			#endregion
-		}
+            services.AddMvc().AddViewLocalization(Microsoft.AspNetCore.Mvc.Razor.LanguageViewLocationExpanderFormat.SubFolder);
+            services.AddMvc().AddDataAnnotationsLocalization();
+            #endregion
+        }
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -130,27 +139,27 @@ namespace HADES
 
 			app.UseStaticFiles();
 
-			app.UseRouting();
+            app.UseRouting();
 
-			app.UseAuthentication();
-			app.UseAuthorization();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
-			app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = SameSiteMode.Strict, Secure = CookieSecurePolicy.Always });
+            app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = SameSiteMode.Strict, Secure = CookieSecurePolicy.Always });
 
-			app.UseSession();
+            app.UseSession();
 
-			// Apply localization service to app
-			IOptions<RequestLocalizationOptions> options = app.ApplicationServices.GetService<IOptions<RequestLocalizationOptions>>();
-			app.UseRequestLocalization(options.Value);
+            // Apply localization service to app
+            IOptions<RequestLocalizationOptions> options = app.ApplicationServices.GetService<IOptions<RequestLocalizationOptions>>();
+            app.UseRequestLocalization(options.Value);
 
-			app.UseEndpoints(endpoints =>
-			{
-				endpoints.MapControllerRoute(
-					name: "default",
-					pattern: "{controller=Home}/{action=MainView}");
-				endpoints.MapRazorPages();
-			});
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Account}/{action=Login}");
+                endpoints.MapRazorPages();
+            });
 
-		}
-	}
+        }
+    }
 }
