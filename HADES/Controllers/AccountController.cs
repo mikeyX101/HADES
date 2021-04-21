@@ -19,12 +19,9 @@ namespace HADES.Controllers
 {
     public class AccountController : LocalizedController<AccountController>
     {
-        // The ConnexionUtil used by the controller
-        private readonly ConnexionUtil connect;
 
         public AccountController(IStringLocalizer<AccountController> localizer) : base(localizer)
         {
-            connect = new ConnexionUtil();
 
         }
 
@@ -52,7 +49,7 @@ namespace HADES.Controllers
             {
                 try
                 {
-                    IUser User = await connect.Login(model.Username, model.Password);
+                    IUser User = ConnexionUtil.Login(model.Username, model.Password);
                     if (!User.IsDefaultUser())
                     {
                         Console.WriteLine(User.GetName() + " CONNECTED"); // Change this by log
