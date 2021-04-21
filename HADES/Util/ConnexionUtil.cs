@@ -19,6 +19,7 @@ namespace HADES.Util
         public ConnexionUtil()
         {
             db = new ApplicationDbContext();
+            aDManager = new ADManager();
         }
 
         // Attempts to login
@@ -29,11 +30,11 @@ namespace HADES.Util
         {
             // Check Default User in BD
 
-            if (true)
+            if (db.DefaultUser.Where((a)=> a.GetName().Equals(user,StringComparison.InvariantCultureIgnoreCase) && a.IsPassword(password)).First()!=null) // TODO CHECK
             {
                 return false;
             }
-            else if (this.aDManager.authenticate(user,password))
+            else if (this.aDManager.authenticate(user, password))
             {
                 // Check Active Directory
 
@@ -51,6 +52,12 @@ namespace HADES.Util
             {
                 throw new LoginException();
             }
+        }
+
+        // Returns the Hashed password for Default User (Other login is handled by Active Directory)
+        private string HashPassword(string password)
+        {
+
         }
     }
 

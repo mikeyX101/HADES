@@ -100,4 +100,7 @@
   <data name="MSG_Invalid" xml:space="preserve">
     <value>Les informations de connexion sont invalides</value>
   </data>
+  <data name="MSG_LDAP" xml:space="preserve">
+    <value>Une erreur est survenue lors de la connexion à l'Active Directory</value>
+  </data>
 </root>
