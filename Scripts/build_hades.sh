@@ -4,7 +4,7 @@
 # Tested on CentOS 7.9.2009
 # Script to pull the latest changes and build HADES
 
-cd ..
+cd ~/hades
 git pull
 
 dotnet publish ./HADES/HADES.sln -c Release -o ./HADES/bin/Release/publish/
