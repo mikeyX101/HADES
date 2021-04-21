@@ -65,7 +65,6 @@ namespace HADES.Util
         {
             // Generate Salt
             char[] passArray = password.ToCharArray();
-            Console.WriteLine(salt.Length);
 
             // Calculate Hash
             string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
@@ -74,7 +73,6 @@ namespace HADES.Util
             prf: KeyDerivationPrf.HMACSHA512,
             iterationCount: 10000,
             numBytesRequested: 256 / 8));
-            Console.WriteLine($"Hashed: {hashed}");
             return hashed;
         }
 
