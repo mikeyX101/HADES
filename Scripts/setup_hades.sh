@@ -26,6 +26,9 @@ fi
 echo "Installing git... (Requires root)"
 sudo yum -y install git
 
+# -----------------------------------------------------------------
+#							Nginx Setup
+# -----------------------------------------------------------------
 # Add Nginx's package repository
 echo "Installing Nginx's package repository... (Requires root)"
 sudo yum -y install epel-release
@@ -34,6 +37,23 @@ sudo yum -y install epel-release
 echo "Installing Nginx... (Requires root)"
 sudo yum -y install nginx
 
+echo "Configuring Nginx... (Requires root)"
+# https://wiki.centos.org/TipsAndTricks/SelinuxBooleans
+# httpd_can_network_connect (HTTPD Service)
+#    Allow HTTPD scripts and modules to connect to the network. 
+sudo setsebool -P httpd_can_network_connect 1
+
+sudo cp ./configs/nginx/nginx.config /etc/nginx/
+
+sudo firewall-cmd --permanent --zone=public --add-service=http
+sudo firewall-cmd --permanent --zone=public --add-service=https
+
+echo "Starting Nginx... (Requires root)"
+sudo systemctl enable nginx
+
+# -----------------------------------------------------------------
+#							DotNet Setup
+# -----------------------------------------------------------------
 # Add Microsoft's CentOS 7 package repository (--quiet)
 sudo rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-prod.rpm
 
@@ -47,6 +67,9 @@ if ! grep -q "export DOTNET_CLI_TELEMETRY_OPTOUT=1" ~/.bashrc; then
 	source ~/.bashrc
 fi
 
+# -----------------------------------------------------------------
+#							HADES Setup
+# -----------------------------------------------------------------
 echo "Public key available at: ~/.ssh/github_hades_rsa.pub"
 echo "Public key: "
 cat ~/.ssh/github_hades_rsa.pub
