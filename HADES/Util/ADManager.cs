@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using HADES.Util.Exceptions;
+using HADES.Util.ModelAD;
 using Novell.Directory.Ldap;
 
 namespace HADES.Util
@@ -29,13 +30,15 @@ namespace HADES.Util
             //Console.WriteLine(authenticate("hades", "Toto123!"));
             //Console.WriteLine(createConnection());
             //Console.WriteLine(getAllUsers());
-
-            List<string[]> root = getRoot();
+            
+            List<RootDataInformation> root = getRoot();
             Console.WriteLine(root.Count);
             for (int i = 0; i < root.Count; i++)
             {
-                Console.WriteLine(root[i][0] + "      " + root[i][1] + "      " + root[i][2]);
+                Console.WriteLine(root[i]);
             }
+
+            //getGroupInformation("CN=Group2,OU=Dossier1,OU=hades_root,DC=R991-AD,DC=lan");
         }
 
         // Champ dans le formulaire
@@ -175,18 +178,19 @@ namespace HADES.Util
             return users;
         }
 
+
         // Get all the OU and the Groups from the root 
-        public List<string[]> getRoot()
+        public List<RootDataInformation> getRoot()
         {
-            List<string[]> root = new List<string[]>();
+            List<RootDataInformation> root = new List<RootDataInformation>();
 
             //Creating an LdapConnection instance
             LdapConnection connection = createConnection();
-            LdapSearchResults lsc = (LdapSearchResults)connection.Search(rootOU, LdapConnection.ScopeSub, "(&(objectClass=*))", null, false);
+            LdapSearchResults lsc = (LdapSearchResults)connection.Search(rootOU, LdapConnection.ScopeSub, "(|(objectClass=group)(objectClass=organizationalUnit))", null, false);
 
             while (lsc.HasMore())
             {
-                string[] data = new string[3];
+                RootDataInformation data = new RootDataInformation();
 
                 LdapEntry nextEntry = null;
                 try
@@ -204,12 +208,12 @@ namespace HADES.Util
                 LdapAttribute att = nextEntry.GetAttribute("objectClass");
                 if (att.ToString().Contains("group"))
                 {
-                    data[0] = "group";
+                    data.Type = "group";
 
                 }
                 else if (att.ToString().Contains("organizationalUnit"))
                 {
-                    data[0] = "ou";
+                    data.Type = "ou";
                 }
 
                 // PATH OF THE OBJECT
@@ -223,21 +227,47 @@ namespace HADES.Util
 
                     if (path[i] != null)
                     {
-                        data[1] += "/" + path[i].Split("=")[1];
+                        data.Path += "/" + path[i].Split("=")[1];
                     }
                 }
 
                 //NAME
-                data[2] = nextEntry.GetAttribute("name").StringValue;
+               data.Name = nextEntry.GetAttribute("name").StringValue;
 
-               
-                root.Add(data);
+                //DN
+               data.Dn = nextEntry.Dn;
+
+
+               root.Add(data);
             }
 
             connection.Disconnect();
             return root;
         }
 
+        public void getGroupInformation(string groupDN) {
+            //Creating an LdapConnection instance
+            LdapConnection connection = createConnection();
+            LdapSearchResults lsc = (LdapSearchResults)connection.Search(rootOU, LdapConnection.ScopeSub, "(&(objectClass=group)(distinguishedName=" + groupDN+"))", null, false);
+            Console.WriteLine(lsc.Count);
+            while (lsc.HasMore())
+            {
+
+                LdapEntry nextEntry = null;
+                try
+                {
+                    nextEntry = lsc.Next();
+                }
+                catch (LdapException e)
+                {
+                    Console.WriteLine("Error: " + e.LdapErrorMessage);
+                    //Exception is thrown, go for next entry
+                    continue;
+                }
+
+                Console.WriteLine(nextEntry.Dn);
+            }
+        }
 
         public string createOU(string name)
         {
