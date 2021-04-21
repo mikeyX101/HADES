@@ -30,7 +30,7 @@ namespace HADES.Util
         {
             // Check Default User in BD
 
-            if (db.DefaultUser.Where((a)=> a.GetName().Equals(user,StringComparison.InvariantCultureIgnoreCase) && a.IsPassword(password)).First()!=null) // TODO CHECK
+            if (db.DefaultUser.SingleOrDefault((a)=> a.UserName.ToLower().Equals(user.ToLower()) && a.Password.Equals(password))!=null) // TODO CHECK
             {
                 return false;
             }
@@ -57,7 +57,7 @@ namespace HADES.Util
         // Returns the Hashed password for Default User (Other login is handled by Active Directory)
         private string HashPassword(string password)
         {
-
+            return null;
         }
     }
 
