@@ -35,9 +35,11 @@ namespace HADES.Util
             {
                 // Check Active Directory
 
+                // Update Admin/SuperAdmin User in DB
+
                 if (true)
                 {
-                    //Check Allowed in HADES
+                    //Check Allowed in HADES (is in DB as User)
                     return null;
                 }
                 else
