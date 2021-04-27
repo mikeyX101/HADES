@@ -1,5 +1,6 @@
 ﻿using HADES.Data;
 using HADES.Models;
+using Microsoft.AspNetCore.Authorization;
 using HADES.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

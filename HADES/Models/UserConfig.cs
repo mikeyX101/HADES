@@ -12,8 +12,8 @@ namespace HADES.Models
     {
         public UserConfig()
         {
-            Language = "fr";
-            ThemeFile = "light";
+            Language = "fr-CA";
+            ThemeFile = "site.css";
             Notification = false;
         }
 

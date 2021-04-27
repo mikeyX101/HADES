@@ -57,5 +57,11 @@ namespace HADES.Models
         {
             return this.UserConfig;
         }
+
+        // Always return false
+        public bool IsDefaultUser()
+        {
+            return false;
+        }
     }
 }

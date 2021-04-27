@@ -2,14 +2,16 @@
 using HADES.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace HADES.Data.Migrations
+namespace HADES.Migrations
 {
-    [DbContext(typeof(DbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(ApplicationDbContext))]
+    [Migration("20210421141307_rootOU")]
+    partial class rootOU
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -170,16 +172,6 @@ namespace HADES.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("DefaultUser_DUS");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Password = "teWqcWW3Ks4yNoq84+Akbx+4feKr/tp+ZVU2CjCbKwI=",
-                            RoleId = 1,
-                            UserConfigId = 1,
-                            UserName = "admin"
-                        });
                 });
 
             modelBuilder.Entity("HADES.Models.Email", b =>
@@ -301,48 +293,6 @@ namespace HADES.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Role_ROL");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            AdCrudAccess = true,
-                            AppConfigAccess = true,
-                            DefineOwner = true,
-                            EventLogAccess = true,
-                            Name = "SuperAdmin",
-                            UserListAccess = true
-                        },
-                        new
-                        {
-                            Id = 2,
-                            AdCrudAccess = true,
-                            AppConfigAccess = false,
-                            DefineOwner = true,
-                            EventLogAccess = true,
-                            Name = "Admin",
-                            UserListAccess = true
-                        },
-                        new
-                        {
-                            Id = 3,
-                            AdCrudAccess = false,
-                            AppConfigAccess = false,
-                            DefineOwner = false,
-                            EventLogAccess = false,
-                            Name = "Owner",
-                            UserListAccess = false
-                        },
-                        new
-                        {
-                            Id = 4,
-                            AdCrudAccess = false,
-                            AppConfigAccess = false,
-                            DefineOwner = false,
-                            EventLogAccess = false,
-                            Name = "inactive",
-                            UserListAccess = false
-                        });
                 });
 
             modelBuilder.Entity("HADES.Models.SuperAdminGroup", b =>
@@ -422,15 +372,6 @@ namespace HADES.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("UserConfig_UCF");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Language = "fr-CA",
-                            Notification = false,
-                            ThemeFile = "site.css"
-                        });
                 });
 
             modelBuilder.Entity("HADES.Models.AdminGroup", b =>

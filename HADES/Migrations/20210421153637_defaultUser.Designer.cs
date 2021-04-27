@@ -2,14 +2,16 @@
 using HADES.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace HADES.Data.Migrations
+namespace HADES.Migrations
 {
-    [DbContext(typeof(DbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(ApplicationDbContext))]
+    [Migration("20210421153637_defaultUser")]
+    partial class defaultUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -175,7 +177,7 @@ namespace HADES.Data.Migrations
                         new
                         {
                             Id = 1,
-                            Password = "teWqcWW3Ks4yNoq84+Akbx+4feKr/tp+ZVU2CjCbKwI=",
+                            Password = "",
                             RoleId = 1,
                             UserConfigId = 1,
                             UserName = "admin"

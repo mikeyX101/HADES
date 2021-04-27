@@ -47,7 +47,18 @@ namespace HADES.Data
             modelBuilder.Entity<SuperAdminGroup>().ToTable("SuperAdminGroup_SUG");
             modelBuilder.Entity<User>().ToTable("User_USE");
             modelBuilder.Entity<UserConfig>().ToTable("UserConfig_UCF");
-            modelBuilder.Entity<ActiveDirectory>().ToTable("ActiveDirectory_ADR");
+
+            // CREATE ROLES
+            modelBuilder.Entity<Role>().HasData(new Role { Id = 1, Name = "SuperAdmin", AppConfigAccess = true, AdCrudAccess = true, UserListAccess = true, EventLogAccess = true, DefineOwner = true });
+            modelBuilder.Entity<Role>().HasData(new Role { Id = 2, Name = "Admin", AppConfigAccess = false, AdCrudAccess = true, UserListAccess = true, EventLogAccess = true, DefineOwner = true });
+            modelBuilder.Entity<Role>().HasData(new Role { Id = 3, Name = "Owner", AppConfigAccess = false, AdCrudAccess = false, UserListAccess = false, EventLogAccess = false, DefineOwner = false });
+            modelBuilder.Entity<Role>().HasData(new Role { Id = 4, Name = "inactive", AppConfigAccess = false, AdCrudAccess = false, UserListAccess = false, EventLogAccess = false, DefineOwner = false });
+
+            // CREATE DEFAULT USERCONFIG
+            modelBuilder.Entity<UserConfig>().HasData(new UserConfig { Id = 1, Notification = false, Language="fr-CA", ThemeFile="site.css" });
+
+            // ADD DEFAULT USER
+            modelBuilder.Entity<DefaultUser>().HasData(new DefaultUser {Id=1, UserName = "admin", Password = "teWqcWW3Ks4yNoq84+Akbx+4feKr/tp+ZVU2CjCbKwI=", RoleId = 1, UserConfigId = 1 });
         }
     }
 }
