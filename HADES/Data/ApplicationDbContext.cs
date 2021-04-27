@@ -48,10 +48,10 @@ namespace HADES.Data
             modelBuilder.Entity<UserConfig>().ToTable("UserConfig_UCF");
 
             // CREATE ROLES
-            modelBuilder.Entity<Role>().HasData(new Role { Id = 1, Name = "SuperAdmin", AppConfigAccess = true, AdCrudAccess = true, UserListAccess = true, EventLogAccess = true, DefineOwner = true });
-            modelBuilder.Entity<Role>().HasData(new Role { Id = 2, Name = "Admin", AppConfigAccess = false, AdCrudAccess = true, UserListAccess = true, EventLogAccess = true, DefineOwner = true });
-            modelBuilder.Entity<Role>().HasData(new Role { Id = 3, Name = "Owner", AppConfigAccess = false, AdCrudAccess = false, UserListAccess = false, EventLogAccess = false, DefineOwner = false });
-            modelBuilder.Entity<Role>().HasData(new Role { Id = 4, Name = "inactive", AppConfigAccess = false, AdCrudAccess = false, UserListAccess = false, EventLogAccess = false, DefineOwner = false });
+            modelBuilder.Entity<Role>().HasData(new Role { Id = 1, Name = "SuperAdmin", AppConfigAccess = true, AdCrudAccess = true, UserListAccess = true, EventLogAccess = true, DefineOwner = true, HadesAccess = true });
+            modelBuilder.Entity<Role>().HasData(new Role { Id = 2, Name = "Admin", AppConfigAccess = false, AdCrudAccess = true, UserListAccess = true, EventLogAccess = true, DefineOwner = true, HadesAccess = true });
+            modelBuilder.Entity<Role>().HasData(new Role { Id = 3, Name = "Owner", AppConfigAccess = false, AdCrudAccess = false, UserListAccess = false, EventLogAccess = false, DefineOwner = false, HadesAccess = true });
+            modelBuilder.Entity<Role>().HasData(new Role { Id = 4, Name = "inactive", AppConfigAccess = false, AdCrudAccess = false, UserListAccess = false, EventLogAccess = false, DefineOwner = false, HadesAccess = false });
 
             // CREATE DEFAULT USERCONFIG
             modelBuilder.Entity<UserConfig>().HasData(new UserConfig { Id = 1, Notification = false, Language="fr-CA", ThemeFile="site.css" });

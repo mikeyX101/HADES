@@ -27,19 +27,25 @@ namespace HADES.Util
         //https://www.novell.com/documentation/developer/ldapcsharp/?page=/documentation/developer/ldapcsharp/cnet/data/bovumfi.html
         public ADManager()
         {
-           /* Console.WriteLine(authenticate("hades", "Toto123!"));
-            Console.WriteLine(createConnection());
+            /* Console.WriteLine(authenticate("hades", "Toto123!"));
+             Console.WriteLine(createConnection());
 
-             List<RootDataInformation> root = getRoot();
-             Console.WriteLine(root.Count);
-             for (int i = 0; i < root.Count; i++)
-             {
-                 Console.WriteLine(root[i]);
-             }
-*/
-           // Console.WriteLine(getGroupInformation("CN=Group1,OU=Dossier1,OU=hades_root,DC=R991-AD,DC=lan"));
-           Console.WriteLine(getUserAD("hdes"));
-           Console.WriteLine("---------------------------------------------------");
+              List<RootDataInformation> root = getRoot();
+              Console.WriteLine(root.Count);
+              for (int i = 0; i < root.Count; i++)
+              {
+                  Console.WriteLine(root[i]);
+              }
+ */
+            // Console.WriteLine(getGroupInformation("CN=Group1,OU=Dossier1,OU=hades_root,DC=R991-AD,DC=lan"));
+            try {
+                Console.WriteLine(getUserAD("hdes"));
+                Console.WriteLine("---------------------------------------------------");
+            } catch (ADException)
+            {
+
+            }
+            
             
 
             List<UserAD> users = getAllUsers();
