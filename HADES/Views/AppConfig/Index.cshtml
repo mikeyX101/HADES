@@ -3,9 +3,6 @@
     ViewBag.Title = Localizer["AppConfigTitle"];
 }
 
-@using Microsoft.AspNetCore.Mvc.Localization
-@inject IViewLocalizer Localizer
-
 <div class="bg-primary text-white text-center">
     <h1 class="m-3 p-3">@Localizer["ParametreApplication"]</h1>
 </div>
@@ -133,7 +130,7 @@
     </div>
     <div class="row">
         <div class="offset-2 col-sm-4">
-            <button type="submit" class="btn btn-primary">@Localizer["Submit"]</button>
+            <button type="submit" class="btn btn-primary">@Localizer["Save"]</button>
         </div>
     </div>
 </form>
