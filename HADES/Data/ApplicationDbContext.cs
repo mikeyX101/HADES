@@ -62,6 +62,7 @@ namespace HADES.Data
 
             // ADD DEFAULT USER
             modelBuilder.Entity<DefaultUser>().HasData(new DefaultUser {Id=1, UserName = "admin", Password = "teWqcWW3Ks4yNoq84+Akbx+4feKr/tp+ZVU2CjCbKwI=", RoleId = 1, UserConfigId = 1 });
+
         }
     }
 }
