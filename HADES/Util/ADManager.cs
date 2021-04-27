@@ -29,7 +29,6 @@ namespace HADES.Util
         {
            /* Console.WriteLine(authenticate("hades", "Toto123!"));
             Console.WriteLine(createConnection());
-            Console.WriteLine(getAllUsers());
 
              List<RootDataInformation> root = getRoot();
              Console.WriteLine(root.Count);
@@ -39,7 +38,16 @@ namespace HADES.Util
              }
 */
            // Console.WriteLine(getGroupInformation("CN=Group1,OU=Dossier1,OU=hades_root,DC=R991-AD,DC=lan"));
-          //  Console.WriteLine(getUserAD("hades"));
+           Console.WriteLine(getUserAD("hdes"));
+           Console.WriteLine("---------------------------------------------------");
+            
+
+            List<UserAD> users = getAllUsers();
+            Console.WriteLine(users.Count);
+            for (int i = 0; i < users.Count; i++)
+            {
+                Console.WriteLine(users[i]);
+            }
         }
 
   
@@ -156,9 +164,9 @@ namespace HADES.Util
         }
 
         // Get all User from the baseDN in the Active directory
-        public List<string> getAllUsers()
+        public List<UserAD> getAllUsers()
         {
-            List<string> users = new List<string>();
+            List<UserAD> users = new List<UserAD>();
 
             //Creating an LdapConnection instance
             LdapConnection connection = createConnection();
@@ -170,6 +178,13 @@ namespace HADES.Util
                 try
                 {
                     nextEntry = lsc.Next();
+
+                    UserAD u = new UserAD();
+                    u.SamAccountName = getAttributeValue(nextEntry, "samaccountName");
+                    u.FirstName = getAttributeValue(nextEntry, "givenName");
+                    u.LastName = getAttributeValue(nextEntry, "sn");
+                    u.Dn = nextEntry.Dn;
+                    users.Add(u);
                 }
                 catch (Exception e)
                 {
@@ -179,8 +194,6 @@ namespace HADES.Util
                     continue;
                 }
 
-                users.Add(nextEntry.Dn);
-                Console.WriteLine("\n" + nextEntry.Dn);
             }
 
             return users;
@@ -199,6 +212,16 @@ namespace HADES.Util
                 try
                 {
                     nextEntry = lsc.Next();
+
+                    if (getAttributeValue(nextEntry, "sAMAccountName") == username)
+                    {
+                        userWasFound = true;
+                        u = new UserAD();
+                        u.SamAccountName = getAttributeValue(nextEntry, "samaccountName");
+                        u.FirstName = getAttributeValue(nextEntry, "givenName");
+                        u.LastName = getAttributeValue(nextEntry, "sn");
+                        u.Dn = nextEntry.Dn;
+                    }
                 }
                 catch (Exception e)
                 {
@@ -207,17 +230,12 @@ namespace HADES.Util
                     continue;
                 }
 
-
-                if (getAttributeValue(nextEntry, "sAMAccountName") == username)
-                {
-                    userWasFound = true;
-                    u = new UserAD();
-                    u.SamAccountName = getAttributeValue(nextEntry, "samaccountName");
-                    u.FirstName = getAttributeValue(nextEntry, "givenName");
-                    u.LastName = getAttributeValue(nextEntry, "sn");
-                    u.Dn = nextEntry.Dn;
-                }
             }
+
+            if (u == null) {
+                throw new ADException();
+            }
+
             return u;
         }
 
