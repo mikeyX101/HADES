@@ -37,8 +37,9 @@ namespace HADES.Util
              {
                  Console.WriteLine(root[i]);
              }
-
-            Console.WriteLine(getGroupInformation("CN=Group1,OU=Dossier1,OU=hades_root,DC=R991-AD,DC=lan"));*/
+*/
+           // Console.WriteLine(getGroupInformation("CN=Group1,OU=Dossier1,OU=hades_root,DC=R991-AD,DC=lan"));
+          //  Console.WriteLine(getUserAD("hades"));
         }
 
   
@@ -180,10 +181,44 @@ namespace HADES.Util
 
                 users.Add(nextEntry.Dn);
                 Console.WriteLine("\n" + nextEntry.Dn);
-
             }
 
             return users;
+        }
+
+        // Get the UserAD of the username 
+        public UserAD getUserAD(string username) {
+            UserAD u = null;
+            LdapConnection connection = createConnection();
+            LdapSearchResults lsc = (LdapSearchResults)connection.Search(baseDN, LdapConnection.ScopeSub, connectionFilter, null, false);
+            bool userWasFound = false;
+           
+            while (lsc.HasMore() && userWasFound == false)
+            {
+                LdapEntry nextEntry = null;
+                try
+                {
+                    nextEntry = lsc.Next();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Error: " + e.Message);
+                    //Exception is thrown, go for next entry
+                    continue;
+                }
+
+
+                if (getAttributeValue(nextEntry, "sAMAccountName") == username)
+                {
+                    userWasFound = true;
+                    u = new UserAD();
+                    u.SamAccountName = getAttributeValue(nextEntry, "samaccountName");
+                    u.FirstName = getAttributeValue(nextEntry, "givenName");
+                    u.LastName = getAttributeValue(nextEntry, "sn");
+                    u.Dn = nextEntry.Dn;
+                }
+            }
+            return u;
         }
 
 
@@ -284,23 +319,32 @@ namespace HADES.Util
                     group.Email = getAttributeValue(nextEntry, "mail");
                     group.Notes = getAttributeValue(nextEntry, "info");
                     group.Description = getAttributeValue(nextEntry, "description");
+                    group.Members = GetMembersOfGroup(groupDN);
                 }
                 catch (LdapException e)
                 {
+                    connection.Disconnect();
                     Console.WriteLine("Error: " + e.LdapErrorMessage);
                     //Exception is thrown, go for next entry
                     continue;
                 }
                 catch (Exception e)
                 {
+                    connection.Disconnect();
                     Console.WriteLine("LOG: " + e.Message);
                 }
-
-
             }
 
+            connection.Disconnect();
+            return group;
+        }
+
+        public List<UserAD> GetMembersOfGroup(string groupDN) {
+            LdapConnection connection = createConnection();
+
             // Get members
-            lsc = (LdapSearchResults)connection.Search(baseDN, LdapConnection.ScopeSub, "(&(objectClass=user)(memberOf=" + groupDN + "))", null, false);
+            LdapSearchResults lsc = (LdapSearchResults)connection.Search(baseDN, LdapConnection.ScopeSub, "(&(objectClass=user)(memberOf=" + groupDN + "))", null, false);
+            List<UserAD> users = new List<UserAD>();
 
             while (lsc.HasMore())
             {
@@ -312,18 +356,25 @@ namespace HADES.Util
                     u.SamAccountName = getAttributeValue(nextEntry, "sAMAccountName");
                     u.FirstName = getAttributeValue(nextEntry, "givenName");
                     u.LastName = getAttributeValue(nextEntry, "sn");
-                    group.Members.Add(u);
+                    u.Dn = nextEntry.Dn;
+                    users.Add(u);
+
                 }
                 catch (LdapException e)
                 {
+                    connection.Disconnect();
                     Console.WriteLine("LOG: " + e.Message);
                     //Exception is thrown, go for next entry
                     continue;
-                } catch (Exception e) {
+                }
+                catch (Exception e)
+                {
                     Console.WriteLine("LOG: " + e.Message);
+                    connection.Disconnect();
                 }
             }
-            return group;
+            connection.Disconnect();
+            return users;
         }
 
         public string createOU(string name)
@@ -373,6 +424,7 @@ namespace HADES.Util
         {
 
         }
+
         public string createGroup(string name, string ouName)
         {
             LdapConnection connection = createConnection();
@@ -405,6 +457,8 @@ namespace HADES.Util
         {
 
         }
+
+
 
 
 
