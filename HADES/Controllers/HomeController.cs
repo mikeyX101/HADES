@@ -39,11 +39,9 @@ namespace HADES.Controllers
                 BuildRootTreeNode(adRoot);
                 viewModel.ADRootJson = TreeNodeToJson(viewModel.ADRoot);
                 viewModel.SelectedNode = viewModel.ADRoot;
-                var user = ConnexionUtil.CurrentUser(this);
                 ViewBag.UserName = ConnexionUtil.CurrentUser(this).GetName();
                 ViewBag.UserRole = ConnexionUtil.CurrentUser(this).GetRole();
                 ViewBag.CompanyName = context.AppConfig.Find(1).CompanyName;
-                var test = context.AppConfig.Find(1);
 
                 return View(viewModel);
             }
