@@ -39,6 +39,10 @@ namespace HADES.Models
         [Column("ROL_access_ad_crud")]
         public bool AdCrudAccess { get; set; }
 
+        [Required]
+        [Column("ROL_access_hades")]
+        public bool HadesAccess { get; set; }
+
 
         public virtual ICollection<User> Users { get; set; }
         public virtual ICollection<DefaultUser> DefaultUsers { get; set; }
