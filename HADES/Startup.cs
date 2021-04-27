@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.HttpOverrides;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -26,10 +27,24 @@ namespace HADES
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddRouting(options => options.LowercaseUrls = true);
+		// This method gets called by the runtime. Use this method to add services to the container.
+		public void ConfigureServices(IServiceCollection services)
+		{
+			// Should be before anything else
+			#region Reverse Proxy Setup
+			services.Configure<ForwardedHeadersOptions>(options =>
+			{
+				options.ForwardLimit = 1;
+				options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+
+				options.KnownNetworks.Clear();
+				options.KnownProxies.Clear();
+				options.KnownProxies.Add(System.Net.IPAddress.Loopback);
+
+			});
+			#endregion
+
+			services.AddRouting(options => options.LowercaseUrls = true);
 
             services.AddMemoryCache();
             services.AddSession();
@@ -48,7 +63,6 @@ namespace HADES
 
             services.AddControllersWithViews();
             services.AddMvc(options => options.Filters.Add(new AuthorizeFilter()));
-
 
             #region Localization Setup
             // Configure localization
@@ -98,22 +112,33 @@ namespace HADES
             #endregion
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseMigrationsEndPoint();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
+		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+		{
+
+			if (env.IsDevelopment())
+			{
+				app.UseHttpsRedirection();
+				app.UseDeveloperExceptionPage();
+				app.UseMigrationsEndPoint();
+			}
+			else if (env.IsProduction())
+			{
+				// UseForwardedHeaders() must be executed before UseHtst().
+				app.UseForwardedHeaders();
+				app.UseExceptionHandler("/Home/Error");
+                app.UseHttpsRedirection();
+				// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+				app.UseHsts();
+
+				// If production build, run migrations to keep database up-to-date.
+				using (IServiceScope scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+				{
+					scope.ServiceProvider.GetRequiredService<ApplicationDbContext>().Database.Migrate();
+				}
+			}
+
+			app.UseStaticFiles();
 
             app.UseRouting();
 

@@ -31,10 +31,6 @@ namespace HADES.Data
         public DbSet<User> User { get; set; }
         public DbSet<UserConfig> UserConfig { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder options)
-           => options.UseSqlite("Data Source=App_Data\\DBHades.db");
-
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<AdminGroup>().ToTable("AdminGroup_ADG");
