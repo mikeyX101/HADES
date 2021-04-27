@@ -37,10 +37,11 @@ namespace HADES.Util
 
                 // Update Admin/SuperAdmin User in DB
 
-                if (true)
+                if (db.User.SingleOrDefault((u) => u.SamAccount.ToLower().Equals(aDManager.getUserAD(user).SamAccountName)) != null)
                 {
                     //Check Allowed in HADES (is in DB as User)
-                    return null;
+
+                    return db.User.SingleOrDefault((u) => u.SamAccount.ToLower().Equals(aDManager.getUserAD(user).SamAccountName));
                 }
                 else
                 {

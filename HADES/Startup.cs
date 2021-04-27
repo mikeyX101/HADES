@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
@@ -39,6 +40,7 @@ namespace HADES
                 options.LoginPath = "/Account/Login";
                 options.LogoutPath = "/Account/Logout";
                 options.AccessDeniedPath = "/Account/AccessDenied";
+                options.Cookie.Expiration = new TimeSpan(12, 0, 0);
             });
 
             services.AddDbContext<ApplicationDbContext>(options =>
