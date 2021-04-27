@@ -41,13 +41,13 @@ namespace HADES.Util
 
             // Console.WriteLine(getUserAD("hades"));
             //Console.WriteLine(deleteOU("OU=Dossier4,OU=hades_root,DC=R991-AD,DC=lan"));
-            Console.WriteLine("---------------------------------------------------");
+          /*  Console.WriteLine("---------------------------------------------------");
             List<RootDataInformation> root = getRoot();
             Console.WriteLine(root.Count);
             for (int i = 0; i < root.Count; i++)
             {
                 Console.WriteLine(root[i]);
-            }
+            }*/
 
 
             /* List<UserAD> users = getAllUsers();
