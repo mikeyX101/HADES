@@ -11,7 +11,7 @@ namespace HADES.Services
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        public async Task<UserConfigViewModel> UserConfigViewModelGET(int? id)
+        public async Task<UserConfigViewModel> UserConfig(int? id)
         {
             var userConfig = await db.UserConfig.FindAsync(id);
             var emails = db.Email.Where(m => m.UserConfigId == userConfig.Id).ToList();
@@ -21,7 +21,6 @@ namespace HADES.Services
                 UserConfig = userConfig,
                 Emails = emails
             };
-
             return viewModel;
         }
         public async Task UpdateUserConfig(UserConfigViewModel viewModel)

@@ -9,9 +9,9 @@ namespace HADES.Models
     {
         public ActiveDirectory ActiveDirectory { get; set; }
 
-        public ICollection<AdminGroup> AdminGroups { get; set; }
+        public List<AdminGroup> AdminGroups { get; set; }
 
-        public ICollection<SuperAdminGroup> SuperAdminGroups { get; set; }
+        public List<SuperAdminGroup> SuperAdminGroups { get; set; }
 
         public DefaultUser DefaultUser { get; set; }   
 

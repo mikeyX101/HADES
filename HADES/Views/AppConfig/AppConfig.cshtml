@@ -121,18 +121,68 @@
             <input type="text" asp-for="@Model.AppConfig.LogTotalMaxSize" class="form-control" />
         </div>
     </div>
-    <div class="form-group row">
-        <div class="col-sm-2"><label>@Localizer["AdminGroup"]</label></div>
-        <div class="col-sm-4">
-            @*<input type="text" asp-for="@Model.AdminGroup" class="form-control" />*@
+    @if (Model.AppConfig != null )
+    {
+        <div class="">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            <label asp-for="@Model.AdminGroups.First().SamAccount" class="control-label"></label>
+                        </th>
+
+                    </tr>
+                </thead>
+                @if (Model.AdminGroups != null)
+                {
+                    for (var i = 0; i < Model.AdminGroups.Count(); i++)
+                    {
+                        <tr>
+                            <td>
+                                <input type="hidden" asp-for="@Model.AdminGroups[i].Id" />
+                                <input type="hidden" asp-for="@Model.AdminGroups[i].AppConfigId" />
+                                <input class="form-control" asp-for="@Model.AdminGroups[i].SamAccount" />
+                            </td>
+                            <td><a asp-action="AdminGroupDelete" asp-route-id="@Model.AdminGroups[i].Id"><h2><i class="bi bi-trash"></i></h2></a></td>
+                        </tr>
+                    }
+                }
+                <tr>
+                    <td><a asp-action="CreateAdminGroup" asp-route-id="@Model.AppConfig.Id"><h2><i class="bi bi-person-plus-fill"></i></h2></a></td>
+                </tr>
+            </table>
         </div>
-    </div>
-    <div class="form-group row">
-        <div class="col-sm-2"><label>@Localizer["SuperAdminGroup"]</label></div>
-        <div class="col-sm-4">
-            @*<input type="text" asp-for="@Model.SuperAdminGroup" class="form-control" />*@
+
+        <div class="">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            <label asp-for="@Model.SuperAdminGroups.First().SamAccount" class="control-label"></label>
+                        </th>
+
+                    </tr>
+                </thead>
+                @if (Model.SuperAdminGroups != null)
+                {
+                    for (var i = 0; i < Model.SuperAdminGroups.Count(); i++)
+                    {
+                        <tr>
+                            <td>
+                                <input type="hidden" asp-for="@Model.SuperAdminGroups[i].Id" />
+                                <input type="hidden" asp-for="@Model.SuperAdminGroups[i].AppConfigId" />
+                                <input class="form-control" asp-for="@Model.SuperAdminGroups[i].SamAccount" />
+                            </td>
+                            <td><a asp-action="SuperAdminGroupDelete" asp-route-id="@Model.SuperAdminGroups[i].Id"><h2><i class="bi bi-trash"></i></h2></a></td>
+                        </tr>
+                    }
+                }
+                <tr>
+                    <td><a asp-action="CreateSuperAdminGroup" asp-route-id="@Model.AppConfig.Id"><h2><i class="bi bi-person-plus-fill"></i></h2></a></td>
+                </tr>
+            </table>
         </div>
-    </div>
+    }
     <div class="form-group row">
         <div class="col-sm-4">
             @Html.ValidationSummary()

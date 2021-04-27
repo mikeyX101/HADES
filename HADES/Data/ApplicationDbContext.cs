@@ -55,10 +55,10 @@ namespace HADES.Data
             modelBuilder.Entity<Role>().HasData(new Role { Id = 4, Name = "inactive", AppConfigAccess = false, AdCrudAccess = false, UserListAccess = false, EventLogAccess = false, DefineOwner = false });
 
             // CREATE DEFAULT USERCONFIG
-            modelBuilder.Entity<UserConfig>().HasData(new UserConfig { Id = 1, Notification = false, Language="fr-CA", ThemeFile="site.css" });
+            modelBuilder.Entity<UserConfig>().HasData(new UserConfig { Id = 1, Notification = false, Language = "fr-CA", ThemeFile = "site.css" });
 
             // ADD DEFAULT USER
-            modelBuilder.Entity<DefaultUser>().HasData(new DefaultUser {Id=1, UserName = "admin", Password = "teWqcWW3Ks4yNoq84+Akbx+4feKr/tp+ZVU2CjCbKwI=", RoleId = 1, UserConfigId = 1 });
+            modelBuilder.Entity<DefaultUser>().HasData(new DefaultUser { Id = 1, UserName = "admin", Password = "teWqcWW3Ks4yNoq84+Akbx+4feKr/tp+ZVU2CjCbKwI=", RoleId = 1, UserConfigId = 1 });
         }
     }
 }

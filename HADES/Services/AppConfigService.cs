@@ -46,97 +46,135 @@ namespace HADES.Services
             viewModel.AppConfig.ActiveDirectory = viewModel.ActiveDirectory;
 
             db.Update(viewModel.AppConfig);
+            db.Update(viewModel.DefaultUser);
+            if (viewModel.AdminGroups != null)
+            {
+                foreach (var group in viewModel.AdminGroups)
+                {
+                    db.Update(group);
+                }
+            }
 
-            CreateDefaultUserIfNotExist(viewModel);
-            //if (viewModel.AdminGroups != null)
-            //{
-            //    foreach (var group in viewModel.AdminGroups)
-            //    {
-            //        db.Update(group);
-            //    }
-            //}
-
-            //if (viewModel.SuperAdminGroups != null)
-            //{
-            //    foreach (var group in viewModel.SuperAdminGroups)
-            //    {
-            //        db.Update(group);
-            //    }
-            //}
+            if (viewModel.SuperAdminGroups != null)
+            {
+                foreach (var group in viewModel.SuperAdminGroups)
+                {
+                    db.Update(group);
+                }
+            }
 
             await db.SaveChangesAsync();
         }
 
-        public async void CreateDefaultUserIfNotExist(AppConfigViewModel viewModel)
-        {
-            var defaultUser = await db.DefaultUser.FirstOrDefaultAsync();
-            if (defaultUser == null)
-            {
-                CreateRolesIfNotExist();
-                var role = db.Role.Where(x => x.Name == "Super Admin").First();
-                var userConfig = new UserConfig();
-                db.Update(userConfig);
-                db.Update(new DefaultUser
-                {
-                    UserName = viewModel.DefaultUser.UserName,
-                    Password = viewModel.DefaultUser.Password,
-                    Role = role,
-                    UserConfig = userConfig
-                }); ;
-            }
-            else
-            {
-                db.ChangeTracker.Clear();
-                db.Update(viewModel.DefaultUser);
-            }
-        }
+        //public async void CreateDefaultUserIfNotExist(AppConfigViewModel viewModel)
+        //{
+        //    var defaultUser = await db.DefaultUser.FirstOrDefaultAsync();
+        //    if (defaultUser == null)
+        //    {
+        //        CreateRolesIfNotExist();
+        //        var role = db.Role.Where(x => x.Name == "SuperAdmin").First();
+        //        var userConfig = new UserConfig();
+        //        db.Update(userConfig);
+        //        db.Update(new DefaultUser
+        //        {
+        //            UserName = viewModel.DefaultUser.UserName,
+        //            Password = viewModel.DefaultUser.Password,
+        //            Role = role,
+        //            UserConfig = userConfig
+        //        }); ;
+        //    }
+        //    else
+        //    {
+        //        db.ChangeTracker.Clear();
+        //        db.Update(viewModel.DefaultUser);
+        //    }
+        //}
 
 
-        public void CreateRolesIfNotExist()
-        {
-            if (!db.Role.Any())
-            {
-                db.Role.Add(new Role
-                {
-                    Id = 1,
-                    Name = "Super Admin",
-                    AppConfigAccess = true,
-                    EventLogAccess = true,
-                    UserListAccess = true,
-                    DefineOwner = true,
-                    AdCrudAccess = true
-                });
+        //public void CreateRolesIfNotExist()
+        //{
+        //    if (!db.Role.Any())
+        //    {
+        //        db.Role.Add(new Role
+        //        {
+        //            Id = 1,
+        //            Name = "SuperAdmin",
+        //            AppConfigAccess = true,
+        //            EventLogAccess = true,
+        //            UserListAccess = true,
+        //            DefineOwner = true,
+        //            AdCrudAccess = true
+        //        });
 
-                db.Role.Add(new Role
-                {
-                    Id = 2,
-                    Name = "Admin",
-                    AppConfigAccess = true,
-                    EventLogAccess = true,
-                    UserListAccess = true,
-                    DefineOwner = true,
-                    AdCrudAccess = true
-                });
-                db.Role.Add(new Role
-                {
-                    Id = 3,
-                    Name = "Owner",
-                    AppConfigAccess = true,
-                    EventLogAccess = true,
-                    UserListAccess = true,
-                    DefineOwner = true,
-                    AdCrudAccess = true
-                });
-            };
+        //        db.Role.Add(new Role
+        //        {
+        //            Id = 2,
+        //            Name = "Admin",
+        //            AppConfigAccess = true,
+        //            EventLogAccess = true,
+        //            UserListAccess = true,
+        //            DefineOwner = true,
+        //            AdCrudAccess = true
+        //        });
+        //        db.Role.Add(new Role
+        //        {
+        //            Id = 3,
+        //            Name = "Owner",
+        //            AppConfigAccess = true,
+        //            EventLogAccess = true,
+        //            UserListAccess = true,
+        //            DefineOwner = true,
+        //            AdCrudAccess = true
+        //        });
+        //    };
 
 
-            db.SaveChanges();
-        }
+        //    db.SaveChanges();
+        //}
 
         public bool AppConfigExists(AppConfigViewModel viewModel)
         {
             return db.AppConfig.Any(x => x.Id == viewModel.AppConfig.Id);
         }
+
+        public async Task AddAdminGroup(AdminGroup adminGroup)
+        {
+            db.Add(adminGroup);
+            await db.SaveChangesAsync();
+        }
+
+        public async Task AddSuperAdminGroup(SuperAdminGroup SuperAdminGroup)
+        {
+            db.Add(SuperAdminGroup);
+            await db.SaveChangesAsync();
+        }
+
+        public async Task DeleteAdminGroup(int? id)
+        {
+            var adminGroup = await db.AdminGroup.FindAsync(id);
+            db.AdminGroup.Remove(adminGroup);
+            await db.SaveChangesAsync();
+        }
+
+        public async Task DeleteSuperAdminGroup(int? id)
+        {
+            var superAdminGroup = await db.SuperAdminGroup.FindAsync(id);
+            db.SuperAdminGroup.Remove(superAdminGroup);
+            await db.SaveChangesAsync();
+        }
+
+        public async Task<int> AdminGroupRedirectId(int? id)
+        {
+            var adminGroup = await db.AdminGroup.FindAsync(id);
+            return adminGroup.AppConfigId;
+        }
+
+        public async Task<int> SuperAdminGroupRedirectId(int? id)
+        {
+            var superAdminGroup = await db.SuperAdminGroup.FindAsync(id);
+            return superAdminGroup.AppConfigId;
+        }
+
 
     }
 }
