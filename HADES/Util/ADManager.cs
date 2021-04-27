@@ -38,8 +38,8 @@ namespace HADES.Util
                  Console.WriteLine(root[i]);
              }
 */
-            Console.WriteLine(getGroupInformation("CN=Group1,OU=Dossier1,OU=hades_root,DC=R991-AD,DC=lan"));
-
+           // Console.WriteLine(getGroupInformation("CN=Group1,OU=Dossier1,OU=hades_root,DC=R991-AD,DC=lan"));
+          //  Console.WriteLine(getUserAD("hades"));
         }
 
   
@@ -181,13 +181,44 @@ namespace HADES.Util
 
                 users.Add(nextEntry.Dn);
                 Console.WriteLine("\n" + nextEntry.Dn);
-
             }
 
             return users;
         }
 
-        public void getUserAD(string username) { 
+        // Get the UserAD of the username 
+        public UserAD getUserAD(string username) {
+            UserAD u = null;
+            LdapConnection connection = createConnection();
+            LdapSearchResults lsc = (LdapSearchResults)connection.Search(baseDN, LdapConnection.ScopeSub, connectionFilter, null, false);
+            bool userWasFound = false;
+           
+            while (lsc.HasMore() && userWasFound == false)
+            {
+                LdapEntry nextEntry = null;
+                try
+                {
+                    nextEntry = lsc.Next();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Error: " + e.Message);
+                    //Exception is thrown, go for next entry
+                    continue;
+                }
+
+
+                if (getAttributeValue(nextEntry, "sAMAccountName") == username)
+                {
+                    userWasFound = true;
+                    u = new UserAD();
+                    u.SamAccountName = getAttributeValue(nextEntry, "samaccountName");
+                    u.FirstName = getAttributeValue(nextEntry, "givenName");
+                    u.LastName = getAttributeValue(nextEntry, "sn");
+                    u.Dn = nextEntry.Dn;
+                }
+            }
+            return u;
         }
 
 
