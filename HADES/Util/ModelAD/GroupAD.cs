@@ -7,7 +7,7 @@ namespace HADES.Util.ModelAD
 {
     public class GroupAD
     {
-        private string name;
+
         private List<UserAD> members;
         private string description;
         private string email;
@@ -16,25 +16,23 @@ namespace HADES.Util.ModelAD
 
         public GroupAD()
         {
-            this.Name = null;
+            this.SamAccountName = null;
             this.Members = new List<UserAD>();
             this.Description = null;
             this.Email = null;
             this.Notes = null;
-            this.SamAccountName = null;
+            
         }
 
-        public GroupAD(string name, List<UserAD> members, string description, string email, string notes, string samAccountName)
+        public GroupAD(string samAccountName, List<UserAD> members, string description, string email, string notes)
         {
-            this.Name = name;
+            this.SamAccountName = samAccountName;
             this.Members = members;
             this.Description = description;
             this.Email = email;
             this.Notes = notes;
-            this.SamAccountName = samAccountName;
         }
 
-        public string Name { get => name; set => name = value; }
         public List<UserAD> Members { get => members; set => members = value; }
         public string Description { get => description; set => description = value; }
         public string Email { get => email; set => email = value; }
@@ -48,7 +46,7 @@ namespace HADES.Util.ModelAD
                 m += Members[i] + " | ";
             }
 
-            return "[ Name: "+ Name  + ", Members: " + m + ", Description: "+ Description + ", Email: " + Email + ", Notes: "+ Notes+ ", SamAccountName: " + SamAccountName + "]";
+            return "[ SamAccountName: " + SamAccountName + ", Members: " + m + ", Description: "+ Description + ", Email: " + Email + ", Notes: "+ Notes+ "]";
         }
     }
 }
