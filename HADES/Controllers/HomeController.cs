@@ -1,25 +1,22 @@
 ﻿using HADES.Models;
-using HADES.Util;
+using HADES.Util.ModelAD;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
-using Microsoft.Extensions.Logging;
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using HADES.Util;
 
 namespace HADES.Controllers
 {
     public class HomeController : LocalizedController<HomeController>
     {
         private ADManager ad;
+        private MainViewViewModel viewModel;
 
         public HomeController(IStringLocalizer<HomeController> localizer) : base(localizer)
         {
             ad = new ADManager();
+            viewModel = new MainViewViewModel();
         }
 
         public IActionResult Login()
@@ -28,43 +25,60 @@ namespace HADES.Controllers
         }
 
         // Returns the Main Application View parameter is the selected Folder
-        public IActionResult MainView(/*Folder f*/)
+        public IActionResult MainView()
         {
-            // Fill ViewBag with Folders and Groups to display as a TreeSet
             var adRoot = ad.getRoot();
+            BuildRootTreeNode(adRoot);
+            viewModel.ADRootJson = TreeNodeToJson(viewModel.ADRoot);
+            viewModel.SelectedNode = viewModel.ADRoot;
 
-            TreeNode<string> root = new TreeNode<string>("root");
+            return View(viewModel);
+        }
+
+        private void BuildRootTreeNode(List<RootDataInformation> adRoot)
+        {
+            TreeNode<string> ou = null;
+            TreeNode<string> group = null;
+            TreeNode<string> member = null;
+            string[] path = null;
+            foreach (var item in adRoot)
             {
-                TreeNode<string> node0 = root.AddChild("node0");
-                TreeNode<string> node1 = root.AddChild("node1");
-                TreeNode<string> node2 = root.AddChild("node2");
+                path = item.Path?.Split("/");
+                if (path == null)
                 {
-                    TreeNode<string> node20 = node2.AddChild("node20");
-                    TreeNode<string> node21 = node2.AddChild("node21");
-                    {
-                        TreeNode<string> node210 = node21.AddChild("node210");
-                        TreeNode<string> node211 = node21.AddChild("node211");
-                    }
+                    viewModel.ADRoot = new TreeNode<string>(item.Name);
                 }
-                TreeNode<string> node3 = root.AddChild("node3");
+                else if (path.Length == 2)
                 {
-                    TreeNode<string> node30 = node3.AddChild("node30");
+                    ou = viewModel.ADRoot.AddChild(item.Name);
+                }
+                else if (path.Length == 3)
+                {
+                    group = ou.AddChild(item.Name);
+                }
+                else if (path.Length == 4)
+                {
+                    member = group.AddChild(item.Name);
                 }
             }
-            var rootJson = JsonConvert.SerializeObject(root, Formatting.Indented,
-                                            new JsonSerializerSettings
-                                            {
-                                                NullValueHandling = NullValueHandling.Ignore,
-                                                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                                            });
-            rootJson = rootJson.Replace("\"nodes\": []", "");
-            ViewBag.output = rootJson;
-            return View();
         }
 
         public IActionResult Error()
         {
             return View();
         }
+
+        private string TreeNodeToJson(TreeNode<string> treeNode)
+        {
+            return JsonConvert.SerializeObject(treeNode, Formatting.Indented,
+                                                    new JsonSerializerSettings
+                                                    {
+                                                        NullValueHandling = NullValueHandling.Ignore,
+                                                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                                                    })
+                                                .Replace("\"nodes\": []", "");
+        }
+
+
     }
 }

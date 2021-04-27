@@ -1,82 +1,6 @@
 ﻿function userDataDependent(userObj) {
     $(function () {
-
-        // Data for treeview
-        //var defaultData1 = [
-        //    {
-        //        text: 'Dossier 1',
-        //        nodes: [
-        //            {
-        //                text: 'Groupe 1',
-        //                nodes: [
-        //                    {
-        //                        text: 'Membre 1',
-        //                    },
-        //                    {
-        //                        text: 'Membre 2',
-        //                    }
-        //                ]
-        //            },
-        //            {
-        //                text: 'Groupe 2',
-        //            }
-        //        ]
-        //    },
-        //    {
-        //        text: 'Dossier 2',
-        //    },
-        //    {
-        //        text: 'Dossier 3',
-        //    }
-        //];
-
-        //var defaultData2 = [
-        //    {
-        //        "text": "root",
-        //        "nodes": [
-        //            {
-        //                "text": "node0",
-        //                "nodes": []
-        //            },
-        //            {
-        //                "text": "node1",
-        //                "nodes": []
-        //            },
-        //            {
-        //                "text": "node2",
-        //                "nodes": [
-        //                    {
-        //                        "nodes": []
-        //                    },
-        //                    {
-        //                        "text": "node21",
-        //                        "nodes": [
-        //                            {
-        //                                "text": "node210",
-        //                                "nodes": []
-        //                            },
-        //                            {
-        //                                "text": "node211",
-        //                                "nodes": []
-        //                            }
-        //                        ]
-        //                    }
-        //                ]
-        //            },
-        //            {
-        //                "text": "node3",
-        //                "nodes": [
-        //                    {
-        //                        "text": "node30",
-        //                        "nodes": []
-        //                    }
-        //                ]
-        //            }
-        //        ]
-        //    }
-        //];
-
-        var defaultData3 = JSON.parse('[' + JSON.stringify(userObj) + ']');
+        var rootData = JSON.parse('[' + JSON.stringify(userObj) + ']');
 
         // options
         $('#mytreeview').treeview({
@@ -85,16 +9,18 @@
             collapseIcon: 'fa fa-minus',
             showBorder: false,
             highlightSelected: true,
-            data: defaultData3
+            data: rootData
         });
 
-        // collapses all nodes
-        $('#mytreeview').treeview('collapseAll', { silent: true });
+        // expand root node 1 level deep
+        $('#mytreeview').treeview('expandNode', [0, { levels: 1, silent: true }]);
+
+        $('#mytreeview').treeview('selectNode', [0, { silent: true }]);
 
         // Action when node is selected
         $('#mytreeview').on('nodeSelected', function (event, data) {
             // TODO: show node content
-            window.alert("You have selected: " + data.text + "\n");
+            window.alert("You have selected: " + data.nodes + "\n");
         });
 
     });
