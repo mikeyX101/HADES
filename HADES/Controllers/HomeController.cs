@@ -6,6 +6,7 @@ using Microsoft.Extensions.Localization;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using HADES.Util.ModelAD;
+using HADES.Data;
 using System;
 
 namespace HADES.Controllers
@@ -14,11 +15,13 @@ namespace HADES.Controllers
     {
         private ADManager ad;
         private MainViewViewModel viewModel;
+        private ApplicationDbContext context;
 
-        public HomeController(IStringLocalizer<HomeController> localizer) : base(localizer)
+        public HomeController(IStringLocalizer<HomeController> localizer, ApplicationDbContext ctx) : base(localizer)
         {
             ad = new ADManager();
             viewModel = new MainViewViewModel();
+            context = ctx;
         }
 
         [Authorize]
@@ -39,7 +42,8 @@ namespace HADES.Controllers
                 var user = ConnexionUtil.CurrentUser(this);
                 ViewBag.UserName = ConnexionUtil.CurrentUser(this).GetName();
                 ViewBag.UserRole = ConnexionUtil.CurrentUser(this).GetRole();
-
+                ViewBag.CompanyName = context.AppConfig.Find(1).CompanyName;
+                var test = context.AppConfig.Find(1);
 
                 return View(viewModel);
             }
@@ -61,19 +65,19 @@ namespace HADES.Controllers
                 path = item.Path?.Split("/");
                 if (path == null)
                 {
-                    viewModel.ADRoot = new TreeNode<string>(item.Name);
+                    viewModel.ADRoot = new TreeNode<string>(item.SamAccountName);
                 }
                 else if (path.Length == 2)
                 {
-                    ou = viewModel.ADRoot.AddChild(item.Name);
+                    ou = viewModel.ADRoot.AddChild(item.SamAccountName);
                 }
                 else if (path.Length == 3)
                 {
-                    group = ou.AddChild(item.Name);
+                    group = ou.AddChild(item.SamAccountName);
                 }
                 else if (path.Length == 4)
                 {
-                    member = group.AddChild(item.Name);
+                    member = group.AddChild(item.SamAccountName);
                 }
             }
         }
