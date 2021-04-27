@@ -30,6 +30,7 @@ namespace HADES.Data
         public DbSet<SuperAdminGroup> SuperAdminGroup { get; set; }
         public DbSet<User> User { get; set; }
         public DbSet<UserConfig> UserConfig { get; set; }
+        public DbSet<ActiveDirectory> ActiveDirectory { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
            => options.UseSqlite("Data Source=App_Data\\DBHades.db");
@@ -46,6 +47,7 @@ namespace HADES.Data
             modelBuilder.Entity<SuperAdminGroup>().ToTable("SuperAdminGroup_SUG");
             modelBuilder.Entity<User>().ToTable("User_USE");
             modelBuilder.Entity<UserConfig>().ToTable("UserConfig_UCF");
+            modelBuilder.Entity<ActiveDirectory>().ToTable("ActiveDirectory_ADR");
         }
     }
 }

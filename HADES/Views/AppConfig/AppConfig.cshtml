@@ -16,7 +16,14 @@
     <h1 class="m-3 p-3">@Localizer["ParametreApplication"]</h1>
 </div>
 
-<form asp-action="Index" method="post">
+<form asp-action="AppConfig" method="post">
+    <div class="form-group row">
+        <input type="hidden" asp-for="@Model.ActiveDirectory.Id" />
+        <div class="col-sm-2"><label>@Localizer["RootOu"]</label></div>
+        <div class="col-sm-4">
+            <input type="text" asp-for="@Model.ActiveDirectory.RootOu" class="form-control" />
+        </div>
+    </div>
     <div class="form-group row">
         <div class="col-sm-2"><label>@Localizer["PortNumber"]</label></div>
         <div class="col-sm-4">
@@ -60,15 +67,12 @@
         </div>
     </div>
     <div class="form-group row">
-        <div class="col-sm-2"><label>@Localizer["SuperAdminGroup"]</label></div>
-        <div class="col-sm-4">
-            <input type="text" asp-for="@Model.SuperAdminGroup" class="form-control" />
-        </div>
-    </div>
-    <div class="form-group row">
+        <input type="hidden" asp-for="@Model.DefaultUser.Id" />
+        <input type="hidden" asp-for="@Model.DefaultUser.UserConfigId" />
+        <input type="hidden" asp-for="@Model.DefaultUser.RoleId" />
         <div class="col-sm-2"><label>@Localizer["DefaultUser"]</label></div>
         <div class="col-sm-4">
-            <input type="text" asp-for="@Model.DefaultUser" class="form-control" />
+            <input type="text" asp-for="@Model.DefaultUser.UserName" class="form-control" />
         </div>
     </div>
     <div class="form-group row">
@@ -78,63 +82,69 @@
         </div>
     </div>
     <div class="form-group row">
-        <div class="col-sm-2"><label>@Localizer["AdminGroup"]</label></div>
-        <div class="col-sm-4">
-            <input type="text" asp-for="@Model.AdminGroup" class="form-control" />
-        </div>
-    </div>
-    <div class="form-group row">
-        <div class="col-sm-2"><label>@Localizer["RootOu"]</label></div>
-        <div class="col-sm-4">
-            <input type="text" asp-for="@Model.ActiveDirectory.RootOu" class="form-control" />
-        </div>
-    </div>
-    <div class="form-group row">
+        <input type="hidden" asp-for="@Model.AppConfig.Id" />
         <div class="col-sm-2"><label>@Localizer["CompanyLogoFile"]</label></div>
         <div class="col-sm-4">
-            <input type="text" asp-for="@Model.CompanyLogoFile" class="form-control" />
+            <input type="text" asp-for="@Model.AppConfig.CompanyLogoFile" class="form-control" />
         </div>
     </div>
     <div class="form-group row">
         <div class="col-sm-2"><label>@Localizer["CompanyName"]</label></div>
         <div class="col-sm-4">
-            <input type="text" asp-for="@Model.CompanyName" class="form-control" />
+            <input type="text" asp-for="@Model.AppConfig.CompanyName" class="form-control" />
         </div>
     </div>
     <div class="form-group row">
         <div class="col-sm-2"><label>@Localizer["CompanyBackgroundFile"]</label></div>
         <div class="col-sm-4">
-            <input type="text" asp-for="@Model.CompanyBackgroundFile" class="form-control" />
+            <input type="text" asp-for="@Model.AppConfig.CompanyBackgroundFile" class="form-control" />
         </div>
     </div>
     <div class="form-group row">
         <div class="col-sm-2"><label>@Localizer["DefaultLanguage"]</label></div>
         <div class="col-sm-4">
-            <input type="text" asp-for="@Model.DefaultLanguage" class="form-control" />
+            <input type="text" asp-for="@Model.AppConfig.DefaultLanguage" class="form-control" />
         </div>
     </div>
     <div class="form-group row">
         <div class="col-sm-2"><label>@Localizer["SMTP"]</label></div>
         <div class="col-sm-4">
-            <input type="text" asp-for="@Model.SMTP" class="form-control" />
+            <input type="text" asp-for="@Model.AppConfig.SMTP" class="form-control" />
         </div>
     </div>
     <div class="form-group row">
         <div class="col-sm-2"><label>@Localizer["LogDeleteFrequency"]</label></div>
         <div class="col-sm-4">
-            <input type="text" asp-for="@Model.LogDeleteFrequency" class="form-control" />
+            <input type="text" asp-for="@Model.AppConfig.LogDeleteFrequency" class="form-control" />
         </div>
     </div>
     <div class="form-group row">
         <div class="col-sm-2"><label>@Localizer["LogMaxFileSize"]</label></div>
         <div class="col-sm-4">
-            <input type="text" asp-for="@Model.LogMaxFileSize" class="form-control" />
+            <input type="text" asp-for="@Model.AppConfig.LogMaxFileSize" class="form-control" />
         </div>
     </div>
     <div class="form-group row">
         <div class="col-sm-2"><label>@Localizer["LogTotalMaxSize"]</label></div>
         <div class="col-sm-4">
-            <input type="text" asp-for="@Model.LogTotalMaxSize" class="form-control" />
+            <input type="text" asp-for="@Model.AppConfig.LogTotalMaxSize" class="form-control" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-2"><label>@Localizer["AdminGroup"]</label></div>
+        <div class="col-sm-4">
+            @*<input type="text" asp-for="@Model.AdminGroup" class="form-control" />*@
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-2"><label>@Localizer["SuperAdminGroup"]</label></div>
+        <div class="col-sm-4">
+            @*<input type="text" asp-for="@Model.SuperAdminGroup" class="form-control" />*@
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-4">
+            @Html.ValidationSummary()
         </div>
     </div>
     <div class="row">

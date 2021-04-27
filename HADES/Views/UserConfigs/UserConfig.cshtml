@@ -1,0 +1,113 @@
+﻿@model UserConfigViewModel
+@{
+    ViewBag.Title = "Paramètres utilisateur";
+}
+
+@section scripts {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/js/minimum-age.js"></script>
+
+}
+
+<div class="bg-primary text-white text-center">
+    <h1 class="m-3 p-3">Paramètres utilisateur</h1>
+</div>
+
+<form asp-action="UserConfig">
+    <div class="form-group row">
+        <input type="hidden" asp-for="@Model.UserConfig.Id" />
+        <div class="col-sm-2"><label>Langue:</label></div>
+        <div class="col-sm-4">
+            <input type="text" asp-for="@Model.UserConfig.Language" class="form-control" />
+        </div>
+        <div class="col">
+            <span asp-validation-for="@Model.UserConfig.Language" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-2"><label>Thème:</label></div>
+        <div class="col-sm-4">
+            <input type="text" asp-for="@Model.UserConfig.ThemeFile" class="form-control" />
+        </div>
+        <div class="col">
+            <span asp-validation-for="@Model.UserConfig.ThemeFile" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-2"><label>Notification par courriel:</label></div>
+        <div class="col-sm-4">
+            <div class="checkbox">
+                <input asp-for="@Model.UserConfig.Notification" class="form-control" />
+            </div>
+        </div>
+    </div>
+    <div class="">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        <label asp-for="@Model.Emails.First().Address" class="control-label"></label>
+                    </th>
+                    <th>
+                        <label asp-for="@Model.Emails.First().ExpirationDate" class="control-label"></label>
+                    </th>
+                    <th>
+                        <label asp-for="@Model.Emails.First().GroupCreate" class="control-label"></label>
+                    </th>
+                    <th>
+                        <label asp-for="@Model.Emails.First().GroupDelete" class="control-label"></label>
+                    </th>
+                    <th>
+                        <label asp-for="@Model.Emails.First().MemberAdd" class="control-label"></label>
+                    </th>
+                    <th>
+                        <label asp-for="@Model.Emails.First().MemberRemoval" class="control-label"></label>
+                    </th>
+                    <th><label class="control-label">Action</label></th>
+                </tr>
+            </thead>
+            @if (Model.Emails != null)
+            {
+                for (var i = 0; i < Model.Emails.Count(); i++)
+                {
+                    <tr>
+                        <td>
+                            <input type="hidden" asp-for="@Model.Emails[i].Id" />
+                            <input type="hidden" asp-for="@Model.Emails[i].UserConfigId" />
+                            <input type="text" asp-for="@Model.Emails[i].Address" class="form-control" />
+                        </td>
+                        <td>
+                            <input class="form-control" asp-for="@Model.Emails[i].ExpirationDate" />
+                        </td>
+                        <td>
+                            <input class="form-control" asp-for="@Model.Emails[i].GroupCreate" />
+                        </td>
+                        <td>
+                            <input class="form-control" asp-for="@Model.Emails[i].GroupDelete" />
+                        </td>
+                        <td>
+                            <input class="form-control" asp-for="@Model.Emails[i].MemberAdd" />
+                        </td>
+                        <td>
+                            <input class="form-control" asp-for="@Model.Emails[i].MemberRemoval" />
+                        </td>
+                        <td><a asp-action="EmailDelete" asp-route-id="@Model.Emails[i].Id"><h2><i class="bi bi-trash"></i></h2></a></td>
+                    </tr>
+                }
+            }
+            <tr>
+                <td><a asp-action="CreateEmail" asp-route-id="@Model.UserConfig.Id"><h2><i class="bi bi-person-plus-fill"></i></h2></a></td>
+            </tr>
+        </table>
+    </div>
+    <div class="row">
+        <div class="offset-2 col-sm-4">
+            <button type="submit" value="Save" class="btn btn-primary">Sauvegarder</button>
+        </div>
+    </div>
+</form>
+
+
+
+
