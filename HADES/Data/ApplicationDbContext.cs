@@ -35,7 +35,7 @@ namespace HADES.Data
 		{
             if (!options.IsConfigured)
             {
-                options.UseSqlServer(Settings.AppSettings.SqlLiteConnectionString);
+                options.UseSqlite(Settings.AppSettings.SqlLiteConnectionString);
             }
         }
 
