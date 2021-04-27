@@ -79,7 +79,10 @@ fi
 git clone git@github.com:ShaiLynx/HADES.git ~/hades
 
 # Copy new Nginx config and start Nginx
-sudo cp ./configs/nginx/nginx.conf /etc/nginx/
+sudo cp ./configs/nginx/nginxHttps.conf /etc/nginx/nginx.conf
 
 echo "Starting Nginx... (Requires root)"
 sudo systemctl enable nginx
+
+echo "Please specify your SSL Certificate and your server name in the Nginx config file at: /etc/nginx/nginx.conf"
+echo "and restart Nginx."

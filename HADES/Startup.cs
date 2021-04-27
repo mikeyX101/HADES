@@ -63,7 +63,6 @@ namespace HADES
             services.AddControllersWithViews();
             services.AddMvc(options => options.Filters.Add(new AuthorizeFilter()));
 
-
             #region Localization Setup
             // Configure localization
             services.Configure<RequestLocalizationOptions>(options =>
@@ -127,6 +126,7 @@ namespace HADES
 				// UseForwardedHeaders() must be executed before UseHtst().
 				app.UseForwardedHeaders();
 				app.UseExceptionHandler("/Home/Error");
+                app.UseHttpsRedirection();
 				// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
 				app.UseHsts();
 
