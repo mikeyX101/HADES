@@ -11,6 +11,7 @@ namespace HADES.Util.ModelAD
         public string Path { get; set; }
         public string Name { get; set; }
         public string Dn { get; set; }
+        public string SamAccountName { get; set; }
 
         public override string ToString()
         {

@@ -6,6 +6,7 @@ using Microsoft.Extensions.Localization;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using HADES.Util;
+using HADES.Util.ModelAD;
 
 namespace HADES.Controllers
 {
