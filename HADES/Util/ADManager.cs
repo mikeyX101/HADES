@@ -32,12 +32,12 @@ namespace HADES.Util
           //  Console.WriteLine(authenticate("hades", "Toto123!"));
 
 
-              List<RootDataInformation> root = getRoot();
+             /* List<RootDataInformation> root = getRoot();
               Console.WriteLine(root.Count);
               for (int i = 0; i < root.Count; i++)
               {
                   Console.WriteLine(root[i]);
-              }
+              }*/
  
             // Console.WriteLine(getGroupInformation("CN=Group1,OU=Dossier1,OU=hades_root,DC=R991-AD,DC=lan"));
 
