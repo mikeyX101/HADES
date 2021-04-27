@@ -49,19 +49,19 @@ namespace HADES.Controllers
                 path = item.Path?.Split("/");
                 if (path == null)
                 {
-                    viewModel.ADRoot = new TreeNode<string>(item.Name);
+                    viewModel.ADRoot = new TreeNode<string>(item.SamAccountName);
                 }
                 else if (path.Length == 2)
                 {
-                    ou = viewModel.ADRoot.AddChild(item.Name);
+                    ou = viewModel.ADRoot.AddChild(item.SamAccountName);
                 }
                 else if (path.Length == 3)
                 {
-                    group = ou.AddChild(item.Name);
+                    group = ou.AddChild(item.SamAccountName);
                 }
                 else if (path.Length == 4)
                 {
-                    member = group.AddChild(item.Name);
+                    member = group.AddChild(item.SamAccountName);
                 }
             }
         }

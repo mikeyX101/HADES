@@ -30,7 +30,7 @@ namespace HADES.Util
         {
 
           //  Console.WriteLine(authenticate("hades", "Toto123!"));
-            /*  Console.WriteLine(createConnection());
+
 
               List<RootDataInformation> root = getRoot();
               Console.WriteLine(root.Count);
@@ -38,7 +38,7 @@ namespace HADES.Util
               {
                   Console.WriteLine(root[i]);
               }
- */
+ 
             // Console.WriteLine(getGroupInformation("CN=Group1,OU=Dossier1,OU=hades_root,DC=R991-AD,DC=lan"));
 
             // Console.WriteLine(getUserAD("hades"));
@@ -285,6 +285,7 @@ namespace HADES.Util
                         else if (att.Contains("organizationalUnit"))
                         {
                             data.Type = "ou";
+                            data.SamAccountName = getAttributeValue(nextEntry, "Name");
                         }
                     }
                     catch (KeyNotFoundException e)
@@ -296,14 +297,12 @@ namespace HADES.Util
                         Console.WriteLine("LOG: " + e.Message);
                     }
 
-                    //NAME
-                    data.Name = getAttributeValue(nextEntry, "Name");
 
                     // PATH OF THE OBJECT
                     string[] path = nextEntry.Dn.Split(',');
                     for (int i = path.Length - 1; i >= 0; i--)
                     {
-                        if (path[i].Contains("DC=") || path[i].Contains("OU=" + data.Name) || path[i].Contains("CN=" + data.Name))
+                        if (path[i].Contains("DC=") || path[i].Contains("OU=" + data.SamAccountName) || path[i].Contains("CN=" + data.SamAccountName))
                         {
                             path[i] = null;
                         }
@@ -347,7 +346,6 @@ namespace HADES.Util
                 {
                     nextEntry = lsc.Next();
                     group.SamAccountName = getAttributeValue(nextEntry, "sAMAccountName");
-                    group.Name = getAttributeValue(nextEntry, "Name");
                     group.Email = getAttributeValue(nextEntry, "mail");
                     group.Notes = getAttributeValue(nextEntry, "info");
                     group.Description = getAttributeValue(nextEntry, "description");
@@ -475,6 +473,13 @@ namespace HADES.Util
 
         public bool createGroup(string name, string ouName)
         {
+            /*
+              group.SamAccountName = getAttributeValue(nextEntry, "sAMAccountName");
+              group.Email = getAttributeValue(nextEntry, "mail");
+              group.Notes = getAttributeValue(nextEntry, "info");
+              group.Description = getAttributeValue(nextEntry, "description");
+             */
+
             LdapConnection connection = createConnection();
             try
             {
@@ -499,7 +504,7 @@ namespace HADES.Util
             }
         }
 
-        public void modifyGroup()
+        public void modifyGroup(string groupDn)
         {
 
         }
