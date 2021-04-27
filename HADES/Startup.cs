@@ -14,7 +14,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore.Proxies;
 
 namespace HADES
 {
@@ -45,7 +44,7 @@ namespace HADES
             });
 
             services.AddDbContext<ApplicationDbContext>(options =>
-                    options.UseLazyLoadingProxies().UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+                    options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddControllersWithViews();
             services.AddMvc(options => options.Filters.Add(new AuthorizeFilter()));
