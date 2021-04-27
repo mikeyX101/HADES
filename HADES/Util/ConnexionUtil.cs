@@ -3,6 +3,7 @@ using HADES.Models;
 using HADES.Util.Exceptions;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -55,7 +56,7 @@ namespace HADES.Util
         }
 
         // Returns the Hashed password for Default User (Other login is handled by Active Directory)
-        private static string HashPassword(string password)
+        public static string HashPassword(string password)
         {
             // Generate Salt
             char[] passArray = password.ToCharArray();
@@ -79,11 +80,11 @@ namespace HADES.Util
 
                 if (bool.Parse(controller.User.Claims.Where(c => c.Type == "isDefault").FirstOrDefault().Value))
                 {
-                    return db.DefaultUser.Where((a) => a.Id == id).FirstOrDefault();
+                    return db.DefaultUser.Include(a=>a.Role).Include(a=> a.UserConfig).Where((a) => a.Id == id).FirstOrDefault();
                 }
                 else
                 {
-                    return db.User.Where((a) => a.Id == id).FirstOrDefault();
+                    return db.User.Include(a => a.Role).Include(a => a.UserConfig).Where((a) => a.Id == id).FirstOrDefault();
                 }
 
             }
