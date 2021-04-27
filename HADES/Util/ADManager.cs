@@ -17,6 +17,7 @@ namespace HADES.Util
         private const string passwordDn = "Toto123!";
         private string connectionFilter = "(&(objectClass=user)(objectCategory=person))";
         private string rootOU = "OU=hades_root,DC=R991-AD,DC=lan";
+        private string syncField = "samaccountName";
 
         //Client Side
         //private const string server = "bkomstudios.com";
@@ -27,8 +28,9 @@ namespace HADES.Util
         //https://www.novell.com/documentation/developer/ldapcsharp/?page=/documentation/developer/ldapcsharp/cnet/data/bovumfi.html
         public ADManager()
         {
-            /* Console.WriteLine(authenticate("hades", "Toto123!"));
-             Console.WriteLine(createConnection());
+
+          //  Console.WriteLine(authenticate("hades", "Toto123!"));
+            /*  Console.WriteLine(createConnection());
 
               List<RootDataInformation> root = getRoot();
               Console.WriteLine(root.Count);
@@ -144,7 +146,7 @@ namespace HADES.Util
                     }
 
 
-                    if (getAttributeValue(nextEntry, "sAMAccountName") == username)
+                    if (getAttributeValue(nextEntry, syncField) == username)
                     {
                         userDN = nextEntry.Dn;
                         userWasFound = true;
@@ -223,7 +225,7 @@ namespace HADES.Util
                 {
                     nextEntry = lsc.Next();
 
-                    if (getAttributeValue(nextEntry, "sAMAccountName") == username)
+                    if (getAttributeValue(nextEntry, syncField) == username)
                     {
                         userWasFound = true;
                         u = new UserAD();
