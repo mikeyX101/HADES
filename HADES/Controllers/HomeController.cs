@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using System.Collections.Generic;
 using Newtonsoft.Json;
-using HADES.Util;
 using HADES.Util.ModelAD;
+using System;
 
 namespace HADES.Controllers
 {
@@ -30,12 +30,24 @@ namespace HADES.Controllers
         // Returns the Main Application View parameter is the selected Folder
         public IActionResult MainView()
         {
-            var adRoot = ad.getRoot();
-            BuildRootTreeNode(adRoot);
-            viewModel.ADRootJson = TreeNodeToJson(viewModel.ADRoot);
-            viewModel.SelectedNode = viewModel.ADRoot;
+            try
+            {
+                var adRoot = ad.getRoot();
+                BuildRootTreeNode(adRoot);
+                viewModel.ADRootJson = TreeNodeToJson(viewModel.ADRoot);
+                viewModel.SelectedNode = viewModel.ADRoot;
+                var user = ConnexionUtil.CurrentUser(this);
+                ViewBag.UserName = ConnexionUtil.CurrentUser(this).GetName();
+                ViewBag.UserRole = ConnexionUtil.CurrentUser(this).GetRole();
 
-            return View(viewModel);
+
+                return View(viewModel);
+            }
+            catch (Exception ex)
+            {
+                viewModel.ADConnectionError = Localizer["ADConnectionError"];
+                return View("Error", viewModel);
+            }
         }
 
         private void BuildRootTreeNode(List<RootDataInformation> adRoot)

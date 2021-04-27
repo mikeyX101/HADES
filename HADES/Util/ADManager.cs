@@ -75,7 +75,6 @@ namespace HADES.Util
                 Console.WriteLine("LOG: " + ex.Message);
                 throw new ADException();
             }
-            
         }
 
         //IF the attribute is not set in the AD it throw KeyNotFoundException

@@ -17,5 +17,7 @@ namespace HADES.Models
 
         public int SelectedNodeId { get; set; }
 
+        public string ADConnectionError { get; set; }
+
     }
 }
