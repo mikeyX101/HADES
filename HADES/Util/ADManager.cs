@@ -8,6 +8,10 @@ using Novell.Directory.Ldap;
 
 namespace HADES.Util
 {
+    public enum Action {
+        ADD,
+        DELETE
+    }
     public class ADManager
     {
         private const string server = "172.20.48.10";
@@ -66,6 +70,8 @@ namespace HADES.Util
 
             //createGroup("allloooo","Dossier1", "Une description","email", "notessssssssssssssssssssss",list);
             //deleteMemberToGroup("CN=yoyoyo,OU=Dossier1,OU=hades_root,DC=R991-AD,DC=lan", "CN=guest,CN=Users,DC=R991-AD,DC=lan");
+
+           Console.WriteLine(modifyGroup("CN=yoyoyo,OU=Dossier1,OU=hades_root,DC=R991-AD,DC=lan","qqqqqq", "Dossier1"));
         }
 
         /*****************************************************
@@ -487,9 +493,29 @@ namespace HADES.Util
         }
 
 
-        public void modifyGroup(string groupDn)
+        public bool modifyGroup(string dnGroupToModify, string name, string ouGroup)
+        //string description, string email, string notes, Dictionary<UserAD, Action> members
         {
+            LdapConnection connection = createConnection();
+            try
+            {
+                //Rename
+                string newRdn = "CN=" + name + ",OU=" + ouGroup;
+                connection.Rename(dnGroupToModify, newRdn, true);
 
+                //Modify Attribute
+
+                //Modify members
+
+                connection.Disconnect();
+                return true;
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("LOG : Cannot modify the group: " + e.Message);
+                return false;
+            }
         }
 
         public bool deleteGroup(string dn)
