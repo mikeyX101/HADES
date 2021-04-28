@@ -42,9 +42,11 @@ namespace HADES
 				options.KnownProxies.Add(System.Net.IPAddress.Loopback);
 
 			});
-			#endregion
+            #endregion
 
-			services.AddRouting(options => options.LowercaseUrls = true);
+            Settings.Initiate(Configuration);
+
+            services.AddRouting(options => options.LowercaseUrls = true);
 
             services.AddMemoryCache();
             services.AddSession();
@@ -59,7 +61,10 @@ namespace HADES
             });
 
             services.AddDbContext<ApplicationDbContext>(options =>
-                    options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlite(Settings.AppSettings.SqlLiteConnectionString));
+
+
+            
 
             services.AddControllersWithViews();
             services.AddMvc(options => options.Filters.Add(new AuthorizeFilter()));

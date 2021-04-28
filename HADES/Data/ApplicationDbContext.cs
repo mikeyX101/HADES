@@ -32,7 +32,12 @@ namespace HADES.Data
         public DbSet<UserConfig> UserConfig { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
-            => options.UseSqlite("Data Source=App_Data/DBHades.db");
+		{
+            if (!options.IsConfigured)
+            {
+                options.UseSqlite(Settings.AppSettings.SqlLiteConnectionString);
+            }
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
