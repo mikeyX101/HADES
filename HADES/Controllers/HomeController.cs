@@ -42,10 +42,6 @@ namespace HADES.Controllers
                 viewModel.SelectedPath = "/" + viewModel.ADRoot[0].SamAccountName;
                 viewModel.ADRootTreeNodeJson = TreeNodeToJson(viewModel.ADRootTreeNode);
 
-                ViewBag.UserName = ConnexionUtil.CurrentUser(User).GetName();
-                ViewBag.UserRole = ConnexionUtil.CurrentUser(User).GetRole().Name;
-                //ViewBag.CompanyName = context.AppConfig.Find(1).CompanyName;
-
                 return View(viewModel);
             }
             catch (ADException ex)
