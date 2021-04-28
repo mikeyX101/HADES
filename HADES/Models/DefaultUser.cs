@@ -17,6 +17,14 @@ namespace HADES.Models
         public int Id { get; set; }
 
         [Required]
+        [Column("USE_attempts")]
+        public int Attempts { get; set; }
+
+        [Required]
+        [Column("USE_date")]
+        public DateTime Date { get; set; }
+
+        [Required]
         [Column("DUS_username")]
         public string UserName { get; set; }
 

@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using HADES.Data;
 using HADES.Models;
 using HADES.Services;
+using HADES.Util;
 
 namespace HADES.Controllers
 {
@@ -21,10 +22,10 @@ namespace HADES.Controllers
         }
 
 
-        public async Task<IActionResult> UserConfig(int? id)
+        public async Task<IActionResult> UserConfig()
         {
             UserConfigService service = new();
-            var viewModel = await service.UserConfig(id);
+            var viewModel = await service.UserConfig(ConnexionUtil.CurrentUser(this.User).GetId());
 
             return View(viewModel);
         }
