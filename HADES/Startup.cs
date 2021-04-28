@@ -58,6 +58,7 @@ namespace HADES
                 options.LogoutPath = "/Account/Logout";
                 options.AccessDeniedPath = "/Account/AccessDenied";
                 options.ExpireTimeSpan = new TimeSpan(12, 0, 0);
+                options.Cookie.HttpOnly = true;
             });
 
             services.AddDbContext<ApplicationDbContext>(options =>
