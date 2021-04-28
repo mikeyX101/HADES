@@ -43,7 +43,7 @@ namespace HADES.Controllers
                 viewModel.ADRootTreeNodeJson = TreeNodeToJson(viewModel.ADRootTreeNode);
 
                 ViewBag.UserName = ConnexionUtil.CurrentUser(User).GetName();
-                ViewBag.UserRole = ConnexionUtil.CurrentUser(User).GetRole();
+                ViewBag.UserRole = ConnexionUtil.CurrentUser(User).GetRole().Name;
                 //ViewBag.CompanyName = context.AppConfig.Find(1).CompanyName;
 
                 return View(viewModel);

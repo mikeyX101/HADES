@@ -30,8 +30,12 @@ namespace HADES.Util
             if (ValidateAttempts(user))
             {
                 if (db.DefaultUser.SingleOrDefault((a) => a.UserName.ToLower().Equals(user.ToLower()) && a.Password.Equals(HashPassword(password))) != null)
-                {
-                    return db.DefaultUser.SingleOrDefault((a) => a.UserName.ToLower().Equals(user.ToLower()) && a.Password.Equals(HashPassword(password)));
+                { 
+                    DefaultUser u = db.DefaultUser.SingleOrDefault((a) => a.UserName.ToLower().Equals(user.ToLower()) && a.Password.Equals(HashPassword(password)));
+                    db.Update(u);
+                    u.Attempts = 0;
+                    db.SaveChanges();
+                    return u;
                 }
                 else if (aDManager.authenticate(user, password))
                 {
@@ -42,8 +46,11 @@ namespace HADES.Util
                     if (db.User.Include(u => u.Role).SingleOrDefault((u) => u.SamAccount.ToLower().Equals(aDManager.getUserAD(user).SamAccountName) && u.Role.HadesAccess) != null)
                     {
                         //Check Allowed in HADES (is in DB as User)
-
-                        return db.User.SingleOrDefault((u) => u.SamAccount.ToLower().Equals(aDManager.getUserAD(user).SamAccountName));
+                        User u = db.User.SingleOrDefault((u) => u.SamAccount.ToLower().Equals(aDManager.getUserAD(user).SamAccountName));
+                        db.Update(u);
+                        u.Attempts = 0;
+                        db.SaveChanges();
+                        return u;
                     }
                     else
                     {
