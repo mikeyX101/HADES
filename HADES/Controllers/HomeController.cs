@@ -108,5 +108,11 @@ namespace HADES.Controllers
                                                 .Replace("\"nodes\": []", "");
         }
 
+        public IActionResult CreateGroupModal()
+        {
+            return PartialView();
+        }
+
+
     }
 }

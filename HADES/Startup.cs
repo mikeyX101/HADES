@@ -144,13 +144,13 @@ namespace HADES
             IOptions<RequestLocalizationOptions> options = app.ApplicationServices.GetService<IOptions<RequestLocalizationOptions>>();
             app.UseRequestLocalization(options.Value);
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Account}/{action=Login}");
-                endpoints.MapRazorPages();
-            });
+			app.UseEndpoints(endpoints =>
+			{
+				endpoints.MapControllerRoute(
+					name: "default",
+					pattern: "{controller=AppConfig}/{action=AppConfig}");
+				endpoints.MapRazorPages();
+			});
 
         }
 

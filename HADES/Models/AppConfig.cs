@@ -39,6 +39,8 @@ namespace HADES.Models
         [Column("ACF_log_max_file_size")]
         public int LogMaxFileSize { get; set; }
 
+        public int LogTotalMaxSize => LogMaxFileSize * LogDeleteFrequency;
+
         [ForeignKey("ActiveDirectory")]
         [Column("ACF_ADR_id")]
         public int ActiveDirectoryId { get; set; }
