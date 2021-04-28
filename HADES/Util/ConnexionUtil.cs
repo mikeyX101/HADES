@@ -67,7 +67,52 @@ namespace HADES.Util
         // Also increases the number of attempts
         private static bool ValidateAttempts(string user)
         {
-            return true;
+            try
+            {
+                DefaultUser u = db.DefaultUser.SingleOrDefault((a) => a.UserName.ToLower().Equals(user.ToLower()));
+                db.Update(u);
+                u.Attempts++;
+                if (u.Attempts > 5)
+                {
+                    u.Attempts = 0;
+                    u.Date = DateTime.Now.AddMinutes(10);
+                }
+                db.SaveChanges();
+                return u.Date < DateTime.Now;
+            }
+            catch (Exception)
+            {
+                // If anything Wrong happens then try User
+                try
+                {
+                    User u = db.User.SingleOrDefault((a) => a.SamAccount.ToLower().Equals(aDManager.getUserAD(user)));
+                    if (u == null)
+                    {
+                        throw new ForbiddenException();
+                    }
+                    db.Update(u);
+                    u.Attempts++;
+                    if (u.Attempts > 5)
+                    {
+                        u.Date = DateTime.Now.AddMinutes(10);
+                    }
+                    db.SaveChanges();
+                    return u.Date < DateTime.Now;
+                }
+                catch (ADException)
+                {
+                    throw;
+                }
+                catch (ForbiddenException)
+                {
+                    return true; // Pass handling to next funtion
+                }
+                catch (Exception)
+                {
+                    // If anything Wrong happens then this User must not exist
+                    return false;
+                }
+            }
         }
 
         // Returns the Hashed password for Default User (Other login is handled by Active Directory)
