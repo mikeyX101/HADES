@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using HADES.Util.ModelAD;
 using HADES.Data;
 using System;
+using System.Threading.Tasks;
 
 namespace HADES.Controllers
 {
@@ -35,10 +36,11 @@ namespace HADES.Controllers
         {
             try
             {
-                var adRoot = ad.getRoot();
-                BuildRootTreeNode(adRoot);
-                viewModel.ADRootJson = TreeNodeToJson(viewModel.ADRoot);
-                viewModel.SelectedNode = viewModel.ADRoot;
+                viewModel.ADRoot = ad.getRoot();
+                BuildRootTreeNode(viewModel.ADRoot);
+                viewModel.SelectedPath = "/" + viewModel.ADRoot[0].SamAccountName;
+                viewModel.ADRootTreeNodeJson = TreeNodeToJson(viewModel.ADRootTreeNode);
+
                 ViewBag.UserName = ConnexionUtil.CurrentUser(this).GetName();
                 ViewBag.UserRole = ConnexionUtil.CurrentUser(this).GetRole();
                 ViewBag.CompanyName = context.AppConfig.Find(1).CompanyName;
@@ -52,6 +54,14 @@ namespace HADES.Controllers
             }
         }
 
+        public IActionResult UpdateContent(string id)
+        {
+            viewModel.ADRoot = ad.getRoot();
+            viewModel.SelectedPath = id;
+            return PartialView("_Content", viewModel);
+        }
+
+
         private void BuildRootTreeNode(List<RootDataInformation> adRoot)
         {
             TreeNode<string> ou = null;
@@ -63,11 +73,11 @@ namespace HADES.Controllers
                 path = item.Path?.Split("/");
                 if (path == null)
                 {
-                    viewModel.ADRoot = new TreeNode<string>(item.SamAccountName);
+                    viewModel.ADRootTreeNode = new TreeNode<string>(item.SamAccountName);
                 }
                 else if (path.Length == 2)
                 {
-                    ou = viewModel.ADRoot.AddChild(item.SamAccountName);
+                    ou = viewModel.ADRootTreeNode.AddChild(item.SamAccountName);
                 }
                 else if (path.Length == 3)
                 {
@@ -96,7 +106,6 @@ namespace HADES.Controllers
                                                     })
                                                 .Replace("\"nodes\": []", "");
         }
-
 
     }
 }
