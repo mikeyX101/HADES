@@ -22,38 +22,38 @@
         </div>
     </div>
     <div class="form-group row">
-        <div class="col-sm-2"><label>@Localizer["ServerAddress"]</label></div>
-        <div class="col-sm-4">
+        <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["ServerAddress"]</label></div>
+        <div class="col-sm-9 col-lg-5">
             <input type="text" asp-for="@Model.ActiveDirectory.ServerAddress" class="form-control" />
         </div>
     </div>
     <div class="form-group row">
-        <div class="col-sm-2"><label>@Localizer["ConnectionFilter"]</label></div>
-        <div class="col-sm-4">
+        <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["ConnectionFilter"]</label></div>
+        <div class="col-sm-9 col-lg-5">
             <input type="text" asp-for="@Model.ActiveDirectory.ConnectionFilter" class="form-control" />
         </div>
     </div>
     <div class="form-group row">
-        <div class="col-sm-2"><label>@Localizer["BaseDN"]</label></div>
-        <div class="col-sm-4">
+        <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["BaseDN"]</label></div>
+        <div class="col-sm-9 col-lg-5">
             <input type="text" asp-for="@Model.ActiveDirectory.BaseDN" class="form-control" />
         </div>
     </div>
     <div class="form-group row">
-        <div class="col-sm-2"><label>@Localizer["AccountDN"]</label></div>
-        <div class="col-sm-4">
+        <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["AccountDN"]</label></div>
+        <div class="col-sm-9 col-lg-5">
             <input type="text" asp-for="@Model.ActiveDirectory.AccountDN" class="form-control" />
         </div>
     </div>
     <div class="form-group row">
-        <div class="col-sm-2"><label>@Localizer["PasswordDN"]</label></div>
-        <div class="col-sm-4">
+        <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["PasswordDN"]</label></div>
+        <div class="col-sm-9 col-lg-5">
             <input type="text" asp-for="@Model.ActiveDirectory.PasswordDN" class="form-control" />
         </div>
     </div>
     <div class="form-group row">
-        <div class="col-sm-2"><label>@Localizer["SyncField"]</label></div>
-        <div class="col-sm-4">
+        <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["SyncField"]</label></div>
+        <div class="col-sm-9 col-lg-5">
             <input type="text" asp-for="@Model.ActiveDirectory.SyncField" class="form-control" />
         </div>
     </div>
@@ -67,8 +67,8 @@
         </div>
     </div>
     <div class="form-group row">
-        <div class="col-sm-2"><label>@Localizer["DefaultUserPassword"]</label></div>
-        <div class="col-sm-4">
+        <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["DefaultUserPassword"]</label></div>
+        <div class="col-sm-9 col-lg-5">
             <input type="text" asp-for="@Model.DefaultUser.Password" class="form-control" />
         </div>
     </div>
@@ -189,8 +189,8 @@
         </div>
     </div>
     <div class="row">
-        <div class="offset-2 col-sm-4">
-            <button type="submit" class="btn btn-primary">@Localizer["Save"]</button>
+        <div class="offset-sm-3 offset-lg-5 col-sm-9 col-lg-5">
+            <button type="submit" class="btn btn-primary btn-lg btn-block">@Localizer["Save"]</button>
         </div>
     </div>
 </form>

@@ -2,14 +2,16 @@
 using HADES.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HADES.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210427142038_HadesAccessRole")]
+    partial class HadesAccessRole
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -64,20 +66,6 @@ namespace HADES.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ActiveDirectory_ADR");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            AccountDN = "CN=hades,CN=Users,DC=R991-AD,DC=lan",
-                            BaseDN = "CN=Users,DC=R991-AD,DC=lan",
-                            ConnectionFilter = "(&(objectClass=user)(objectCategory=person))",
-                            PasswordDN = "Toto123!",
-                            PortNumber = 389,
-                            RootOu = "OU=hades_root,DC=R991-AD,DC=lan",
-                            ServerAddress = "172.20.48.10",
-                            SyncField = "samaccountName"
-                        });
                 });
 
             modelBuilder.Entity("HADES.Models.AdminGroup", b =>
@@ -149,20 +137,6 @@ namespace HADES.Migrations
                         .IsUnique();
 
                     b.ToTable("AppConfig_ACF");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            ActiveDirectoryId = 1,
-                            CompanyBackgroundFile = "background.png",
-                            CompanyLogoFile = "logo.png",
-                            CompanyName = "YourCompanyName",
-                            DefaultLanguage = "fr-CA",
-                            LogDeleteFrequency = 1,
-                            LogMaxFileSize = 1,
-                            SMTP = ""
-                        });
                 });
 
             modelBuilder.Entity("HADES.Models.DefaultUser", b =>

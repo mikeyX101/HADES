@@ -50,15 +50,8 @@ namespace HADES.Controllers
                 try
                 {
                     IUser User = ConnexionUtil.Login(model.Username, model.Password);
-                    if (!User.IsDefaultUser())
-                    {
-                        Console.WriteLine(User.GetName() + " CONNECTED"); // Change this by log
-                        return RedirectToAction("MainView", "Home");
-                    }
-                    else
-                    {
-                        Console.WriteLine("DEFAULT USER " + User.GetName() + " CONNECTED"); // Change this by log
 
+                        Console.WriteLine(User.GetName() + " CONNECTED"); // Change this by log
                         var claims = new List<Claim>{
                                 new Claim("id", User.GetId().ToString()),
                                 new Claim("isDefault", User.IsDefaultUser().ToString())
@@ -73,8 +66,6 @@ namespace HADES.Controllers
                           new ClaimsPrincipal(claimsIdentity),
                           authProperties);
                         return RedirectToAction("MainView", "Home");
-                    }
-
                 }
                 catch (ForbiddenException)
                 {

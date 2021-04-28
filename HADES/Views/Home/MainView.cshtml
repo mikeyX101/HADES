@@ -5,50 +5,29 @@
     <link rel="stylesheet" href="~/lib/bootstrap-treeview/css/bootstrap-treeview.css">
     <script type="text/javascript" src="~/lib/bootstrap-treeview/js/bootstrap-treeview.js"></script>
     <script type="text/javascript" src="~/js/treeview.js"></script>
-    <script type="text/javascript">userDataDependent(@Html.Raw(Model.ADRootJson));</script>
+    <script type="text/javascript">showTreeView(@Html.Raw(Model.ADRootTreeNodeJson));</script>
 }
 
 <div class="row">
+
+    @* Left Nav *@
     <div class="col-sm-4">
         <h3 class="mt-3">Dossier et groupes</h3>
-
-        @* Left Nav *@
-        <div id="mytreeview" class="treeview"></div>
-
+        <div id="leftnav">
+            @await Html.PartialAsync("_LeftNav", Model)
+        </div>
     </div>
+
+    @* Right Nav *@
     <div class="col-sm-8">
         <h3 class="mt-3">Contenu des dossiers et des groupes</h3>
-
-        @* Right Nav *@
         <button type="button" class="btn btn-outline-secondary">
             @Html.ActionLink(Localizer["CreateNew"].Value, "CreateGroupModal")
         </button>
-        <table class="table">
-            <thead>
-            </thead>
-            <tbody>
-                @foreach (var item in Model.ADRoot.Children)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Value)
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-outline-secondary">
-                                @* TODO *@
-                                @Html.ActionLink(Localizer["Edit"].Value, "Edit", new { /* id=item.PrimaryKey */ })
-                            </button>
-                            <button type="button" class="btn btn-outline-secondary">
-                                @* TODO *@
-                                @Html.ActionLink(Localizer["Delete"].Value, "Delete", new { /* id=item.PrimaryKey */ })
-                            </button>
-
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-
+        <div id="content">
+            @await Html.PartialAsync("_Content", Model)
+        </div>
     </div>
+
 </div>
 
