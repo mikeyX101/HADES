@@ -1,0 +1,31 @@
+﻿@model MainViewViewModel
+
+<table class="table">
+    <thead>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.ADRoot)
+        {
+            if (item.Path == Model.SelectedPath)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SamAccountName)
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-outline-secondary offset-xl-8 offset-lg-7 offset-md-6 offset-sm-4 offset-7">
+                            @* TODO *@
+                            @Html.ActionLink(Localizer["Edit"].Value, "Edit", new { /* id=item.PrimaryKey */ })
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary">
+                            @* TODO *@
+                            @Html.ActionLink(Localizer["Delete"].Value, "Delete", new { /* id=item.PrimaryKey */ })
+                        </button>
+
+                    </td>
+                </tr>
+
+            }
+        }
+    </tbody>
+</table>

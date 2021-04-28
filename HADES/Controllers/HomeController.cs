@@ -1,12 +1,15 @@
-﻿using HADES.Models;
+using HADES.Models;
 using HADES.Util;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using System.Collections.Generic;
 using Newtonsoft.Json;
-using HADES.Util;
 using HADES.Util.ModelAD;
+using HADES.Data;
+using System;
+using System.Threading.Tasks;
+using HADES.Util.Exceptions;
 
 namespace HADES.Controllers
 {
@@ -14,11 +17,13 @@ namespace HADES.Controllers
     {
         private ADManager ad;
         private MainViewViewModel viewModel;
+        private ApplicationDbContext context;
 
-        public HomeController(IStringLocalizer<HomeController> localizer) : base(localizer)
+        public HomeController(IStringLocalizer<HomeController> localizer, ApplicationDbContext ctx) : base(localizer)
         {
             ad = new ADManager();
             viewModel = new MainViewViewModel();
+            context = ctx;
         }
 
         [Authorize]
@@ -30,13 +35,29 @@ namespace HADES.Controllers
         // Returns the Main Application View parameter is the selected Folder
         public IActionResult MainView()
         {
-            var adRoot = ad.getRoot();
-            BuildRootTreeNode(adRoot);
-            viewModel.ADRootJson = TreeNodeToJson(viewModel.ADRoot);
-            viewModel.SelectedNode = viewModel.ADRoot;
+            try
+            {
+                viewModel.ADRoot = ad.getRoot();
+                BuildRootTreeNode(viewModel.ADRoot);
+                viewModel.SelectedPath = "/" + viewModel.ADRoot[0].SamAccountName;
+                viewModel.ADRootTreeNodeJson = TreeNodeToJson(viewModel.ADRootTreeNode);
 
-            return View(viewModel);
+                return View(viewModel);
+            }
+            catch (ADException ex)
+            {
+                viewModel.ADConnectionError = Localizer["ADConnectionError"];
+                return View("Error", viewModel);
+            }
         }
+
+        public IActionResult UpdateContent(string id)
+        {
+            viewModel.ADRoot = ad.getRoot();
+            viewModel.SelectedPath = id;
+            return PartialView("_Content", viewModel);
+        }
+
 
         private void BuildRootTreeNode(List<RootDataInformation> adRoot)
         {
@@ -49,11 +70,11 @@ namespace HADES.Controllers
                 path = item.Path?.Split("/");
                 if (path == null)
                 {
-                    viewModel.ADRoot = new TreeNode<string>(item.SamAccountName);
+                    viewModel.ADRootTreeNode = new TreeNode<string>(item.SamAccountName);
                 }
                 else if (path.Length == 2)
                 {
-                    ou = viewModel.ADRoot.AddChild(item.SamAccountName);
+                    ou = viewModel.ADRootTreeNode.AddChild(item.SamAccountName);
                 }
                 else if (path.Length == 3)
                 {
@@ -81,6 +102,11 @@ namespace HADES.Controllers
                                                         ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
                                                     })
                                                 .Replace("\"nodes\": []", "");
+        }
+
+        public IActionResult CreateGroupModal()
+        {
+            return PartialView();
         }
 
 

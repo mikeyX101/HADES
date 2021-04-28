@@ -30,6 +30,15 @@ namespace HADES.Data
         public DbSet<SuperAdminGroup> SuperAdminGroup { get; set; }
         public DbSet<User> User { get; set; }
         public DbSet<UserConfig> UserConfig { get; set; }
+        public DbSet<ActiveDirectory> ActiveDirectory { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder options)
+		{
+            if (!options.IsConfigured)
+            {
+                options.UseSqlite(Settings.AppSettings.SqlLiteConnectionString);
+            }
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -50,10 +59,18 @@ namespace HADES.Data
             modelBuilder.Entity<Role>().HasData(new Role { Id = 4, Name = "inactive", AppConfigAccess = false, AdCrudAccess = false, UserListAccess = false, EventLogAccess = false, DefineOwner = false, HadesAccess = false });
 
             // CREATE DEFAULT USERCONFIG
-            modelBuilder.Entity<UserConfig>().HasData(new UserConfig { Id = 1, Notification = false, Language="fr-CA", ThemeFile="site.css" });
+            modelBuilder.Entity<UserConfig>().HasData(new UserConfig { Id = 1, Notification = false, Language = "fr-CA", ThemeFile = "site.css" });
 
             // ADD DEFAULT USER
             modelBuilder.Entity<DefaultUser>().HasData(new DefaultUser {Id=1, UserName = "admin", Password = "teWqcWW3Ks4yNoq84+Akbx+4feKr/tp+ZVU2CjCbKwI=", RoleId = 1, UserConfigId = 1 });
+
+            // --- TESTS TEMPORAIRE (En attendant le Wizard AppConfig) ---
+
+            // ADD DEFAULT ACTIVE DIRECTORY
+            modelBuilder.Entity<ActiveDirectory>().HasData(new ActiveDirectory { Id=1, RootOu= "OU=hades_root,DC=R991-AD,DC=lan", PortNumber=389, ServerAddress= "172.20.48.10", ConnectionFilter= "(&(objectClass=user)(objectCategory=person))", BaseDN= "CN=Users,DC=R991-AD,DC=lan", AccountDN= "CN=hades,CN=Users,DC=R991-AD,DC=lan", PasswordDN= "Toto123!", SyncField= "samaccountName" });
+
+            // ADD DEFAULT APP CONFIG
+            modelBuilder.Entity<AppConfig>().HasData(new AppConfig { Id=1, CompanyName="YourCompanyName", CompanyBackgroundFile="background.png", CompanyLogoFile="logo.png", DefaultLanguage="fr-CA", SMTP="", LogDeleteFrequency=1, LogMaxFileSize=1, ActiveDirectoryId=1 });
         }
     }
 }
