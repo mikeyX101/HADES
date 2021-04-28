@@ -52,7 +52,7 @@ namespace HADES.Util
             //list.Add(u2);
 
             //Console.WriteLine(deleteOU("OU=Dossier4,OU=hades_root,DC=R991-AD,DC=lan"));
-            /*  Console.WriteLine("---------------------------------------------------");
+             /*Console.WriteLine("---------------------------------------------------");
               List<RootDataInformation> root = getRoot();
               Console.WriteLine(root.Count);
               for (int i = 0; i < root.Count; i++)
@@ -71,7 +71,16 @@ namespace HADES.Util
             //createGroup("allloooo","Dossier1", "Une description","email", "notessssssssssssssssssssss",list);
             //deleteMemberToGroup("CN=yoyoyo,OU=Dossier1,OU=hades_root,DC=R991-AD,DC=lan", "CN=guest,CN=Users,DC=R991-AD,DC=lan");
 
-           Console.WriteLine(modifyGroup("CN=yoyoyo,OU=Dossier1,OU=hades_root,DC=R991-AD,DC=lan","qqqqqq", "Dossier1"));
+       }
+
+        public void test() {
+            UserAD u1 = getUserAD("hades");
+            UserAD u2 = getUserAD("Administrator");
+            Dictionary<UserAD,Action> list = new Dictionary<UserAD, Action>();
+            list.Add(u1, Action.DELETE);
+            list.Add(u2, Action.ADD);
+
+            modifyGroup("CN=Group11,OU=Dossier1,OU=hades_root,DC=R991-AD,DC=lan", "Group11", "Dossier1", "Une fgdsgfsdescriptionfsd", "emddddailfds", "notessssdsadsassssssssssssssssssdfs", list);
         }
 
         /*****************************************************
@@ -493,21 +502,55 @@ namespace HADES.Util
         }
 
 
-        public bool modifyGroup(string dnGroupToModify, string name, string ouGroup)
-        //string description, string email, string notes, Dictionary<UserAD, Action> members
+        public bool modifyGroup(string dnGroupToModify, string name, string ouGroup, string description, string email, string notes, Dictionary<UserAD, Action> members)
+        
         {
             LdapConnection connection = createConnection();
             try
             {
-                //Rename
-                string newRdn = "CN=" + name + ",OU=" + ouGroup;
+
+                //Rename 
+                string newRdn = "CN=" + name;
                 connection.Rename(dnGroupToModify, newRdn, true);
 
-                //Modify Attribute
+                dnGroupToModify = newRdn + ",OU=" + ouGroup + "," + rootOU;
 
-                //Modify members
+                //Modify Attribute
+                List<LdapModification> modList = new List<LdapModification>();
+
+                //Description
+                LdapAttribute attribute = new LdapAttribute("description", description);
+                modList.Add(new LdapModification(LdapModification.Replace, attribute));
+
+                //Email
+                attribute = new LdapAttribute("mail", email);
+                modList.Add(new LdapModification(LdapModification.Replace, attribute));
+
+                //Notes
+                attribute = new LdapAttribute("info", notes);
+                modList.Add(new LdapModification(LdapModification.Replace, attribute));
+
+                //SamAccountName 
+                attribute = new LdapAttribute("samaccountname", name);
+                modList.Add(new LdapModification(LdapModification.Replace, attribute));
+
+                LdapModification[] mods = new LdapModification[modList.Count];
+                mods = (LdapModification[])modList.ToArray();
+                connection.Modify(dnGroupToModify, mods);
 
                 connection.Disconnect();
+
+                //Modify members
+                foreach (KeyValuePair<UserAD, Action> entry in members)
+                {
+                    if (entry.Value == Action.ADD) {
+                        addMemberToGroup(dnGroupToModify, entry.Key.Dn);
+                    } else if (entry.Value == Action.DELETE) {
+                        deleteMemberToGroup(dnGroupToModify, entry.Key.Dn);
+                    }
+                }
+
+                
                 return true;
 
             }
