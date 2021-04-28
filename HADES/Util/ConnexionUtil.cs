@@ -27,32 +27,47 @@ namespace HADES.Util
         public static IUser Login(string user, string password)
         {
             // Check Default User in BD
-
-            if (db.DefaultUser.SingleOrDefault((a) => a.UserName.ToLower().Equals(user.ToLower()) && a.Password.Equals(HashPassword(password))) != null)
+            if (ValidateAttempts(user))
             {
-                return db.DefaultUser.SingleOrDefault((a) => a.UserName.ToLower().Equals(user.ToLower()) && a.Password.Equals(HashPassword(password)));
-            }
-            else if (aDManager.authenticate(user, password))
-            {
-                // Check Active Directory
-
-                // Update Admin/SuperAdmin User in DB
-
-                if (db.User.Include(u => u.Role).SingleOrDefault((u) => u.SamAccount.ToLower().Equals(aDManager.getUserAD(user).SamAccountName) && u.Role.HadesAccess) != null)
+                if (db.DefaultUser.SingleOrDefault((a) => a.UserName.ToLower().Equals(user.ToLower()) && a.Password.Equals(HashPassword(password))) != null)
                 {
-                    //Check Allowed in HADES (is in DB as User)
+                    return db.DefaultUser.SingleOrDefault((a) => a.UserName.ToLower().Equals(user.ToLower()) && a.Password.Equals(HashPassword(password)));
+                }
+                else if (aDManager.authenticate(user, password))
+                {
+                    // Check Active Directory
 
-                    return db.User.SingleOrDefault((u) => u.SamAccount.ToLower().Equals(aDManager.getUserAD(user).SamAccountName));
+                    // Update Admin/SuperAdmin User in DB
+
+                    if (db.User.Include(u => u.Role).SingleOrDefault((u) => u.SamAccount.ToLower().Equals(aDManager.getUserAD(user).SamAccountName) && u.Role.HadesAccess) != null)
+                    {
+                        //Check Allowed in HADES (is in DB as User)
+
+                        return db.User.SingleOrDefault((u) => u.SamAccount.ToLower().Equals(aDManager.getUserAD(user).SamAccountName));
+                    }
+                    else
+                    {
+                        throw new ForbiddenException();
+                    }
                 }
                 else
                 {
-                    throw new ForbiddenException();
+                    throw new LoginException();
                 }
             }
             else
             {
                 throw new LoginException();
             }
+            
+        }
+
+        // Returns true if the specified user exists and is allowed to Login
+        // False otherwise
+        // Also increases the number of attempts
+        private static bool ValidateAttempts(string user)
+        {
+            return true;
         }
 
         // Returns the Hashed password for Default User (Other login is handled by Active Directory)
