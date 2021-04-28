@@ -10,6 +10,7 @@ using HADES.Data;
 using System;
 using System.Threading.Tasks;
 using HADES.Util.Exceptions;
+using System.Linq;
 
 namespace HADES.Controllers
 {
@@ -38,20 +39,21 @@ namespace HADES.Controllers
             try
             {
                 viewModel.ADRoot = ad.getRoot();
-                BuildRootTreeNode(viewModel.ADRoot);
-                viewModel.SelectedPath = "/" + viewModel.ADRoot[0].SamAccountName;
-                viewModel.ADRootTreeNodeJson = TreeNodeToJson(viewModel.ADRootTreeNode);
+                BuildRootTreeNode(viewModel.ADRoot); // conversion List<RootDataInformation> en TreeNode<string>
+                viewModel.ADRootTreeNodeJson = TreeNodeToJson(viewModel.ADRootTreeNode); // conversion TreeNode<string> en Json
+                viewModel.SelectedPath = "/" + viewModel.ADRoot[0].SamAccountName; // select root OU par défaut
 
+                // Données utiles pour la NavBar
                 ViewBag.UserName = ConnexionUtil.CurrentUser(this).GetName();
                 ViewBag.UserRole = ConnexionUtil.CurrentUser(this).GetRole();
-                ViewBag.CompanyName = context.AppConfig.Find(1).CompanyName;
+                ViewBag.CompanyName = context.AppConfig.FirstOrDefault().CompanyName;
 
                 return View(viewModel);
             }
-            catch (ADException ex)
+            catch (ADException ex) // Connection à l'AD impossible
             {
                 viewModel.ADConnectionError = Localizer["ADConnectionError"];
-                return View("Error", viewModel);
+                return View(viewModel);
             }
         }
 
