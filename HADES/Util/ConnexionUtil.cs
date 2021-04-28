@@ -76,6 +76,7 @@ namespace HADES.Util
                 {
                     u.Attempts = 0;
                     u.Date = DateTime.Now.AddMinutes(10);
+                    Console.WriteLine(u.GetName() + " LOCKED UNTIL " + u.Date.ToString());
                 }
                 db.SaveChanges();
                 return u.Date < DateTime.Now;
@@ -95,6 +96,7 @@ namespace HADES.Util
                     if (u.Attempts > 5)
                     {
                         u.Date = DateTime.Now.AddMinutes(10);
+                        Console.WriteLine(u.GetName() + " LOCKED UNTIL " + u.Date.ToString());
                     }
                     db.SaveChanges();
                     return u.Date < DateTime.Now;
