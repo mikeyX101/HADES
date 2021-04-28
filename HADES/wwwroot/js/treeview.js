@@ -1,7 +1,7 @@
 ﻿var selectedPath;
 var selectedPathForContent;
 var selectedNode;
-var depth;
+var selectedDepth;
 
 function showTreeView(userObj) {
     $(function () {
@@ -30,11 +30,11 @@ function showTreeView(userObj) {
             selectedPath = "";
             selectedNode = data;
             selectedPath = "/" + selectedNode.text;
-            depth = 1;
+            selectedDepth = 1;
             while (typeof selectedNode.parentId !== 'undefined') {
                 selectedNode = $('#mytreeview').treeview('getNode', selectedNode.parentId);
                 selectedPath = "/" + selectedNode.text + selectedPath;
-                depth++;
+                selectedDepth++;
             } 
 
             // backup selectedNode
@@ -42,7 +42,7 @@ function showTreeView(userObj) {
             selectedPathForContent = selectedPath;
 
             // If Group is selected set selectedPathForContent to his parent ou
-            if (depth > 2) {
+            if (selectedDepth > 2) {
                 // Group is selected so set selectedPathForContent to his parent ou
                 var splitSelectedPath = selectedPath.split("/");
                 selectedPathForContent = "";
@@ -55,14 +55,14 @@ function showTreeView(userObj) {
             $.ajax({
                 url: '/Home/UpdateContent',
                 type: "GET",
-                data: { id: selectedPathForContent },
+                data: { selectedPathForContent: selectedPathForContent },
                 success: function (msg) {
                     $('#content').html(msg);
                 }
             });
 
             // If Group is selected select his parent ou
-            if (depth > 2) {
+            if (selectedDepth > 2) {
                 $('#mytreeview').treeview('selectNode', [selectedNode.parentId, { silent: true }]);
             }
         });

@@ -1,5 +1,8 @@
 ﻿@model MainViewViewModel
 
+<button type="button" class="btn btn-outline-secondary">
+    @Html.ActionLink(Model.CreateButtonLabel, "Create")
+</button>
 <table class="table">
     <thead>
     </thead>
@@ -13,9 +16,9 @@
                         @Html.DisplayFor(modelItem => item.SamAccountName)
                     </td>
                     <td>
-                        <button type="button" class="btn btn-outline-secondary offset-xl-8 offset-lg-7 offset-md-6 offset-sm-4 offset-7">
+                        <button type="button" class="btn btn-outline-secondary offset-lg-7 offset-md-5 offset-sm-3 offset-6">
                             @* TODO *@
-                            @Html.ActionLink(Localizer["Edit"].Value, "Edit", new { /* id=item.PrimaryKey */ })
+                            @Html.ActionLink(Model.EditLinkLabel, "Edit", new { /* id=item.PrimaryKey */ })
                         </button>
                         <button type="button" class="btn btn-outline-secondary">
                             @* TODO *@

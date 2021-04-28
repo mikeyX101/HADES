@@ -18,5 +18,9 @@ namespace HADES.Models
         public string SelectedPath { get; set; }
 
         public string ADConnectionError { get; set; }
+
+        public string CreateButtonLabel { get; set; }
+
+        public string EditLinkLabel { get; set; }
     }
 }

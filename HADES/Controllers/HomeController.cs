@@ -42,6 +42,8 @@ namespace HADES.Controllers
                 BuildRootTreeNode(viewModel.ADRoot); // conversion List<RootDataInformation> en TreeNode<string>
                 viewModel.ADRootTreeNodeJson = TreeNodeToJson(viewModel.ADRootTreeNode); // conversion TreeNode<string> en Json
                 viewModel.SelectedPath = "/" + viewModel.ADRoot[0].SamAccountName; // select root OU par défaut
+                viewModel.CreateButtonLabel = Localizer["CreateNewOU"];
+                viewModel.EditLinkLabel = Localizer["Rename"];
 
                 // Données utiles pour la NavBar
                 ViewBag.UserName = ConnexionUtil.CurrentUser(this).GetName();
@@ -57,10 +59,20 @@ namespace HADES.Controllers
             }
         }
 
-        public IActionResult UpdateContent(string id)
+        public IActionResult UpdateContent(string selectedPathForContent)
         {
             viewModel.ADRoot = ad.getRoot();
-            viewModel.SelectedPath = id;
+            viewModel.SelectedPath = selectedPathForContent;
+            if (viewModel.SelectedPath.Split('/').Length == 2)
+            {
+                viewModel.CreateButtonLabel = Localizer["CreateNewOU"];
+                viewModel.EditLinkLabel = Localizer["Rename"];
+            } 
+            else
+            {
+                viewModel.CreateButtonLabel = Localizer["CreateNewGroup"];
+                viewModel.EditLinkLabel = Localizer["Edit"];
+            }
             return PartialView("_Content", viewModel);
         }
 
