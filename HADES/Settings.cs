@@ -17,10 +17,14 @@ namespace HADES
 		}
 
 		public readonly string SqlLiteConnectionString;
+		public readonly string LocalResourcesPath;
+		public readonly string DefaultCulture;
 
 		private Settings(IConfiguration config)
 		{
 			SqlLiteConnectionString = config.GetConnectionString("DefaultConnection");
+			LocalResourcesPath = config.GetValue<string>("LocalResourcesPath");
+			DefaultCulture = config.GetValue<string>("DefaultCulture");
 		}
 
 		public static void Initiate(IConfiguration config)

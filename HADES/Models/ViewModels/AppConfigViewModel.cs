@@ -9,27 +9,12 @@ namespace HADES.Models
     {
         public ActiveDirectory ActiveDirectory { get; set; }
 
-        public SuperAdminGroup SuperAdminGroup { get; set; }
+        public List<AdminGroup> AdminGroups { get; set; }
 
-        public DefaultUser DefaultUser { get; set; }
+        public List<SuperAdminGroup> SuperAdminGroups { get; set; }
 
-        public AdminGroup AdminGroup { get; set; }
+        public DefaultUser DefaultUser { get; set; }   
 
-        public string CompanyLogoFile { get; set; }
-
-        public string CompanyName { get; set; }
-
-        public string CompanyBackgroundFile { get; set; }
-
-        public string DefaultLanguage { get; set; }
-
-        public string SMTP { get; set; }
-
-        public int LogDeleteFrequency { get; set; }
-
-        public int LogMaxFileSize { get; set; }
-
-        public int LogTotalMaxSize => LogMaxFileSize * LogDeleteFrequency;
-
+        public AppConfig AppConfig { get; set; }
     }
 }

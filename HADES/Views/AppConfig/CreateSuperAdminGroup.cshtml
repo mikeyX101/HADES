@@ -1,0 +1,35 @@
+﻿@model HADES.Models.SuperAdminGroup
+
+@{
+    ViewData["Title"] = "View";
+}
+
+<h1>View</h1>
+
+<h4>Super Admin Group</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CreateSuperAdminGroup">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="SamAccount" class="control-label"></label>
+                <input asp-for="SamAccount" class="form-control" />
+                <span asp-validation-for="SamAccount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="hidden" asp-for="@Model.AppConfigId" value="@ViewBag.AppConfigId" />
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+<div>
+    <a asp-action="AppConfig" asp-route-id="@ViewBag.AppConfigId">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

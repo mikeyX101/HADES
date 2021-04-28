@@ -1,4 +1,4 @@
-﻿using HADES.Models;
+using HADES.Models;
 using HADES.Util;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -42,9 +42,9 @@ namespace HADES.Controllers
                 viewModel.SelectedPath = "/" + viewModel.ADRoot[0].SamAccountName;
                 viewModel.ADRootTreeNodeJson = TreeNodeToJson(viewModel.ADRootTreeNode);
 
-                ViewBag.UserName = ConnexionUtil.CurrentUser(this).GetName();
-                ViewBag.UserRole = ConnexionUtil.CurrentUser(this).GetRole();
-                ViewBag.CompanyName = context.AppConfig.Find(1).CompanyName;
+                ViewBag.UserName = ConnexionUtil.CurrentUser(User).GetName();
+                ViewBag.UserRole = ConnexionUtil.CurrentUser(User).GetRole();
+                //ViewBag.CompanyName = context.AppConfig.Find(1).CompanyName;
 
                 return View(viewModel);
             }
@@ -107,6 +107,12 @@ namespace HADES.Controllers
                                                     })
                                                 .Replace("\"nodes\": []", "");
         }
+
+        public IActionResult CreateGroupModal()
+        {
+            return PartialView();
+        }
+
 
     }
 }

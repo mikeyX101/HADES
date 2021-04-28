@@ -6,22 +6,29 @@
     <title>HADES</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/lib/pureScriptSelect-master/style.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+
 </head>
 <body>
     <header>
         <nav class="navbar navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-controller="Account" asp-action="LogIn"><img src="~/img/Logo.png" alt="*LOGO*"/> - HADES</a>
-*TODO display if() Nom, role | Admin Config | User Config*
+                <a class="navbar-brand" asp-controller="Account" asp-action="LogIn"><img src="~/img/Logo.png" alt="*LOGO*" /> - HADES</a>
+                *TODO display if() Nom, role | Admin Config | User Config*
             </div>
         </nav>
     </header>
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+    <main role="main" class="pb-3">
+        @RenderBody()
+    </main>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
+<script src="~/lib/pureScriptSelect-master/script.js"></script>
+<script>pureScriptSelect('#multiSelect');</script>
+
 </html>

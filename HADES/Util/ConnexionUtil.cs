@@ -72,13 +72,13 @@ namespace HADES.Util
         }
 
         // Returns the Current User or null if the Current user is not in the database/no cookie found
-        public static IUser CurrentUser(Controller controller)
+        public static IUser CurrentUser(System.Security.Claims.ClaimsPrincipal user)
         {
-            if (controller.User.Identity.IsAuthenticated)
+            if (user.Identity.IsAuthenticated)
             {
-                int id = int.Parse(controller.User.Claims.Where(c => c.Type == "id").FirstOrDefault().Value);
+                int id = int.Parse(user.Claims.Where(c => c.Type == "id").FirstOrDefault().Value);
 
-                if (bool.Parse(controller.User.Claims.Where(c => c.Type == "isDefault").FirstOrDefault().Value))
+                if (bool.Parse(user.Claims.Where(c => c.Type == "isDefault").FirstOrDefault().Value))
                 {
                     return db.DefaultUser.Include(a=>a.Role).Include(a=> a.UserConfig).Where((a) => a.Id == id).FirstOrDefault();
                 }
