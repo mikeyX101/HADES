@@ -41,11 +41,11 @@ namespace HADES.Util
 
             // Console.WriteLine(getGroupInformation("CN=Group1,OU=Dossier1,OU=hades_root,DC=R991-AD,DC=lan"));
 
-            UserAD u1 = getUserAD("hades");
-            UserAD u2 = getUserAD("Guest");
-            List<UserAD> list = new List<UserAD>();
-            list.Add(u1);
-            list.Add(u2);
+            //UserAD u1 = getUserAD("hades");
+            //UserAD u2 = getUserAD("Guest");
+            //List<UserAD> list = new List<UserAD>();
+            //list.Add(u1);
+            //list.Add(u2);
 
             //Console.WriteLine(deleteOU("OU=Dossier4,OU=hades_root,DC=R991-AD,DC=lan"));
             /*  Console.WriteLine("---------------------------------------------------");
@@ -125,7 +125,6 @@ namespace HADES.Util
                 Console.WriteLine("LOG: " + ex.Message);
                 throw new ADException();
             }
-
         }
 
         //Authenticate the user in the Active Directory 
