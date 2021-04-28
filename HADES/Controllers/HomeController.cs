@@ -9,6 +9,7 @@ using HADES.Util.ModelAD;
 using HADES.Data;
 using System;
 using System.Threading.Tasks;
+using HADES.Util.Exceptions;
 
 namespace HADES.Controllers
 {
@@ -47,7 +48,7 @@ namespace HADES.Controllers
 
                 return View(viewModel);
             }
-            catch (Exception ex)
+            catch (ADException ex)
             {
                 viewModel.ADConnectionError = Localizer["ADConnectionError"];
                 return View("Error", viewModel);
