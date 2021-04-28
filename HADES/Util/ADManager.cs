@@ -12,6 +12,13 @@ namespace HADES.Util
         ADD,
         DELETE
     }
+
+    public enum SyncField
+    {
+        samaccountname,
+        mail,
+        userprincipalname
+    }
     public class ADManager
     {
         // TODO: HARDCODE replace by the information in the Database
@@ -23,7 +30,7 @@ namespace HADES.Util
         private string rootOU = "OU=hades_root,DC=R991-AD,DC=lan";
 
         private string connectionFilter = "(&(objectClass=user)(objectCategory=person))";
-        private string syncField = "samaccountName";
+        private SyncField syncField = SyncField.samaccountname;
 
         //Client Side information for testing
         //private const string server = "bkomstudios.com";
@@ -35,19 +42,27 @@ namespace HADES.Util
 
         //https://www.novell.com/documentation/developer/ldapcsharp/?page=/documentation/developer/ldapcsharp/cnet/data/bovumfi.html
         public ADManager()
-        {}
+        { test(); }
 
         /*****************************************************
             For testing in the dev Build
          ******************************************************/
         public void test() {
-            UserAD u1 = getUserAD("hades");
-            UserAD u2 = getUserAD("Administrator");
-            Dictionary<UserAD,Action> list = new Dictionary<UserAD, Action>();
-            list.Add(u1, Action.DELETE);
-            list.Add(u2, Action.ADD);
+            /* UserAD u1 = getUserAD("hades");
+             UserAD u2 = getUserAD("Administrator");
+             Dictionary<UserAD,Action> list = new Dictionary<UserAD, Action>();
+             list.Add(u1, Action.DELETE);
+             list.Add(u2, Action.ADD);
 
-            modifyGroup("CN=Group11,OU=Dossier1,OU=hades_root,DC=R991-AD,DC=lan", "Group11", "Dossier1", "Une fgdsgfsdescriptionfsd", "emddddailfds", "notessssdsadsassssssssssssssssssdfs", list);
+             modifyGroup("CN=Group11,OU=Dossier1,OU=hades_root,DC=R991-AD,DC=lan", "Group11", "Dossier1", "Une fgdsgfsdescriptionfsd", "emddddailfds", "notessssdsadsassssssssssssssssssdfs", list);
+         */
+           // getUserAD("hades@R991-AD.lan");
+           // getUserAD("hades@hades.com");
+           // getUserAD("hades");
+
+          //  authenticate("hades", "Toto123!");
+            //authenticate("hades@hades.com", "Toto123!");
+           // authenticate("hades@R991-AD.lan", "Toto123!");
         }
 
         /*****************************************************
@@ -59,7 +74,7 @@ namespace HADES.Util
             {
                 return entry.GetAttribute(attribute).StringValue;
             }
-            catch (KeyNotFoundException e)
+            catch (KeyNotFoundException)
             {
                 //The key is not set or empty
                 return null;
@@ -116,18 +131,18 @@ namespace HADES.Util
 
             try
             {
-                LdapSearchResults lsc = (LdapSearchResults)connection.Search(baseDN, LdapConnection.ScopeSub, connectionFilter, null, false);
+                LdapSearchResults lsc = (LdapSearchResults)connection.Search(baseDN, LdapConnection.ScopeSub, connectionFilter.Remove(connectionFilter.Length - 1) + "(" + syncField.ToString() + "=" + username + "))", null, false);
 
                 string userDN = null;
-                bool userWasFound = false;
                 bool userIsAuthenticate = false;
 
-                while (lsc.HasMore() && userWasFound == false)
+                while (lsc.HasMore())
                 {
                     LdapEntry nextEntry = null;
                     try
                     {
                         nextEntry = lsc.Next();
+                        Console.WriteLine(nextEntry.Dn);
                     }
                     catch (Exception e)
                     {
@@ -136,19 +151,18 @@ namespace HADES.Util
                     }
 
 
-                    if (getAttributeValue(nextEntry, syncField) == username)
+                    if (getAttributeValue(nextEntry, syncField.ToString()) == username)
                     {
                         userDN = nextEntry.Dn;
-                        userWasFound = true;
                     }
                 }
 
                 connection.Disconnect();
 
-                if (userWasFound)
+                if (userDN != null)
                 {
 
-                    connection = createConnection(username, password);
+                    connection = createConnection(userDN, password);
                     if (connection != null)
                     {
                         userIsAuthenticate = connection.Bound;
@@ -204,19 +218,17 @@ namespace HADES.Util
         {
             UserAD u = null;
             LdapConnection connection = createConnection();
-            LdapSearchResults lsc = (LdapSearchResults)connection.Search(baseDN, LdapConnection.ScopeSub, connectionFilter, null, false);
-            bool userWasFound = false;
+            LdapSearchResults lsc = (LdapSearchResults)connection.Search(baseDN, LdapConnection.ScopeSub, connectionFilter.Remove(connectionFilter.Length - 1) + "(" + syncField.ToString() + "=" + username + "))", null, false);
 
-            while (lsc.HasMore() && userWasFound == false)
+            while (lsc.HasMore() )
             {
                 LdapEntry nextEntry = null;
                 try
                 {
                     nextEntry = lsc.Next();
 
-                    if (getAttributeValue(nextEntry, syncField) == username)
+                    if (getAttributeValue(nextEntry, syncField.ToString()) == username)
                     {
-                        userWasFound = true;
                         u = new UserAD();
                         u.SamAccountName = getAttributeValue(nextEntry, "samaccountName");
                         u.FirstName = getAttributeValue(nextEntry, "givenName");
@@ -234,7 +246,8 @@ namespace HADES.Util
 
             if (u == null)
             {
-                throw new ADException();
+                Console.WriteLine("LOG : USER WAS NOT FOUND ");
+                throw new LoginException();
             }
 
             return u;
@@ -278,7 +291,7 @@ namespace HADES.Util
                             data.SamAccountName = getAttributeValue(nextEntry, "Name");
                         }
                     }
-                    catch (KeyNotFoundException e)
+                    catch (KeyNotFoundException)
                     {
                         Console.WriteLine("LOG: KeyNotFoundExcption");
                     }
@@ -497,7 +510,7 @@ namespace HADES.Util
                 modList.Add(new LdapModification(LdapModification.Replace, attribute));
 
                 LdapModification[] mods = new LdapModification[modList.Count];
-                mods = (LdapModification[])modList.ToArray();
+                mods = modList.ToArray();
                 connection.Modify(dnGroupToModify, mods);
 
                 connection.Disconnect();
@@ -505,6 +518,7 @@ namespace HADES.Util
                 //Modify members
                 foreach (KeyValuePair<UserAD, Action> entry in members)
                 {
+                    // TODO: ADD MEMBERS IN BATCH
                     if (entry.Value == Action.ADD) {
                         addMemberToGroup(dnGroupToModify, entry.Key.Dn);
                     } else if (entry.Value == Action.DELETE) {
@@ -589,7 +603,7 @@ namespace HADES.Util
                 modList.Add(new LdapModification(LdapModification.Add, attribute));
 
                 LdapModification[] mods = new LdapModification[modList.Count];
-                mods = (LdapModification[])modList.ToArray();
+                mods = modList.ToArray();
 
                 connection.Modify(groupDn, mods);
 
@@ -614,7 +628,7 @@ namespace HADES.Util
                 modList.Add(new LdapModification(LdapModification.Delete, attribute));
 
                 LdapModification[] mods = new LdapModification[modList.Count];
-                mods = (LdapModification[])modList.ToArray();
+                mods = modList.ToArray();
 
                 connection.Modify(groupDn, mods);
 
