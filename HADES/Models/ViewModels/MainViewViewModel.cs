@@ -22,5 +22,7 @@ namespace HADES.Models
         public string CreateButtonLabel { get; set; }
 
         public string EditLinkLabel { get; set; }
+
+        public string SelectedName { get; set; }
     }
 }

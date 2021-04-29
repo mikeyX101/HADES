@@ -42,6 +42,7 @@ namespace HADES.Controllers
                 BuildRootTreeNode(viewModel.ADRoot); // conversion List<RootDataInformation> en TreeNode<string>
                 viewModel.ADRootTreeNodeJson = TreeNodeToJson(viewModel.ADRootTreeNode); // conversion TreeNode<string> en Json
                 viewModel.SelectedPath = "/" + viewModel.ADRoot[0].SamAccountName; // select root OU par défaut
+                viewModel.SelectedName = viewModel.ADRoot[0].SamAccountName;
                 viewModel.CreateButtonLabel = Localizer["CreateNewOU"];
                 viewModel.EditLinkLabel = Localizer["Rename"];
 
@@ -63,7 +64,9 @@ namespace HADES.Controllers
         {
             viewModel.ADRoot = ad.getRoot();
             viewModel.SelectedPath = selectedPathForContent;
-            if (viewModel.SelectedPath.Split('/').Length == 2)
+            var split = viewModel.SelectedPath.Split('/');
+            viewModel.SelectedName = split[split.Length - 1];
+            if (split.Length == 2)
             {
                 viewModel.CreateButtonLabel = Localizer["CreateNewOU"];
                 viewModel.EditLinkLabel = Localizer["Rename"];

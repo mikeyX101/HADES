@@ -117,7 +117,19 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="GlobalString" xml:space="preserve">
-    <value>GlobalFR</value>
+  <data name="ADConnectionError" xml:space="preserve">
+    <value>La connexion à l'Active Directory n'a pas pu être établie</value>
+  </data>
+  <data name="CreateNewGroup" xml:space="preserve">
+    <value>Créer un nouveau groupe</value>
+  </data>
+  <data name="CreateNewOU" xml:space="preserve">
+    <value>Créer un nouveau dossier</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Modifier</value>
+  </data>
+  <data name="Rename" xml:space="preserve">
+    <value>Renommer</value>
   </data>
 </root>

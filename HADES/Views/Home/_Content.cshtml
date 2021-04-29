@@ -1,5 +1,6 @@
 ﻿@model MainViewViewModel
 
+<h3 class="mt-3">@Localizer["ContenuDossier"] @Model.SelectedName</h3>
 <button type="button" class="btn btn-outline-secondary">
     @Html.ActionLink(Model.CreateButtonLabel, "Create")
 </button>
