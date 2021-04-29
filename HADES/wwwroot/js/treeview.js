@@ -21,20 +21,8 @@ function showTreeView(userObj) {
         // expand root node only 1 level deep
         $('#mytreeview').treeview('expandNode', [0, { levels: 1, silent: true }]);
 
-    /* TODO: setter les icones suivant dossier ou groupe*/
-        var node = $('#mytreeview').treeview('getNode', 0);
-        // set root icon
-        node.icon = 'fa fa-home';
-        // set folders icon
-        var folders = node.nodes;
-        var groups;
-        for (var i = 0; i < folders.length; i++) {
-            $('#mytreeview').treeview('getNode', folders[i].nodeId).icon = 'fa fa-folder';
-            groups = folders[i].nodes;
-            for (var j = 0; j < groups.length; j++) {
-                $('#mytreeview').treeview('getNode', groups[j].nodeId).icon = 'fa fa-users';
-            }
-        }
+        // set icons
+        setIcons();
 
         // select root node
         $('#mytreeview').treeview('selectNode', [0, { silent: true }]);
@@ -66,7 +54,7 @@ function showTreeView(userObj) {
                 }
             }
 
-            // update content of selected node to display
+            // update selected node content to display
             $.ajax({
                 url: '/Home/UpdateContent',
                 type: "GET",
@@ -80,13 +68,26 @@ function showTreeView(userObj) {
             if (selectedDepth > 2) {
                 $('#mytreeview').treeview('selectNode', [selectedNode.parentId, { silent: true }]);
             }
-
             
         });
         
-        
     });
-
     
 }
 
+// Set icons for home, ou and group
+function setIcons() {
+    var node = $('#mytreeview').treeview('getNode', 0);
+    // set root icon
+    node.icon = 'fa fa-home';
+    // set folder and group icons
+    var folders = node.nodes;
+    var groups;
+    for (var i = 0; i < folders.length; i++) {
+        $('#mytreeview').treeview('getNode', folders[i].nodeId).icon = 'fa fa-folder';
+        groups = folders[i].nodes;
+        for (var j = 0; j < groups.length; j++) {
+            $('#mytreeview').treeview('getNode', groups[j].nodeId).icon = 'fa fa-users';
+        }
+    }
+}
