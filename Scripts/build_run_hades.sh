@@ -2,7 +2,7 @@
 # Samuel Caron
 
 # Tested on CentOS 7.9.2009
-# Script to build AND run HADES
+# Script to build AND run HADES. Run with app user
 bash ./build_hades.sh
 ret=$?
 if [ $ret -ne 0 ]; then

@@ -106,6 +106,13 @@ fi
 git clone git@github.com:ShaiLynx/HADES.git /var/www/hades
 chown -R www-hades /var/www/hades/*
 chgrp -R www-hades /var/www/hades/*
+chown -R www-hades /var/www/hades/.git*
+chgrp -R www-hades /var/www/hades/.git*
+
+git config --global core.autocrlf input
+
+cd /var/www/hades
+git checkout SC/server_scripts
 
 # Copy the HADES Kestrel Server service and start it
 cp /var/www/hades/Scripts/configs/systemd/hades-kestrel-server.service /etc/systemd/system/hades-kestrel-server.service
@@ -113,11 +120,10 @@ cp /var/www/hades/Scripts/configs/systemd/hades-kestrel-server.service /etc/syst
 # Copy new Nginx config and start Nginx
 cp /var/www/hades/Scripts/configs/nginx/nginxHttps.conf /etc/nginx/nginx.conf
 
-echo "Starting HADES Kestrel Server..."
+echo "Enabling HADES Kestrel Server..."
 systemctl enable hades-kestrel-server.service
 
-echo "Starting Nginx..."
+echo "Enabling Nginx..."
 systemctl enable nginx
 
-echo "Please specify your SSL Certificate and your server name in the Nginx config file at: /etc/nginx/nginx.conf"
-echo "and restart Nginx."
+echo "Please specify your SSL Certificate and your server name in the Nginx config file at: /etc/nginx/nginx.conf and restart Nginx. (or reboot the system)" 
