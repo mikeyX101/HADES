@@ -25,6 +25,18 @@ if ! [ -d /var/www ]; then
 	chgrp www-hades /var/www
 fi
 
+# Needed for dotnet
+# DotNet creates a .dotnet folder in ~ when users use the DotNet CLI for various operations
+if ! [ -d /home/www-hades ]; then 
+	mkdir /home/www-hades
+	chown www-hades /home/www-hades
+	chgrp www-hades /home/www-hades
+	chmod 700 /home/www-hades
+fi
+
+# -----------------------------------------------------------------
+#							git Setup
+# -----------------------------------------------------------------
 # Generate rsa4096 key without passcode
 echo "Generating SSH key for the Github repository..."
 ssh-keygen -q -t rsa -b 4096 -N "" -f /var/www/github_hades_rsa <<< n # Answer no if asking to overwrite
@@ -51,6 +63,7 @@ fi
 # Install git (-q)
 echo "Installing git..."
 yum -y install git
+# Make sure we use Unix line endings
 git config --system core.autocrlf input
 git config --global core.autocrlf input
 
