@@ -51,6 +51,8 @@ fi
 # Install git (-q)
 echo "Installing git..."
 yum -y install git
+git config --system core.autocrlf input
+git config --global core.autocrlf input
 
 # -----------------------------------------------------------------
 #							Nginx Setup
@@ -110,7 +112,7 @@ chgrp -R www-hades /var/www/hades/*
 chown -R www-hades /var/www/hades/.git*
 chgrp -R www-hades /var/www/hades/.git*
 
-git config --system core.autocrlf input
+
 
 cd /var/www/hades
 git checkout SC/server_scripts
@@ -127,4 +129,4 @@ systemctl enable hades-kestrel-server.service
 echo "Enabling Nginx..."
 systemctl enable nginx
 
-echo "Please specify your SSL Certificate and your server name in the Nginx config file at: /etc/nginx/nginx.conf and restart Nginx. (or reboot the system)" 
+echo "Please specify your SSL Certificate and your server name in the Nginx config file at: /etc/nginx/nginx.conf and reboot the system." 
