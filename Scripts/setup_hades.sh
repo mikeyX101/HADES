@@ -32,6 +32,7 @@ chmod 640 /var/www/github_hades_rsa
 chmod 644 /var/www/github_hades_rsa.pub
 chown www-hades /var/www/github_hades_*
 chgrp www-hades /var/www/github_hades_*
+echo
 
 # Allow git to use key on Github in SSH config if file or entry doesn't exist
 if ! [ -e /etc/ssh/ssh_config ] || ! grep -q "IdentityFile /var/www/github_hades_rsa" /etc/ssh/ssh_config; then
@@ -109,7 +110,7 @@ chgrp -R www-hades /var/www/hades/*
 chown -R www-hades /var/www/hades/.git*
 chgrp -R www-hades /var/www/hades/.git*
 
-git config --global core.autocrlf input
+git config --system core.autocrlf input
 
 cd /var/www/hades
 git checkout SC/server_scripts
