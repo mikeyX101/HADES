@@ -10,6 +10,15 @@ if ! [ $(id -u) = 0 ]; then
 fi
 
 # -----------------------------------------------------------------
+#							Functions
+# -----------------------------------------------------------------
+
+function executeAsHadesUser()
+{
+	/bin/su -s /bin/bash -c "$1" - www-hades
+}
+
+# -----------------------------------------------------------------
 #						www-hades User Setup
 # -----------------------------------------------------------------
 
@@ -39,11 +48,7 @@ fi
 # -----------------------------------------------------------------
 # Generate rsa4096 key without passcode
 echo "Generating SSH key for the Github repository..."
-ssh-keygen -q -t rsa -b 4096 -N "" -f /var/www/github_hades_rsa <<< n # Answer no if asking to overwrite
-chmod 640 /var/www/github_hades_rsa
-chmod 644 /var/www/github_hades_rsa.pub
-chown www-hades /var/www/github_hades_*
-chgrp www-hades /var/www/github_hades_*
+executeAsHadesUser "ssh-keygen -q -t rsa -b 4096 -N '' -f /var/www/github_hades_rsa <<< n" # Answer no if asking to overwrite
 echo
 
 # Allow git to use key on Github in SSH config if file or entry doesn't exist
@@ -54,10 +59,8 @@ if ! [ -e /etc/ssh/ssh_config ] || ! grep -q "IdentityFile /var/www/github_hades
 	#	Hostname github.com
 	#	User git
 	#	IdentityFile /var/www/github_hades_rsa
-	echo $'Host *\n\tHostname github.com\n\tUser git\n\tIdentityFile /var/www/github_hades_rsa' >> /etc/ssh/ssh_config
-	
-	# Make sure config is readable
-	#chmod 644 ~/.ssh/config
+	#	StrictHostKeyChecking no
+	echo $'Host *\n\tHostname github.com\n\tUser git\n\tIdentityFile /var/www/github_hades_rsa\n\tStrictHostKeyChecking no' >> /etc/ssh/ssh_config
 fi
 
 # Install git (-q)
@@ -98,12 +101,6 @@ rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-prod.
 echo "Installing dotnet-sdk-5.0... (Requires root, can take some time)"
 yum -y install dotnet-sdk-5.0
 
-# Opt-out of DotNet telemetry
-#if ! grep -q "export DOTNET_CLI_TELEMETRY_OPTOUT=1" ~/.bashrc; then
-#	echo $'export DOTNET_CLI_TELEMETRY_OPTOUT=1\n' >> ~/.bashrc
-#	source ~/.bashrc
-#fi
-
 # -----------------------------------------------------------------
 #							HADES Setup
 # -----------------------------------------------------------------
@@ -119,16 +116,7 @@ if ! [ -d /var/www/hades ]; then
 	chown www-hades /var/www/hades
 	chgrp www-hades /var/www/hades
 fi
-git clone git@github.com:ShaiLynx/HADES.git /var/www/hades
-chown -R www-hades /var/www/hades/*
-chgrp -R www-hades /var/www/hades/*
-chown -R www-hades /var/www/hades/.git*
-chgrp -R www-hades /var/www/hades/.git*
-
-
-
-cd /var/www/hades
-git checkout SC/server_scripts
+executeAsHadesUser "git clone git@github.com:ShaiLynx/HADES.git /var/www/hades <<< yes" # 
 
 # Copy the HADES Kestrel Server service and start it
 cp /var/www/hades/Scripts/configs/systemd/hades-kestrel-server.service /etc/systemd/system/hades-kestrel-server.service
