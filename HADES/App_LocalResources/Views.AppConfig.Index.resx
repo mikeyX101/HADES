@@ -117,7 +117,70 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="GlobalString" xml:space="preserve">
-    <value>GlobalFR</value>
+  <data name="AccountDN" xml:space="preserve">
+    <value>Compte DN</value>
+  </data>
+  <data name="AdminGroup" xml:space="preserve">
+    <value>Groupe administrateur</value>
+  </data>
+  <data name="BaseDN" xml:space="preserve">
+    <value>Base DN</value>
+  </data>
+  <data name="CompanyBackgroundFile" xml:space="preserve">
+    <value>Fond d'écran de la compagnie</value>
+  </data>
+  <data name="CompanyLogoFile" xml:space="preserve">
+    <value>Logo de la compagnie</value>
+  </data>
+  <data name="CompanyName" xml:space="preserve">
+    <value>Nom de la compagnie</value>
+  </data>
+  <data name="ConnectionFilter" xml:space="preserve">
+    <value>Filtre de connexion</value>
+  </data>
+  <data name="DefaultLanguage" xml:space="preserve">
+    <value>Langue par défaut</value>
+  </data>
+  <data name="DefaultUser" xml:space="preserve">
+    <value>Utilisateur par défaut</value>
+  </data>
+  <data name="DefaultUserPassword" xml:space="preserve">
+    <value>Mot de passe par défaut</value>
+  </data>
+  <data name="LogDeleteFrequency" xml:space="preserve">
+    <value>Fréquence de suppression des fichiers de log</value>
+  </data>
+  <data name="LogMaxFileSize" xml:space="preserve">
+    <value>Taille maximale des fichiers de log</value>
+  </data>
+  <data name="LogTotalMaxSize" xml:space="preserve">
+    <value>Taille totale maximale des fichiers de log</value>
+  </data>
+  <data name="ParametreApplication" xml:space="preserve">
+    <value>Paramètres de l'application</value>
+  </data>
+  <data name="PasswordDN" xml:space="preserve">
+    <value>Mot de passe DN</value>
+  </data>
+  <data name="PortNumber" xml:space="preserve">
+    <value>Numéro de port</value>
+  </data>
+  <data name="RootOu" xml:space="preserve">
+    <value>Dossier racine</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Enregistrer</value>
+  </data>
+  <data name="ServerAddress" xml:space="preserve">
+    <value>Adresse du serveur</value>
+  </data>
+  <data name="SMTP" xml:space="preserve">
+    <value>SMTP</value>
+  </data>
+  <data name="SuperAdminGroup" xml:space="preserve">
+    <value>Groupes super administrateur</value>
+  </data>
+  <data name="SyncField" xml:space="preserve">
+    <value>Champ de synchronisation</value>
   </data>
 </root>
