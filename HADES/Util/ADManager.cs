@@ -304,25 +304,40 @@ namespace HADES.Util
 
 
                     // PATH OF THE OBJECT
-                    string[] path = nextEntry.Dn.Split(',');
-                    for (int i = path.Length - 1; i >= 0; i--)
-                    {
-                        if (path[i].Contains("DC=") || path[i].Contains("OU=" + data.SamAccountName) || path[i].Contains("CN=" + data.SamAccountName))
-                        {
-                            path[i] = null;
-                        }
-
-                        if (path[i] != null)
-                        {
-                            data.Path += "/" + path[i].Split("=")[1];
-                        }
+                    /*  string[] rootOuName = ADSettingsCache.Ad.RootOu.Split(',');
+                      string[] splitRoutOU = nextEntry.Dn.Split(rootOuName[0]);
+                      Console.WriteLine("splitResult " + splitRoutOU[0] + " /////" + splitRoutOU[1]);*/
+                
+                    if (nextEntry.Dn != ADSettingsCache.Ad.RootOu) {
+                        string[] rootOuName = ADSettingsCache.Ad.RootOu.Split(',');
+                        
+                        data.Path += "/" + rootOuName[0].Split("=")[1];
                     }
+                    string[] path = nextEntry.Dn.Split(',');
 
+                    for (int i = path.Length - 1; i >= 0; i--)
+                       {
+                           if (path[i].Contains("DC=") || path[i].Contains("OU=" + data.SamAccountName) || path[i].Contains("CN=" + data.SamAccountName) || ADSettingsCache.Ad.RootOu.Contains(path[i]))
+                           {
+                               path[i] = null;
+                           }
 
+                           if (path[i] != null)
+                           {
+                               data.Path += "/" + path[i].Split("=")[1];
+                           }
+                       }
+
+                    //   Console.WriteLine("path: " + data.Path);
+
+                  
                     //DN 
                     data.Dn = nextEntry.Dn;
 
                     root.Add(data);
+
+                    Console.WriteLine(data);
+
                 }
                 catch (Exception e)
                 {

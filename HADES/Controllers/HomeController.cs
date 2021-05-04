@@ -92,6 +92,11 @@ namespace HADES.Controllers
             foreach (var item in adRoot)
             {
                 path = item.Path?.Split("/");
+
+                if (viewModel.ADRootTreeNode == null) {
+                    viewModel.ADRootTreeNode = new TreeNode<string>(item.SamAccountName);
+                }
+
                 if (path == null)
                 {
                     viewModel.ADRootTreeNode = new TreeNode<string>(item.SamAccountName);
@@ -99,6 +104,7 @@ namespace HADES.Controllers
                 else if (path.Length == 2)
                 {
                     ou = viewModel.ADRootTreeNode.AddChild(item.SamAccountName);
+                    
                 }
                 else if (path.Length == 3)
                 {
