@@ -3,7 +3,7 @@ var selectedPathForContent;
 var selectedNode;
 var selectedDepth;
 
-function showTreeView(userObj) {
+function showTreeView(userObj, nodeName) {
     $(function () {
         // conversion Json en array Json
         var rootData = JSON.parse('[' + JSON.stringify(userObj) + ']');
@@ -15,17 +15,25 @@ function showTreeView(userObj) {
             collapseIcon: 'fa fa-minus',
             showBorder: false,
             highlightSelected: true,
+            highlightSearchResults: false,
             data: rootData
         });
 
-        // expand root node only 1 level deep
-        $('#mytreeview').treeview('expandNode', [0, { levels: 1, silent: true }]);
+        // search
+        var foundNodes = $('#mytreeview').treeview('search', [nodeName, {
+            ignoreCase: false,     // case insensitive
+            exactMatch: true,    // like or equals
+            revealResults: true,  // reveal matching nodes
+        }]);
+
+        // expand node 1 level deep
+        $('#mytreeview').treeview('expandNode', [foundNodes[0].nodeId, { levels: 1, silent: true }]);
 
         // set icons
         setIcons();
 
-        // select root node
-        $('#mytreeview').treeview('selectNode', [0, { silent: true }]);
+        // select node
+        $('#mytreeview').treeview('selectNode', [foundNodes[0].nodeId, { silent: true }]);
 
         // Action when node is selected
         $('#mytreeview').on('nodeSelected', function (event, data) {

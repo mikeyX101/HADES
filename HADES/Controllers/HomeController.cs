@@ -34,22 +34,29 @@ namespace HADES.Controllers
         }
 
         // Returns the Main Application View parameter is the selected Folder
-        public IActionResult MainView()
+        public IActionResult MainView(string selectedPath)
         {
             try
             {
                 viewModel.ADRoot = ad.getRoot();
                 BuildRootTreeNode(viewModel.ADRoot); // conversion List<RootDataInformation> en TreeNode<string>
                 viewModel.ADRootTreeNodeJson = TreeNodeToJson(viewModel.ADRootTreeNode); // conversion TreeNode<string> en Json
-                viewModel.SelectedPath = "/" + viewModel.ADRoot[0].SamAccountName; // select root OU par défaut
-                viewModel.SelectedName = viewModel.ADRoot[0].SamAccountName;
+                
+                if (selectedPath == null)
+                {
+                    viewModel.SelectedPath = "/" + viewModel.ADRoot[0].SamAccountName; // select root OU par défaut
+                    viewModel.SelectedNodeName = viewModel.ADRoot[0].SamAccountName;
+                }
+                else
+                {
+                    var split = selectedPath.Split('/');
+                    var selectedNodeName = split.Length == 2 ? split[1] : split[2];
+                    viewModel.SelectedPath = selectedPath;
+                    viewModel.SelectedNodeName = selectedNodeName;
+                }
+                
                 viewModel.CreateButtonLabel = Localizer["CreateNewOU"];
                 viewModel.EditLinkLabel = Localizer["Rename"];
-
-                // Données utiles pour la NavBar
-                ViewBag.UserName = ConnexionUtil.CurrentUser(this).GetName();
-                ViewBag.UserRole = ConnexionUtil.CurrentUser(this).GetRole();
-                ViewBag.CompanyName = context.AppConfig.FirstOrDefault().CompanyName;
 
                 return View(viewModel);
             }
@@ -65,13 +72,13 @@ namespace HADES.Controllers
             viewModel.ADRoot = ad.getRoot();
             viewModel.SelectedPath = selectedPathForContent;
             var split = viewModel.SelectedPath.Split('/');
-            viewModel.SelectedName = split[split.Length - 1];
+            viewModel.SelectedNodeName = split[split.Length - 1];
             if (split.Length == 2)
             {
                 viewModel.CreateButtonLabel = Localizer["CreateNewOU"];
                 viewModel.EditLinkLabel = Localizer["Rename"];
-            } 
-            else
+            }
+            if (split.Length == 3)
             {
                 viewModel.CreateButtonLabel = Localizer["CreateNewGroup"];
                 viewModel.EditLinkLabel = Localizer["Edit"];
@@ -130,6 +137,29 @@ namespace HADES.Controllers
             return PartialView();
         }
 
+        [HttpPost]
+        public IActionResult Delete(MainViewViewModel viewModel)
+        {
+            var DN = FindDN(viewModel.SelectedPath, viewModel.SelectedContentName);
+            var split = viewModel.SelectedPath.Split('/');
+            var selectedNodeName = split.Length == 2 ? split[1] : split[2];
+            if (split.Length == 2)
+            {
+                ad.deleteOU(DN);
+            }
+            if (split.Length == 3)
+            {
+                ad.deleteGroup(DN);
+            }
+            viewModel.ADRoot = ad.getRoot();
+            viewModel.SelectedNodeName = selectedNodeName;
+            return RedirectToAction("MainView", "Home", new { selectedPath = viewModel.SelectedPath });
+        }
 
+        private string FindDN(string selectedPath, string selectedContentName)
+        {
+            viewModel.ADRoot = ad.getRoot();
+            return viewModel.ADRoot.Find(e => e.Path == selectedPath && e.SamAccountName == selectedContentName).Dn;
+        }
     }
 }

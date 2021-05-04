@@ -1,6 +1,6 @@
 ﻿@model MainViewViewModel
 
-<h3 class="mt-3">@Localizer["ContenuDossier"] @Model.SelectedName</h3>
+<h3 class="mt-3">@Localizer["ContenuDossier"] @Model.SelectedNodeName</h3>
 <button type="button" class="btn btn-outline-secondary">
     @Html.ActionLink(Model.CreateButtonLabel, "Create")
 </button>
@@ -21,11 +21,14 @@
                             @* TODO *@
                             @Html.ActionLink(Model.EditLinkLabel, "Edit", new { /* id=item.PrimaryKey */ })
                         </button>
-                        <button type="button" class="btn btn-outline-secondary">
-                            @* TODO *@
-                            @Html.ActionLink(Localizer["Delete"].Value, "Delete", new { /* id=item.PrimaryKey */ })
-                        </button>
-
+                        <form action="Delete" method="post" style="display: inline-block">
+                            <button type="submit" class="btn btn-outline-secondary">
+                                @* TODO *@
+                                @Localizer["Delete"].Value
+                            </button>
+                            <input type="hidden" name="SelectedPath" value="@Model.SelectedPath" />
+                            <input type="hidden" name="SelectedContentName" value="@item.SamAccountName" />
+                        </form>
                     </td>
                 </tr>
 
