@@ -57,7 +57,7 @@ namespace HADES.Models
         {
             try
             {
-               return new ADManager().getUserAD(GUID).SamAccountName;
+               return new ADManager().getUserAD(GUID,true).SamAccountName;
             }
             catch (ADException)
             {

@@ -33,7 +33,7 @@ namespace HADES.Services
                 TimeSpan.Zero,
                 TimeSpan.FromMinutes(5)
             );
-
+            
             return Task.CompletedTask;
         }
 
@@ -67,6 +67,7 @@ namespace HADES.Services
 
         private void UpdateUsers()
         {
+            ad.getAllUsers();
             Console.WriteLine("Hades Users Synchronized with Active Directory");
         }
     }
