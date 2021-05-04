@@ -13,6 +13,7 @@ namespace HADES.Util.ModelAD
         private string email;
         private string notes;
         private string samAccountName;
+        private string objectGUID;
 
         public GroupAD()
         {
@@ -21,16 +22,17 @@ namespace HADES.Util.ModelAD
             this.Description = null;
             this.Email = null;
             this.Notes = null;
-            
+            this.ObjectGUID = null;
         }
 
-        public GroupAD(string samAccountName, List<UserAD> members, string description, string email, string notes)
+        public GroupAD(string samAccountName, List<UserAD> members, string description, string email, string notes, string objectGUID)
         {
             this.SamAccountName = samAccountName;
             this.Members = members;
             this.Description = description;
             this.Email = email;
             this.Notes = notes;
+            this.ObjectGUID = objectGUID;
         }
 
         public List<UserAD> Members { get => members; set => members = value; }
@@ -38,6 +40,7 @@ namespace HADES.Util.ModelAD
         public string Email { get => email; set => email = value; }
         public string Notes { get => notes; set => notes = value; }
         public string SamAccountName { get => samAccountName; set => samAccountName = value; }
+        public string ObjectGUID { get => objectGUID; set => objectGUID = value; }
 
         public override string ToString()
         {
@@ -46,7 +49,7 @@ namespace HADES.Util.ModelAD
                 m += Members[i] + " | ";
             }
 
-            return "[ SamAccountName: " + SamAccountName + ", Members: " + m + ", Description: "+ Description + ", Email: " + Email + ", Notes: "+ Notes+ "]";
+            return "[ SamAccountName: " + SamAccountName + ", Members: " + m + ", Description: "+ Description + ", Email: " + Email + ", Notes: "+ Notes+ ", ObjectGUID: " + ObjectGUID + "]";
         }
     }
 }

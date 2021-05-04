@@ -56,13 +56,22 @@ namespace HADES.Util
 
              modifyGroup("CN=Group11,OU=Dossier1,OU=hades_root,DC=R991-AD,DC=lan", "Group11", "Dossier1", "Une fgdsgfsdescriptionfsd", "emddddailfds", "notessssdsadsassssssssssssssssssdfs", list);
          */
-           // getUserAD("hades@R991-AD.lan");
-           // getUserAD("hades@hades.com");
-           // getUserAD("hades");
+            // getUserAD("hades@R991-AD.lan");
+            // getUserAD("hades@hades.com");
+            //  Console.WriteLine( getUserAD("hades"));
 
-          //  authenticate("hades", "Toto123!");
+            //  authenticate("hades", "Toto123!");
             //authenticate("hades@hades.com", "Toto123!");
-           // authenticate("hades@R991-AD.lan", "Toto123!");
+            // authenticate("hades@R991-AD.lan", "Toto123!");
+
+            // getAllUsers();
+            //  Console.WriteLine(getGroupInformation("CN=Group11,OU=Dossier1,OU=hades_root,DC=R991-AD,DC=lan"));
+           // UserAD hades = getUserAD("hades",false);
+
+          //  Console.WriteLine(hades.ObjectGUID);
+
+           // Console.WriteLine(getUserAD(hades.ObjectGUID, true));
+         
         }
 
         /*****************************************************
@@ -73,6 +82,28 @@ namespace HADES.Util
             try
             {
                 return entry.GetAttribute(attribute).StringValue;
+            }
+            catch (KeyNotFoundException)
+            {
+                //The key is not set or empty
+                return null;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("LOG: " + e.Message);
+                return null;
+            }
+        }
+
+        private string getObjectGUID(LdapEntry entry)
+        {
+            try
+            {
+                string guid = System.BitConverter.ToString(entry.GetAttribute("ObjectGUID").ByteValue);
+                guid = "\\" + guid.Replace("-", "\\").ToLower();
+
+                return guid;
+
             }
             catch (KeyNotFoundException)
             {
@@ -200,6 +231,9 @@ namespace HADES.Util
                     u.FirstName = getAttributeValue(nextEntry, "givenName");
                     u.LastName = getAttributeValue(nextEntry, "sn");
                     u.Dn = nextEntry.Dn;
+                    u.ObjectGUID = getObjectGUID(nextEntry);
+
+                    Console.WriteLine(u);
                     users.Add(u);
                 }
                 catch (Exception e)
@@ -214,11 +248,20 @@ namespace HADES.Util
             return users;
         }
 
-        public UserAD getUserAD(string username)
+        public UserAD getUserAD(string usernameOrGUID , bool fetchByGUID = false)
         {
             UserAD u = null;
             LdapConnection connection = createConnection();
-            LdapSearchResults lsc = (LdapSearchResults)connection.Search(baseDN, LdapConnection.ScopeSub, connectionFilter.Remove(connectionFilter.Length - 1) + "(" + syncField.ToString() + "=" + username + "))", null, false);
+            LdapSearchResults lsc = null;
+            if (fetchByGUID == false)
+            {
+                lsc = (LdapSearchResults)connection.Search(baseDN, LdapConnection.ScopeSub, connectionFilter.Remove(connectionFilter.Length - 1) + "(" + syncField.ToString() + "=" + usernameOrGUID + "))", null, false);
+            }
+            else {
+                lsc = (LdapSearchResults)connection.Search(baseDN, LdapConnection.ScopeSub, "(objectGUID="+ usernameOrGUID + ")", null, false);
+            }
+            
+
 
             while (lsc.HasMore() )
             {
@@ -227,14 +270,14 @@ namespace HADES.Util
                 {
                     nextEntry = lsc.Next();
 
-                    if (getAttributeValue(nextEntry, syncField.ToString()) == username)
-                    {
                         u = new UserAD();
                         u.SamAccountName = getAttributeValue(nextEntry, "samaccountName");
                         u.FirstName = getAttributeValue(nextEntry, "givenName");
                         u.LastName = getAttributeValue(nextEntry, "sn");
                         u.Dn = nextEntry.Dn;
-                    }
+                        u.ObjectGUID = getObjectGUID(nextEntry);
+                        Console.WriteLine(u);
+                    
                 }
                 catch (Exception e)
                 {
@@ -352,6 +395,7 @@ namespace HADES.Util
                     group.Notes = getAttributeValue(nextEntry, "info");
                     group.Description = getAttributeValue(nextEntry, "description");
                     group.Members = GetMembersOfGroup(groupDN);
+                    group.ObjectGUID = getObjectGUID(nextEntry);
                 }
                 catch (LdapException e)
                 {
