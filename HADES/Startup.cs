@@ -15,6 +15,9 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Mvc.Filters;
+using HADES.Middlewares;
 
 namespace HADES
 {
@@ -62,7 +65,10 @@ namespace HADES
                 options.UseSqlite(Settings.AppSettings.SqlLiteConnectionString));
 
             services.AddControllersWithViews();
-            services.AddMvc(options => options.Filters.Add(new AuthorizeFilter()));
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(new AuthorizeFilter());
+            });
 
             #region Localization Setup
             // Configure localization
@@ -106,21 +112,23 @@ namespace HADES
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 		{
-
-			if (env.IsDevelopment())
+            if (env.IsDevelopment())
 			{
 				app.UseHttpsRedirection();
 				app.UseDeveloperExceptionPage();
-				app.UseMigrationsEndPoint();
 			}
 			else if (env.IsProduction())
 			{
 				// UseForwardedHeaders() must be executed before UseHtst().
 				app.UseForwardedHeaders();
-				app.UseExceptionHandler("/Home/Error");
+
+                app.UseExceptionHandler("/Errors");
+                app.UseHadesErrorHandling();
+
                 app.UseHttpsRedirection();
 				// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
 				app.UseHsts();
+
 
 				// If production build, run migrations to keep database up-to-date.
 				using (IServiceScope scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
@@ -129,7 +137,7 @@ namespace HADES
 				}
 			}
 
-			app.UseStaticFiles();
+            app.UseStaticFiles();
 
             app.UseRouting();
 
@@ -179,5 +187,5 @@ namespace HADES
                 return await Task.FromResult(new ProviderCultureResult(locale));
             };
         }
-    }
+	}
 }
