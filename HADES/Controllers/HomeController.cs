@@ -28,11 +28,6 @@ namespace HADES.Controllers
         }
 
         [Authorize]
-        public IActionResult Login()
-        {
-            return View();
-        }
-
         // Returns the Main Application View parameter is the selected Folder
         public IActionResult MainView(string selectedPath)
         {
@@ -67,6 +62,7 @@ namespace HADES.Controllers
             }
         }
 
+        [Authorize]
         public IActionResult UpdateContent(string selectedPathForContent)
         {
             viewModel.ADRoot = ad.getRoot();
@@ -132,12 +128,14 @@ namespace HADES.Controllers
                                                 .Replace("\"nodes\": []", "");
         }
 
+        [Authorize]
         public IActionResult CreateGroupModal()
         {
             return PartialView();
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult Delete(MainViewViewModel viewModel)
         {
             var DN = FindDN(viewModel.SelectedPath, viewModel.SelectedContentName);
