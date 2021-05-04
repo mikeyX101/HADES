@@ -1,4 +1,4 @@
-ï»¿using HADES.Models;
+using HADES.Models;
 using HADES.Util;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -41,19 +41,19 @@ namespace HADES.Controllers
                 viewModel.ADRoot = ad.getRoot();
                 BuildRootTreeNode(viewModel.ADRoot); // conversion List<RootDataInformation> en TreeNode<string>
                 viewModel.ADRootTreeNodeJson = TreeNodeToJson(viewModel.ADRootTreeNode); // conversion TreeNode<string> en Json
-                viewModel.SelectedPath = "/" + viewModel.ADRoot[0].SamAccountName; // select root OU par dÃ©faut
+                viewModel.SelectedPath = "/" + viewModel.ADRoot[0].SamAccountName; // select root OU par défaut
                 viewModel.SelectedName = viewModel.ADRoot[0].SamAccountName;
                 viewModel.CreateButtonLabel = Localizer["CreateNewOU"];
                 viewModel.EditLinkLabel = Localizer["Rename"];
 
-                // DonnÃ©es utiles pour la NavBar
+                // Données utiles pour la NavBar
                 ViewBag.UserName = ConnexionUtil.CurrentUser(this).GetName();
                 ViewBag.UserRole = ConnexionUtil.CurrentUser(this).GetRole();
                 ViewBag.CompanyName = context.AppConfig.FirstOrDefault().CompanyName;
 
                 return View(viewModel);
             }
-            catch (ADException ex) // Connection Ã  l'AD impossible
+            catch (ADException ex) // Connection à l'AD impossible
             {
                 viewModel.ADConnectionError = Localizer["ADConnectionError"];
                 return View(viewModel);
@@ -124,6 +124,12 @@ namespace HADES.Controllers
                                                     })
                                                 .Replace("\"nodes\": []", "");
         }
+
+        public IActionResult CreateGroupModal()
+        {
+            return PartialView();
+        }
+
 
     }
 }
