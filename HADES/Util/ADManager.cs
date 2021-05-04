@@ -398,14 +398,14 @@ namespace HADES.Util
             }
         }
 
-        public bool renameOU(string dn, string newName)
+        public bool renameOU(string dnOUToRename, string newName)
         {
             LdapConnection connection = createConnection();
             try
             {
                 string newRdn = "OU=" + newName;
 
-                connection.Rename(dn, newRdn, true);
+                connection.Rename(dnOUToRename, newRdn, true);
                 connection.Disconnect();
                 return true;
             }
@@ -417,12 +417,12 @@ namespace HADES.Util
             }
         }
 
-        public bool deleteOU(string dn)
+        public bool deleteOU(string dnOUToDelete)
         {
             LdapConnection connection = createConnection();
             try
             {
-                connection.Delete(dn);
+                connection.Delete(dnOUToDelete);
                 connection.Disconnect();
                 return true;
             }
@@ -537,12 +537,12 @@ namespace HADES.Util
             }
         }
 
-        public bool deleteGroup(string dn)
+        public bool deleteGroup(string dnGroupToDelete)
         {
             LdapConnection connection = createConnection();
             try
             {
-                connection.Delete(dn);
+                connection.Delete(dnGroupToDelete);
                 connection.Disconnect();
                 return true;
             }
