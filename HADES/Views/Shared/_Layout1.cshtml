@@ -35,13 +35,20 @@
                 <ul class="navbar-nav mr-auto text-light">
                     <li class="nav-item">
                         @* TODO: HADES - Nom de l'entreprise *@
-                        HADES - @ViewBag.CompanyName
+                        @{ HADES.Data.ApplicationDbContext tempdb = new(); }
+                        HADES - @tempdb.AppConfig.FirstOrDefault().CompanyName
                     </li>
                 </ul>
                 <ul class="navbar-nav mr-auto text-light">
                     <li class="nav-item">
                         @* TODO: Nom utilisateur (Role)*@
-                        @ViewBag.UserName (@ViewBag.UserRole)
+                        @{
+                            IUser u = HADES.Util.ConnexionUtil.CurrentUser(Context.User);
+
+
+                        }
+                        @u.GetName() (@u.GetRole().Name)
+
                     </li>
                 </ul>
                 <div class="dropdown">
@@ -59,8 +66,8 @@
                         @Localizer["MenuUtilisateur"]
                     </button>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" asp-action="UserConfig" asp-controller="UserConfigs" asp-route-id="1">@Localizer["ParametreUtilisateur"]</a>
-                        <a class="dropdown-item">@Localizer["Deconnexion"]</a>
+                        <a class="dropdown-item" asp-action="UserConfig" asp-controller="UserConfigs">@Localizer["ParametreUtilisateur"]</a>
+                        <a class="dropdown-item" asp-action="LogOut" asp-controller="Account">@Localizer["Deconnexion"]</a>
                     </div>
                 </div>
             </div>

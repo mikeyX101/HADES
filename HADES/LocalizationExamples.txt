@@ -33,5 +33,3 @@ Global Resources:
 		@HADES.Strings.<key_name>
 	In controllers/code:
 		string myString = HADES.Strings.<key_name>
-
-Test branche romain sourcetree

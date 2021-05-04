@@ -117,10 +117,25 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="MSG_Invalid" xml:space="preserve">
-    <value>Invalid login information. If you are certain of your Login information, it's possible that your account has been disabled temporarily for security reasons.</value>
+  <data name="Deconnexion" xml:space="preserve">
+    <value>Déconnexion</value>
   </data>
-  <data name="MSG_LDAP" xml:space="preserve">
-    <value>An error occured while connecting to the Active Directory</value>
+  <data name="JournalEvenements" xml:space="preserve">
+    <value>Journal des évènements</value>
+  </data>
+  <data name="ListeUtilisateurs" xml:space="preserve">
+    <value>Liste des utilisateurs</value>
+  </data>
+  <data name="MenuAdministrateur" xml:space="preserve">
+    <value>Menu administrateur</value>
+  </data>
+  <data name="MenuUtilisateur" xml:space="preserve">
+    <value>Menu utilisateur</value>
+  </data>
+  <data name="ParametreApplication" xml:space="preserve">
+    <value>Paramètres de l'application</value>
+  </data>
+  <data name="ParametreUtilisateur" xml:space="preserve">
+    <value>Paramètres de l'utilisateur</value>
   </data>
 </root>

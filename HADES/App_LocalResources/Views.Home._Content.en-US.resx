@@ -117,10 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="MSG_Invalid" xml:space="preserve">
-    <value>Invalid login information. If you are certain of your Login information, it's possible that your account has been disabled temporarily for security reasons.</value>
+  <data name="ContenuDossier" xml:space="preserve">
+    <value>Folder content</value>
   </data>
-  <data name="MSG_LDAP" xml:space="preserve">
-    <value>An error occured while connecting to the Active Directory</value>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
   </data>
 </root>

@@ -1,4 +1,3 @@
-using HADES.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -12,6 +11,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.HttpOverrides;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
@@ -22,10 +22,9 @@ namespace HADES
     {
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            // Use settings to access appsettings.json 
+            Settings.Initiate(configuration);
         }
-
-        public IConfiguration Configuration { get; }
 
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
@@ -44,8 +43,6 @@ namespace HADES
 			});
             #endregion
 
-            Settings.Initiate(Configuration);
-
             services.AddRouting(options => options.LowercaseUrls = true);
 
             services.AddMemoryCache();
@@ -61,11 +58,8 @@ namespace HADES
                 options.Cookie.HttpOnly = true;
             });
 
-            services.AddDbContext<ApplicationDbContext>(options =>
+            services.AddDbContext<Data.ApplicationDbContext>(options =>
                 options.UseSqlite(Settings.AppSettings.SqlLiteConnectionString));
-
-
-            
 
             services.AddControllersWithViews();
             services.AddMvc(options => options.Filters.Add(new AuthorizeFilter()));
@@ -83,7 +77,7 @@ namespace HADES
                     new CultureInfo("pt-BR")
                 };
                 // Set default culture to fr (ServiceCulture and UICulture)
-                options.DefaultRequestCulture = new RequestCulture("fr-CA", "fr-CA");
+                options.DefaultRequestCulture = new RequestCulture(Settings.AppSettings.DefaultCulture, Settings.AppSettings.DefaultCulture);
                 options.SupportedCultures = supportedCultures;
                 options.SupportedUICultures = supportedCultures;
                 /*
@@ -98,20 +92,11 @@ namespace HADES
 					We should clear the default providers and only use our own.
 				*/
                 options.RequestCultureProviders.Clear();
-                options.RequestCultureProviders.Add(new CustomRequestCultureProvider(async context =>
-                {
-                    // Do DB request, context is HttpContext
-                    await Task.Delay(1);
-
-                    // TEMP Allow override from query string
-                    string locale = context.Request.Query["l"].ToString() ?? "fr-CA";
-                    // Return culture from request
-                    return new ProviderCultureResult(locale);
-                }));
+                options.RequestCultureProviders.Add(new HadesCultureProvider());
             });
 
             // Set resource path for localizations
-            services.AddLocalization(localOptions => { localOptions.ResourcesPath = "App_LocalResources"; });
+            services.AddLocalization(localOptions => { localOptions.ResourcesPath = Settings.AppSettings.LocalResourcesPath; });
 
             services.AddMvc().AddViewLocalization(Microsoft.AspNetCore.Mvc.Razor.LanguageViewLocationExpanderFormat.SubFolder);
             services.AddMvc().AddDataAnnotationsLocalization();
@@ -140,7 +125,7 @@ namespace HADES
 				// If production build, run migrations to keep database up-to-date.
 				using (IServiceScope scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
 				{
-					scope.ServiceProvider.GetRequiredService<ApplicationDbContext>().Database.Migrate();
+					scope.ServiceProvider.GetRequiredService<Data.ApplicationDbContext>().Database.Migrate();
 				}
 			}
 
@@ -167,6 +152,32 @@ namespace HADES
 				endpoints.MapRazorPages();
 			});
 
+        }
+
+        private class HadesCultureProvider : CustomRequestCultureProvider
+        {
+            public HadesCultureProvider() : base(GetCultureFunc)
+			{
+			}
+
+            private static Func<HttpContext, Task<ProviderCultureResult>> GetCultureFunc => async context =>
+            {
+                string locale;
+                Models.IUser connectedUser = Util.ConnexionUtil.CurrentUser(context.User);
+
+                using (Data.ApplicationDbContext db = new())
+				{
+                    string queryStringLanguage = context.Request.Query["l"].ToString();
+                    locale =
+                        !string.IsNullOrWhiteSpace(queryStringLanguage) ? queryStringLanguage : null ??     // TEMP, CHECK l IN QUERY STRING. TO BE REMOVED, THIS IS AN UNFILTERED USER INPUT ENTRY POINT
+                        connectedUser?.GetUserConfig().Language ??                                          // Get from connected user.
+                        db.AppConfig.FirstOrDefault()?.DefaultLanguage ??                                   // Get from app config.
+                        Settings.AppSettings.DefaultCulture;                                                // Get default in appsettings.json (Always defined)
+                }
+
+                // Return culture from request
+                return await Task.FromResult(new ProviderCultureResult(locale));
+            };
         }
     }
 }
