@@ -21,30 +21,10 @@ namespace HADES.Util
         mail,
         userprincipalname
     }
+
+    //https://www.novell.com/documentation/developer/ldapcsharp/?page=/documentation/developer/ldapcsharp/cnet/data/bovumfi.html
     public class ADManager
     {
-        public object DatabaseSyncService { get; private set; }
-
-
-        //   private string server = "172.20.48.10";
-        //  private int PortNumber = 389;
-        // private string accountDn = "CN=hades,CN=Users,DC=R991-AD,DC=lan";
-        //  private string passwordDn = "Toto123!";
-        // private string baseDN = "CN=Users,DC=R991-AD,DC=lan";
-        // private string rootOU = "OU=hades_root,DC=R991-AD,DC=lan";
-        // private string connectionFilter = "(&(objectClass=user)(objectCategory=person))";
-        //private SyncField syncField = SyncField.samaccountname;
-
-
-        //Client Side information for testing
-        //private const string server = "bkomstudios.com";
-        //private const int PortNumber = 389;
-        //private const string accountDn = "CN=hades,OU=ServiceAccounts,OU=BkomUsers,DC=bkomstudios,DC=com";
-        //private const string passwordDn = "";
-        //private const string baseDN = "OU=BkomUsers,DC=bkomstudios,DC=com";
-        //private string rootOU = "OU=BkomGroups,DC=bkomstudios,DC=com";
-
-        //https://www.novell.com/documentation/developer/ldapcsharp/?page=/documentation/developer/ldapcsharp/cnet/data/bovumfi.html
         public ADManager()
         {
             if (ADSettingsCache.Ad == null) {
@@ -52,39 +32,6 @@ namespace HADES.Util
             }
         }
        
-        /*****************************************************
-            For testing in the dev Build
-         ******************************************************/
-        public void test() {
-            /*  UserAD u1 = getUserAD("hades");
-              UserAD u2 = getUserAD("Administrator");
-              UserAD u3 = getUserAD("Guest");
-              Dictionary<UserAD,Action> list = new Dictionary<UserAD, Action>();
-              list.Add(u1, Action.DELETE);
-              list.Add(u2, Action.DELETE);
-              list.Add(u3, Action.DELETE);
-
-              modifyGroup("CN=Group11,OU=Dossier22,OU=hades_root,DC=R991-AD,DC=lan", "Group11", "Dossier22", "Une fgdsgfsdescriptionfsd", "emddddailfds", "notessssdsadsassssssssssssssssssdfs", list);
-          */
-            // getUserAD("hades@R991-AD.lan");
-            // getUserAD("hades@hades.com");
-            //  Console.WriteLine( getUserAD("hades"));
-
-            //  authenticate("hades", "Toto123!");
-            //authenticate("hades@hades.com", "Toto123!");
-            // authenticate("hades@R991-AD.lan", "Toto123!");
-
-            // getAllUsers();
-            //  Console.WriteLine(getGroupInformation("CN=Group11,OU=Dossier1,OU=hades_root,DC=R991-AD,DC=lan"));
-            // UserAD hades = getUserAD("hades",false);
-
-            //  Console.WriteLine(hades.ObjectGUID);
-
-            // Console.WriteLine(getUserAD(hades.ObjectGUID, true));
-        }
-
-       
-
         /*****************************************************
          GETATTRIBUTE in AD
          ******************************************************/
@@ -106,15 +53,17 @@ namespace HADES.Util
             }
         }
 
+        /*****************************************************
+        GETObjectGUID Hexadecimal value in AD
+        ******************************************************/
         private string getObjectGUID(LdapEntry entry)
         {
             try
             {
                 string guid = System.BitConverter.ToString(entry.GetAttribute("ObjectGUID").ByteValue);
+                // Format for Search filter
                 guid = "\\" + guid.Replace("-", "\\").ToLower();
-
                 return guid;
-
             }
             catch (KeyNotFoundException)
             {
@@ -131,7 +80,6 @@ namespace HADES.Util
         /*****************************************************
          CONNECTION
          ******************************************************/
-
         private LdapConnection createConnection(string userDN = null, string password = null)
         {
             DatabaseSyncService.ExecUpdate();
@@ -272,7 +220,6 @@ namespace HADES.Util
             else {
                 lsc = (LdapSearchResults)connection.Search(ADSettingsCache.Ad.BaseDN, LdapConnection.ScopeSub, "(objectGUID=" + usernameOrGUID + ")", null, false);
             }
-
 
 
             while (lsc.HasMore())
