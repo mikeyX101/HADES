@@ -41,7 +41,7 @@ namespace HADES.Controllers
                 viewModel.ADRoot = ad.getRoot();
                 BuildRootTreeNode(viewModel.ADRoot); // conversion List<RootDataInformation> en TreeNode<string>
                 viewModel.ADRootTreeNodeJson = TreeNodeToJson(viewModel.ADRootTreeNode); // conversion TreeNode<string> en Json
-                
+
                 if (selectedPath == null)
                 {
                     viewModel.SelectedPath = "/" + viewModel.ADRoot[0].SamAccountName; // select root OU par défaut
@@ -54,7 +54,7 @@ namespace HADES.Controllers
                     viewModel.SelectedPath = selectedPath;
                     viewModel.SelectedNodeName = selectedNodeName;
                 }
-                
+
                 viewModel.CreateButtonLabel = Localizer["CreateNewOU"];
                 viewModel.EditLinkLabel = Localizer["Rename"];
 
@@ -192,14 +192,14 @@ namespace HADES.Controllers
             }
             return View(groupAD);
         }
-
-    }
-
-
         private string FindDN(string selectedPath, string selectedContentName)
         {
             viewModel.ADRoot = ad.getRoot();
             return viewModel.ADRoot.Find(e => e.Path == selectedPath && e.SamAccountName == selectedContentName).Dn;
         }
     }
+
+
+
+
 }
