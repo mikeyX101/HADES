@@ -9,6 +9,7 @@ using HADES.Data;
 using HADES.Models;
 using HADES.Services;
 using HADES.Util;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HADES.Controllers
 {
@@ -21,7 +22,7 @@ namespace HADES.Controllers
             db = context;
         }
 
-
+        [Authorize]
         public async Task<IActionResult> UserConfig()
         {
             UserConfigService service = new();
@@ -32,6 +33,7 @@ namespace HADES.Controllers
 
 
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UserConfig([Bind("UserConfig,Emails")] UserConfigViewModel viewModel)
         {
@@ -59,6 +61,7 @@ namespace HADES.Controllers
             return View(viewModel);
         }
 
+        [Authorize]
         public IActionResult CreateEmail(int? id)
         {
             ViewBag.UserConfigId = id;
@@ -67,6 +70,7 @@ namespace HADES.Controllers
 
 
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateEmail([Bind("Id,Address,ExpirationDate,GroupCreate,GroupDelete,MemberAdd,MemberRemoval,UserConfigId")] Email email)
         {
@@ -80,6 +84,7 @@ namespace HADES.Controllers
         }
 
 
+        [Authorize]
         public async Task<IActionResult> EmailDelete(int? id)
         {
             UserConfigService service = new();

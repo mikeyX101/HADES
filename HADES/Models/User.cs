@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using HADES.Util;
+using HADES.Util.Exceptions;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -25,8 +27,8 @@ namespace HADES.Models
         public DateTime Date { get; set; }
 
         [Required]
-        [Column("USE_sam_account_name")]
-        public string SamAccount { get; set; }
+        [Column("USE_guid")]
+        public string GUID { get; set; }
 
         [ForeignKey("Role")]
         [Column("USE_ROL_id")]
@@ -53,7 +55,14 @@ namespace HADES.Models
 
         public string GetName()
         {
-            return this.SamAccount;
+            try
+            {
+               return new ADManager().getUserAD(GUID,true).SamAccountName;
+            }
+            catch (ADException)
+            {
+                return GUID;
+            }
         }
 
         public Role GetRole()
