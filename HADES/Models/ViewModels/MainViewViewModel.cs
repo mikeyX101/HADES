@@ -13,6 +13,8 @@ namespace HADES.Models
 
         public TreeNode<string> ADRootTreeNode { get; set; }
         
+        public GroupAD GroupAD { get; set; }
+        
         public string ADRootTreeNodeJson { get; set; }
 
         public string SelectedPath { get; set; }

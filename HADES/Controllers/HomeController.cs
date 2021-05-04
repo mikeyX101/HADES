@@ -113,6 +113,45 @@ namespace HADES.Controllers
             return PartialView();
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateGroupModal([Bind("SamAccountName,FirstName,LastName,Dn")] GroupAD groupAD)
+        {
+            if (ModelState.IsValid)
+            {
+                //Quel endroit je trouve le OU(...) pour le constructeur?
+                //ad.createGroup(groupAD.SamAccountName, ..., groupAD.Description, groupAD.Email, groupAD.Notes, groupAD.Members);
+                return RedirectToAction("EditGroupModal", groupAD.SamAccountName);
+            }
+            return View(groupAD);
+        }
+
+        public IActionResult EditGroupModal(string samAccountName)
+        {
+            //getGroup??
+            return View(/*group*/);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditGroupModal([Bind("SamAccountName,FirstName,LastName,Dn")] GroupAD groupAD)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    //ad.modifyGroup();
+                }
+                catch (Exception e)
+                {
+
+                }
+                return RedirectToAction("MainView");
+            }
+            return View(groupAD);
+        }
 
     }
+
+
 }
