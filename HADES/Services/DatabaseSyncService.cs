@@ -1,5 +1,6 @@
 ﻿using HADES.Data;
 using HADES.Util;
+using HADES.Util.ModelAD;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ namespace HADES.Services
 
         private static bool UpdateMe = false;
 
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private ApplicationDbContext db;
         private ADManager ad = new ADManager();
 
         // Flag the database for update
@@ -23,7 +24,7 @@ namespace HADES.Services
         {
             UpdateMe = true;
         }
-
+        
         public Task StartAsync(CancellationToken cancellationToken)
         {
             // timer repeats call to UpdateDatabase every 5 minutes.
@@ -52,6 +53,7 @@ namespace HADES.Services
                 UpdateOwnerGroups();
                 UpdateAdminSuperAdmin();
                 UpdateMe = false;
+                db = null;
             }
         }
 
@@ -67,7 +69,10 @@ namespace HADES.Services
 
         private void UpdateUsers()
         {
-            ad.getAllUsers();
+            List<UserAD> ulist = ad.getAllUsers();
+            // First Delete Users that are not in the Active Directory
+
+
             Console.WriteLine("Hades Users Synchronized with Active Directory");
         }
     }
