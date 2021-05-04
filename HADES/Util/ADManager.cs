@@ -48,14 +48,16 @@ namespace HADES.Util
             For testing in the dev Build
          ******************************************************/
         public void test() {
-            /* UserAD u1 = getUserAD("hades");
+             UserAD u1 = getUserAD("hades");
              UserAD u2 = getUserAD("Administrator");
+             UserAD u3 = getUserAD("Guest");
              Dictionary<UserAD,Action> list = new Dictionary<UserAD, Action>();
              list.Add(u1, Action.DELETE);
-             list.Add(u2, Action.ADD);
+             list.Add(u2, Action.DELETE);
+             list.Add(u3, Action.DELETE);
 
-             modifyGroup("CN=Group11,OU=Dossier1,OU=hades_root,DC=R991-AD,DC=lan", "Group11", "Dossier1", "Une fgdsgfsdescriptionfsd", "emddddailfds", "notessssdsadsassssssssssssssssssdfs", list);
-         */
+             modifyGroup("CN=Group11,OU=Dossier22,OU=hades_root,DC=R991-AD,DC=lan", "Group11", "Dossier22", "Une fgdsgfsdescriptionfsd", "emddddailfds", "notessssdsadsassssssssssssssssssdfs", list);
+         
             // getUserAD("hades@R991-AD.lan");
             // getUserAD("hades@hades.com");
             //  Console.WriteLine( getUserAD("hades"));
@@ -66,12 +68,12 @@ namespace HADES.Util
 
             // getAllUsers();
             //  Console.WriteLine(getGroupInformation("CN=Group11,OU=Dossier1,OU=hades_root,DC=R991-AD,DC=lan"));
-           // UserAD hades = getUserAD("hades",false);
+            // UserAD hades = getUserAD("hades",false);
 
-          //  Console.WriteLine(hades.ObjectGUID);
+            //  Console.WriteLine(hades.ObjectGUID);
 
-           // Console.WriteLine(getUserAD(hades.ObjectGUID, true));
-         
+            // Console.WriteLine(getUserAD(hades.ObjectGUID, true));
+
         }
 
         /*****************************************************
@@ -248,7 +250,7 @@ namespace HADES.Util
             return users;
         }
 
-        public UserAD getUserAD(string usernameOrGUID , bool fetchByGUID = false)
+        public UserAD getUserAD(string usernameOrGUID, bool fetchByGUID = false)
         {
             UserAD u = null;
             LdapConnection connection = createConnection();
@@ -258,26 +260,26 @@ namespace HADES.Util
                 lsc = (LdapSearchResults)connection.Search(baseDN, LdapConnection.ScopeSub, connectionFilter.Remove(connectionFilter.Length - 1) + "(" + syncField.ToString() + "=" + usernameOrGUID + "))", null, false);
             }
             else {
-                lsc = (LdapSearchResults)connection.Search(baseDN, LdapConnection.ScopeSub, "(objectGUID="+ usernameOrGUID + ")", null, false);
+                lsc = (LdapSearchResults)connection.Search(baseDN, LdapConnection.ScopeSub, "(objectGUID=" + usernameOrGUID + ")", null, false);
             }
-            
 
 
-            while (lsc.HasMore() )
+
+            while (lsc.HasMore())
             {
                 LdapEntry nextEntry = null;
                 try
                 {
                     nextEntry = lsc.Next();
 
-                        u = new UserAD();
-                        u.SamAccountName = getAttributeValue(nextEntry, "samaccountName");
-                        u.FirstName = getAttributeValue(nextEntry, "givenName");
-                        u.LastName = getAttributeValue(nextEntry, "sn");
-                        u.Dn = nextEntry.Dn;
-                        u.ObjectGUID = getObjectGUID(nextEntry);
-                        Console.WriteLine(u);
-                    
+                    u = new UserAD();
+                    u.SamAccountName = getAttributeValue(nextEntry, "samaccountName");
+                    u.FirstName = getAttributeValue(nextEntry, "givenName");
+                    u.LastName = getAttributeValue(nextEntry, "sn");
+                    u.Dn = nextEntry.Dn;
+                    u.ObjectGUID = getObjectGUID(nextEntry);
+                    Console.WriteLine(u);
+
                 }
                 catch (Exception e)
                 {
@@ -506,9 +508,11 @@ namespace HADES.Util
                 connection.Disconnect();
 
                 //Add members
+                List<string> add = new List<string>();
                 foreach (UserAD m in members) {
-                    addMemberToGroup(dn, m.Dn);
+                    add.Add(m.Dn);
                 }
+                addMemberToGroup(dn, add);
 
                 return true;
             }
@@ -522,7 +526,7 @@ namespace HADES.Util
 
 
         public bool modifyGroup(string dnGroupToModify, string name, string ouGroup, string description, string email, string notes, Dictionary<UserAD, Action> members)
-        
+
         {
             LdapConnection connection = createConnection();
             try
@@ -559,18 +563,26 @@ namespace HADES.Util
 
                 connection.Disconnect();
 
+                List<string> add = new List<string>();
+                List<string> delete = new List<string>();
                 //Modify members
                 foreach (KeyValuePair<UserAD, Action> entry in members)
                 {
-                    // TODO: ADD MEMBERS IN BATCH
                     if (entry.Value == Action.ADD) {
-                        addMemberToGroup(dnGroupToModify, entry.Key.Dn);
+                        add.Add(entry.Key.Dn);
+
                     } else if (entry.Value == Action.DELETE) {
-                        deleteMemberToGroup(dnGroupToModify, entry.Key.Dn);
+                        delete.Add(entry.Key.Dn);
                     }
                 }
 
-                
+                if (add.Count > 0) {
+                    addMemberToGroup(dnGroupToModify, add);
+                }
+                if (delete.Count > 0)
+                {
+                    deleteMemberToGroup(dnGroupToModify, delete);
+                }
                 return true;
 
             }
@@ -637,14 +649,20 @@ namespace HADES.Util
             return users;
         }
 
-        public bool addMemberToGroup(string groupDn, string userDn)
+        public bool addMemberToGroup(string groupDn, List<string> usersDn)
         {
             LdapConnection connection = createConnection();
             try
             {
                 List<LdapModification> modList = new List<LdapModification>();
-                LdapAttribute attribute = new LdapAttribute("member", userDn);
-                modList.Add(new LdapModification(LdapModification.Add, attribute));
+
+
+                foreach (string dn in usersDn)
+                {
+                    LdapAttribute attribute = new LdapAttribute("member", dn);
+                    modList.Add(new LdapModification(LdapModification.Add, attribute));
+                }
+
 
                 LdapModification[] mods = new LdapModification[modList.Count];
                 mods = modList.ToArray();
@@ -656,20 +674,24 @@ namespace HADES.Util
             }
             catch (Exception e)
             {
-                Console.WriteLine("Cannot add " + userDn + " in " + groupDn + " : " + e.Message);
+                Console.WriteLine("Cannot add user in " + groupDn + " : " + e.Message);
                 connection.Disconnect();
                 return false;
             }
         }
 
-        public bool deleteMemberToGroup(string groupDn, string userDn)
+        public bool deleteMemberToGroup(string groupDn, List<string> usersDn)
         {
             LdapConnection connection = createConnection();
             try
             {
                 List<LdapModification> modList = new List<LdapModification>();
-                LdapAttribute attribute = new LdapAttribute("member", userDn);
-                modList.Add(new LdapModification(LdapModification.Delete, attribute));
+
+                foreach (string dn in usersDn)
+                {
+                    LdapAttribute attribute = new LdapAttribute("member", dn);
+                    modList.Add(new LdapModification(LdapModification.Delete, attribute));
+                }
 
                 LdapModification[] mods = new LdapModification[modList.Count];
                 mods = modList.ToArray();
@@ -681,7 +703,7 @@ namespace HADES.Util
             }
             catch (Exception e)
             {
-                Console.WriteLine("LOG : Cannot delete "+ userDn + " in "+groupDn+" : " + e.Message);
+                Console.WriteLine("LOG : Cannot delete user in "+ groupDn+" : " + e.Message);
                 connection.Disconnect();
                 return false;
             }
