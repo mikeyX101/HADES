@@ -152,7 +152,7 @@ namespace HADES
 			{
 				endpoints.MapControllerRoute(
 					name: "default",
-					pattern: "{controller=AppConfig}/{action=AppConfig}");
+					pattern: "{controller=Account}/{action=LogIn}");
 				endpoints.MapRazorPages();
 			});
 
