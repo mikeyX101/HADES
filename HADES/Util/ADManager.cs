@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using HADES.Models;
+using HADES.Services;
 using HADES.Util.Exceptions;
 using HADES.Util.ModelAD;
 using Novell.Directory.Ldap;
@@ -21,16 +23,18 @@ namespace HADES.Util
     }
     public class ADManager
     {
-        // TODO: HARDCODE replace by the information in the Database
-        private const string server = "172.20.48.10";
-        private const int PortNumber = 389;
-        private const string accountDn = "CN=hades,CN=Users,DC=R991-AD,DC=lan";
-        private const string passwordDn = "Toto123!";
-        private const string baseDN = "CN=Users,DC=R991-AD,DC=lan";
-        private string rootOU = "OU=hades_root,DC=R991-AD,DC=lan";
+        public object DatabaseSyncService { get; private set; }
 
-        private string connectionFilter = "(&(objectClass=user)(objectCategory=person))";
-        private SyncField syncField = SyncField.samaccountname;
+
+        //   private string server = "172.20.48.10";
+        //  private int PortNumber = 389;
+        // private string accountDn = "CN=hades,CN=Users,DC=R991-AD,DC=lan";
+        //  private string passwordDn = "Toto123!";
+        // private string baseDN = "CN=Users,DC=R991-AD,DC=lan";
+        // private string rootOU = "OU=hades_root,DC=R991-AD,DC=lan";
+        // private string connectionFilter = "(&(objectClass=user)(objectCategory=person))";
+        //private SyncField syncField = SyncField.samaccountname;
+
 
         //Client Side information for testing
         //private const string server = "bkomstudios.com";
@@ -42,22 +46,26 @@ namespace HADES.Util
 
         //https://www.novell.com/documentation/developer/ldapcsharp/?page=/documentation/developer/ldapcsharp/cnet/data/bovumfi.html
         public ADManager()
-        { test(); }
-
+        {
+            if (ADSettingsCache.Ad == null) {
+                ADSettingsCache.Refresh();
+            }
+        }
+       
         /*****************************************************
             For testing in the dev Build
          ******************************************************/
         public void test() {
-             UserAD u1 = getUserAD("hades");
-             UserAD u2 = getUserAD("Administrator");
-             UserAD u3 = getUserAD("Guest");
-             Dictionary<UserAD,Action> list = new Dictionary<UserAD, Action>();
-             list.Add(u1, Action.DELETE);
-             list.Add(u2, Action.DELETE);
-             list.Add(u3, Action.DELETE);
+            /*  UserAD u1 = getUserAD("hades");
+              UserAD u2 = getUserAD("Administrator");
+              UserAD u3 = getUserAD("Guest");
+              Dictionary<UserAD,Action> list = new Dictionary<UserAD, Action>();
+              list.Add(u1, Action.DELETE);
+              list.Add(u2, Action.DELETE);
+              list.Add(u3, Action.DELETE);
 
-             modifyGroup("CN=Group11,OU=Dossier22,OU=hades_root,DC=R991-AD,DC=lan", "Group11", "Dossier22", "Une fgdsgfsdescriptionfsd", "emddddailfds", "notessssdsadsassssssssssssssssssdfs", list);
-         
+              modifyGroup("CN=Group11,OU=Dossier22,OU=hades_root,DC=R991-AD,DC=lan", "Group11", "Dossier22", "Une fgdsgfsdescriptionfsd", "emddddailfds", "notessssdsadsassssssssssssssssssdfs", list);
+          */
             // getUserAD("hades@R991-AD.lan");
             // getUserAD("hades@hades.com");
             //  Console.WriteLine( getUserAD("hades"));
@@ -73,8 +81,9 @@ namespace HADES.Util
             //  Console.WriteLine(hades.ObjectGUID);
 
             // Console.WriteLine(getUserAD(hades.ObjectGUID, true));
-
         }
+
+       
 
         /*****************************************************
          GETATTRIBUTE in AD
@@ -125,12 +134,13 @@ namespace HADES.Util
 
         private LdapConnection createConnection(string userDN = null, string password = null)
         {
+            DatabaseSyncService.ExecUpdate();
             //Creating an LdapConnection instance
             LdapConnection connection = new LdapConnection();
             try
             {
                 //Connect function will create a socket connection to the server
-                connection.Connect(server, PortNumber);
+                connection.Connect(ADSettingsCache.Ad.ServerAddress, ADSettingsCache.Ad.PortNumber);
                 Console.WriteLine("isConnected : " + connection.Connected);
 
                 //Bind function will Bind the user object Credentials to the Server
@@ -142,7 +152,7 @@ namespace HADES.Util
                 else
                 {
                     Console.WriteLine("serverCredential");
-                    connection.Bind(accountDn, passwordDn);
+                    connection.Bind(ADSettingsCache.Ad.AccountDN, ADSettingsCache.Ad.PasswordDN);
                 }
 
                 Console.WriteLine("isAuthenticated : " + connection.Bound);
@@ -164,7 +174,7 @@ namespace HADES.Util
 
             try
             {
-                LdapSearchResults lsc = (LdapSearchResults)connection.Search(baseDN, LdapConnection.ScopeSub, connectionFilter.Remove(connectionFilter.Length - 1) + "(" + syncField.ToString() + "=" + username + "))", null, false);
+                LdapSearchResults lsc = (LdapSearchResults)connection.Search(ADSettingsCache.Ad.BaseDN, LdapConnection.ScopeSub, ADSettingsCache.Ad.ConnectionFilter.Remove(ADSettingsCache.Ad.ConnectionFilter.Length - 1) + "(" + ADSettingsCache.Ad.SyncField + "=" + username + "))", null, false);
 
                 string userDN = null;
                 bool userIsAuthenticate = false;
@@ -184,7 +194,7 @@ namespace HADES.Util
                     }
 
 
-                    if (getAttributeValue(nextEntry, syncField.ToString()) == username)
+                    if (getAttributeValue(nextEntry, ADSettingsCache.Ad.SyncField) == username)
                     {
                         userDN = nextEntry.Dn;
                     }
@@ -219,7 +229,7 @@ namespace HADES.Util
             List<UserAD> users = new List<UserAD>();
 
             LdapConnection connection = createConnection();
-            LdapSearchResults lsc = (LdapSearchResults)connection.Search(baseDN, LdapConnection.ScopeSub, connectionFilter, null, false);
+            LdapSearchResults lsc = (LdapSearchResults)connection.Search(ADSettingsCache.Ad.BaseDN, LdapConnection.ScopeSub, ADSettingsCache.Ad.ConnectionFilter, null, false);
 
             while (lsc.HasMore())
             {
@@ -257,10 +267,10 @@ namespace HADES.Util
             LdapSearchResults lsc = null;
             if (fetchByGUID == false)
             {
-                lsc = (LdapSearchResults)connection.Search(baseDN, LdapConnection.ScopeSub, connectionFilter.Remove(connectionFilter.Length - 1) + "(" + syncField.ToString() + "=" + usernameOrGUID + "))", null, false);
+                lsc = (LdapSearchResults)connection.Search(ADSettingsCache.Ad.BaseDN, LdapConnection.ScopeSub, ADSettingsCache.Ad.ConnectionFilter.Remove(ADSettingsCache.Ad.ConnectionFilter.Length - 1) + "(" + ADSettingsCache.Ad.SyncField + "=" + usernameOrGUID + "))", null, false);
             }
             else {
-                lsc = (LdapSearchResults)connection.Search(baseDN, LdapConnection.ScopeSub, "(objectGUID=" + usernameOrGUID + ")", null, false);
+                lsc = (LdapSearchResults)connection.Search(ADSettingsCache.Ad.BaseDN, LdapConnection.ScopeSub, "(objectGUID=" + usernameOrGUID + ")", null, false);
             }
 
 
@@ -307,7 +317,7 @@ namespace HADES.Util
 
             //Creating an LdapConnection instance
             LdapConnection connection = createConnection();
-            LdapSearchResults lsc = (LdapSearchResults)connection.Search(rootOU, LdapConnection.ScopeSub, "(|(objectClass=group)(objectClass=organizationalUnit))", null, false);
+            LdapSearchResults lsc = (LdapSearchResults)connection.Search(ADSettingsCache.Ad.RootOu, LdapConnection.ScopeSub, "(|(objectClass=group)(objectClass=organizationalUnit))", null, false);
 
             while (lsc.HasMore())
             {
@@ -383,7 +393,7 @@ namespace HADES.Util
             //Creating an LdapConnection instance
             LdapConnection connection = createConnection();
 
-            LdapSearchResults lsc = (LdapSearchResults)connection.Search(rootOU, LdapConnection.ScopeSub, "(&(objectClass=group)(distinguishedName=" + groupDN + "))", null, false);
+            LdapSearchResults lsc = (LdapSearchResults)connection.Search(ADSettingsCache.Ad.RootOu, LdapConnection.ScopeSub, "(&(objectClass=group)(distinguishedName=" + groupDN + "))", null, false);
             GroupAD group = new GroupAD();
             while (lsc.HasMore())
             {
@@ -429,7 +439,7 @@ namespace HADES.Util
                 attributeSet.Add(new LdapAttribute("objectclass", "organizationalunit"));
                 attributeSet.Add(new LdapAttribute("OU", name));
                 // DN of the entry to be added
-                string dn = "OU=" + name + "," + rootOU;
+                string dn = "OU=" + name + "," + ADSettingsCache.Ad.RootOu;
                 LdapEntry newEntry = new LdapEntry(dn, attributeSet);
                 //Add the entry to the directory
                 connection.Add(newEntry);
@@ -500,7 +510,7 @@ namespace HADES.Util
                 attributeSet.Add(new LdapAttribute("info", notes));
 
                 // DN of the entry to be added
-                string dn = "CN=" + name + "," + "OU=" + ouName + "," + rootOU;
+                string dn = "CN=" + name + "," + "OU=" + ouName + "," + ADSettingsCache.Ad.RootOu;
                 LdapEntry newEntry = new LdapEntry(dn, attributeSet);
 
                 //Add the entry to the directory
@@ -536,7 +546,7 @@ namespace HADES.Util
                 string newRdn = "CN=" + name;
                 connection.Rename(dnGroupToModify, newRdn, true);
 
-                dnGroupToModify = newRdn + ",OU=" + ouGroup + "," + rootOU;
+                dnGroupToModify = newRdn + ",OU=" + ouGroup + "," + ADSettingsCache.Ad.RootOu;
 
                 //Modify Attribute
                 List<LdapModification> modList = new List<LdapModification>();
@@ -617,7 +627,7 @@ namespace HADES.Util
         {
             LdapConnection connection = createConnection();
 
-            LdapSearchResults lsc = (LdapSearchResults)connection.Search(baseDN, LdapConnection.ScopeSub, "(&(objectClass=user)(memberOf=" + groupDN + "))", null, false);
+            LdapSearchResults lsc = (LdapSearchResults)connection.Search(ADSettingsCache.Ad.BaseDN, LdapConnection.ScopeSub, "(&(objectClass=user)(memberOf=" + groupDN + "))", null, false);
             List<UserAD> users = new List<UserAD>();
 
             while (lsc.HasMore())

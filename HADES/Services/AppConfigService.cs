@@ -1,5 +1,6 @@
 ﻿using HADES.Data;
 using HADES.Models;
+using HADES.Util;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -40,7 +41,13 @@ namespace HADES.Services
             return viewModel;
         }
 
-        public async Task UpdateAppConfig(AppConfigViewModel viewModel)
+        public async Task<ActiveDirectory> getADInfo()
+        {
+            var activeDirectory = await db.ActiveDirectory.FirstOrDefaultAsync();
+            return activeDirectory;
+        }
+
+            public async Task UpdateAppConfig(AppConfigViewModel viewModel)
         {
             db.Update(viewModel.ActiveDirectory);
             viewModel.AppConfig.ActiveDirectory = viewModel.ActiveDirectory;
@@ -63,7 +70,10 @@ namespace HADES.Services
                 }
             }
 
+            
             await db.SaveChangesAsync();
+
+            ADSettingsCache.Refresh();
         }
 
         public bool AppConfigExists(AppConfigViewModel viewModel)
