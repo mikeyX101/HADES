@@ -43,10 +43,10 @@ namespace HADES.Util
 
                     // Update Admin/SuperAdmin User in DB
 
-                    if (db.User.Include(u => u.Role).SingleOrDefault((u) => u.SamAccount.ToLower().Equals(aDManager.getUserAD(user).SamAccountName) && u.Role.HadesAccess) != null)
+                    if (db.User.Include(u => u.Role).SingleOrDefault((u) => u.SamAccount.ToLower().Equals(aDManager.getUserAD(user, false).SamAccountName) && u.Role.HadesAccess) != null)
                     {
                         //Check Allowed in HADES (is in DB as User)
-                        User u = db.User.SingleOrDefault((u) => u.SamAccount.ToLower().Equals(aDManager.getUserAD(user).SamAccountName));
+                        User u = db.User.SingleOrDefault((u) => u.SamAccount.ToLower().Equals(aDManager.getUserAD(user,false).SamAccountName));
                         db.Update(u);
                         u.Attempts = 0;
                         db.SaveChanges();
@@ -93,7 +93,7 @@ namespace HADES.Util
                 // If anything Wrong happens then try User
                 try
                 {
-                    User u = db.User.SingleOrDefault((a) => a.SamAccount.ToLower().Equals(aDManager.getUserAD(user)));
+                    User u = db.User.SingleOrDefault((a) => a.SamAccount.ToLower().Equals(aDManager.getUserAD(user,false)));
                     if (u == null)
                     {
                         throw new ForbiddenException();
