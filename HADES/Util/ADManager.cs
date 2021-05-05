@@ -88,6 +88,7 @@ namespace HADES.Util
             try
             {
                 //Connect function will create a socket connection to the server
+                connection.ConnectionTimeout = 1000 * 30;
                 connection.Connect(ADSettingsCache.Ad.ServerAddress, ADSettingsCache.Ad.PortNumber);
                 Console.WriteLine("isConnected : " + connection.Connected);
 
