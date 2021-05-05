@@ -26,6 +26,7 @@ namespace HADES.Middlewares
 			public async Task Invoke(HttpContext context)
 			{
 				await _next(context);
+				// TODO Only use for pages, not for general error codes
 				if (context.Request.Method == "GET" && context.Response.StatusCode >= 400 && context.Response.StatusCode <= 599)
 				{
 					context.Request.Path = $"/Errors/{context.Response.StatusCode}";

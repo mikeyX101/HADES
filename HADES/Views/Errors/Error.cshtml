@@ -4,7 +4,7 @@
 @{ 
     Layout = null;
 
-    int messageLength = 6 + Model.StatusNumber.Length + 1 + Model.StatusName.Length + 1 + Model.StatusDescription.Length;
+    int messageLength = 6 + Model.StatusNumber.Length + 1 + Model.StatusName.Length + 2 + Model.StatusDescription.Length;
     string speachBubbleTop = "";
     string speachBubbleBottom = "";
     for (int i = 0; i < messageLength; i++)
@@ -25,7 +25,7 @@
     <div>
         <pre>
                                    ___          @speachBubbleTop
-                               ,-""   `.      < HONK, @Model.StatusNumber @Model.StatusName @Model.StatusDescription >
+                               ,-""   `.      < HONK, @Model.StatusNumber @Model.StatusName, @Model.StatusDescription >
                              ,'  _   e )`-._ /  @speachBubbleBottom
                             /  ,' `-._<.===-'
                            /  /
