@@ -18,7 +18,7 @@
         <div id="leftnav">
             @if (Model.ADConnectionError != null)
             {
-<h6 class="text-center bg-warning mt-lg-5">@Model.ADConnectionError</h6> }
+    <h6 class="text-center bg-warning mt-lg-5">@Model.ADConnectionError</h6> }
             else
             {
                 @await Html.PartialAsync("_LeftNav", Model)
@@ -29,7 +29,6 @@
 
     @* Right Nav *@
     <div class="col-sm-8">
-        <h3 class="mt-3">Contenu des dossiers et des groupes</h3>
         @if (Model.ADConnectionError != null)
         {
             <h3 class="mt-3">@Localizer["ContenuDossier"]</h3>
