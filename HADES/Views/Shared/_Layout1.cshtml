@@ -51,16 +51,29 @@
 
                     </li>
                 </ul>
-                <div class="dropdown">
-                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                        @Localizer["MenuAdministrateur"]
-                    </button>
-                    <div class="dropdown-menu">
-                        <a class="dropdown-item" asp-action="AppConfig" asp-controller="AppConfig" asp-area="">@Localizer["ParametreApplication"]</a>
-                        <a class="dropdown-item" asp-action="MainView" asp-controller="Home" asp-area="">@Localizer["JournalEvenements"]</a>
-                        <a class="dropdown-item" asp-action="MainView" asp-controller="Home" asp-area="">@Localizer["ListeUtilisateurs"]</a>
+                @if (u.GetRole().AppConfigAccess || u.GetRole().EventLogAccess || u.GetRole().UserListAccess)
+                {
+                    <div class="dropdown">
+                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                            @Localizer["MenuAdministrateur"]
+                        </button>
+                        <div class="dropdown-menu">
+                            @if (u.GetRole().AppConfigAccess)
+                            {
+                                <a class="dropdown-item" asp-action="AppConfig" asp-controller="AppConfig" asp-area="">@Localizer["ParametreApplication"]</a>
+                            }
+                            @if (u.GetRole().EventLogAccess)
+                            {
+                                <a class="dropdown-item" asp-action="MainView" asp-controller="Home" asp-area="">@Localizer["JournalEvenements"]</a>
+                            }
+                            @if (u.GetRole().UserListAccess)
+                            {
+                                <a class="dropdown-item" asp-action="MainView" asp-controller="Home" asp-area="">@Localizer["ListeUtilisateurs"]</a>
+                            }
+                        </div>
                     </div>
-                </div>
+                }
+
                 <div class="dropdown">
                     <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                         @Localizer["MenuUtilisateur"]

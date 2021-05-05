@@ -142,6 +142,10 @@ namespace HADES.Controllers
         [Authorize]
         public IActionResult Delete(MainViewViewModel viewModel)
         {
+            if (!ConnexionUtil.CurrentUser(this.User).GetRole().AdCrudAccess)
+            {
+                return RedirectToAction("MainView","Home");
+            }
             var DN = FindDN(viewModel.SelectedPath, viewModel.SelectedContentName);
             var split = viewModel.SelectedPath.Split('/');
             var selectedNodeName = split.Length == 2 ? split[1] : split[2];
@@ -165,8 +169,13 @@ namespace HADES.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult Rename(MainViewViewModel viewModel)
         {
+            if (!ConnexionUtil.CurrentUser(this.User).GetRole().AdCrudAccess)
+            {
+                return RedirectToAction("MainView", "Home");
+            }
             var DN = FindDN(viewModel.SelectedPath, viewModel.SelectedContentName);
             ad.renameOU(DN, viewModel.NewName);
             viewModel.ADRoot = ad.getRoot();
@@ -227,8 +236,13 @@ namespace HADES.Controllers
             return View(viewModel.GroupAD);
         }
         [HttpPost]
+        [Authorize]
         public IActionResult CreateOU(MainViewViewModel viewModel)
         {
+            if (!ConnexionUtil.CurrentUser(this.User).GetRole().AdCrudAccess)
+            {
+                return RedirectToAction("MainView", "Home");
+            }
             ad.createOU(viewModel.NewName);
             viewModel.ADRoot = ad.getRoot();
             return RedirectToAction("MainView", "Home");
