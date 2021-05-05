@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using HADES.Util;
 
 namespace HADES.Controllers
 {
@@ -21,9 +22,13 @@ namespace HADES.Controllers
             db = context;
         }
 
-
+        [Authorize]
         public async Task<IActionResult> AppConfig()
         {
+            if (!ConnexionUtil.CurrentUser(this.User).GetRole().AppConfigAccess)
+            {
+                return RedirectToAction("MainView", "Home");
+            }
             AppConfigService service = new();
 
             return View(await service.AppConfigViewModelGET());
@@ -32,8 +37,14 @@ namespace HADES.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> AppConfig([Bind("ActiveDirectory,AdminGroups,SuperAdminGroups,DefaultUser,AppConfig")] AppConfigViewModel viewModel)
         {
+
+            if (!ConnexionUtil.CurrentUser(this.User).GetRole().AppConfigAccess)
+            {
+                return RedirectToAction("MainView", "Home");
+            }
             AppConfigService service = new();
 
             ValidateModelState();
@@ -60,16 +71,27 @@ namespace HADES.Controllers
             return View(viewModel);
         }
 
+        [Authorize]
         public IActionResult CreateAdminGroup(int? id)
         {
+            if (!ConnexionUtil.CurrentUser(this.User).GetRole().AppConfigAccess)
+            {
+                return RedirectToAction("MainView", "Home");
+            }
             ViewBag.AppConfigId = id;
             return View();
         }
 
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateAdminGroup([Bind("Id,SamAccount,AppConfigId")] AdminGroup adminGroup)
         {
+            if (!ConnexionUtil.CurrentUser(this.User).GetRole().AppConfigAccess)
+            {
+                return RedirectToAction("MainView", "Home");
+            }
+
             AppConfigService service = new();
             if (ModelState.IsValid)
             {
@@ -79,8 +101,14 @@ namespace HADES.Controllers
             return View(adminGroup);
         }
 
+        [Authorize]
         public async Task<IActionResult> AdminGroupDelete(int? id)
         {
+            if (!ConnexionUtil.CurrentUser(this.User).GetRole().AppConfigAccess)
+            {
+                return RedirectToAction("MainView", "Home");
+            }
+
             AppConfigService service = new();
             if (id == null)
             {
@@ -92,17 +120,29 @@ namespace HADES.Controllers
             return RedirectToAction("AppConfig", new { id = appConfigId });
         }
 
+        [Authorize]
         public IActionResult CreateSuperAdminGroup(int? id)
         {
+            if (!ConnexionUtil.CurrentUser(this.User).GetRole().AppConfigAccess)
+            {
+                return RedirectToAction("MainView", "Home");
+            }
+
             ViewBag.AppConfigId = id;
             return View();
         }
 
 
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateSuperAdminGroup([Bind("Id,SamAccount,AppConfigId")] SuperAdminGroup superAdminGroup)
         {
+            if (!ConnexionUtil.CurrentUser(this.User).GetRole().AppConfigAccess)
+            {
+                return RedirectToAction("MainView", "Home");
+            }
+
             AppConfigService service = new();
             if (ModelState.IsValid)
             {
@@ -112,8 +152,14 @@ namespace HADES.Controllers
             return View(superAdminGroup);
         }
 
+        [Authorize]
         public async Task<IActionResult> SuperAdminGroupDelete(int? id)
         {
+            if (!ConnexionUtil.CurrentUser(this.User).GetRole().AppConfigAccess)
+            {
+                return RedirectToAction("MainView", "Home");
+            }
+
             AppConfigService service = new();
             if (id == null)
             {
