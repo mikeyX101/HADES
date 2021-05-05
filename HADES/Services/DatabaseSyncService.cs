@@ -17,14 +17,14 @@ namespace HADES.Services
         private static bool UpdateMe = false;
         private static bool processing = false;
 
-        private ADManager ad = new ADManager();
+        private ADManager ad;
 
         // Flag the database for update
         public static void ExecUpdate()
         {
             UpdateMe = true;
         }
-        
+
         public Task StartAsync(CancellationToken cancellationToken)
         {
             // timer repeats call to UpdateDatabase every 5 minutes.
@@ -34,7 +34,7 @@ namespace HADES.Services
                 TimeSpan.Zero,
                 TimeSpan.FromMinutes(5)
             );
-            
+
             return Task.CompletedTask;
         }
 
@@ -47,9 +47,11 @@ namespace HADES.Services
 
         private void UpdateDatabase(object state)
         {
-            if (UpdateMe) // Only update if asked to
+            if (UpdateMe && !processing) // Only update if asked to
             {
                 processing = true;
+                if (ad == null) ad = new ADManager(); // Initialize ad on first use
+
                 try
                 {
                     ApplicationDbContext db = new ApplicationDbContext();
@@ -66,6 +68,7 @@ namespace HADES.Services
                     return;
                 }
             }
+            processing = false; // Just to be sure
         }
 
         private void UpdateAdminSuperAdmin(ApplicationDbContext db)
