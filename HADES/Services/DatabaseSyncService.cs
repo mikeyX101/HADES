@@ -49,6 +49,7 @@ namespace HADES.Services
         {
             if (UpdateMe) // Only update if asked to
             {
+                db = new ApplicationDbContext();
                 UpdateUsers();
                 UpdateOwnerGroups();
                 UpdateAdminSuperAdmin();
