@@ -5,6 +5,11 @@ var selectedDepth;
 var selectedContentName;
 var isValid = false;
 
+/**
+ * Show treeview
+ * @param {any} userObj
+ * @param {any} nodeName
+ */
 function showTreeView(userObj, nodeName) {
     $(function () {
         // conversion Json en array Json
@@ -21,7 +26,7 @@ function showTreeView(userObj, nodeName) {
             data: rootData
         });
 
-        // search
+        // search node in treeview
         var foundNodes = $('#mytreeview').treeview('search', [nodeName, {
             ignoreCase: false,     // case insensitive
             exactMatch: true,    // like or equals
@@ -85,7 +90,9 @@ function showTreeView(userObj, nodeName) {
     
 }
 
-// Set icons for home, ou and group
+/**
+ * Set icons for home, ou and group
+ * */
 function setIcons() {
     var node = $('#mytreeview').treeview('getNode', 0);
     // set root icon
@@ -104,7 +111,9 @@ function setIcons() {
     }
 }
 
-/* Setup dialog settings*/
+/**
+ * Setup dialog settings after document is ready
+ */
 $(function () {
     $("#dialog-error-delete").dialog({
         autoOpen: false,
@@ -136,6 +145,10 @@ $(function () {
     })  
 });
 
+/**
+ * delete OU
+ * @param {any} form
+ */
 function deleteOU(form) {
 
     //validation here
@@ -159,5 +172,31 @@ function deleteOU(form) {
         // error dialog
         $("#dialog-error-delete").dialog("open");
     }
-    return false;
+    
+    return false; // pour ne pas faire de submit avant d'avoir eu la réponse de la boite de dialog
+}
+
+/**
+ * Submit the form for deleting OU or Group
+ * @param {any} form
+ */
+function formSubmit(form) {
+    if (isOU(form[1].value)) {
+        deleteOU(form)
+    } 
+    /* TODO : implémenter la fonctionnalité deleteGroup */
+    if (isGroup(form[1].value)) {
+        alert("Implémenter la fonctionalité de suppression d'un groupe")
+    }
+    return false; // pour ne pas faire de submit avant d'avoir eu la réponse de la boite de dialog
+}
+
+function isGroup(path) {
+    var splitPath = path.split('/');
+    return splitPath.length == 3;
+}
+
+function isOU(path) {
+    var splitPath = path.split('/');
+    return splitPath.length < 3;
 }
