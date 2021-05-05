@@ -1,5 +1,7 @@
 ﻿@model MainViewViewModel
 
+
+
 <h3 class="mt-3">@Localizer["ContenuDossier"] @Model.SelectedNodeName</h3>
 
 <!-- Button trigger modal create OU -->
@@ -43,61 +45,67 @@
     <thead>
     </thead>
     <tbody>
-        @foreach (var item in Model.ADRoot)
+
+
+        @for (int i = 0; i < Model.ADRoot.Count; i++)
         {
-            if (item.Path == Model.SelectedPath)
+            
+                var dataTarget = "#a" + i.ToString();
+                var id = "a" + i.ToString();
+            
+        if (Model.ADRoot[i].Path == Model.SelectedPath)
             {
-<tr>
-    <td>
-        @Html.DisplayFor(modelItem => item.SamAccountName)
-    </td>
-    <td>
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => Model.ADRoot[i].SamAccountName)
+                    </td>
+                    <td>
 
-        <!-- Button trigger modal rename OU -->
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#@item.SamAccountName">
-            @Model.EditLinkLabel
-        </button>
-
-        <!-- Modal Rename OU -->
-        <div class="modal fade" id="@item.SamAccountName" role="dialog" aria-labelledby="@item.SamAccountName + Label" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content" role="document">
-                    <div class="modal-header text-center">
-                        <h4 class="modal-title w-100 font-weight-bold" id="@item.SamAccountName + Label">@Model.EditLinkLabel</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
+                        <!-- Button trigger modal rename OU -->
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="@dataTarget">
+                            @Model.EditLinkLabel
                         </button>
-                    </div>
-                    <div class="modal-body mx-3">
-                        <div class="md-form">
-                            <form action="Rename" method="post">
-                                <div class="form-group row">
-                                    <div class="col-10">
-                                        <input type="text" name="NewName" value="@item.SamAccountName" class="form-control validate" />
-                                        <input type="hidden" name="SelectedPath" value="@Model.SelectedPath" />
-                                        <input type="hidden" name="SelectedContentName" value="@item.SamAccountName" />
+
+                        <!-- Modal Rename OU -->
+                        <div class="modal fade" id="@id" role="dialog" aria-labelledby="@Model.ADRoot[i].SamAccountName" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content" role="document">
+                                    <div class="modal-header text-center">
+                                        <h4 class="modal-title w-100 font-weight-bold" id="@Model.ADRoot[i].SamAccountName">@Model.EditLinkLabel</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
                                     </div>
-                                    <button type="submit" class="btn btn-primary col-2">@Localizer["OK"].Value</button>
+                                    <div class="modal-body mx-3">
+                                        <div class="md-form">
+                                            <form action="Rename" method="post">
+                                                <div class="form-group row">
+                                                    <div class="col-10">
+                                                        <input type="text" name="NewName" value="@Model.ADRoot[i].SamAccountName" class="form-control validate" />
+                                                        <input type="hidden" name="SelectedPath" value="@Model.SelectedPath" />
+                                                        <input type="hidden" name="SelectedContentName" value="@Model.ADRoot[i].SamAccountName" />
+                                                    </div>
+                                                    <button type="submit" class="btn btn-primary col-2">@Localizer["OK"].Value</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
                                 </div>
-                            </form>
+                            </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        <!-- Button to delete -->
-        <form action="Delete" method="post" onsubmit="return formSubmit(this)" style="display: inline-block">
-            <button class="btn btn-primary">
-                @Localizer["Delete"].Value
-            </button>
-            <input type="hidden" name="SelectedPath" value="@Model.SelectedPath" />
-            <input type="hidden" name="SelectedContentName" value="@item.SamAccountName" />
-        </form>
+                        <!-- Button to delete -->
+                        <form action="Delete" method="post" onsubmit="return formSubmit(this)" style="display: inline-block">
+                            <button class="btn btn-primary">
+                                @Localizer["Delete"].Value
+                            </button>
+                            <input type="hidden" name="SelectedPath" value="@Model.SelectedPath" />
+                            <input type="hidden" name="SelectedContentName" value="@Model.ADRoot[i].SamAccountName" />
+                        </form>
 
-    </td>
-</tr>
-}
-}
+                    </td>
+                </tr>
+            }
+        }
     </tbody>
 </table>
