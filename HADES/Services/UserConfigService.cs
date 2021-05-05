@@ -11,9 +11,8 @@ namespace HADES.Services
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        public async Task<UserConfigViewModel> UserConfig(int? id)
+        public async Task<UserConfigViewModel> UserConfig(UserConfig userConfig)
         {
-            var userConfig = await db.UserConfig.FindAsync(id);
             var emails = db.Email.Where(m => m.UserConfigId == userConfig.Id).ToList();
 
             var viewModel = new UserConfigViewModel

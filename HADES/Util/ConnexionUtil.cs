@@ -16,7 +16,6 @@ namespace HADES.Util
     {
 
         static readonly byte[] salt = { 80, 232, 103, 125, 189, 33, 51, 46, 132, 179, 77, 146, 140, 164, 204, 227, 60, 147, 126, 173, 123, 7, 180, 183, 38, 78, 40, 105, 74, 105, 39, 30 };
-        static ApplicationDbContext db = new ApplicationDbContext();
 
         static ADManager aDManager = new ADManager();
 
@@ -26,6 +25,7 @@ namespace HADES.Util
         // Throws ForbiddenException or LoginException
         public static IUser Login(string user, string password)
         {
+            ApplicationDbContext db = new ApplicationDbContext();
             // Check Default User in BD
             if (ValidateAttempts(user))
             {
@@ -74,6 +74,7 @@ namespace HADES.Util
         // Also increases the number of attempts
         private static bool ValidateAttempts(string user)
         {
+            ApplicationDbContext db = new ApplicationDbContext();
             try
             {
                 DefaultUser u = db.DefaultUser.SingleOrDefault((a) => a.UserName.ToLower().Equals(user.ToLower()));
@@ -143,6 +144,7 @@ namespace HADES.Util
         // Returns the Current User or null if the Current user is not in the database/no cookie found
         public static IUser CurrentUser(System.Security.Claims.ClaimsPrincipal user)
         {
+            ApplicationDbContext db = new ApplicationDbContext();
             if (user.Identity.IsAuthenticated)
             {
                 int id = int.Parse(user.Claims.Where(c => c.Type == "id").FirstOrDefault().Value);

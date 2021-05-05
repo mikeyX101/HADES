@@ -26,7 +26,7 @@ namespace HADES.Controllers
         public async Task<IActionResult> UserConfig()
         {
             UserConfigService service = new();
-            var viewModel = await service.UserConfig(ConnexionUtil.CurrentUser(this.User).GetId());
+            var viewModel = await service.UserConfig(ConnexionUtil.CurrentUser(this.User).GetUserConfig());
 
             return View(viewModel);
         }

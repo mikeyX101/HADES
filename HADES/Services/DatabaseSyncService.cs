@@ -15,6 +15,7 @@ namespace HADES.Services
         private Timer _timer;
 
         private static bool UpdateMe = false;
+        private static bool processing = false;
 
         private ADManager ad = new ADManager();
 
@@ -48,11 +49,22 @@ namespace HADES.Services
         {
             if (UpdateMe) // Only update if asked to
             {
-                ApplicationDbContext db = new ApplicationDbContext();
-                UpdateUsers(db);
-                UpdateOwnerGroups(db);
-                UpdateAdminSuperAdmin(db);
-                UpdateMe = false;
+                processing = true;
+                try
+                {
+                    ApplicationDbContext db = new ApplicationDbContext();
+                    UpdateUsers(db);
+                    UpdateOwnerGroups(db);
+                    UpdateAdminSuperAdmin(db);
+                    UpdateMe = false;
+                    processing = false;
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine("An error Occured while synchronizing the database");
+                    processing = false;
+                    return;
+                }
             }
         }
 
