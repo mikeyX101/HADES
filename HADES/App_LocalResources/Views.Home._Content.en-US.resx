@@ -123,4 +123,7 @@
   <data name="Delete" xml:space="preserve">
     <value>Delete</value>
   </data>
+  <data name="EnterOUName" xml:space="preserve">
+    <value>Enter folder's name</value>
+  </data>
 </root>
