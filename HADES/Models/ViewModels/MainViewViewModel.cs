@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using HADES.Util.ModelAD;
@@ -26,5 +27,8 @@ namespace HADES.Models
         public string SelectedNodeName { get; set; }
 
         public string SelectedContentName { get; set; }
+
+        public string NewName { get; set; }
+
     }
 }

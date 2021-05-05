@@ -143,15 +143,38 @@ namespace HADES.Controllers
             var selectedNodeName = split.Length == 2 ? split[1] : split[2];
             if (split.Length == 2)
             {
-                ad.deleteOU(DN);
+                /* TODO : validations dossier ne contient pas de groupes */
+                if (true)
+                {
+                    ad.deleteOU(DN);
+                }
+                
             }
-            if (split.Length == 3)
+            /* TODO : supprimer Group */
+            /*if (split.Length == 3)
             {
                 ad.deleteGroup(DN);
-            }
+            }*/
             viewModel.ADRoot = ad.getRoot();
             viewModel.SelectedNodeName = selectedNodeName;
             return RedirectToAction("MainView", "Home", new { selectedPath = viewModel.SelectedPath });
+        }
+
+        [HttpPost]
+        public IActionResult Rename(MainViewViewModel viewModel)
+        {
+            var DN = FindDN(viewModel.SelectedPath, viewModel.SelectedContentName);
+            ad.renameOU(DN, viewModel.NewName);
+            viewModel.ADRoot = ad.getRoot();
+            return RedirectToAction("MainView", "Home", new { selectedPath = viewModel.SelectedPath });
+        }
+
+        [HttpPost]
+        public IActionResult CreateOU(MainViewViewModel viewModel)
+        {
+            ad.createOU(viewModel.NewName);
+            viewModel.ADRoot = ad.getRoot();
+            return RedirectToAction("MainView", "Home");
         }
 
         private string FindDN(string selectedPath, string selectedContentName)
