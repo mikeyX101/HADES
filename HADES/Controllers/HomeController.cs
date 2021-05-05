@@ -73,11 +73,13 @@ namespace HADES.Controllers
             {
                 viewModel.CreateButtonLabel = Localizer["CreateNewOU"];
                 viewModel.EditLinkLabel = Localizer["Rename"];
+                viewModel.DataTarget = "#createOuModal";
             }
             if (split.Length == 3)
             {
                 viewModel.CreateButtonLabel = Localizer["CreateNewGroup"];
                 viewModel.EditLinkLabel = Localizer["Edit"];
+                viewModel.DataTarget = "#GroupCreate";
             }
             return PartialView("_Content", viewModel);
         }
@@ -134,10 +136,7 @@ namespace HADES.Controllers
                                                 .Replace("\"nodes\": []", "");
         }
 
-        public IActionResult CreateGroupModal()
-        {
-            return PartialView();
-        }
+      
 
         [HttpPost]
         [Authorize]

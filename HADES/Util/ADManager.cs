@@ -506,8 +506,8 @@ namespace HADES.Util
 
         {
             LdapConnection connection = createConnection();
-            try
-            {
+            //try
+            //{
 
                 //Rename 
                 string newRdn = "CN=" + name;
@@ -545,15 +545,19 @@ namespace HADES.Util
                 //Modify members
                 foreach (KeyValuePair<UserAD, Action> entry in members)
                 {
-                    if (entry.Value == Action.ADD) {
+                    if (entry.Value == Action.ADD)
+                    {
                         add.Add(entry.Key.Dn);
 
-                    } else if (entry.Value == Action.DELETE) {
+                    }
+                    else if (entry.Value == Action.DELETE)
+                    {
                         delete.Add(entry.Key.Dn);
                     }
                 }
 
-                if (add.Count > 0) {
+                if (add.Count > 0)
+                {
                     addMemberToGroup(dnGroupToModify, add);
                 }
                 if (delete.Count > 0)
@@ -561,7 +565,7 @@ namespace HADES.Util
                     deleteMemberToGroup(dnGroupToModify, delete);
                 }
                 return true;
-
+            
         }
 
         public bool deleteGroup(string dnGroupToDelete)

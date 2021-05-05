@@ -26,6 +26,8 @@ namespace HADES.Models
 
         public string EditLinkLabel { get; set; }
 
+        public string DataTarget { get; set; }
+
         public string SelectedNodeName { get; set; }
 
         public string SelectedContentName { get; set; }
