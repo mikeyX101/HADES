@@ -55,7 +55,7 @@ namespace HADES.Controllers
 
                 return View(viewModel);
             }
-            catch (ADException ex) // Connection à l'AD impossible
+            catch (ADException) // Connection à l'AD impossible
             {
                 viewModel.ADConnectionError = Localizer["ADConnectionError"];
                 return View(viewModel);
