@@ -16,7 +16,6 @@ namespace HADES.Services
 
         private static bool UpdateMe = false;
 
-        private ApplicationDbContext db;
         private ADManager ad = new ADManager();
 
         // Flag the database for update
@@ -49,26 +48,25 @@ namespace HADES.Services
         {
             if (UpdateMe) // Only update if asked to
             {
-                db = new ApplicationDbContext();
-                UpdateUsers();
-                UpdateOwnerGroups();
-                UpdateAdminSuperAdmin();
+                ApplicationDbContext db = new ApplicationDbContext();
+                UpdateUsers(db);
+                UpdateOwnerGroups(db);
+                UpdateAdminSuperAdmin(db);
                 UpdateMe = false;
-                db = null;
             }
         }
 
-        private void UpdateAdminSuperAdmin()
+        private void UpdateAdminSuperAdmin(ApplicationDbContext db)
         {
             Console.WriteLine("Hades Admin/SuperAdmin Groups Synchronized with Active Directory");
         }
 
-        private void UpdateOwnerGroups()
+        private void UpdateOwnerGroups(ApplicationDbContext db)
         {
             Console.WriteLine("Hades OwnerGroups Synchronized with Active Directory");
         }
 
-        private void UpdateUsers()
+        private void UpdateUsers(ApplicationDbContext db)
         {
             List<UserAD> ulist = ad.getAllUsers();
             // First Delete Users that are not in the Active Directory
