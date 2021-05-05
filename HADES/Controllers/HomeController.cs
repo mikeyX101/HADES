@@ -132,11 +132,6 @@ namespace HADES.Controllers
                                                 .Replace("\"nodes\": []", "");
         }
 
-        public IActionResult CreateGroupModal()
-        {
-            return PartialView();
-        }
-
         [HttpPost]
         public IActionResult Delete(MainViewViewModel viewModel)
         {
@@ -155,34 +150,51 @@ namespace HADES.Controllers
             viewModel.SelectedNodeName = selectedNodeName;
             return RedirectToAction("MainView", "Home", new { selectedPath = viewModel.SelectedPath });
         }
+
+
+        public IActionResult CreateGroupModal()
+        {
+            return PartialView();
+        }
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateGroupModal([Bind("SamAccountName,FirstName,LastName,Dn")] GroupAD groupAD)
+
+        public async Task<IActionResult> CreateGroupModal([Bind("GroupAD, SelectedNodeName, SelectedContentName, SelectedPath")] MainViewViewModel viewModel)
         {
+            var split = viewModel.SelectedPath.Split('/');
+            var selectedNodeName = split.Length == 2 ? split[1] : split[2];
+
+            var groupAD = viewModel.GroupAD;
             if (ModelState.IsValid)
             {
-                //Quel endroit je trouve le OU(...) pour le constructeur?
-                //ad.createGroup(groupAD.SamAccountName, ..., groupAD.Description, groupAD.Email, groupAD.Notes, groupAD.Members);
-                return RedirectToAction("EditGroupModal", groupAD.SamAccountName);
+                ad.createGroup(groupAD.SamAccountName, selectedNodeName, groupAD.Description, groupAD.Email, groupAD.Notes, groupAD.Members);
+                //return RedirectToAction("EditGroupModal");
+                return RedirectToAction("MainView");
             }
             return View(groupAD);
         }
 
-        public IActionResult EditGroupModal(string samAccountName)
+        public IActionResult EditGroupModal()
         {
-            //getGroup??
-            return View(/*group*/);
+            var DN = FindDN(viewModel.SelectedPath, viewModel.SelectedContentName);
+
+            var group = ad.getGroupInformation(DN);
+
+            return View(group);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditGroupModal([Bind("SamAccountName,FirstName,LastName,Dn")] GroupAD groupAD)
+        public async Task<IActionResult> EditGroupModal([Bind("GroupAD, SelectedNodeName, SelectedContentName, SelectedPath")] MainViewViewModel viewModel)
         {
+            //var DN = FindDN(viewModel.SelectedPath, viewModel.SelectedContentName);
             if (ModelState.IsValid)
             {
                 try
                 {
-                    //ad.modifyGroup();
+                    //ad.modifyGroup(DN);
                 }
                 catch (Exception e)
                 {
@@ -190,7 +202,7 @@ namespace HADES.Controllers
                 }
                 return RedirectToAction("MainView");
             }
-            return View(groupAD);
+            return View(viewModel.GroupAD);
         }
         private string FindDN(string selectedPath, string selectedContentName)
         {
