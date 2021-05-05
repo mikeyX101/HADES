@@ -1,6 +1,8 @@
 ﻿using HADES.Data;
+using HADES.Models;
 using HADES.Util;
 using HADES.Util.ModelAD;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
@@ -55,9 +57,9 @@ namespace HADES.Services
                 try
                 {
                     ApplicationDbContext db = new ApplicationDbContext();
-                    UpdateUsers(db);
                     UpdateOwnerGroups(db);
                     UpdateAdminSuperAdmin(db);
+                    UpdateUsers(db);
                     UpdateMe = false;
                     processing = false;
                 }
@@ -73,20 +75,36 @@ namespace HADES.Services
 
         private void UpdateAdminSuperAdmin(ApplicationDbContext db)
         {
+            // Get all groups in AD ?
             Console.WriteLine("Hades Admin/SuperAdmin Groups Synchronized with Active Directory");
         }
 
         private void UpdateOwnerGroups(ApplicationDbContext db)
         {
+            // Get all groups under root in ADManager
             Console.WriteLine("Hades OwnerGroups Synchronized with Active Directory");
         }
 
         private void UpdateUsers(ApplicationDbContext db)
         {
             List<UserAD> ulist = ad.getAllUsers();
-            // First Delete Users that are not in the Active Directory
+            List<User> dblist = db.User.ToList();
 
+            foreach (User u in dblist)
+            {
+                // First Delete Users that are not in the Active Directory
+                if(ulist.Where(a => a.ObjectGUID.Equals(u.GUID)).SingleOrDefault()==null)
+                {
+                    db.User.Remove(u);
+                }
+                else
+                {
+                    // Update is in AdminGroup / SuperAdminGroup
 
+                }
+            }
+
+            db.SaveChanges();
             Console.WriteLine("Hades Users Synchronized with Active Directory");
         }
     }
