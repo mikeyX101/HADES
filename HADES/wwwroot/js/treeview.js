@@ -2,6 +2,8 @@
 var selectedPathForContent;
 var selectedNode;
 var selectedDepth;
+var selectedContentName;
+var isValid = false;
 
 function showTreeView(userObj, nodeName) {
     $(function () {
@@ -94,8 +96,68 @@ function setIcons() {
     for (var i = 0; i < folders.length; i++) {
         $('#mytreeview').treeview('getNode', folders[i].nodeId).icon = 'fa fa-folder';
         groups = folders[i].nodes;
-        for (var j = 0; j < groups.length; j++) {
-            $('#mytreeview').treeview('getNode', groups[j].nodeId).icon = 'fa fa-users';
+        if (typeof groups !== 'undefined') {
+            for (var j = 0; j < groups.length; j++) {
+                $('#mytreeview').treeview('getNode', groups[j].nodeId).icon = 'fa fa-users';
+            }
         }
     }
+}
+
+/* Setup dialog settings*/
+$(function () {
+    $("#dialog-error-delete").dialog({
+        autoOpen: false,
+        modal: true,
+        width: 600,
+        buttons: {
+            OK: function () { $(this).dialog("close"); }
+        },
+    });
+
+    $("#dialog-confirmation-delete").dialog({
+        autoOpen: false,
+        modal: true,
+        width: 600,
+        buttons: {
+            OK: function () {
+                $(this).dialog("close");
+                $(this).data('form').submit();
+            },
+            Cancel: function () {
+                $(this).dialog("close");
+            }
+        }
+    });
+
+    // focus on modal input field after dialog shows up
+    $('#createOuModal').on('shown.bs.modal', function () {
+        $('#NewName').focus();
+    })  
+});
+
+function deleteOU(form) {
+
+    //validation here
+    selectedPath = form[1].value;
+    selectedContentName = form[2].value;
+
+    // search for selectedContentName
+    var foundNodes = $('#mytreeview').treeview('search', [selectedContentName, {
+        ignoreCase: false,     // case insensitive
+        exactMatch: true,    // like or equals
+        revealResults: true,  // reveal matching nodes
+    }]);
+
+    isValid = foundNodes[0] && foundNodes[0].parentId == 0 && typeof foundNodes[0].nodes === 'undefined';
+
+    if (isValid) {
+        // confirmation dialog
+        $("#dialog-confirmation-delete").data('form', form).dialog("open");
+    }
+    else {
+        // error dialog
+        $("#dialog-error-delete").dialog("open");
+    }
+    return false;
 }
