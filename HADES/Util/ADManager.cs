@@ -87,8 +87,9 @@ namespace HADES.Util
             LdapConnection connection = new LdapConnection();
             try
             {
+                //Put a timeout on the connection to reduce the time waiting AND avoiding Nginx to timeout with 504 Gateway Timeout
+                connection.ConnectionTimeout = 1000 * 15;
                 //Connect function will create a socket connection to the server
-                connection.ConnectionTimeout = 1000 * 30;
                 connection.Connect(ADSettingsCache.Ad.ServerAddress, ADSettingsCache.Ad.PortNumber);
                 Console.WriteLine("isConnected : " + connection.Connected);
 
