@@ -2,7 +2,14 @@
 var selectedPathForContent;
 var selectedNode;
 var selectedDepth;
+var selectedContentName;
+var isValid = false;
 
+/**
+ * Show treeview
+ * @param {any} userObj
+ * @param {any} nodeName
+ */
 function showTreeView(userObj, nodeName) {
     $(function () {
         // conversion Json en array Json
@@ -19,7 +26,7 @@ function showTreeView(userObj, nodeName) {
             data: rootData
         });
 
-        // search
+        // search node in treeview
         var foundNodes = $('#mytreeview').treeview('search', [nodeName, {
             ignoreCase: false,     // case insensitive
             exactMatch: true,    // like or equals
@@ -83,7 +90,9 @@ function showTreeView(userObj, nodeName) {
     
 }
 
-// Set icons for home, ou and group
+/**
+ * Set icons for home, ou and group
+ * */
 function setIcons() {
     var node = $('#mytreeview').treeview('getNode', 0);
     // set root icon
@@ -94,8 +103,100 @@ function setIcons() {
     for (var i = 0; i < folders.length; i++) {
         $('#mytreeview').treeview('getNode', folders[i].nodeId).icon = 'fa fa-folder';
         groups = folders[i].nodes;
-        for (var j = 0; j < groups.length; j++) {
-            $('#mytreeview').treeview('getNode', groups[j].nodeId).icon = 'fa fa-users';
+        if (typeof groups !== 'undefined') {
+            for (var j = 0; j < groups.length; j++) {
+                $('#mytreeview').treeview('getNode', groups[j].nodeId).icon = 'fa fa-users';
+            }
         }
     }
+}
+
+/**
+ * Setup dialog settings after document is ready
+ */
+$(function () {
+    $("#dialog-error-delete").dialog({
+        autoOpen: false,
+        modal: true,
+        width: 600,
+        buttons: {
+            OK: function () { $(this).dialog("close"); }
+        },
+    });
+
+    $("#dialog-confirmation-delete").dialog({
+        autoOpen: false,
+        modal: true,
+        width: 600,
+        buttons: {
+            OK: function () {
+                $(this).dialog("close");
+                $(this).data('form').submit();
+            },
+            Cancel: function () {
+                $(this).dialog("close");
+            }
+        }
+    });
+
+    // focus on modal input field after dialog shows up
+    $('#createOuModal').on('shown.bs.modal', function () {
+        $('#NewName').focus();
+    })  
+});
+
+/**
+ * delete OU
+ * @param {any} form
+ */
+function deleteOU(form) {
+
+    //validation here
+    selectedPath = form[1].value;
+    selectedContentName = form[2].value;
+
+    // search for selectedContentName
+    var foundNodes = $('#mytreeview').treeview('search', [selectedContentName, {
+        ignoreCase: false,     // case insensitive
+        exactMatch: true,    // like or equals
+        revealResults: true,  // reveal matching nodes
+    }]);
+
+    isValid = foundNodes[0] && foundNodes[0].parentId == 0 && typeof foundNodes[0].nodes === 'undefined';
+
+    if (isValid) {
+        // confirmation dialog
+        $("#dialog-confirmation-delete").data('form', form).dialog("open");
+    }
+    else {
+        // error dialog
+        $("#dialog-error-delete").dialog("open");
+    }
+    
+    return false; // pour ne pas faire de submit avant d'avoir eu la réponse de la boite de dialog
+}
+
+/**
+ * Submit the form for deleting OU or Group
+ * @param {any} form
+ */
+function formSubmit(form) {
+    if (isOU(form[1].value)) {
+        deleteOU(form)
+    } 
+    /* TODO : implémenter la fonctionnalité deleteGroup */
+    if (isGroup(form[1].value)) {
+        alert("Implémenter la fonctionalité de suppression d'un groupe")
+    }
+    return false; // pour ne pas faire de submit avant d'avoir eu la réponse de la boite de dialog
+}
+
+function isGroup(path) {
+    var splitPath = path.split('/');
+    return splitPath.length == 3;
+}
+
+function isOU(path) {
+    var splitPath = path.split('/');
+    return splitPath.length < 3;
 }

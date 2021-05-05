@@ -16,8 +16,8 @@ namespace HADES.Models
         public int Id { get; set; }
 
         [Required]
-        [Column("GRP_sam_account_name")]
-        public string SamAccount { get; set; }
+        [Column("GRP_guid")]
+        public string GUID { get; set; }
       
 
         public virtual ICollection<OwnerGroupUser> OwnerGroupUsers { get; set; }

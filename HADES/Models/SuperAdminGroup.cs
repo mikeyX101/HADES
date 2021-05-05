@@ -16,8 +16,8 @@ namespace HADES.Models
         public int Id { get; set; }
 
         [Required]
-        [Column("SUG_sam_account_name")]
-        public string SamAccount { get; set; }
+        [Column("SUG_guid")]
+        public string GUID { get; set; }
 
         [ForeignKey("AppConfig")]
         [Column("SUG_ACF_id")]

@@ -21,7 +21,7 @@ namespace HADES.Controllers
             db = context;
         }
 
-
+        [Authorize]
         public async Task<IActionResult> AppConfig()
         {
             AppConfigService service = new();
@@ -32,6 +32,7 @@ namespace HADES.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> AppConfig([Bind("ActiveDirectory,AdminGroups,SuperAdminGroups,DefaultUser,AppConfig")] AppConfigViewModel viewModel)
         {
             AppConfigService service = new();
@@ -60,6 +61,7 @@ namespace HADES.Controllers
             return View(viewModel);
         }
 
+        [Authorize]
         public IActionResult CreateAdminGroup(int? id)
         {
             ViewBag.AppConfigId = id;
@@ -67,6 +69,7 @@ namespace HADES.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateAdminGroup([Bind("Id,SamAccount,AppConfigId")] AdminGroup adminGroup)
         {
@@ -79,6 +82,7 @@ namespace HADES.Controllers
             return View(adminGroup);
         }
 
+        [Authorize]
         public async Task<IActionResult> AdminGroupDelete(int? id)
         {
             AppConfigService service = new();
@@ -92,6 +96,7 @@ namespace HADES.Controllers
             return RedirectToAction("AppConfig", new { id = appConfigId });
         }
 
+        [Authorize]
         public IActionResult CreateSuperAdminGroup(int? id)
         {
             ViewBag.AppConfigId = id;
@@ -100,6 +105,7 @@ namespace HADES.Controllers
 
 
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateSuperAdminGroup([Bind("Id,SamAccount,AppConfigId")] SuperAdminGroup superAdminGroup)
         {
@@ -112,6 +118,7 @@ namespace HADES.Controllers
             return View(superAdminGroup);
         }
 
+        [Authorize]
         public async Task<IActionResult> SuperAdminGroupDelete(int? id)
         {
             AppConfigService service = new();

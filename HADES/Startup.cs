@@ -15,6 +15,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
+using HADES.Services;
 
 namespace HADES
 {
@@ -47,7 +48,7 @@ namespace HADES
 
             services.AddMemoryCache();
             services.AddSession();
-
+            
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
             {
                 options.Cookie.Name = "HADES_AUTH";
@@ -63,6 +64,9 @@ namespace HADES
 
             services.AddControllersWithViews();
             services.AddMvc(options => options.Filters.Add(new AuthorizeFilter()));
+
+            // Adds service that updates DB
+            services.AddHostedService<DatabaseSyncService>();
 
             #region Localization Setup
             // Configure localization
@@ -148,7 +152,7 @@ namespace HADES
 			{
 				endpoints.MapControllerRoute(
 					name: "default",
-					pattern: "{controller=AppConfig}/{action=AppConfig}");
+					pattern: "{controller=Account}/{action=LogIn}");
 				endpoints.MapRazorPages();
 			});
 
