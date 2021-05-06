@@ -1,11 +1,9 @@
-using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
-using System;
 
 namespace HADES
 {
-    public class Program
+	public class Program
     {
         public static void Main(string[] args)
         {

@@ -2,17 +2,15 @@
 using HADES.Models;
 using HADES.Util.Exceptions;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace HADES.Util
 {
-    // Handles Connexion to Hades and refers to the ADManager if the user is not a default user.
-    // Updates the model to match the Active Directory User
-    public abstract class ConnexionUtil
+	// Handles Connexion to Hades and refers to the ADManager if the user is not a default user.
+	// Updates the model to match the Active Directory User
+	public abstract class ConnexionUtil
     {
 
         static readonly byte[] salt = { 80, 232, 103, 125, 189, 33, 51, 46, 132, 179, 77, 146, 140, 164, 204, 227, 60, 147, 126, 173, 123, 7, 180, 183, 38, 78, 40, 105, 74, 105, 39, 30 };

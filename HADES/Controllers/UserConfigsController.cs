@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using HADES.Data;
+﻿using HADES.Data;
 using HADES.Models;
 using HADES.Services;
 using HADES.Util;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace HADES.Controllers
 {
-    public class UserConfigsController : Controller
+	public class UserConfigsController : Controller
     {
         private readonly ApplicationDbContext db;
 

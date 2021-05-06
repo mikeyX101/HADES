@@ -1,15 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using HADES.Models;
+﻿using HADES.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace HADES.Data
 {
 
-    public class ApplicationDbContext : DbContext
+	public class ApplicationDbContext : DbContext
     {
         public ApplicationDbContext()
             : base()

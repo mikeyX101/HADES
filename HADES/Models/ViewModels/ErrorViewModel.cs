@@ -1,5 +1,3 @@
-using System;
-
 namespace HADES.Models
 {
 	public class ErrorViewModel

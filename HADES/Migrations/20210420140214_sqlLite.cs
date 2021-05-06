@@ -2,7 +2,7 @@
 
 namespace HADES.Migrations
 {
-    public partial class sqlLite : Migration
+	public partial class sqlLite : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

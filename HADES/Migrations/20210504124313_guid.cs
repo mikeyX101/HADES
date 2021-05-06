@@ -2,7 +2,7 @@
 
 namespace HADES.Migrations
 {
-    public partial class guid : Migration
+	public partial class guid : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

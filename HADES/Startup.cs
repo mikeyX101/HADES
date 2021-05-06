@@ -1,7 +1,10 @@
+using HADES.Middlewares;
+using HADES.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -9,20 +12,15 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using Microsoft.AspNetCore.HttpOverrides;
 using System;
-using System.Linq;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
-using HADES.Services;
-using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Mvc.Filters;
-using HADES.Middlewares;
 
 namespace HADES
 {
-    public class Startup
+	public class Startup
     {
         public Startup(IConfiguration configuration)
         {

@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using HADES.Models;
-using HADES.Services;
+﻿using HADES.Services;
 using HADES.Util.Exceptions;
 using HADES.Util.ModelAD;
 using Novell.Directory.Ldap;
+using System;
+using System.Collections.Generic;
 
 namespace HADES.Util
 {
-    public enum Action {
+	public enum Action {
         ADD,
         DELETE
     }
@@ -87,7 +84,7 @@ namespace HADES.Util
             LdapConnection connection = new LdapConnection();
             try
             {
-                //Put a timeout on the connection to reduce the time waiting AND avoiding Nginx to timeout with 504 Gateway Timeout
+                //Put a timeout (instead of using the default one) on the connection to reduce the time waiting AND avoiding Nginx to timeout with 504 Gateway Timeout
                 connection.ConnectionTimeout = 1000 * 15;
                 //Connect function will create a socket connection to the server
                 connection.Connect(ADSettingsCache.Ad.ServerAddress, ADSettingsCache.Ad.PortNumber);
