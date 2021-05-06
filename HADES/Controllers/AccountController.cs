@@ -1,23 +1,19 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using HADES.Models;
-using Microsoft.Extensions.Localization;
+﻿using HADES.Models;
 using HADES.Util;
 using HADES.Util.Exceptions;
-using Novell.Directory.Ldap;
-using HADES.Data;
-using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
+using System;
+using System.Collections.Generic;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace HADES.Controllers
 {
-    public class AccountController : LocalizedController<AccountController>
+	public class AccountController : LocalizedController<AccountController>
     {
 
         public AccountController(IStringLocalizer<AccountController> localizer) : base(localizer)

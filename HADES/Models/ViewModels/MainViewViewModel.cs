@@ -1,14 +1,9 @@
-﻿using System;
+﻿using HADES.Util.ModelAD;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-using HADES.Util.ModelAD;
-using Newtonsoft.Json;
 
 namespace HADES.Models
 {
-    public class MainViewViewModel
+	public class MainViewViewModel
     {
         public List<RootDataInformation> ADRoot { get; set; }
 

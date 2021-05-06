@@ -1,16 +1,13 @@
 ﻿using HADES.Util;
 using HADES.Util.Exceptions;
-using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Web;
 
 namespace HADES.Models
 {
-    [Table("User_USE")]
+	[Table("User_USE")]
     public class User : IUser
     {
         [Key]

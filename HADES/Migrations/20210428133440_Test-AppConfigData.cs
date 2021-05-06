@@ -2,7 +2,7 @@
 
 namespace HADES.Migrations
 {
-    public partial class TestAppConfigData : Migration
+	public partial class TestAppConfigData : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

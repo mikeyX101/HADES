@@ -2,7 +2,6 @@
 using HADES.Models;
 using HADES.Util;
 using HADES.Util.ModelAD;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
@@ -12,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace HADES.Services
 {
-    public class DatabaseSyncService : IHostedService
+	public class DatabaseSyncService : IHostedService
     {
         private Timer _timer;
 

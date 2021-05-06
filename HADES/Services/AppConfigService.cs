@@ -1,16 +1,14 @@
 ﻿using HADES.Data;
 using HADES.Models;
 using HADES.Util;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace HADES.Services
 {
-    public class AppConfigService
+	public class AppConfigService
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 

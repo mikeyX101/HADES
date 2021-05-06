@@ -1,11 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using HADES.Models.ViewModels;
-using Microsoft.Extensions.Localization;
+﻿using HADES.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 
 namespace HADES.Controllers
 {
