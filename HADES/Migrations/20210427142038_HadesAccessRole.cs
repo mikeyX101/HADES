@@ -2,7 +2,7 @@
 
 namespace HADES.Migrations
 {
-    public partial class HadesAccessRole : Migration
+	public partial class HadesAccessRole : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

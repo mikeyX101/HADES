@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace HADES.Models
 {
-    public class AppConfigViewModel
+	public class AppConfigViewModel
     {
         public ActiveDirectory ActiveDirectory { get; set; }
 

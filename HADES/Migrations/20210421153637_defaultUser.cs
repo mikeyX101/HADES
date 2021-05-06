@@ -2,7 +2,7 @@
 
 namespace HADES.Migrations
 {
-    public partial class defaultUser : Migration
+	public partial class defaultUser : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

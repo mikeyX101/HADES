@@ -1,13 +1,11 @@
 ﻿using HADES.Data;
 using HADES.Models;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace HADES.Services
 {
-    public class UserConfigService
+	public class UserConfigService
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 

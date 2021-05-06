@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace HADES.Util.ModelAD
+﻿namespace HADES.Util.ModelAD
 {
-    public class UserAD
+	public class UserAD
     {
         private string samAccountName;
         private string firstName;

@@ -1,20 +1,19 @@
+using HADES.Data;
 using HADES.Models;
 using HADES.Util;
+using HADES.Util.Exceptions;
+using HADES.Util.ModelAD;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
-using System.Collections.Generic;
 using Newtonsoft.Json;
-using HADES.Util.ModelAD;
-using HADES.Data;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using HADES.Util.Exceptions;
-using System.Linq;
 
 namespace HADES.Controllers
 {
-    public class HomeController : LocalizedController<HomeController>
+	public class HomeController : LocalizedController<HomeController>
     {
         private ADManager ad;
         private MainViewViewModel viewModel;
