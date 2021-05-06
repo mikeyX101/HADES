@@ -123,12 +123,18 @@
   <data name="ContenuDossier" xml:space="preserve">
     <value>Folder content</value>
   </data>
+  <data name="DeleteConfirmationMessage" xml:space="preserve">
+    <value>Are you sure you want to delete the folder ?</value>
+  </data>
+  <data name="DeleteConfirmationTitle" xml:space="preserve">
+    <value>Confirmation</value>
+  </data>
   <data name="DeleteFailedMessage" xml:space="preserve">
     <value>Folder is not empty.
 Delete groups first and then delete empty folder.</value>
   </data>
   <data name="DeleteFailedTitle" xml:space="preserve">
-    <value>Folder not deleted</value>
+    <value>Error</value>
   </data>
   <data name="DossierGroupe" xml:space="preserve">
     <value>Folders and groups</value>

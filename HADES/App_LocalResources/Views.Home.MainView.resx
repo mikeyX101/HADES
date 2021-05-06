@@ -127,14 +127,14 @@
     <value>Voulez-vous vraiment supprimer le dossier ?</value>
   </data>
   <data name="DeleteConfirmationTitle" xml:space="preserve">
-    <value>Confirmation de suppression</value>
+    <value>Confirmation</value>
   </data>
   <data name="DeleteFailedMessage" xml:space="preserve">
     <value>Le dossier n'est pas vide. 
 Supprimez les groupes du dossier d'abord puis supprimez le dossier vide.</value>
   </data>
   <data name="DeleteFailedTitle" xml:space="preserve">
-    <value>Erreur lors de la suppression du dossier</value>
+    <value>Erreur</value>
   </data>
   <data name="DossierGroupe" xml:space="preserve">
     <value>Dossiers et groupes</value>

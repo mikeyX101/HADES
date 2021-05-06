@@ -182,7 +182,7 @@ namespace HADES.Controllers
             return RedirectToAction("MainView", "Home", new { selectedPath = viewModel.SelectedPath });
         }
 
-
+        [Authorize]
         public IActionResult CreateGroupModal()
         {
             return PartialView();
@@ -207,6 +207,7 @@ namespace HADES.Controllers
             return View(groupAD);
         }
 
+        [Authorize]
         public IActionResult EditGroupModal()
         {
             var DN = FindDN(viewModel.SelectedPath, viewModel.SelectedContentName);
