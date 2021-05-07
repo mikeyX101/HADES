@@ -87,11 +87,17 @@ namespace HADES.Services
 
             foreach(SuperAdminGroup su in sulist)
             {
-
+                if (!ad.doesGroupExist(su.GUID))
+                {
+                    db.Remove(su);
+                }
             }
             foreach (AdminGroup a in alist)
             {
-
+                if (!ad.doesGroupExist(a.GUID))
+                {
+                    db.Remove(a);
+                }
             }
 
             // Get all groups in AD ?

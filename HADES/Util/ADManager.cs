@@ -617,10 +617,10 @@ namespace HADES.Util
             }
         }
 
-        public Boolean doesGroupExist(string GUID)
+        public bool doesGroupExist(string GUID)
         {
             LdapConnection connection = createConnection();
-            Boolean wasFound = false;
+            bool wasFound = false;
 
             try
             {
@@ -636,10 +636,10 @@ namespace HADES.Util
                     Console.WriteLine("The group was NOT found");
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 connection.Disconnect();
-                return false;
+                throw new ADException();
             }
 
             connection.Disconnect();
