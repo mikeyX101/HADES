@@ -56,6 +56,7 @@ namespace HADES.Services
         {
             if ((UpdateMe && !processing) || forced) // Only update if asked to
             {
+                Console.WriteLine("Attempting Database Update -- NOT TESTED MAY OR MAY NOT DESTROY DATABASE -- we hope not...");
                 processing = true;
                 if (ad == null) ad = new ADManager(); // Initialize ad on first use
 
@@ -100,7 +101,6 @@ namespace HADES.Services
                 }
             }
 
-            // Get all groups in AD ?
             Console.WriteLine("Hades Admin/SuperAdmin Groups Synchronized with Active Directory");
         }
 
@@ -154,6 +154,16 @@ namespace HADES.Services
                     // Update is in AdminGroup / SuperAdminGroup
 
                     // Update User is active
+                    if(u.RoleId == (int)RolesID.Owner && u.OwnerGroupUsers.Count == 0)
+                    {
+                        u.RoleId = (int)RolesID.Inactive;
+                        db.User.Update(u);
+                    }
+                    else if(u.RoleId == (int)RolesID.Inactive)
+                    {
+                        u.RoleId = (int)RolesID.Owner;
+                        db.User.Update(u);
+                    }
                 }
             }
 
