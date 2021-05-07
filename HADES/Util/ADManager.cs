@@ -344,7 +344,7 @@ namespace HADES.Util
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("Error: " + e.Message);
+                    Console.WriteLine("Log: " + e.Message);
                     continue;
                 }
             }
@@ -636,7 +636,7 @@ namespace HADES.Util
                     Console.WriteLine("The group was NOT found");
                 }
             }
-            catch (Exception)
+            catch (Exception) 
             {
                 connection.Disconnect();
                 throw new ADException();
@@ -653,7 +653,7 @@ namespace HADES.Util
 
             try
             {
-                LdapSearchResults lsc = (LdapSearchResults)connection.Search(ADSettingsCache.Ad.RootOu, LdapConnection.ScopeSub, "(objectGUID =" + GUID + ")", null, false);
+                LdapSearchResults lsc = (LdapSearchResults)connection.Search("", LdapConnection.ScopeSub, "(objectGUID =" + GUID + ")", null, false);
                 LdapEntry nextEntry = null;
                 while (lsc.HasMore())
                 {
@@ -680,7 +680,7 @@ namespace HADES.Util
 
             try
             {
-                LdapSearchResults lsc = (LdapSearchResults)connection.Search(ADSettingsCache.Ad.RootOu, LdapConnection.ScopeSub, "(&(objectClass=group)(distinguishedName=" + Dn + "))", null, false);
+                LdapSearchResults lsc = (LdapSearchResults)connection.Search("", LdapConnection.ScopeSub, "(&(objectClass=group)(distinguishedName=" + Dn + "))", null, false);
                 LdapEntry nextEntry = null;
                 while (lsc.HasMore())
                 {
