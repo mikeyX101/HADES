@@ -26,7 +26,7 @@ namespace HADES.Util
         {
             if (ADSettingsCache.Ad == null) {
                 ADSettingsCache.Refresh();
-            }
+            }         
         }
 
         /*****************************************************
@@ -344,7 +344,7 @@ namespace HADES.Util
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("Error: " + e.Message);
+                    Console.WriteLine("Log: " + e.Message);
                     continue;
                 }
             }
@@ -617,10 +617,10 @@ namespace HADES.Util
             }
         }
 
-        public Boolean doesGroupExist(string GUID)
+        public bool doesGroupExist(string GUID)
         {
             LdapConnection connection = createConnection();
-            Boolean wasFound = false;
+            bool wasFound = false;
 
             try
             {
@@ -636,16 +636,32 @@ namespace HADES.Util
                     Console.WriteLine("The group was NOT found");
                 }
             }
-            catch (Exception e)
+            catch (Exception) 
             {
                 connection.Disconnect();
-                return false;
+                throw new ADException();
             }
 
             connection.Disconnect();
             return wasFound;
         }
 
+        private string getBaseAd() {
+            string[] rootTab = ADSettingsCache.Ad.RootOu.Split(",");
+            string b = "";
+            for (int i = 0; i < rootTab.Length; i++)
+            {
+                if (rootTab[i].Contains("DC="))
+                {
+                    b += rootTab[i] + ",";
+                }
+            }
+            if (b.Length > 0)
+            {
+                b = b.Remove(b.Length - 1);
+            }
+            return b;
+        }
         public string getGroupDnByGUID(string GUID)
         {
             LdapConnection connection = createConnection();
@@ -653,7 +669,7 @@ namespace HADES.Util
 
             try
             {
-                LdapSearchResults lsc = (LdapSearchResults)connection.Search(ADSettingsCache.Ad.RootOu, LdapConnection.ScopeSub, "(objectGUID =" + GUID + ")", null, false);
+                LdapSearchResults lsc = (LdapSearchResults)connection.Search(getBaseAd(), LdapConnection.ScopeSub, "(objectGUID =" + GUID + ")", null, false);
                 LdapEntry nextEntry = null;
                 while (lsc.HasMore())
                 {
@@ -680,7 +696,7 @@ namespace HADES.Util
 
             try
             {
-                LdapSearchResults lsc = (LdapSearchResults)connection.Search(ADSettingsCache.Ad.RootOu, LdapConnection.ScopeSub, "(&(objectClass=group)(distinguishedName=" + Dn + "))", null, false);
+                LdapSearchResults lsc = (LdapSearchResults)connection.Search(getBaseAd(), LdapConnection.ScopeSub, "(&(objectClass=group)(distinguishedName=" + Dn + "))", null, false);
                 LdapEntry nextEntry = null;
                 while (lsc.HasMore())
                 {
@@ -689,7 +705,7 @@ namespace HADES.Util
                     GUID = getObjectGUID(nextEntry);
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 connection.Disconnect();
                 return GUID;
