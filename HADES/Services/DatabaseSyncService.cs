@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace HADES.Services
 {
-	public class DatabaseSyncService : IHostedService
+    public class DatabaseSyncService : IHostedService
     {
         private static Timer _timer;
 
@@ -29,14 +29,14 @@ namespace HADES.Services
         // Forces an Update on the current thread
         public static void ForceUpdate()
         {
-            UpdateDatabase(null,true);
+            UpdateDatabase(null, true);
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
             // timer repeats call to UpdateDatabase every 5 minutes.
             _timer = new Timer(
-                (object state)=>UpdateDatabase(state),
+                (object state) => UpdateDatabase(state),
                 null,
                 TimeSpan.Zero,
                 TimeSpan.FromMinutes(5)
@@ -54,7 +54,7 @@ namespace HADES.Services
 
         private static void UpdateDatabase(object? state, bool forced = false)
         {
-            if ((UpdateMe && !processing)||forced) // Only update if asked to
+            if ((UpdateMe && !processing) || forced) // Only update if asked to
             {
                 processing = true;
                 if (ad == null) ad = new ADManager(); // Initialize ad on first use
@@ -85,7 +85,7 @@ namespace HADES.Services
 
             // First Delete groups that are not in the Active Directory
 
-            foreach(SuperAdminGroup su in sulist)
+            foreach (SuperAdminGroup su in sulist)
             {
                 if (!ad.doesGroupExist(su.GUID))
                 {
@@ -107,7 +107,28 @@ namespace HADES.Services
         private static void UpdateOwnerGroups(ApplicationDbContext db)
         {
             List<OwnerGroup> oglist = db.OwnerGroup.ToList();
+            List<GroupAD> grplist = ad.getGroupsInRoot();
 
+            // Remove OwnerGroups not in ADroot
+            foreach (OwnerGroup og in oglist)
+            {
+                if (grplist.Where(a => a.ObjectGUID.Equals(og.GUID)).SingleOrDefault() == null)
+                {
+                    db.OwnerGroup.Remove(og);
+                }
+            }
+
+            // Add OwnerGroups to DB
+
+            foreach (GroupAD grp in grplist)
+            {
+                if (oglist.Where(a => a.GUID.Equals(grp.ObjectGUID)).SingleOrDefault() == null)
+                {
+                    db.OwnerGroup.Add(new OwnerGroup { GUID = grp.ObjectGUID });
+                }
+            }
+
+            db.SaveChanges();
             // Get all groups under root in ADManager
             Console.WriteLine("Hades OwnerGroups Synchronized with Active Directory");
         }
@@ -124,14 +145,14 @@ namespace HADES.Services
             foreach (User u in dblist)
             {
                 // First Delete Users that are not in the Active Directory
-                if(ulist.Where(a => a.ObjectGUID.Equals(u.GUID)).SingleOrDefault()==null)
+                if (ulist.Where(a => a.ObjectGUID.Equals(u.GUID)).SingleOrDefault() == null)
                 {
                     db.User.Remove(u);
                 }
                 else
                 {
                     // Update is in AdminGroup / SuperAdminGroup
-                    
+
                     // Update User is active
                 }
             }
