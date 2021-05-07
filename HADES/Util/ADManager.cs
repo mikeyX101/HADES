@@ -353,6 +353,41 @@ namespace HADES.Util
             return root;
         }
 
+        public List<GroupAD> getGroupsInRoot()
+        {
+            List<GroupAD> root = new List<GroupAD>();
+
+            //Creating an LdapConnection instance
+            LdapConnection connection = createConnection();
+            LdapSearchResults lsc = (LdapSearchResults)connection.Search(ADSettingsCache.Ad.RootOu, LdapConnection.ScopeSub, "(|(objectClass=group))", null, false);
+
+            while (lsc.HasMore())
+            {
+                GroupAD group = new GroupAD();
+                LdapEntry nextEntry = null;
+                try
+                {
+                    nextEntry = lsc.Next();
+                    group.SamAccountName = getAttributeValue(nextEntry, "sAMAccountName");
+                    group.Email = getAttributeValue(nextEntry, "mail");
+                    group.Notes = getAttributeValue(nextEntry, "info");
+                    group.Description = getAttributeValue(nextEntry, "description");
+                    group.Members = GetMembersOfGroup(nextEntry.Dn, connection);
+                    group.ObjectGUID = getObjectGUID(nextEntry);
+
+                    Console.WriteLine(group);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Error: " + e.Message);
+                    continue;
+                }
+            }
+
+            connection.Disconnect();
+            return root;
+        }
+
         public GroupAD getGroupInformation(string groupDN)
         {
             //Creating an LdapConnection instance
@@ -371,7 +406,7 @@ namespace HADES.Util
                     group.Email = getAttributeValue(nextEntry, "mail");
                     group.Notes = getAttributeValue(nextEntry, "info");
                     group.Description = getAttributeValue(nextEntry, "description");
-                    group.Members = GetMembersOfGroup(groupDN);
+                    group.Members = GetMembersOfGroup(groupDN,connection);
                     group.ObjectGUID = getObjectGUID(nextEntry);
                 }
                 catch (LdapException e)
@@ -587,9 +622,16 @@ namespace HADES.Util
         /*****************************************************
          MEMBER
          ******************************************************/
-        public List<UserAD> GetMembersOfGroup(string groupDN)
+        public List<UserAD> GetMembersOfGroup(string groupDN, LdapConnection connectionAlreadyOpen)
         {
-            LdapConnection connection = createConnection();
+            LdapConnection connection;
+            if (connectionAlreadyOpen == null)
+            {
+                connection = createConnection();
+            }
+            else {
+                connection = connectionAlreadyOpen;
+            }
 
             LdapSearchResults lsc = (LdapSearchResults)connection.Search(ADSettingsCache.Ad.BaseDN, LdapConnection.ScopeSub, "(&(objectClass=user)(memberOf=" + groupDN + "))", null, false);
             List<UserAD> users = new List<UserAD>();
@@ -620,7 +662,11 @@ namespace HADES.Util
                     connection.Disconnect();
                 }
             }
-            connection.Disconnect();
+            
+            if (connectionAlreadyOpen == null) {  
+                connection.Disconnect();
+            }
+           
             return users;
         }
 
@@ -685,6 +731,11 @@ namespace HADES.Util
                 return false;
             }
         }
+
+        //IF group exist 
+
+        //GET DN GROUP by GUID 
+        //GET GUID GROUP by DN
 
     }
 }
