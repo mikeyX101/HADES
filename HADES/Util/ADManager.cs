@@ -27,10 +27,6 @@ namespace HADES.Util
             if (ADSettingsCache.Ad == null) {
                 ADSettingsCache.Refresh();
             }
-
-            List<GroupAD> groups = getGroupsInRoot();
-
-             doesGroupExist("gdfsaghfds");
         }
 
         /*****************************************************
@@ -544,9 +540,7 @@ namespace HADES.Util
 
         {
             LdapConnection connection = createConnection();
-            //try
-            //{
-
+           
                 //Rename 
                 string newRdn = "CN=" + name;
                 connection.Rename(dnGroupToModify, newRdn, true);
@@ -621,6 +615,89 @@ namespace HADES.Util
                 Console.WriteLine("Cannot delete the group: " + e.Message);
                 return false;
             }
+        }
+
+        public Boolean doesGroupExist(string GUID)
+        {
+            LdapConnection connection = createConnection();
+            Boolean wasFound = false;
+
+            try
+            {
+                LdapSearchResults lsc = (LdapSearchResults)connection.Search(ADSettingsCache.Ad.RootOu, LdapConnection.ScopeSub, "(objectGUID =" + GUID + ")", null, false);
+
+                if (lsc.HasMore())
+                {
+                    Console.WriteLine("The group was found");
+                    wasFound = true;
+                }
+                else
+                {
+                    Console.WriteLine("The group was NOT found");
+                }
+            }
+            catch (Exception e)
+            {
+                connection.Disconnect();
+                return false;
+            }
+
+            connection.Disconnect();
+            return wasFound;
+        }
+
+        public string getGroupDnByGUID(string GUID)
+        {
+            LdapConnection connection = createConnection();
+            String dn = "";
+
+            try
+            {
+                LdapSearchResults lsc = (LdapSearchResults)connection.Search(ADSettingsCache.Ad.RootOu, LdapConnection.ScopeSub, "(objectGUID =" + GUID + ")", null, false);
+                LdapEntry nextEntry = null;
+                while (lsc.HasMore())
+                {
+
+                    nextEntry = lsc.Next();
+                    dn = nextEntry.Dn;
+                }
+            }
+            catch (Exception e)
+            {
+                connection.Disconnect();
+                return dn;
+            }
+
+            connection.Disconnect();
+            return dn;
+
+        }
+
+        public string getGroupGUIDByDn(string Dn)
+        {
+            LdapConnection connection = createConnection();
+            String GUID = "";
+
+            try
+            {
+                LdapSearchResults lsc = (LdapSearchResults)connection.Search(ADSettingsCache.Ad.RootOu, LdapConnection.ScopeSub, "(&(objectClass=group)(distinguishedName=" + Dn + "))", null, false);
+                LdapEntry nextEntry = null;
+                while (lsc.HasMore())
+                {
+
+                    nextEntry = lsc.Next();
+                    GUID = getObjectGUID(nextEntry);
+                }
+            }
+            catch (Exception e)
+            {
+                connection.Disconnect();
+                return GUID;
+            }
+
+            connection.Disconnect();
+            return GUID;
+
         }
 
         /*****************************************************
@@ -736,34 +813,6 @@ namespace HADES.Util
             }
         }
 
-        public Boolean doesGroupExist(string GUID) {
-            LdapConnection connection = createConnection();
-            Boolean wasFound = false;
-
-            try
-            {
-                LdapSearchResults lsc = (LdapSearchResults)connection.Search(ADSettingsCache.Ad.RootOu, LdapConnection.ScopeSub, "(objectGUID =" + GUID + ")", null, false);
-
-                if (lsc.HasMore())
-                {
-                    Console.WriteLine("The group was found");
-                    wasFound = true;
-                }
-                else {
-                    Console.WriteLine("The group was NOT found");
-                }
-            }
-            catch (Exception e)
-            {
-                connection.Disconnect();
-                return false;
-            }
-
-            connection.Disconnect();
-            return wasFound;
-        }
-        
-        //GET DN GROUP by GUID 
-        //GET GUID GROUP by DN
+       
     }
 }
