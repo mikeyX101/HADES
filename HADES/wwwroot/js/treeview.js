@@ -20,6 +20,7 @@ function showTreeView(userObj, nodeName) {
             color: "#428bca",
             expandIcon: 'fa fa-plus',
             collapseIcon: 'fa fa-minus',
+            emptyIcon: 'fa',
             showBorder: false,
             highlightSelected: true,
             highlightSearchResults: false,
