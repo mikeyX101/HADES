@@ -39,11 +39,11 @@ namespace HADES.Util
                 {
                     // Check Active Directory
 
-                    // Update Admin/SuperAdmin User in DB
+                    // TODO Update Admin/SuperAdmin User in DB
 
                     if (db.User.Include(u => u.Role).SingleOrDefault((u) => u.GUID.ToLower().Equals(aDManager.getUserAD(user, false).ObjectGUID) && u.Role.HadesAccess) != null)
                     {
-                        //Check Allowed in HADES (is in DB as User)
+                        //Check Allowed in HADES (is in DB as User && Role.HadesAccess)
                         User u = db.User.SingleOrDefault((u) => u.GUID.ToLower().Equals(aDManager.getUserAD(user,false).ObjectGUID));
                         db.Update(u);
                         u.Attempts = 0;
@@ -113,7 +113,7 @@ namespace HADES.Util
                 }
                 catch (ForbiddenException)
                 {
-                    return true; // Pass handling to next funtion
+                    return true; // Pass handling to next function
                 }
                 catch (Exception)
                 {
