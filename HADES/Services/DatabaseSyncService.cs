@@ -13,12 +13,12 @@ namespace HADES.Services
 {
 	public class DatabaseSyncService : IHostedService
     {
-        private Timer _timer;
+        private static Timer _timer;
 
         private static bool UpdateMe = false;
         private static bool processing = false;
 
-        private ADManager ad;
+        private static ADManager ad;
 
         // Flag the database for update
         public static void ExecUpdate()
@@ -26,11 +26,17 @@ namespace HADES.Services
             UpdateMe = true;
         }
 
+        // Forces an Update on the current thread
+        public static void ForceUpdate()
+        {
+            UpdateDatabase(null,true);
+        }
+
         public Task StartAsync(CancellationToken cancellationToken)
         {
             // timer repeats call to UpdateDatabase every 5 minutes.
             _timer = new Timer(
-                UpdateDatabase,
+                (object state)=>UpdateDatabase(state),
                 null,
                 TimeSpan.Zero,
                 TimeSpan.FromMinutes(5)
@@ -46,9 +52,9 @@ namespace HADES.Services
             return Task.CompletedTask;
         }
 
-        private void UpdateDatabase(object state)
+        private static void UpdateDatabase(object? state, bool forced = false)
         {
-            if (UpdateMe && !processing) // Only update if asked to
+            if ((UpdateMe && !processing)||forced) // Only update if asked to
             {
                 processing = true;
                 if (ad == null) ad = new ADManager(); // Initialize ad on first use
@@ -64,7 +70,7 @@ namespace HADES.Services
                 }
                 catch (Exception)
                 {
-                    Console.WriteLine("An error Occured while synchronizing the database");
+                    Console.WriteLine("An error Occured while synchronizing the HADES database to the Active Directory");
                     processing = false;
                     return;
                 }
@@ -72,22 +78,42 @@ namespace HADES.Services
             processing = false; // Just to be sure
         }
 
-        private void UpdateAdminSuperAdmin(ApplicationDbContext db)
+        private static void UpdateAdminSuperAdmin(ApplicationDbContext db)
         {
+            List<SuperAdminGroup> sulist = db.SuperAdminGroup.ToList();
+            List<AdminGroup> alist = db.AdminGroup.ToList();
+
+            // First Delete groups that are not in the Active Directory
+
+            foreach(SuperAdminGroup su in sulist)
+            {
+
+            }
+            foreach (AdminGroup a in alist)
+            {
+
+            }
+
             // Get all groups in AD ?
             Console.WriteLine("Hades Admin/SuperAdmin Groups Synchronized with Active Directory");
         }
 
-        private void UpdateOwnerGroups(ApplicationDbContext db)
+        private static void UpdateOwnerGroups(ApplicationDbContext db)
         {
+            List<OwnerGroup> oglist = db.OwnerGroup.ToList();
+
             // Get all groups under root in ADManager
             Console.WriteLine("Hades OwnerGroups Synchronized with Active Directory");
         }
 
-        private void UpdateUsers(ApplicationDbContext db)
+        private static void UpdateUsers(ApplicationDbContext db)
         {
             List<UserAD> ulist = ad.getAllUsers();
             List<User> dblist = db.User.ToList();
+
+            Role adminRole = db.Role.First(r => r.Id == (int)RolesID.Admin);
+            Role superadminRole = db.Role.First(r => r.Id == (int)RolesID.SuperAdmin);
+            Role inactiveRole = db.Role.First(r => r.Id == (int)RolesID.Inactive);
 
             foreach (User u in dblist)
             {
@@ -99,7 +125,8 @@ namespace HADES.Services
                 else
                 {
                     // Update is in AdminGroup / SuperAdminGroup
-
+                    
+                    // Update User is active
                 }
             }
 

@@ -45,4 +45,9 @@ namespace HADES.Models
         public virtual ICollection<DefaultUser> DefaultUsers { get; set; }
     }
 
+    public enum RolesID
+    {
+        SuperAdmin = 1, Admin=2, Owner=3, Inactive = 4
+    }
+
 }
