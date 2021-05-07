@@ -126,9 +126,6 @@ namespace HADES.Util
         // Returns the Hashed password for Default User (Other login is handled by Active Directory)
         public static string HashPassword(string password)
         {
-            // Generate Salt
-            char[] passArray = password.ToCharArray();
-
             // Calculate Hash
             string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
             password: password,
