@@ -27,8 +27,12 @@ namespace HADES.Util
             if (ADSettingsCache.Ad == null) {
                 ADSettingsCache.Refresh();
             }
+
+            List<GroupAD> groups = getGroupsInRoot();
+
+             doesGroupExist("gdfsaghfds");
         }
-       
+
         /*****************************************************
          GETATTRIBUTE in AD
          ******************************************************/
@@ -374,7 +378,7 @@ namespace HADES.Util
                     group.Description = getAttributeValue(nextEntry, "description");
                     group.Members = GetMembersOfGroup(nextEntry.Dn, connection);
                     group.ObjectGUID = getObjectGUID(nextEntry);
-
+                    root.Add(group);
                     Console.WriteLine(group);
                 }
                 catch (Exception e)
@@ -732,10 +736,34 @@ namespace HADES.Util
             }
         }
 
-        //IF group exist 
+        public Boolean doesGroupExist(string GUID) {
+            LdapConnection connection = createConnection();
+            Boolean wasFound = false;
 
+            try
+            {
+                LdapSearchResults lsc = (LdapSearchResults)connection.Search(ADSettingsCache.Ad.RootOu, LdapConnection.ScopeSub, "(objectGUID =" + GUID + ")", null, false);
+
+                if (lsc.HasMore())
+                {
+                    Console.WriteLine("The group was found");
+                    wasFound = true;
+                }
+                else {
+                    Console.WriteLine("The group was NOT found");
+                }
+            }
+            catch (Exception e)
+            {
+                connection.Disconnect();
+                return false;
+            }
+
+            connection.Disconnect();
+            return wasFound;
+        }
+        
         //GET DN GROUP by GUID 
         //GET GUID GROUP by DN
-
     }
 }
