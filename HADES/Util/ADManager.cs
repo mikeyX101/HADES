@@ -733,7 +733,7 @@ namespace HADES.Util
             }
             catch (Exception e)
             {
-                Console.WriteLine("EXCEPTION");
+
                 connection.Disconnect();
                 return GUID;
             }
