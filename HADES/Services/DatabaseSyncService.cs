@@ -107,7 +107,7 @@ namespace HADES.Services
                     db.Remove(a);
                 }
             }
-
+            db.SaveChanges();
             Console.WriteLine("Hades Admin/SuperAdmin Groups Synchronized with Active Directory");
         }
 
