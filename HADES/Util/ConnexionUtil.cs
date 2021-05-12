@@ -92,7 +92,8 @@ namespace HADES.Util
                 // If anything Wrong happens then try User
                 try
                 {
-                    User u = db.User.SingleOrDefault((a) => a.GUID.ToLower().Equals(aDManager.getUserAD(user,false).ObjectGUID));
+                    string guid = aDManager.getUserAD(user, false).ObjectGUID;
+                    User u = db.User.SingleOrDefault((a) => a.GUID.ToLower().Equals(guid));
                     if (u == null)
                     {
                         throw new ForbiddenException();
@@ -109,14 +110,16 @@ namespace HADES.Util
                 }
                 catch (ADException)
                 {
+                    Console.WriteLine("ADEXCEPTION");
                     throw;
                 }
                 catch (ForbiddenException)
                 {
                     return true; // Pass handling to next function
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
+                    Console.WriteLine(e.Message);
                     // If anything Wrong happens then this User must not exist
                     return false;
                 }
