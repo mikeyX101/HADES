@@ -40,7 +40,13 @@ namespace HADES.Services
                 (object state) => UpdateDatabase(state),
                 null,
                 TimeSpan.Zero,
+#if DEBUG
+                TimeSpan.FromSeconds(10)
+#endif
+
+#if RELEASE
                 TimeSpan.FromMinutes(5)
+#endif
             );
 
             return Task.CompletedTask;
@@ -193,7 +199,7 @@ namespace HADES.Services
                         db.User.Update(u);
                         u.RoleId = (int)RolesID.Owner;
                     }
-                    
+
 
                     // Update User is active
                     if (u.RoleId == (int)RolesID.Owner && u.OwnerGroupUsers.Count == 0)
