@@ -1,0 +1,64 @@
+﻿@model UserListViewModel
+
+
+<div class="bg-primary text-white text-center">
+    <h1 class="m-3 p-3">@Localizer["UserList"]</h1>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">@Localizer["FirstName"]</th>
+            <th scope="col">@Localizer["LastName"]</th>
+            <th scope="col">@Localizer["SamAccount"]</th>
+            <th scope="col">@Localizer["Role"]</th>
+            <th scope="col">@Localizer["OwnerOf"]</th>
+            <th scope="col">@Localizer["MemberOf"]</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (UserViewModel u in Model.ActiveUsers)
+        {
+            <tr id=@u.GUID>
+                <td>@u.FirstName</td>
+                <td>@u.LastName</td>
+                <td>@u.SamAccount</td>
+                <td>@u.Role</td>
+                <td>@u.OwnerOf</td>
+                <td>@u.MemberOf</td>
+                <td><button>DELETE TEST</button></td>
+            </tr>
+        }
+    </tbody>
+</table>
+<hr />
+
+<div class="bg-danger text-white text-center">
+    <h2 class="m-3 p-3">@Localizer["Inactive"]</h2>
+</div>
+<table class="table table-danger">
+    <thead>
+        <tr>
+            <th scope="col">@Localizer["FirstName"]</th>
+            <th scope="col">@Localizer["LastName"]</th>
+            <th scope="col">@Localizer["SamAccount"]</th>
+            <th scope="col">@Localizer["Role"]</th>
+            <th scope="col">@Localizer["OwnerOf"]</th>
+            <th scope="col">@Localizer["MemberOf"]</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (UserViewModel u in Model.InactiveUsers)
+        {
+        <tr id=@u.GUID class="text-muted">
+            <td>@u.FirstName</td>
+            <td>@u.LastName</td>
+            <td>@u.SamAccount</td>
+            <td>@u.Role</td>
+            <td>@u.OwnerOf</td>
+            <td>@u.MemberOf</td>
+            <td><button>DELETE TEST</button></td>
+        </tr>
+        }
+    </tbody>
+</table>
