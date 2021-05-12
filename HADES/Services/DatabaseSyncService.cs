@@ -2,6 +2,7 @@
 using HADES.Models;
 using HADES.Util;
 using HADES.Util.ModelAD;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
@@ -39,7 +40,13 @@ namespace HADES.Services
                 (object state) => UpdateDatabase(state),
                 null,
                 TimeSpan.Zero,
+#if DEBUG
+                TimeSpan.FromSeconds(10)
+#endif
+
+#if RELEASE
                 TimeSpan.FromMinutes(5)
+#endif
             );
 
             return Task.CompletedTask;
@@ -100,7 +107,7 @@ namespace HADES.Services
                     db.Remove(a);
                 }
             }
-
+            db.SaveChanges();
             Console.WriteLine("Hades Admin/SuperAdmin Groups Synchronized with Active Directory");
         }
 
@@ -136,11 +143,27 @@ namespace HADES.Services
         private static void UpdateUsers(ApplicationDbContext db)
         {
             List<UserAD> ulist = ad.getAllUsers();
-            List<User> dblist = db.User.ToList();
+            List<User> dblist = db.User.Include(i => i.OwnerGroupUsers).ToList();
+
+            List<AdminGroup> adminGroupsDB = db.AdminGroup.ToList();
+            List<SuperAdminGroup> superadminGroupsDB = db.SuperAdminGroup.ToList();
 
             Role adminRole = db.Role.First(r => r.Id == (int)RolesID.Admin);
             Role superadminRole = db.Role.First(r => r.Id == (int)RolesID.SuperAdmin);
             Role inactiveRole = db.Role.First(r => r.Id == (int)RolesID.Inactive);
+
+            // Generate AD User List of Admin
+            List<UserAD> adminsAD = new List<UserAD>();
+            foreach (AdminGroup ag in adminGroupsDB)
+            {
+                adminsAD.AddRange(ad.GetMembersOfGroup(ad.getGroupDnByGUID(ag.GUID), null));
+            }
+            // Generate AD User List of SuperAdmin
+            List<UserAD> superadminsAD = new List<UserAD>();
+            foreach (SuperAdminGroup sag in superadminGroupsDB)
+            {
+                superadminsAD.AddRange(ad.GetMembersOfGroup(ad.getGroupDnByGUID(sag.GUID), null));
+            }
 
             foreach (User u in dblist)
             {
@@ -151,18 +174,43 @@ namespace HADES.Services
                 }
                 else
                 {
-                    // Update is in AdminGroup / SuperAdminGroup
+                    // --- Update is in AdminGroup / SuperAdminGroup ---
+
+                    // If is in list set SuperAdmin else Lower Privilege
+                    if (superadminsAD.Where(a => a.ObjectGUID == u.GUID).FirstOrDefault() != null)
+                    {
+                        db.User.Update(u);
+                        u.RoleId = (int)RolesID.SuperAdmin;
+                    }
+                    else
+                    {
+                        db.User.Update(u);
+                        u.RoleId = (int)RolesID.Admin;
+                    }
+
+                    // If is in list set Admin else Lower Privilege
+                    if (adminsAD.Where(a => a.ObjectGUID == u.GUID).FirstOrDefault() != null)
+                    {
+                        db.User.Update(u);
+                        u.RoleId = (int)RolesID.Admin;
+                    }
+                    else
+                    {
+                        db.User.Update(u);
+                        u.RoleId = (int)RolesID.Owner;
+                    }
+
 
                     // Update User is active
-                    if(u.RoleId == (int)RolesID.Owner && u.OwnerGroupUsers.Count == 0)
+                    if (u.RoleId == (int)RolesID.Owner && u.OwnerGroupUsers.Count == 0)
                     {
+                        db.User.Update(u);
                         u.RoleId = (int)RolesID.Inactive;
-                        db.User.Update(u);
                     }
-                    else if(u.RoleId == (int)RolesID.Inactive)
+                    else if (u.RoleId == (int)RolesID.Inactive)
                     {
-                        u.RoleId = (int)RolesID.Owner;
                         db.User.Update(u);
+                        u.RoleId = (int)RolesID.Owner;
                     }
                 }
             }
