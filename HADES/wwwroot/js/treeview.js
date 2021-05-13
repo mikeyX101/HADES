@@ -76,7 +76,7 @@ function showTreeView(userObj, nodeName) {
                 type: "GET",
                 data: { selectedPathForContent: selectedPathForContent },
                 success: function (msg) {
-                    $('#content').html(msg);
+                    $('#main').html(msg);
                 }
             });
 
@@ -132,7 +132,18 @@ $(function () {
         buttons: {
             OK: function () {
                 $(this).dialog("close");
-                $(this).data('form').submit();
+                $(this).data('form');
+                $.ajax({
+                    url: '/Home/Delete',
+                    type: "POST",
+                    data: {
+                        SelectedPath: $(this).data('form')[1].value,
+                        SelectedContentName: $(this).data('form')[2].value
+                    },
+                    success: function (msg) {
+                        $('#main').html(msg);
+                    }
+                });
             },
             Cancel: function () {
                 $(this).dialog("close");
@@ -163,6 +174,7 @@ function deleteOU(form) {
         revealResults: true,  // reveal matching nodes
     }]);
 
+    // OU is valid if it does not contain Groups(il a un parent qui est root et n'a pas d'enfant)
     isValid = foundNodes[0] && foundNodes[0].parentId == 0 && typeof foundNodes[0].nodes === 'undefined';
 
     if (isValid) {

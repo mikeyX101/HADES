@@ -1,14 +1,11 @@
 ﻿@model MainViewViewModel
 
-
-
 <h3 class="mt-3">@Localizer["ContenuDossier"] @Model.SelectedNodeName</h3>
 
 <!-- Button trigger modal create OU -->
-
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="@Model.DataTarget">
-        @Model.CreateButtonLabel
-    </button>
+    @Model.CreateButtonLabel
+</button>
 
 @await Html.PartialAsync("CreateGroupModal", Model)
 
@@ -24,7 +21,7 @@
             </div>
             <div class="modal-body mx-3">
                 <div class="md-form">
-                    <form action="CreateOU" method="post">
+                    <form asp-controller="Home" asp-action="CreateOU" data-ajax="true" data-ajax-method="POST" data-ajax-mode="replace" data-ajax-update="#main">
                         <div class="form-group row">
                             <div class="col-10">
                                 <input id="NewName" type="text" name="NewName" value="" class="form-control validate" />
@@ -49,15 +46,16 @@
 
         @for (int i = 0; i < Model.ADRoot.Count; i++)
         {
-            
-                var dataTarget = "#a" + i.ToString();
-                var id = "a" + i.ToString();
-            
-        if (Model.ADRoot[i].Path == Model.SelectedPath)
+
+            var dataTarget = "#a" + i.ToString();
+            var id = "a" + i.ToString();
+
+            if (Model.ADRoot[i].Path == Model.SelectedPath)
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => Model.ADRoot[i].SamAccountName)
+                        <a data-ajax="true" data-ajax-method="GET" data-ajax-mode="replace" data-ajax-update="#main" 
+                           href='@Url.Action("UpdateContent","Home", new { selectedPathForContent = Model.SelectedPath + "/" + Model.ADRoot[i].SamAccountName })'>@Model.ADRoot[i].SamAccountName</a>
                     </td>
                     <td>
 
@@ -78,7 +76,7 @@
                                     </div>
                                     <div class="modal-body mx-3">
                                         <div class="md-form">
-                                            <form action="Rename" method="post">
+                                            <form asp-controller="Home" asp-action="Rename" data-ajax="true" data-ajax-method="POST" data-ajax-mode="replace" data-ajax-update="#main">
                                                 <div class="form-group row">
                                                     <div class="col-10">
                                                         <input type="text" name="NewName" value="@Model.ADRoot[i].SamAccountName" class="form-control validate" />
@@ -95,7 +93,7 @@
                         </div>
 
                         <!-- Button to delete -->
-                        <form action="Delete" method="post" onsubmit="return formSubmit(this)" style="display: inline-block">
+                        <form onsubmit="return formSubmit(this)" style="display: inline-block">
                             <button class="btn btn-primary">
                                 @Localizer["Delete"].Value
                             </button>
