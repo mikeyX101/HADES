@@ -59,14 +59,5 @@ namespace HADES {
                 resourceCulture = value;
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to GlobalFR.
-        /// </summary>
-        public static string GlobalString {
-            get {
-                return ResourceManager.GetString("GlobalString", resourceCulture);
-            }
-        }
     }
 }

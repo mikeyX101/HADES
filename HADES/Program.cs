@@ -10,16 +10,11 @@ namespace HADES
     {
         public static int Main(string[] args)
         {
-            IConfiguration config = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json")
-                .AddJsonFile($"appsettings.{System.Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", true)
-                .Build();
-
             Serilog.Debugging.SelfLog.Enable(System.Console.WriteLine);
             // Logger used for ASP.NET Core initialization, is replaced when building host
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Debug)
-                .WriteTo.Console(LogEventLevel.Debug)
+                .WriteTo.Console(LogEventLevel.Debug, outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level}] {Message:lj}{NewLine}{Exception}")
                 .CreateBootstrapLogger();
 
             try
@@ -35,6 +30,7 @@ namespace HADES
             }
             finally
             {
+                Log.Information("Stopping web host");
                 Log.CloseAndFlush();
             }
         }
