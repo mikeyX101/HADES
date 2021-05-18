@@ -156,11 +156,11 @@ namespace HADES
 				}
 			}
 
+            app.UseSerilogRequestLogging();
+
             app.UseStaticFiles();
 
             app.UseRouting();
-
-            app.UseSerilogRequestLogging();
 
             app.UseContentSecurityPolicyHeader(
                 "default-src 'self'; img-src 'self' data:; media-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; frame-src 'self'",

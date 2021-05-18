@@ -141,9 +141,8 @@ namespace HADES.Migrations
                         .HasColumnName("ACF_log_max_file_size");
 
                     b.Property<string>("SMTPFromEmail")
-                        .ValueGeneratedOnUpdateSometimes()
                         .HasColumnType("TEXT")
-                        .HasColumnName("ACF_SMTP_server");
+                        .HasColumnName("ACF_SMTP_from_email");
 
                     b.Property<string>("SMTPPassword")
                         .HasColumnType("TEXT")
@@ -154,7 +153,6 @@ namespace HADES.Migrations
                         .HasColumnName("ACF_SMTP_port");
 
                     b.Property<string>("SMTPServer")
-                        .ValueGeneratedOnUpdateSometimes()
                         .HasColumnType("TEXT")
                         .HasColumnName("ACF_SMTP_server");
 
