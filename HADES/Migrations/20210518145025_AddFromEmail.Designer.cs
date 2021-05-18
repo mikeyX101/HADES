@@ -3,14 +3,16 @@ using System;
 using HADES.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HADES.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210518145025_AddFromEmail")]
+    partial class AddFromEmail
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -141,9 +143,8 @@ namespace HADES.Migrations
                         .HasColumnName("ACF_log_max_file_size");
 
                     b.Property<string>("SMTPFromEmail")
-                        .ValueGeneratedOnUpdateSometimes()
                         .HasColumnType("TEXT")
-                        .HasColumnName("ACF_SMTP_server");
+                        .HasColumnName("ACF_SMTP_from_email");
 
                     b.Property<string>("SMTPPassword")
                         .HasColumnType("TEXT")
@@ -154,7 +155,6 @@ namespace HADES.Migrations
                         .HasColumnName("ACF_SMTP_port");
 
                     b.Property<string>("SMTPServer")
-                        .ValueGeneratedOnUpdateSometimes()
                         .HasColumnType("TEXT")
                         .HasColumnName("ACF_SMTP_server");
 

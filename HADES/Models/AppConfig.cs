@@ -25,8 +25,20 @@ namespace HADES.Models
         [Column("ACF_default_language")]
         public string DefaultLanguage { get; set; }
 
-        [Column("ACF_SMTP")]
-        public string SMTP { get; set; }
+        [Column("ACF_SMTP_server")]
+        public string SMTPServer { get; set; }
+
+        [Column("ACF_SMTP_port")]
+        public int SMTPPort { get; set; }
+
+        [Column("ACF_SMTP_username")]
+        public string SMTPUsername { get; set; }
+
+        [Column("ACF_SMTP_password")]
+        public string SMTPPassword { get; set; }
+
+        [Column("ACF_SMTP_from_email")]
+        public string SMTPFromEmail { get; set; }
 
         [Required]
         [Column("ACF_log_delete_frequency")]

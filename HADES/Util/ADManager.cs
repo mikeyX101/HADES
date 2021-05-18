@@ -339,7 +339,6 @@ namespace HADES.Util
 
                     root.Add(data);
 
-                    Console.WriteLine(data);
 
                 }
                 catch (Exception e)
@@ -350,6 +349,8 @@ namespace HADES.Util
             }
 
             connection.Disconnect();
+
+          //  EmailHelper.SendEmail(NotificationType.MemberRemoval, "\\93\\e8\\68\\b0\\a1\\d8\\dc\\46\\a6\\d0\\01\\08\\64\\c8\\5d\\38");
             return root;
         }
 
@@ -375,7 +376,7 @@ namespace HADES.Util
                     group.Members = GetMembersOfGroup(nextEntry.Dn, connection);
                     group.ObjectGUID = getObjectGUID(nextEntry);
                     root.Add(group);
-                    Console.WriteLine(group);
+                    
                 }
                 catch (Exception e)
                 {
@@ -765,6 +766,51 @@ namespace HADES.Util
                 {
                     nextEntry = lsc.Next();
                     groupsname.Add(getAttributeValue(nextEntry, "sAMAccountName"));
+
+                }
+                catch (LdapException e)
+                {
+                    connection.Disconnect();
+                    Console.WriteLine("LOG: " + e.Message);
+                    continue;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("LOG: " + e.Message);
+                    connection.Disconnect();
+                }
+            }
+
+            if (connectionAlreadyOpen == null)
+            {
+                connection.Disconnect();
+            }
+
+            return groupsname;
+        }
+
+        public List<String> GetGroupsDNforUser(string userDn, LdapConnection connectionAlreadyOpen)
+        {
+            LdapConnection connection;
+            if (connectionAlreadyOpen == null)
+            {
+                connection = createConnection();
+            }
+            else
+            {
+                connection = connectionAlreadyOpen;
+            }
+
+            LdapSearchResults lsc = (LdapSearchResults)connection.Search(ADSettingsCache.Ad.RootOu, LdapConnection.ScopeSub, "(&(objectClass=group)(member=" + userDn + "))", null, false);
+            List<string> groupsname = new List<string>();
+
+            while (lsc.HasMore())
+            {
+                LdapEntry nextEntry = null;
+                try
+                {
+                    nextEntry = lsc.Next();
+                    groupsname.Add(nextEntry.Dn);
 
                 }
                 catch (LdapException e)
