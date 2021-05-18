@@ -183,4 +183,7 @@
   <data name="SyncField" xml:space="preserve">
     <value>Sync field</value>
   </data>
+  <data name="DefaultUserPasswordConfirm" xml:space="preserve">
+    <value>Confirm Password</value>
+  </data>
 </root>
