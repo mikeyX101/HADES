@@ -16,7 +16,7 @@
                             <div class="col-10">
                                 <input id="NewName" type="text" name="NewName" value="" class="form-control validate" pattern='^[^/[\]:;|=+*?<>,"\\]*$' required/>
                                 <input type="hidden" name="SelectedPath" value="@Model.SelectedPath" />
-                                <div class="invalid-feedback">
+                                <div class="invalid-tooltip">
                                     @Localizer["InvalidCharacters"]
                                 </div>
                             </div>

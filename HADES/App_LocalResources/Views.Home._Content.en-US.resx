@@ -124,7 +124,7 @@
     <value>Delete</value>
   </data>
   <data name="InvalidCharacters" xml:space="preserve">
-    <value>The following characters are forbidden:   " [ ] : ; | = + * ? &lt; &gt; / \ ,</value>
+    <value>These characters are not allowed:   " [ ] : ; | = + * ? &lt; &gt; / \ ,</value>
   </data>
   <data name="OK" xml:space="preserve">
     <value>OK</value>

@@ -121,7 +121,7 @@
     <value>Renseignez le nom du dossier</value>
   </data>
   <data name="InvalidCharacters" xml:space="preserve">
-    <value>Les caractères suivants sont interdits:   " [ ] : ; | = + * ? &lt; &gt; / \ ,</value>
+    <value>Ces caractères sont interdits:   " [ ] : ; | = + * ? &lt; &gt; / \ ,</value>
   </data>
   <data name="OK" xml:space="preserve">
     <value>OK</value>
