@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Serilog;
 using Serilog.Events;
 using System.Net;
+using System.Globalization;
 
 namespace HADES.Util
 {
@@ -27,21 +28,24 @@ namespace HADES.Util
             //SuperAdmin and Admin = All groups
             //Owner only group owner
             List<string> emailsToNotify = new List<string>();
+            string subject = "";
+            string msg = "";
+
 
             ApplicationDbContext db = new ApplicationDbContext();
             List<Email> emails = null;
             switch (type) {
                 case NotificationType.ExpirationDate:
-                     emails = db.Email.Include(c => c.UserConfig).ThenInclude(c => c.User).ThenInclude(c => c.Role).Where(c => c.ExpirationDate == true && c.UserConfig.Notification == true).ToList();
+                    emails = db.Email.Include(c => c.UserConfig).ThenInclude(c => c.DefaultUser).Include(c => c.UserConfig).ThenInclude(c => c.User).ThenInclude(c => c.OwnerGroupUsers).ThenInclude(c => c.OwnerGroup).Include(c => c.UserConfig).ThenInclude(c => c.User).ThenInclude(c => c.Role).Where(c => c.ExpirationDate == true && c.UserConfig.Notification == true).ToList();
                     break;
                 case NotificationType.GroupCreate:
-                    emails = db.Email.Include(c => c.UserConfig).ThenInclude(c => c.User).ThenInclude(c => c.Role).Where(c => c.GroupCreate == true && c.UserConfig.Notification == true).ToList();
+                    emails = db.Email.Include(c => c.UserConfig).ThenInclude(c => c.DefaultUser).Include(c => c.UserConfig).ThenInclude(c => c.User).ThenInclude(c => c.OwnerGroupUsers).ThenInclude(c => c.OwnerGroup).Include(c => c.UserConfig).ThenInclude(c => c.User).ThenInclude(c => c.Role).Where(c => c.GroupCreate == true && c.UserConfig.Notification == true).ToList();
                     break;
                 case NotificationType.GroupDelete:
-                     emails = db.Email.Include(c => c.UserConfig).ThenInclude(c => c.User).ThenInclude(c => c.Role).Where(c => c.GroupDelete == true && c.UserConfig.Notification == true).ToList();
+                    emails = db.Email.Include(c => c.UserConfig).ThenInclude(c => c.DefaultUser).Include(c => c.UserConfig).ThenInclude(c => c.User).ThenInclude(c => c.OwnerGroupUsers).ThenInclude(c => c.OwnerGroup).Include(c => c.UserConfig).ThenInclude(c => c.User).ThenInclude(c => c.Role).Where(c => c.GroupDelete == true && c.UserConfig.Notification == true).ToList();
                     break;
                 case NotificationType.MemberAdd:
-                     emails = db.Email.Include(c => c.UserConfig).ThenInclude(c => c.User).ThenInclude(c => c.Role).Where(c => c.MemberAdd == true && c.UserConfig.Notification == true).ToList();
+                    emails = db.Email.Include(c => c.UserConfig).ThenInclude(c => c.DefaultUser).Include(c => c.UserConfig).ThenInclude(c => c.User).ThenInclude(c => c.OwnerGroupUsers).ThenInclude(c => c.OwnerGroup).Include(c => c.UserConfig).ThenInclude(c => c.User).ThenInclude(c => c.Role).Where(c => c.MemberAdd == true && c.UserConfig.Notification == true).ToList();
                     break;
                 case NotificationType.MemberRemoval:
                      emails = db.Email.Include(c => c.UserConfig).ThenInclude(c => c.DefaultUser).Include(c => c.UserConfig).ThenInclude(c => c.User).ThenInclude(c => c.OwnerGroupUsers).ThenInclude(c => c.OwnerGroup).Include(c => c.UserConfig).ThenInclude(c => c.User).ThenInclude(c => c.Role).Where(c => c.MemberRemoval == true && c.UserConfig.Notification == true).ToList();
@@ -71,21 +75,29 @@ namespace HADES.Util
                             Console.WriteLine(g.OwnerGroup.GUID);
                             if (g.OwnerGroup.GUID == groupGUID) {
                                 Console.WriteLine("Send Email to (Owner)" + e.Address);
-                              //  emailsToNotify.Add(e.Address);
+                              //emailsToNotify.Add(e.Address);
                             }
                         }
                      }
                  }  
              }
 
+            CultureInfo currentC = Strings.Culture;
+           
+
+          //Strings.Culture = new System.Globalization.CultureInfo("en-US");
+           
+
             // Send Emails
-          /*  using (EmailSink sink = new(emailsToNotify, "Someone broke everything"))
+            using (EmailSink sink = new(emailsToNotify, type.ToString()))
             {
                 sink.AddMessage(LogEventLevel.Information, "Yeah, someone  F U C K E D  everything up.");
-            }*/
+            }
+
+            Strings.Culture = currentC;
         }
 
-        //TODO TO TEST
+   
         private sealed class EmailSink : IDisposable
 		{
 

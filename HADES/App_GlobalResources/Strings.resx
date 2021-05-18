@@ -126,4 +126,10 @@
   <data name="Remove" xml:space="preserve">
     <value>Retirer</value>
   </data>
+  <data name="email_ExpirationDateSubject" xml:space="preserve">
+    <value>Date d'expiration</value>
+  </data>
+  <data name="email_ExpirationDateMessage" xml:space="preserve">
+    <value>La date d'expiration est arrivée a échéance pour le groupe </value>
+  </data>
 </root>

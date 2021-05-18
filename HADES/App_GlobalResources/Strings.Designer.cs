@@ -70,6 +70,24 @@ namespace HADES {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à La date d&apos;expiration est arrivée a échéance pour le groupe .
+        /// </summary>
+        public static string email_ExpirationDateMessage {
+            get {
+                return ResourceManager.GetString("email_ExpirationDateMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Date d&apos;expiration.
+        /// </summary>
+        public static string email_ExpirationDateSubject {
+            get {
+                return ResourceManager.GetString("email_ExpirationDateSubject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à GlobalFR.
         /// </summary>
         public static string GlobalString {

@@ -350,7 +350,6 @@ namespace HADES.Util
 
             connection.Disconnect();
 
-          //  EmailHelper.SendEmail(NotificationType.MemberRemoval, "\\93\\e8\\68\\b0\\a1\\d8\\dc\\46\\a6\\d0\\01\\08\\64\\c8\\5d\\38");
             return root;
         }
 
@@ -526,6 +525,7 @@ namespace HADES.Util
                 }
                 addMemberToGroup(dn, add);
 
+                EmailHelper.SendEmail(NotificationType.GroupCreate, this.getGroupGUIDByDn(dn));
                 return true;
             }
             catch (Exception e)
@@ -608,6 +608,7 @@ namespace HADES.Util
             {
                 connection.Delete(dnGroupToDelete);
                 connection.Disconnect();
+                EmailHelper.SendEmail(NotificationType.MemberRemoval, this.getGroupGUIDByDn(dnGroupToDelete));
                 return true;
             }
             catch (Exception e)
@@ -907,6 +908,8 @@ namespace HADES.Util
                 connection.Modify(groupDn, mods);
 
                 connection.Disconnect();
+
+                EmailHelper.SendEmail(NotificationType.MemberAdd, this.getGroupGUIDByDn(groupDn));
                 return true;
             }
             catch (Exception e)
@@ -937,6 +940,7 @@ namespace HADES.Util
                 connection.Modify(groupDn, mods);
 
                 connection.Disconnect();
+                EmailHelper.SendEmail(NotificationType.MemberRemoval, this.getGroupGUIDByDn(groupDn));
                 return true;
             }
             catch (Exception e)
