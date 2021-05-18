@@ -65,7 +65,7 @@ namespace HADES.Data
             modelBuilder.Entity<ActiveDirectory>().HasData(new ActiveDirectory { Id=1, RootOu= "OU=hades_root,DC=R991-AD,DC=lan", PortNumber=389, ServerAddress= "172.20.48.10", ConnectionFilter= "(&(objectClass=user)(objectCategory=person))", BaseDN= "CN=Users,DC=R991-AD,DC=lan", AccountDN= "CN=hades,CN=Users,DC=R991-AD,DC=lan", PasswordDN= "Toto123!", SyncField= "samaccountName" });
 
             // ADD DEFAULT APP CONFIG
-            modelBuilder.Entity<AppConfig>().HasData(new AppConfig { Id=1, CompanyName="YourCompanyName", CompanyBackgroundFile="background.png", CompanyLogoFile="logo.png", DefaultLanguage="fr-CA", SMTP="", LogDeleteFrequency=1, LogMaxFileSize=1, ActiveDirectoryId=1 });
+            modelBuilder.Entity<AppConfig>().HasData(new AppConfig { Id=1, CompanyName="YourCompanyName", CompanyBackgroundFile="background.png", CompanyLogoFile="logo.png", DefaultLanguage="fr-CA", SMTPServer="", SMTPPort = 465, SMTPUsername = "", SMTPPassword = "", SMTPFromEmail = "", LogDeleteFrequency=1, LogMaxFileSize=1, ActiveDirectoryId=1 });
         }
     }
 }
