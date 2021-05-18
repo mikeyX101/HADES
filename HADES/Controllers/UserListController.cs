@@ -27,7 +27,7 @@ namespace HADES.Controllers
         [Authorize]
         public IActionResult UserList()
         {
-            if (!ConnexionUtil.CurrentUser(this.User).GetRole().UserListAccess)
+            if (!ConnexionUtil.CurrentUser(this.User).GetRole().UserListAccess) // ACCESS CONTROL
             {
                 return RedirectToAction("MainView", "Home");
             }

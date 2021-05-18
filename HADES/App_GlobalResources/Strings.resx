@@ -120,4 +120,7 @@
   <data name="GlobalString" xml:space="preserve">
     <value>GlobalFR</value>
   </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Supprimer</value>
+  </data>
 </root>
