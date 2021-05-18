@@ -117,73 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AccountDN" xml:space="preserve">
-    <value>DN Account</value>
+  <data name="EnterOUName" xml:space="preserve">
+    <value>Renseignez le nom du dossier</value>
   </data>
-  <data name="AdminGroup" xml:space="preserve">
-    <value>Administrator group</value>
+  <data name="InvalidCharacters" xml:space="preserve">
+    <value>Les caractères suivants sont interdits:   " [ ] : ; | = + * ? &lt; &gt; / \ ,</value>
   </data>
-  <data name="BaseDN" xml:space="preserve">
-    <value>DN Base</value>
-  </data>
-  <data name="CompanyBackgroundFile" xml:space="preserve">
-    <value>Company background file</value>
-  </data>
-  <data name="CompanyLogoFile" xml:space="preserve">
-    <value>Company logo file</value>
-  </data>
-  <data name="CompanyName" xml:space="preserve">
-    <value>Company name</value>
-  </data>
-  <data name="ConnectionFilter" xml:space="preserve">
-    <value>Connection filter</value>
-  </data>
-  <data name="DefaultLanguage" xml:space="preserve">
-    <value>Default language</value>
-  </data>
-  <data name="DefaultUser" xml:space="preserve">
-    <value>Default user</value>
-  </data>
-  <data name="DefaultUserPassword" xml:space="preserve">
-    <value>Default user password</value>
-  </data>
-  <data name="LogDeleteFrequency" xml:space="preserve">
-    <value>Log delete frequency</value>
-  </data>
-  <data name="LogMaxFileSize" xml:space="preserve">
-    <value>Log max file size</value>
-  </data>
-  <data name="LogTotalMaxSize" xml:space="preserve">
-    <value>Total log max file size</value>
-  </data>
-  <data name="ParametreApplication" xml:space="preserve">
-    <value>Application settings</value>
-  </data>
-  <data name="PasswordDN" xml:space="preserve">
-    <value>DN password</value>
-  </data>
-  <data name="PortNumber" xml:space="preserve">
-    <value>Port number</value>
-  </data>
-  <data name="RootOu" xml:space="preserve">
-    <value>Root folder</value>
-  </data>
-  <data name="Save" xml:space="preserve">
-    <value>Save</value>
-  </data>
-  <data name="ServerAddress" xml:space="preserve">
-    <value>Server address</value>
-  </data>
-  <data name="SMTP" xml:space="preserve">
-    <value>SMTP</value>
-  </data>
-  <data name="SuperAdminGroup" xml:space="preserve">
-    <value>Super administrator group</value>
-  </data>
-  <data name="SyncField" xml:space="preserve">
-    <value>Sync field</value>
-  </data>
-  <data name="DefaultUserPasswordConfirm" xml:space="preserve">
-    <value>Confirm Password</value>
+  <data name="OK" xml:space="preserve">
+    <value>OK</value>
   </data>
 </root>

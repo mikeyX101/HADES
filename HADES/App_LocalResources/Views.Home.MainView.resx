@@ -117,12 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ADConnectionError" xml:space="preserve">
-    <value>La connexion à l'Active Directory n'a pas pu être établie</value>
-  </data>
-  <data name="ContenuDossier" xml:space="preserve">
-    <value>Contenu du dossier</value>
-  </data>
   <data name="DeleteConfirmationMessage" xml:space="preserve">
     <value>Voulez-vous vraiment supprimer le dossier ?</value>
   </data>
@@ -135,8 +129,5 @@ Supprimez les groupes du dossier d'abord puis supprimez le dossier vide.</value>
   </data>
   <data name="DeleteFailedTitle" xml:space="preserve">
     <value>Erreur</value>
-  </data>
-  <data name="DossierGroupe" xml:space="preserve">
-    <value>Dossiers et groupes</value>
   </data>
 </root>

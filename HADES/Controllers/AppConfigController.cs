@@ -74,8 +74,8 @@ namespace HADES.Controllers
             {
                 return RedirectToAction("MainView", "Home");
             }
-            ViewBag.AppConfigId = id;
-            return View();
+            ViewBag.AppConfigId = id ??= db.AppConfig.FirstOrDefaultAsync().Result.Id; ;
+            return View(new AdminGroup());
         }
 
         [HttpPost]
@@ -124,8 +124,8 @@ namespace HADES.Controllers
                 return RedirectToAction("MainView", "Home");
             }
 
-            ViewBag.AppConfigId = id;
-            return View();
+            ViewBag.AppConfigId = id??=db.AppConfig.FirstOrDefaultAsync().Result.Id;
+            return View(new SuperAdminGroup());
         }
 
 

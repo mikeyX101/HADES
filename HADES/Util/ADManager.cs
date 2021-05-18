@@ -679,7 +679,7 @@ namespace HADES.Util
                     dn = nextEntry.Dn;
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 connection.Disconnect();
                 return dn;
@@ -766,6 +766,51 @@ namespace HADES.Util
                 {
                     nextEntry = lsc.Next();
                     groupsname.Add(getAttributeValue(nextEntry, "sAMAccountName"));
+
+                }
+                catch (LdapException e)
+                {
+                    connection.Disconnect();
+                    Console.WriteLine("LOG: " + e.Message);
+                    continue;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("LOG: " + e.Message);
+                    connection.Disconnect();
+                }
+            }
+
+            if (connectionAlreadyOpen == null)
+            {
+                connection.Disconnect();
+            }
+
+            return groupsname;
+        }
+
+        public List<String> GetGroupsDNforUser(string userDn, LdapConnection connectionAlreadyOpen)
+        {
+            LdapConnection connection;
+            if (connectionAlreadyOpen == null)
+            {
+                connection = createConnection();
+            }
+            else
+            {
+                connection = connectionAlreadyOpen;
+            }
+
+            LdapSearchResults lsc = (LdapSearchResults)connection.Search(ADSettingsCache.Ad.RootOu, LdapConnection.ScopeSub, "(&(objectClass=group)(member=" + userDn + "))", null, false);
+            List<string> groupsname = new List<string>();
+
+            while (lsc.HasMore())
+            {
+                LdapEntry nextEntry = null;
+                try
+                {
+                    nextEntry = lsc.Next();
+                    groupsname.Add(nextEntry.Dn);
 
                 }
                 catch (LdapException e)

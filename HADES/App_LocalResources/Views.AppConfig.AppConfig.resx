@@ -183,4 +183,7 @@
   <data name="SyncField" xml:space="preserve">
     <value>Champ de synchronisation</value>
   </data>
+  <data name="DefaultUserPasswordConfirm" xml:space="preserve">
+    <value>Confirmer Mot de passe</value>
+  </data>
 </root>

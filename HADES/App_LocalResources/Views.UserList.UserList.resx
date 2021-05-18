@@ -141,4 +141,25 @@
   <data name="MemberOf" xml:space="preserve">
     <value>Membre de</value>
   </data>
+  <data name="ADError" xml:space="preserve">
+    <value>Erreur de connexion à l'Active Directory</value>
+  </data>
+  <data name="UserDeleteToolTip" xml:space="preserve">
+    <value>Supprime l'utilisateur d'Hades sans le supprimer de l'Active Directory</value>
+  </data>
+  <data name="UserRemoveToolTip" xml:space="preserve">
+    <value>Retire un Utilisateur de tous ses groupes et assigne ce User comme Inactif</value>
+  </data>
+  <data name="RemoveConfirmationTitle" xml:space="preserve">
+    <value>Retirer Utilisateur</value>
+  </data>
+  <data name="RemoveConfirmationMessage" xml:space="preserve">
+    <value>Êtes-vous certains de vouloir retirer cet utilisateur de tous ses groupes ?&lt;br&gt; Il sera marqué comme inactif dans Hades et ne fera plus parti d'aucun groupe dans l'Active Directory.</value>
+  </data>
+  <data name="DeleteConfirmationTitle" xml:space="preserve">
+    <value>Supprimer Utilisateur</value>
+  </data>
+  <data name="DeleteConfirmationMessage" xml:space="preserve">
+    <value>Êtes-vous certain de vouloir supprimer cet utilisateur d'Hades ?&lt;br&gt; L'utilisateur ne sera plus dans cette liste et sa configuration personelle sera supprimée.&lt;br&gt; &lt;b&gt;L'utilisateur ne sera pas supprimé de l'Active Directory&lt;/b&gt;</value>
+  </data>
 </root>
