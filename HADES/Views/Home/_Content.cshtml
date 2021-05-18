@@ -58,7 +58,7 @@
                                                         <input type="text" name="NewName" value="@Model.ADRoot[i].SamAccountName" class="form-control validate" pattern='^[^/[\]:;|=+*?<>,"\\]*$' required />
                                                         <input type="hidden" name="SelectedPath" value="@Model.SelectedPath" />
                                                         <input type="hidden" name="SelectedContentName" value="@Model.ADRoot[i].SamAccountName" />
-                                                        <div class="invalid-feedback">
+                                                        <div class="invalid-tooltip">
                                                             @Localizer["InvalidCharacters"]
                                                         </div>
                                                     </div>
