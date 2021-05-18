@@ -26,7 +26,7 @@ namespace HADES.Util
 
             //SuperAdmin and Admin = All groups
             //Owner only group owner
-
+            List<string> emailsToNotify = new List<string>();
 
             ApplicationDbContext db = new ApplicationDbContext();
             List<Email> emails = null;
@@ -44,49 +44,45 @@ namespace HADES.Util
                      emails = db.Email.Include(c => c.UserConfig).ThenInclude(c => c.User).ThenInclude(c => c.Role).Where(c => c.MemberAdd == true && c.UserConfig.Notification == true).ToList();
                     break;
                 case NotificationType.MemberRemoval:
-                     emails = db.Email.Include(c => c.UserConfig).ThenInclude(c => c.DefaultUser).Include(c => c.UserConfig).ThenInclude(c => c.User).ThenInclude(c => c.OwnerGroupUsers).ThenInclude(c => c.OwnerGroup).Where(c => c.MemberRemoval == true && c.UserConfig.Notification == true).ToList();
+                     emails = db.Email.Include(c => c.UserConfig).ThenInclude(c => c.DefaultUser).Include(c => c.UserConfig).ThenInclude(c => c.User).ThenInclude(c => c.OwnerGroupUsers).ThenInclude(c => c.OwnerGroup).Include(c => c.UserConfig).ThenInclude(c => c.User).ThenInclude(c => c.Role).Where(c => c.MemberRemoval == true && c.UserConfig.Notification == true).ToList();
                     break;
             }
 
 
-            foreach (var e in emails)
-            {
-                Console.WriteLine("---------------------------------- "+ e.Address + "  " );
-                //Is a DefautUser
-                if (e.UserConfig.DefaultUser != null) {
-                    Console.WriteLine("----------------------------------DefaultUser " + e.UserConfig.DefaultUser.RoleId);
+             foreach (var e in emails)
+             {
+                 //Is a DefautUser
+                 if (e.UserConfig.DefaultUser != null) {
+                    Console.WriteLine("Send Email to " + e.Address);
+                    //emailsToNotify.Add(e.Address);
+                 //Is a AD user
+                 } else if (e.UserConfig.User != null) {
+                    //Is a SuperAdmin or an Admin
+                     if (e.UserConfig.User.Role.Id == (int)RolesID.SuperAdmin || e.UserConfig.User.Role.Id == (int)RolesID.Admin)
+                     {
+                        Console.WriteLine("Send Email to " + e.Address);
+                      //  emailsToNotify.Add(e.Address);
+                     } 
+                     //Is owner og the group
+                     else if (e.UserConfig.User.RoleId == (int)RolesID.Owner)
+                     {
+                        foreach (var g in e.UserConfig.User.OwnerGroupUsers)
+                        {
+                            Console.WriteLine(g.OwnerGroup.GUID);
+                            if (g.OwnerGroup.GUID == groupGUID) {
+                                Console.WriteLine("Send Email to (Owner)" + e.Address);
+                              //  emailsToNotify.Add(e.Address);
+                            }
+                        }
+                     }
+                 }  
+             }
 
-                    //TODO: Send notification
-
-                //Is a AD user
-                } else if (e.UserConfig.User != null) {
-                    Console.WriteLine("----------------------------------User " + e.UserConfig.User.RoleId);
-                    if (e.UserConfig.User.RoleId == (int)RolesID.SuperAdmin || e.UserConfig.User.RoleId == (int)RolesID.Admin)
-                    {
-                        //TODO: Send notification
-                    }
-                    else if (e.UserConfig.User.RoleId == (int)RolesID.Owner)
-                    {
-
-           
-                        //TODO: Send notification
-                    }
-
-                }  
-             
-            }
-
-            // EXAMPLE
-            List<string> emailsTemp = new()
-            {
-                "allo@allo.allo",
-                "yo@whad.up"
-            };
-
-            using (EmailSink sink = new(emailsTemp, "Someone broke everything"))
+            // Send Emails
+          /*  using (EmailSink sink = new(emailsToNotify, "Someone broke everything"))
             {
                 sink.AddMessage(LogEventLevel.Information, "Yeah, someone  F U C K E D  everything up.");
-            }
+            }*/
         }
 
         //TODO TO TEST

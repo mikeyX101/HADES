@@ -350,7 +350,7 @@ namespace HADES.Util
 
             connection.Disconnect();
 
-            EmailHelper.SendEmail(NotificationType.MemberRemoval,"");
+          //  EmailHelper.SendEmail(NotificationType.MemberRemoval, "\\93\\e8\\68\\b0\\a1\\d8\\dc\\46\\a6\\d0\\01\\08\\64\\c8\\5d\\38");
             return root;
         }
 
