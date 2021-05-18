@@ -126,8 +126,8 @@
   <data name="Remove" xml:space="preserve">
     <value>Remove</value>
   </data>
-  <data name="email_ExpirationDateSubject" xml:space="preserve">
-    <value>Expiration Date</value>
+  <data name="ErrorSavingConfiguration" xml:space="preserve">
+    <value>The configuration couldn't be saved. Make sure the inputs fields are filled properly</value>
   </data>
   <data name="email_ExpirationDateMessage" xml:space="preserve">
     <value>The expiration date has passed for the group</value>

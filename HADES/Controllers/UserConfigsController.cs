@@ -31,6 +31,12 @@ namespace HADES.Controllers
                 new SelectListItem {Text = "fr-CA", Value = "fr-CA"},
                 new SelectListItem {Text = "en-US", Value = "en-US"}
             };
+            viewModel.Themes = new List<SelectListItem>()
+            {
+                new SelectListItem {Text = "Dark", Value = "~\\css\\Dark.css"},
+                new SelectListItem {Text = "site", Value = "~\\css\\site.css"}
+            };
+
 
             return View(viewModel);
         }

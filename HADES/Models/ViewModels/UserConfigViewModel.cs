@@ -9,5 +9,7 @@ namespace HADES.Models
         public List<Email> Emails { get; set; }
 
         public List<SelectListItem> Languages { get; set; }
+
+        public List<SelectListItem> Themes { get; set; }
     }
 }

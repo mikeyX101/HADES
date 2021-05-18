@@ -70,11 +70,11 @@ namespace HADES {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à La date d&apos;expiration est arrivée a échéance pour le groupe .
+        ///   Recherche une chaîne localisée semblable à La configuration n&apos;a pas pu être sauvegardée vérifier que les champs sont bien remplis.
         /// </summary>
-        public static string email_ExpirationDateMessage {
+        public static string ErrorSavingConfiguration {
             get {
-                return ResourceManager.GetString("email_ExpirationDateMessage", resourceCulture);
+                return ResourceManager.GetString("ErrorSavingConfiguration", resourceCulture);
             }
         }
         
