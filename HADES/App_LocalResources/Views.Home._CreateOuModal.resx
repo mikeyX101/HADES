@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="EnterOUName" xml:space="preserve">
-    <value>Enter folder's name</value>
+    <value>Renseignez le nom du dossier</value>
   </data>
   <data name="OK" xml:space="preserve">
     <value>OK</value>

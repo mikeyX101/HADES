@@ -40,6 +40,7 @@ namespace HADES.Controllers
 
                 viewModel.CreateButtonLabel = Localizer["CreateNewOU"];
                 viewModel.EditLinkLabel = Localizer["Rename"];
+                viewModel.DataTarget = "#OuCreate";
 
                 return View(viewModel);
             }
@@ -63,7 +64,7 @@ namespace HADES.Controllers
             {
                 viewModel.CreateButtonLabel = Localizer["CreateNewOU"];
                 viewModel.EditLinkLabel = Localizer["Rename"];
-                viewModel.DataTarget = "#createOuModal";
+                viewModel.DataTarget = "#OuCreate";
             }
             if (split.Length == 3)
             {

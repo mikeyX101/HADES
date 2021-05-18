@@ -117,12 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ADConnectionError" xml:space="preserve">
-    <value>Enable to connect to Active Directory</value>
-  </data>
-  <data name="ContenuDossier" xml:space="preserve">
-    <value>Folder content</value>
-  </data>
   <data name="DeleteConfirmationMessage" xml:space="preserve">
     <value>Are you sure you want to delete the folder ?</value>
   </data>
@@ -135,8 +129,5 @@ Delete groups first and then delete empty folder.</value>
   </data>
   <data name="DeleteFailedTitle" xml:space="preserve">
     <value>Error</value>
-  </data>
-  <data name="DossierGroupe" xml:space="preserve">
-    <value>Folders and groups</value>
   </data>
 </root>
