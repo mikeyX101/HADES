@@ -37,7 +37,8 @@ namespace HADES.Controllers
         [Authorize]
         public async Task<IActionResult> AppConfig([Bind("ActiveDirectory,AdminGroups,SuperAdminGroups,DefaultUser,AppConfig")] AppConfigViewModel viewModel, string confirm, string confirmDN)
         {
-            
+            ViewBag.AppConfigError = "";
+
             if (!ConnexionUtil.CurrentUser(this.User).GetRole().AppConfigAccess)
             {
                 return RedirectToAction("MainView", "Home");
@@ -59,6 +60,9 @@ namespace HADES.Controllers
                 confirm = viewModel.DefaultUser.Password = service.AppConfigViewModelGET().Result.DefaultUser.Password;
                 hashed = true;
             }
+
+            if (confirm == null) confirm = "";
+            if (confirmDN == null) confirmDN = "";
 
             if (confirmDN.Equals(viewModel.ActiveDirectory.PasswordDN) && confirm.Equals(viewModel.DefaultUser.Password) && (validatePassword(viewModel.DefaultUser.Password)||hashed) && TryValidateModel(viewModel))
             {
@@ -84,12 +88,13 @@ namespace HADES.Controllers
                 }
                 return RedirectToAction(nameof(AppConfig));
             }
+            ViewBag.AppConfigError = HADES.Strings.ErrorSavingConfiguration;
             return View(viewModel);
         }
 
         private bool validatePassword(string pass)
         {
-            return new Regex(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$").IsMatch(pass);
+            return new Regex(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W)[a-zA-Z\d].{6,}$").IsMatch(pass);
         }
 
         [Authorize]

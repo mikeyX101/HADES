@@ -70,6 +70,15 @@ namespace HADES {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à La configuration n&apos;a pas pu être sauvegardée vérifier que les champs sont bien remplis.
+        /// </summary>
+        public static string ErrorSavingConfiguration {
+            get {
+                return ResourceManager.GetString("ErrorSavingConfiguration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à GlobalFR.
         /// </summary>
         public static string GlobalString {

@@ -126,4 +126,7 @@
   <data name="Remove" xml:space="preserve">
     <value>Remove</value>
   </data>
+  <data name="ErrorSavingConfiguration" xml:space="preserve">
+    <value>The configuration couldn't be saved. Make sure the inputs fields are filled properly</value>
+  </data>
 </root>
