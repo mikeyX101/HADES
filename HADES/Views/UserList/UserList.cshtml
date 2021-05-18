@@ -1,5 +1,12 @@
 ﻿@model UserListViewModel
 
+@section scripts
+{
+    <link rel="stylesheet" href="~/lib/jquery-ui/jquery-ui.min.css">
+    <script src="~/lib/jquery-ui/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="~/js/dialogConfirmUser.js"></script>
+}
+
 @if (Model == null)
 {
     <h6 class="text-center bg-warning mt-lg-5">@Localizer["ADError"]</h6>
@@ -31,7 +38,7 @@ else
                     <td>@u.Role</td>
                     <td>@u.OwnerOf</td>
                     <td>@u.MemberOf</td>
-                    <td><button class="btn btn-danger">@HADES.Strings.Delete</button></td>
+                    <td><button class="btn btn-danger" data-toggle="tooltip" data-placement="top" title=@Localizer["UserRemoveToolTip"]>@HADES.Strings.Remove</button></td>
                 </tr>
             }
         </tbody>
@@ -62,10 +69,19 @@ else
                     <td>@u.Role</td>
                     <td>@u.OwnerOf</td>
                     <td>@u.MemberOf</td>
-                    <td><button>DELETE TEST</button></td>
+                    <td>
+                        <form action="Delete" method="post" onsubmit="return deleteUser(this)" style="display: inline-block">
+                            <button class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="@Localizer["UserDeleteToolTip"]">@HADES.Strings.Delete</button>
+                            <input type="hidden" name="guid" value=@u.GUID />
+                        </form>
+                    </td>
                 </tr>
             }
         </tbody>
     </table>
 
+
+    <!-- dialogs -->
+    <div id="dialog-confirmation-remove" title=@Localizer["RemoveConfirmationTitle"].Value>@Localizer["RemoveConfirmationMessage"]</div>
+    <div id="dialog-confirmation-delete" title=@Localizer["DeleteConfirmationTitle"].Value>@Localizer["DeleteConfirmationMessage"]</div>
 }

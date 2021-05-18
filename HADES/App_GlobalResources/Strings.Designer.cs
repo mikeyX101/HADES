@@ -77,5 +77,14 @@ namespace HADES {
                 return ResourceManager.GetString("GlobalString", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Retirer.
+        /// </summary>
+        public static string Remove {
+            get {
+                return ResourceManager.GetString("Remove", resourceCulture);
+            }
+        }
     }
 }

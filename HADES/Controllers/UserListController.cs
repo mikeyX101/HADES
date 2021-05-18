@@ -7,6 +7,7 @@ using HADES.Util.ModelAD;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -33,7 +34,7 @@ namespace HADES.Controllers
             }
 
             UserListViewModel ulist = new UserListViewModel() { ActiveUsers = new List<UserViewModel>(), InactiveUsers = new List<UserViewModel>() };
-            List<User> allUsers = db.User.Include(a => a.Role).Include(a => a.OwnerGroupUsers).ThenInclude(a=> a.OwnerGroup).ToList();
+            List<User> allUsers = db.User.Include(a => a.Role).Include(a => a.OwnerGroupUsers).ThenInclude(a => a.OwnerGroup).ToList();
 
             foreach (User u in allUsers)
             {
@@ -104,14 +105,58 @@ namespace HADES.Controllers
             memberof = "";
             foreach (OwnerGroupUser ogu in u.OwnerGroupUsers)
             {
-               ownerof += ad.getGroupSamAccountNameByGUID(ogu.OwnerGroup.GUID) + ", ";
+                ownerof += ad.getGroupSamAccountNameByGUID(ogu.OwnerGroup.GUID) + ", ";
             }
 
-            foreach (string names in ad.GetGroupsNameforUser(ad.getUserAD(u.GUID,true).Dn,null))
+            foreach (string names in ad.GetGroupsNameforUser(ad.getUserAD(u.GUID, true).Dn, null))
             {
                 memberof += names + ", ";
             }
         }
 
+        [Authorize]
+        [HttpPost]
+        public IActionResult Delete(string guid)
+        {
+            if (!ConnexionUtil.CurrentUser(this.User).GetRole().UserListAccess) // ACCESS CONTROL
+            {
+                return RedirectToAction("MainView", "Home");
+            }
+
+            db.User.Remove(db.User.Where(u => u.GUID == guid).FirstOrDefault());
+            db.SaveChanges();
+
+            return RedirectToAction("UserList");
+        }
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult Remove(string guid)
+        {
+            if (!ConnexionUtil.CurrentUser(this.User).GetRole().UserListAccess) // ACCESS CONTROL
+            {
+                return RedirectToAction("MainView", "Home");
+            }
+
+            User user = db.User.Include(u => u.OwnerGroupUsers).Where(u => u.GUID == guid).FirstOrDefault();
+
+            // Remove Owner Group and set inactive
+            db.Update(user);
+            user.OwnerGroupUsers.Clear();
+            user.RoleId = (int)RolesID.Inactive;
+            db.SaveChanges();
+
+            // Remove groups
+            List<string> groupsDN = ad.GetGroupsDNforUser(user.GUID, null);
+            List<string> useraslist = new List<string>() { ad.getUserAD(user.GUID, true).Dn };
+            foreach (string group in groupsDN)
+            {
+                ad.deleteMemberToGroup(group,useraslist);
+            }
+
+            return RedirectToAction("UserList");
+        }
+
     }
+
 }
