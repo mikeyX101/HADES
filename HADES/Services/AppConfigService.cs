@@ -45,7 +45,15 @@ namespace HADES.Services
             return activeDirectory;
         }
 
-            public async Task UpdateAppConfig(AppConfigViewModel viewModel)
+        public async Task<SMTPSettings> getSMTPInfo()
+        {
+            SMTPSettings settings = await db.AppConfig.Select(app => 
+                new SMTPSettings(app.SMTPServer, app.SMTPPort, app.SMTPUsername, app.SMTPPassword, app.SMTPFromEmail)
+            ).FirstOrDefaultAsync();
+            return settings;
+        }
+
+        public async Task UpdateAppConfig(AppConfigViewModel viewModel)
         {
             db.Update(viewModel.ActiveDirectory);
             viewModel.AppConfig.ActiveDirectory = viewModel.ActiveDirectory;
@@ -72,6 +80,7 @@ namespace HADES.Services
             await db.SaveChangesAsync();
 
             ADSettingsCache.Refresh();
+            SMTPSettingsCache.Refresh();
         }
 
         public bool AppConfigExists(AppConfigViewModel viewModel)

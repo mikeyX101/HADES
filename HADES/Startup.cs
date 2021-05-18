@@ -32,7 +32,6 @@ namespace HADES
         public Startup(IConfiguration configuration)
         {
             Settings.Initiate(configuration);
-            //.WriteTo.Email(new EmailConnectionInfo() { EnableSsl = true, Port = 465, FromEmail = "", ToEmail = "", MailServer = "smtp.gmail.com", NetworkCredentials = new NetworkCredential("", "") }, restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Verbose)
         }
 
 		// This method gets called by the runtime. Use this method to add services to the container.
