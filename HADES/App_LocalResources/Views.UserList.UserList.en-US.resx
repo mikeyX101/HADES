@@ -141,4 +141,7 @@
   <data name="MemberOf" xml:space="preserve">
     <value>Member Of</value>
   </data>
+  <data name="ADError" xml:space="preserve">
+    <value>Active Directory connection error</value>
+  </data>
 </root>

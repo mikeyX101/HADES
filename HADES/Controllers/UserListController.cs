@@ -59,6 +59,11 @@ namespace HADES.Controllers
 #endif     
                         continue;
                     }
+                    catch (ADException)
+                    {
+                        ulist = null;
+                        break;
+                    }
                 }
                 else
                 {
@@ -81,6 +86,11 @@ namespace HADES.Controllers
                         ulist.InactiveUsers.Add(new UserViewModel() { FirstName = "UNKNOWN", LastName = "UNKNOWN", Role = u.Role.Name, SamAccount = "GUID " + u.GUID + " not found in Active Directory it should be deleted at next synchronization" });
 #endif
                         continue;
+                    }
+                    catch (ADException)
+                    {
+                        ulist = null;
+                        break;
                     }
                 }
             }
