@@ -37,7 +37,7 @@ namespace HADES.Models
         [Column("ACF_SMTP_password")]
         public string SMTPPassword { get; set; }
 
-        [Column("ACF_SMTP_server")]
+        [Column("ACF_SMTP_from_email")]
         public string SMTPFromEmail { get; set; }
 
         [Required]

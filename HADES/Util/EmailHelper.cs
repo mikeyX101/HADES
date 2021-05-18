@@ -20,7 +20,8 @@ namespace HADES.Util
     } 
     public static class EmailHelper
     {
-        public static bool SendEmail(NotificationType type) {
+        public static void SendEmail(NotificationType type, string groupGUID) {
+
 
 
             //SuperAdmin and Admin = All groups
@@ -28,24 +29,51 @@ namespace HADES.Util
 
 
             ApplicationDbContext db = new ApplicationDbContext();
-            DbSet<Email> emails = null;
+            List<Email> emails = null;
             switch (type) {
                 case NotificationType.ExpirationDate:
-                     emails = (DbSet<Email>)db.Email.Where(c => c.ExpirationDate == true && c.UserConfig.Notification == true);
+                     emails = db.Email.Include(c => c.UserConfig).ThenInclude(c => c.User).ThenInclude(c => c.Role).Where(c => c.ExpirationDate == true && c.UserConfig.Notification == true).ToList();
                     break;
                 case NotificationType.GroupCreate:
-                    emails = (DbSet<Email>)db.Email.Where(c => c.GroupCreate == true && c.UserConfig.Notification == true);
+                    emails = db.Email.Include(c => c.UserConfig).ThenInclude(c => c.User).ThenInclude(c => c.Role).Where(c => c.GroupCreate == true && c.UserConfig.Notification == true).ToList();
                     break;
                 case NotificationType.GroupDelete:
-                     emails = (DbSet<Email>)db.Email.Where(c => c.GroupDelete == true && c.UserConfig.Notification == true);
+                     emails = db.Email.Include(c => c.UserConfig).ThenInclude(c => c.User).ThenInclude(c => c.Role).Where(c => c.GroupDelete == true && c.UserConfig.Notification == true).ToList();
                     break;
                 case NotificationType.MemberAdd:
-                     emails = (DbSet<Email>)db.Email.Where(c => c.MemberAdd == true && c.UserConfig.Notification == true);
+                     emails = db.Email.Include(c => c.UserConfig).ThenInclude(c => c.User).ThenInclude(c => c.Role).Where(c => c.MemberAdd == true && c.UserConfig.Notification == true).ToList();
                     break;
                 case NotificationType.MemberRemoval:
-                     emails = (DbSet<Email>)db.Email.Where(c => c.MemberRemoval == true && c.UserConfig.Notification == true);
+                     emails = db.Email.Include(c => c.UserConfig).ThenInclude(c => c.DefaultUser).Include(c => c.UserConfig).ThenInclude(c => c.User).ThenInclude(c => c.OwnerGroupUsers).ThenInclude(c => c.OwnerGroup).Where(c => c.MemberRemoval == true && c.UserConfig.Notification == true).ToList();
                     break;
+            }
 
+
+            foreach (var e in emails)
+            {
+                Console.WriteLine("---------------------------------- "+ e.Address + "  " );
+                //Is a DefautUser
+                if (e.UserConfig.DefaultUser != null) {
+                    Console.WriteLine("----------------------------------DefaultUser " + e.UserConfig.DefaultUser.RoleId);
+
+                    //TODO: Send notification
+
+                //Is a AD user
+                } else if (e.UserConfig.User != null) {
+                    Console.WriteLine("----------------------------------User " + e.UserConfig.User.RoleId);
+                    if (e.UserConfig.User.RoleId == (int)RolesID.SuperAdmin || e.UserConfig.User.RoleId == (int)RolesID.Admin)
+                    {
+                        //TODO: Send notification
+                    }
+                    else if (e.UserConfig.User.RoleId == (int)RolesID.Owner)
+                    {
+
+           
+                        //TODO: Send notification
+                    }
+
+                }  
+             
             }
 
             // EXAMPLE
@@ -56,12 +84,9 @@ namespace HADES.Util
             };
 
             using (EmailSink sink = new(emailsTemp, "Someone broke everything"))
-			{
+            {
                 sink.AddMessage(LogEventLevel.Information, "Yeah, someone  F U C K E D  everything up.");
-			}
-
-
-            return true;
+            }
         }
 
         //TODO TO TEST
