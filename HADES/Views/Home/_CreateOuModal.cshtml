@@ -11,11 +11,14 @@
             </div>
             <div class="modal-body mx-3">
                 <div class="md-form">
-                    <form asp-controller="Home" asp-action="CreateOU" data-ajax="true" data-ajax-method="POST" data-ajax-mode="replace" data-ajax-update="#main">
+                    <form class="needs-validation" id="needs-validation" asp-controller="Home" asp-action="CreateOU" data-ajax="true" data-ajax-method="POST" data-ajax-mode="replace" data-ajax-update="#main" novalidate>
                         <div class="form-group row">
                             <div class="col-10">
-                                <input id="NewName" type="text" name="NewName" value="" class="form-control validate" />
+                                <input id="NewName" type="text" name="NewName" value="" class="form-control validate" pattern='^[^/[\]:;|=+*?<>,"\\]*$' required/>
                                 <input type="hidden" name="SelectedPath" value="@Model.SelectedPath" />
+                                <div class="invalid-feedback">
+                                    @Localizer["InvalidCharacters"]
+                                </div>
                             </div>
                             <button type="submit" class="btn btn-primary col-2">@Localizer["OK"].Value</button>
                         </div>

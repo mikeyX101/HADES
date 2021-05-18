@@ -14,7 +14,6 @@
 @await Html.PartialAsync("_CreateOuModal", Model)
 
 <!-- Liste des dossiers ou des groupes à partir de la sélection du treeview -->
-
 <table class="table">
     <thead>
     </thead>
@@ -53,12 +52,15 @@
                                     </div>
                                     <div class="modal-body mx-3">
                                         <div class="md-form">
-                                            <form asp-controller="Home" asp-action="Rename" data-ajax="true" data-ajax-method="POST" data-ajax-mode="replace" data-ajax-update="#main">
+                                            <form class="needs-validation" asp-controller="Home" asp-action="Rename" data-ajax="true" data-ajax-method="POST" data-ajax-mode="replace" data-ajax-update="#main" novalidate>
                                                 <div class="form-group row">
                                                     <div class="col-10">
-                                                        <input type="text" name="NewName" value="@Model.ADRoot[i].SamAccountName" class="form-control validate" />
+                                                        <input type="text" name="NewName" value="@Model.ADRoot[i].SamAccountName" class="form-control validate" pattern='^[^/[\]:;|=+*?<>,"\\]*$' required />
                                                         <input type="hidden" name="SelectedPath" value="@Model.SelectedPath" />
                                                         <input type="hidden" name="SelectedContentName" value="@Model.ADRoot[i].SamAccountName" />
+                                                        <div class="invalid-feedback">
+                                                            @Localizer["InvalidCharacters"]
+                                                        </div>
                                                     </div>
                                                     <button type="submit" class="btn btn-primary col-2">@Localizer["OK"].Value</button>
                                                 </div>
@@ -84,3 +86,6 @@
         }
     </tbody>
 </table>
+
+<script type="text/javascript" src="~/js/formValidation.js"></script>
+<script type="text/javascript" src="~/js/formFocus.js"></script> 

@@ -154,7 +154,7 @@ namespace HADES.Controllers
             {
                 ad.deleteGroup(DN);
             }*/
-            Console.WriteLine("L'OU " + DN + " a été supprimé");
+            Console.WriteLine("L'OU " + DN + " a été supprimé par l'utilisateur " + ConnexionUtil.CurrentUser(this.User).GetName());
             return RedirectToAction("UpdateContent", "Home", new { selectedPathForContent = viewModel.SelectedPath });
         }
 
@@ -168,7 +168,7 @@ namespace HADES.Controllers
             }
             var DN = FindDN(viewModel.SelectedPath, viewModel.SelectedContentName);
             ad.renameOU(DN, viewModel.NewName);
-            Console.WriteLine("L'OU " + DN + " a été renommé");
+            Console.WriteLine("L'OU " + DN + " a été renommé par l'utilisateur " + ConnexionUtil.CurrentUser(this.User).GetName());
             return RedirectToAction("UpdateContent", "Home", new { selectedPathForContent = viewModel.SelectedPath });
         }
 
@@ -217,7 +217,7 @@ namespace HADES.Controllers
                 {
                     //ad.modifyGroup(DN);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
 
                 }
@@ -235,7 +235,7 @@ namespace HADES.Controllers
                 return RedirectToAction("MainView", "Home");
             }
             ad.createOU(viewModel.NewName);
-            Console.WriteLine("L'OU " + viewModel.NewName + " a été créé");
+            Console.WriteLine("L'OU " + viewModel.NewName + " a été créé par l'utilisateur " + ConnexionUtil.CurrentUser(this.User).GetName());
             return RedirectToAction("UpdateContent", "Home", new { selectedPathForContent = viewModel.SelectedPath });
         }
 
