@@ -160,7 +160,7 @@ namespace HADES
             app.UseRouting();
 
             app.UseContentSecurityPolicyHeader(
-                "default-src 'self'; img-src 'self' data:; media-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; frame-src 'self'",
+                "default-src 'self'; img-src 'self' data:; media-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; font-src 'self'; frame-src 'self'",
                 "/api/CSPReport"
             );
             app.UseCors(policyBuilder => policyBuilder
