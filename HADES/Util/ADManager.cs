@@ -26,7 +26,7 @@ namespace HADES.Util
         {
             if (ADSettingsCache.Ad == null) {
                 ADSettingsCache.Refresh();
-            }         
+            } 
         }
 
         /*****************************************************
@@ -646,7 +646,7 @@ namespace HADES.Util
             return wasFound;
         }
 
-        private string getBaseAd() {
+        public string getBaseAd() {
             string[] rootTab = ADSettingsCache.Ad.RootOu.Split(",");
             string b = "";
             for (int i = 0; i < rootTab.Length; i++)
@@ -689,6 +689,33 @@ namespace HADES.Util
 
         }
 
+        public string getGroupSamAccountNameByGUID(string GUID)
+        {
+            LdapConnection connection = createConnection();
+            String samAccountName = "";
+
+            try
+            {
+                LdapSearchResults lsc = (LdapSearchResults)connection.Search(getBaseAd(), LdapConnection.ScopeSub, "(objectGUID =" + GUID + ")", null, false);
+                LdapEntry nextEntry = null;
+                while (lsc.HasMore())
+                {
+
+                    nextEntry = lsc.Next();
+                    samAccountName = getAttributeValue(nextEntry, "sAMAccountName"); ;
+                }
+            }
+            catch (Exception e)
+            {
+                connection.Disconnect();
+                return samAccountName;
+            }
+
+            connection.Disconnect();
+            return samAccountName;
+
+        }
+
         public string getGroupGUIDByDn(string Dn)
         {
             LdapConnection connection = createConnection();
@@ -700,13 +727,13 @@ namespace HADES.Util
                 LdapEntry nextEntry = null;
                 while (lsc.HasMore())
                 {
-
                     nextEntry = lsc.Next();
                     GUID = getObjectGUID(nextEntry);
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
+
                 connection.Disconnect();
                 return GUID;
             }
@@ -714,6 +741,51 @@ namespace HADES.Util
             connection.Disconnect();
             return GUID;
 
+        }
+
+        public List<String> GetGroupsNameforUser(string userDn, LdapConnection connectionAlreadyOpen)
+        {
+            LdapConnection connection;
+            if (connectionAlreadyOpen == null)
+            {
+                connection = createConnection();
+            }
+            else
+            {
+                connection = connectionAlreadyOpen;
+            }
+
+            LdapSearchResults lsc = (LdapSearchResults)connection.Search(ADSettingsCache.Ad.RootOu, LdapConnection.ScopeSub, "(&(objectClass=group)(member=" + userDn + "))", null, false);
+            List<string> groupsname = new List<string>();
+
+            while (lsc.HasMore())
+            {
+                LdapEntry nextEntry = null;
+                try
+                {
+                    nextEntry = lsc.Next();
+                    groupsname.Add(getAttributeValue(nextEntry, "sAMAccountName"));
+
+                }
+                catch (LdapException e)
+                {
+                    connection.Disconnect();
+                    Console.WriteLine("LOG: " + e.Message);
+                    continue;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("LOG: " + e.Message);
+                    connection.Disconnect();
+                }
+            }
+
+            if (connectionAlreadyOpen == null)
+            {
+                connection.Disconnect();
+            }
+
+            return groupsname;
         }
 
         /*****************************************************
