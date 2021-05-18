@@ -117,8 +117,11 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="EnterOUName" xml:space="preserve">
-    <value>Enter folder's name</value>
+  <data name="ContenuDossier" xml:space="preserve">
+    <value>Folder's content</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
   </data>
   <data name="InvalidCharacters" xml:space="preserve">
     <value>The following characters are forbidden:   " [ ] : ; | = + * ? &lt; &gt; / \ ,</value>
