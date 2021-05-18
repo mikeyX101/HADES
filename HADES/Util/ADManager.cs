@@ -339,7 +339,6 @@ namespace HADES.Util
 
                     root.Add(data);
 
-                    Console.WriteLine(data);
 
                 }
                 catch (Exception e)
@@ -350,6 +349,8 @@ namespace HADES.Util
             }
 
             connection.Disconnect();
+
+          //  EmailHelper.SendEmail(NotificationType.MemberRemoval, "\\93\\e8\\68\\b0\\a1\\d8\\dc\\46\\a6\\d0\\01\\08\\64\\c8\\5d\\38");
             return root;
         }
 
@@ -375,7 +376,7 @@ namespace HADES.Util
                     group.Members = GetMembersOfGroup(nextEntry.Dn, connection);
                     group.ObjectGUID = getObjectGUID(nextEntry);
                     root.Add(group);
-                    Console.WriteLine(group);
+                    
                 }
                 catch (Exception e)
                 {

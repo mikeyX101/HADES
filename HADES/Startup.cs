@@ -22,6 +22,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Net;
+using Serilog;
 
 namespace HADES
 {
@@ -29,14 +31,13 @@ namespace HADES
     {
         public Startup(IConfiguration configuration)
         {
-            // Use settings to access appsettings.json 
             Settings.Initiate(configuration);
         }
 
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-			// Should be before anything else
+			// Should be before anything network related
 			#region Reverse Proxy Setup
 			services.Configure<ForwardedHeadersOptions>(options =>
 			{
@@ -159,6 +160,8 @@ namespace HADES
 
             app.UseRouting();
 
+            app.UseSerilogRequestLogging();
+
             app.UseContentSecurityPolicyHeader(
                 "default-src 'self'; img-src 'self' data:; media-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; font-src 'self'; frame-src 'self'",
                 "/api/CSPReport"
@@ -206,7 +209,7 @@ namespace HADES
 				{
                     string queryStringLanguage = context.Request.Query["l"].ToString();
                     locale =
-                        !string.IsNullOrWhiteSpace(queryStringLanguage) ? queryStringLanguage : null ??     // TEMP, CHECK l IN QUERY STRING. TO BE REMOVED, THIS IS AN UNFILTERED USER INPUT ENTRY POINT
+                        !string.IsNullOrWhiteSpace(queryStringLanguage) ? queryStringLanguage : null ??     //TODO TEMP, CHECK l IN QUERY STRING. TO BE REMOVED, THIS IS AN UNFILTERED USER INPUT ENTRY POINT
                         connectedUser?.GetUserConfig().Language ??                                          // Get from connected user.
                         db.AppConfig.FirstOrDefault()?.DefaultLanguage ??                                   // Get from app config.
                         Settings.AppSettings.DefaultCulture;                                                // Get default in appsettings.json (Always defined)
