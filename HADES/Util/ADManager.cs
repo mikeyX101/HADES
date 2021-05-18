@@ -678,7 +678,7 @@ namespace HADES.Util
                     dn = nextEntry.Dn;
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 connection.Disconnect();
                 return dn;

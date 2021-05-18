@@ -123,7 +123,10 @@
   <data name="Delete" xml:space="preserve">
     <value>Supprimer</value>
   </data>
-  <data name="EnterOUName" xml:space="preserve">
-    <value>Renseignez le nom du dossier</value>
+  <data name="InvalidCharacters" xml:space="preserve">
+    <value>Les caractères suivants sont interdits:   " [ ] : ; | = + * ? &lt; &gt; / \ ,</value>
+  </data>
+  <data name="OK" xml:space="preserve">
+    <value>OK</value>
   </data>
 </root>

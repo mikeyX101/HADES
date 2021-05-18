@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Collections.Generic;
 
 namespace HADES.Models
 {
@@ -6,5 +7,7 @@ namespace HADES.Models
     {
         public UserConfig UserConfig { get; set; }
         public List<Email> Emails { get; set; }
+
+        public List<SelectListItem> Languages { get; set; }
     }
 }

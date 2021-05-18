@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+using System.Collections;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace HADES.Controllers
 {
@@ -23,6 +26,11 @@ namespace HADES.Controllers
         {
             UserConfigService service = new();
             var viewModel = await service.UserConfig(ConnexionUtil.CurrentUser(this.User).GetUserConfig());
+            viewModel.Languages = new List<SelectListItem>() 
+            {
+                new SelectListItem {Text = "fr-CA", Value = "fr-CA"},
+                new SelectListItem {Text = "en-US", Value = "en-US"}
+            };
 
             return View(viewModel);
         }
