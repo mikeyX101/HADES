@@ -3,7 +3,7 @@
 <h3 class="mt-3">@Localizer["ContenuDossier"] @Model.SelectedNodeName</h3>
 
 <!-- Button trigger modal create OU -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="@Model.DataTarget">
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="@Model.DataTarget" data-backdrop="false">
     @Model.CreateButtonLabel
 </button>
 
@@ -36,7 +36,7 @@
                     <td>
 
                         <!-- Button trigger modal rename OU -->
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="@dataTarget">
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="@dataTarget" data-backdrop="false">
                             @Model.EditLinkLabel
                         </button>
 
