@@ -7,34 +7,11 @@
     @Model.CreateButtonLabel
 </button>
 
+<!-- Modal Create Group -->
 @await Html.PartialAsync("CreateGroupModal", Model)
 
 <!-- Modal Create OU -->
-<div class="modal fade" id="createOuModal" role="dialog" aria-labelledby="createOuModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content" role="document">
-            <div class="modal-header text-center">
-                <h4 class="modal-title w-100 font-weight-bold" id="createOuModalLabel">@Localizer["EnterOUName"].Value</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body mx-3">
-                <div class="md-form">
-                    <form asp-controller="Home" asp-action="CreateOU" data-ajax="true" data-ajax-method="POST" data-ajax-mode="replace" data-ajax-update="#main">
-                        <div class="form-group row">
-                            <div class="col-10">
-                                <input id="NewName" type="text" name="NewName" value="" class="form-control validate" />
-                                <input type="hidden" name="SelectedPath" value="@Model.SelectedPath" />
-                            </div>
-                            <button type="submit" class="btn btn-primary col-2">@Localizer["OK"].Value</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+@await Html.PartialAsync("CreateOuModal", Model)
 
 <!-- Liste des dossiers ou des groupes à partir de la sélection du treeview -->
 
@@ -54,7 +31,7 @@
             {
                 <tr>
                     <td>
-                        <a data-ajax="true" data-ajax-method="GET" data-ajax-mode="replace" data-ajax-update="#main" 
+                        <a data-ajax="true" data-ajax-method="GET" data-ajax-mode="replace" data-ajax-update="#main"
                            href='@Url.Action("UpdateContent","Home", new { selectedPathForContent = Model.SelectedPath + "/" + Model.ADRoot[i].SamAccountName })'>@Model.ADRoot[i].SamAccountName</a>
                     </td>
                     <td>
