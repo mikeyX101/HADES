@@ -4,6 +4,7 @@ using HADES.Util;
 using HADES.Util.ModelAD;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -63,7 +64,7 @@ namespace HADES.Services
         {
             if ((UpdateMe && !processing) || forced) // Only update if asked to
             {
-                Console.WriteLine("Attempting Database Update -- NOT TESTED MAY OR MAY NOT DESTROY DATABASE -- we hope not...");
+                Log.Information("Attempting Database Sync");
                 processing = true;
                 if (ad == null) ad = new ADManager(); // Initialize ad on first use
 
@@ -78,7 +79,7 @@ namespace HADES.Services
                 }
                 catch (Exception)
                 {
-                    Console.WriteLine("An error Occured while synchronizing the HADES database to the Active Directory");
+                    Log.Warning("An error occured while synchronizing the HADES database to the Active Directory");
                     processing = false;
                     return;
                 }
@@ -108,7 +109,7 @@ namespace HADES.Services
                 }
             }
             db.SaveChanges();
-            Console.WriteLine("Hades Admin/SuperAdmin Groups Synchronized with Active Directory");
+            Log.Information("Hades {Sync} Synchronized with Active Directory", "Admin / SuperAdmin Groups");
         }
 
         private static void UpdateOwnerGroups(ApplicationDbContext db)
@@ -137,7 +138,7 @@ namespace HADES.Services
 
             db.SaveChanges();
             // Get all groups under root in ADManager
-            Console.WriteLine("Hades OwnerGroups Synchronized with Active Directory");
+            Log.Information("Hades {Sync} Synchronized with Active Directory", "OwnerGroups");
         }
 
         private static void UpdateUsers(ApplicationDbContext db)
@@ -216,7 +217,7 @@ namespace HADES.Services
             }
 
             db.SaveChanges();
-            Console.WriteLine("Hades Users Synchronized with Active Directory");
+            Log.Information("Hades {Sync} Synchronized with Active Directory", "Users");
         }
     }
 }

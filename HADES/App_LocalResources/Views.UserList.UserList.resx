@@ -148,13 +148,13 @@
     <value>Supprime l'utilisateur d'Hades sans le supprimer de l'Active Directory</value>
   </data>
   <data name="UserRemoveToolTip" xml:space="preserve">
-    <value>Retire un Utilisateur de tous ses groupes et assigne ce User comme Inactif</value>
+    <value>Retire les droits de cet utilisateur sur les groupes et assigne ce User comme Inactif. &lt;b&gt;Les Admin et SuperAdmin ne peuvent pas être retiré&lt;/b&gt;</value>
   </data>
   <data name="RemoveConfirmationTitle" xml:space="preserve">
     <value>Retirer Utilisateur</value>
   </data>
   <data name="RemoveConfirmationMessage" xml:space="preserve">
-    <value>Êtes-vous certains de vouloir retirer cet utilisateur de tous ses groupes ?&lt;br&gt; Il sera marqué comme inactif dans Hades et ne fera plus parti d'aucun groupe dans l'Active Directory.</value>
+    <value>Êtes-vous certains de vouloir retirer les droits de cet utilisateur ?&lt;br&gt; Il sera marqué comme inactif dans Hades. &lt;b&gt;Les Admins et SuperAdmin seront réactivé à la prochaine synchronisation&lt;/b&gt;</value>
   </data>
   <data name="DeleteConfirmationTitle" xml:space="preserve">
     <value>Supprimer Utilisateur</value>

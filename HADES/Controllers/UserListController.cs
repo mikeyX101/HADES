@@ -146,14 +146,6 @@ namespace HADES.Controllers
             user.RoleId = (int)RolesID.Inactive;
             db.SaveChanges();
 
-            // Remove groups
-            List<string> groupsDN = ad.GetGroupsDNforUser(user.GUID, null);
-            List<string> useraslist = new List<string>() { ad.getUserAD(user.GUID, true).Dn };
-            foreach (string group in groupsDN)
-            {
-                ad.deleteMemberToGroup(group,useraslist);
-            }
-
             return RedirectToAction("UserList");
         }
 
