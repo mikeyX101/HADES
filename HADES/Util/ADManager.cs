@@ -669,7 +669,7 @@ namespace HADES.Util
                     dn = nextEntry.Dn;
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 connection.Disconnect();
                 Log.Warning(e, DataFetchErrorLogTemplate, "getGroupDnByGUID()");
