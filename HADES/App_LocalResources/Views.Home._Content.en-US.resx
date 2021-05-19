@@ -118,12 +118,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ContenuDossier" xml:space="preserve">
-    <value>Folder content</value>
+    <value>Folder's content</value>
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Delete</value>
   </data>
-  <data name="EnterOUName" xml:space="preserve">
-    <value>Enter folder's name</value>
+  <data name="InvalidCharacters" xml:space="preserve">
+    <value>These characters are not allowed:   " [ ] : ; | = + * ? &lt; &gt; / \ ,</value>
+  </data>
+  <data name="OK" xml:space="preserve">
+    <value>OK</value>
   </data>
 </root>

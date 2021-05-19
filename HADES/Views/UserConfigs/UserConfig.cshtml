@@ -6,8 +6,6 @@
 @section scripts {
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
-    <script src="~/js/minimum-age.js"></script>
-
 }
 
 <div class="bg-primary text-white text-center">
@@ -17,25 +15,31 @@
 <form asp-action="UserConfig">
     <div class="form-group row">
         <input type="hidden" asp-for="@Model.UserConfig.Id" />
-        <div class="col-sm-3 col-lg-3 offset-lg-2"><label>Langue:</label></div>
+        <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["Language"]</label></div>
         <div class="col-sm-9 col-lg-5">
-            <input type="text" asp-for="@Model.UserConfig.Language" class="form-control" />
+            <select asp-for="@Model.UserConfig.Language" class="form-control" asp-items="@Model.Languages">
+            </select>
         </div>
-        <div class="col">
-            <span asp-validation-for="@Model.UserConfig.Language" class="text-danger"></span>
+        <div class="col-sm-9 col-lg-5 offset-lg-5">
+            <span asp-validation-for="@Model.UserConfig.Language"
+                  class="text-danger"></span>
         </div>
     </div>
+
     <div class="form-group row">
-        <div class="col-sm-3 col-lg-3 offset-lg-2"><label>Thème:</label></div>
+        <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["Theme"]</label></div>
         <div class="col-sm-9 col-lg-5">
-            <input type="text" asp-for="@Model.UserConfig.ThemeFile" class="form-control" />
+            <select asp-for="@Model.UserConfig.ThemeFile" class="form-control" asp-items="@Model.Themes">
+            </select>
         </div>
-        <div class="col">
-            <span asp-validation-for="@Model.UserConfig.ThemeFile" class="text-danger"></span>
+        <div class="col-sm-9 col-lg-5 offset-lg-5">
+            <span asp-validation-for="@Model.UserConfig.ThemeFile"
+                  class="text-danger"></span>
         </div>
     </div>
+
     <div class="form-group row">
-        <div class="col-sm-3 col-lg-3 offset-lg-2"><label>Notification par courriel:</label></div>
+        <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["EmailNotification"]</label></div>
         <div class="col-sm-9 col-lg-5">
             <div class="checkbox">
                 <input asp-for="@Model.UserConfig.Notification" class="form-control" />
@@ -75,7 +79,11 @@
                         <td>
                             <input type="hidden" asp-for="@Model.Emails[i].Id" />
                             <input type="hidden" asp-for="@Model.Emails[i].UserConfigId" />
-                            <input type="text" asp-for="@Model.Emails[i].Address" class="form-control" />
+                            <input type="email" asp-for="@Model.Emails[i].Address" class="form-control" />
+                            <div class="col">
+                                <span asp-validation-for="@Model.Emails[i].Address"
+                                      class="text-danger"></span>
+                            </div>
                         </td>
                         <td>
                             <input class="form-control" asp-for="@Model.Emails[i].ExpirationDate" />

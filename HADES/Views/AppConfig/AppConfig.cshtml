@@ -18,7 +18,7 @@
     <div class="form-group row">
         <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["PortNumber"]</label></div>
         <div class="col-sm-9 col-lg-5">
-            <input type="text" asp-for="@Model.ActiveDirectory.PortNumber" class="form-control" />
+            <input type="number" asp-for="@Model.ActiveDirectory.PortNumber" class="form-control" />
         </div>
     </div>
     <div class="form-group row">
@@ -48,15 +48,28 @@
     <div class="form-group row">
         <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["PasswordDN"]</label></div>
         <div class="col-sm-9 col-lg-5">
-            <input type="text" asp-for="@Model.ActiveDirectory.PasswordDN" class="form-control" />
+            <input id="DNpass" type="password" asp-for="@Model.ActiveDirectory.PasswordDN" class="form-control" />
         </div>
+        <script>$("#DNpass").change(function () { if ($("#DNpass").val() != $("#DNpassconfirm").val()) $("#DNpassconfirm").css("border-color", "red"); else $("#DNpassconfirm").css("border-color", "blue") })</script>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["DefaultUserPasswordConfirm"]</label></div>
+        <div class="col-sm-9 col-lg-5">
+            <input id="DNpassconfirm" type="password" name="confirmDN" class="form-control" />
+        </div>
+        <script>$("#DNpassconfirm").change(function () { if ($("#DNpass").val() != $("#DNpassconfirm").val()) $("#DNpassconfirm").css("border-color", "red"); else $("#DNpassconfirm").css("border-color", "blue") })</script>
     </div>
     <div class="form-group row">
         <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["SyncField"]</label></div>
         <div class="col-sm-9 col-lg-5">
-            <input type="text" asp-for="@Model.ActiveDirectory.SyncField" class="form-control" />
+            <select id="syncfield" asp-for="@Model.ActiveDirectory.SyncField" class="form-control">
+                <option value="samaccountname">samaccountName</option>
+                <option value="mail">mail</option>
+                <option value="userprincipalname">userprincipalname</option>
+            </select>
         </div>
     </div>
+    <hr />
     <div class="form-group row">
         <input type="hidden" asp-for="@Model.DefaultUser.Id" />
         <input type="hidden" asp-for="@Model.DefaultUser.UserConfigId" />
@@ -69,16 +82,18 @@
     <div class="form-group row">
         <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["DefaultUserPassword"]</label></div>
         <div class="col-sm-9 col-lg-5">
-            <input type="text" asp-for="@Model.DefaultUser.Password" class="form-control" />
+            <input id="passDefaultUser" type="password" asp-for="@Model.DefaultUser.Password" class="form-control" />
         </div>
+        <script>$("#passDefaultUser").change(function () { if ($("#passDefaultUser").val() != $("#passDefaultUserConfirm").val()) $("#passDefaultUserConfirm").css("border-color", "red"); else $("#passDefaultUserConfirm").css("border-color", "blue") })</script>
     </div>
     <div class="form-group row">
-        <input type="hidden" asp-for="@Model.AppConfig.Id" />
-        <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["CompanyLogoFile"]</label></div>
+        <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["DefaultUserPasswordConfirm"]</label></div>
         <div class="col-sm-9 col-lg-5">
-            <input type="text" asp-for="@Model.AppConfig.CompanyLogoFile" class="form-control" />
+            <input id="passDefaultUserConfirm" type="password" name="confirm" class="form-control" />
         </div>
+        <script>$("#passDefaultUserConfirm").change(function () { if ($("#passDefaultUser").val() != $("#passDefaultUserConfirm").val()) $("#passDefaultUserConfirm").css("border-color", "red"); else $("#passDefaultUserConfirm").css("border-color", "blue") })</script>
     </div>
+    <hr />
     <div class="form-group row">
         <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["CompanyName"]</label></div>
         <div class="col-sm-9 col-lg-5">
@@ -86,49 +101,77 @@
         </div>
     </div>
     <div class="form-group row">
+        <input type="hidden" asp-for="@Model.AppConfig.Id" />
+        <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["CompanyLogoFile"]</label></div>
+        <div class="col-sm-9 col-lg-5">
+            <input type="file" accept="image/*" asp-for="@Model.AppConfig.CompanyLogoFile" class="form-control" />
+        </div>
+    </div>
+    <div class="form-group row">
         <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["CompanyBackgroundFile"]</label></div>
         <div class="col-sm-9 col-lg-5">
-            <input type="text" asp-for="@Model.AppConfig.CompanyBackgroundFile" class="form-control" />
+            <input type="file" accept="image/*" asp-for="@Model.AppConfig.CompanyBackgroundFile" class="form-control" />
         </div>
     </div>
     <div class="form-group row">
         <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["DefaultLanguage"]</label></div>
         <div class="col-sm-9 col-lg-5">
-            <input type="text" asp-for="@Model.AppConfig.DefaultLanguage" class="form-control" />
+            <select id="language" asp-for="@Model.AppConfig.DefaultLanguage" class="form-control">
+                <option value="fr-CA">@HADES.Strings.French</option>
+                <option value="en-US">@HADES.Strings.English</option>
+                <option value="es-US">@HADES.Strings.Spanish</option>
+                <option value="pt-BR">@HADES.Strings.Portuguese</option>
+            </select>
         </div>
     </div>
+    <hr />
     <div class="form-group row">
-        <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["SMTP"]</label></div>
+        <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["SMTPServer"]</label></div>
         <div class="col-sm-9 col-lg-5">
             <input type="text" asp-for="@Model.AppConfig.SMTPServer" class="form-control" />
         </div>
     </div>
     <div class="form-group row">
+        <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["SMTPPort"]</label></div>
+        <div class="col-sm-9 col-lg-5">
+            <input type="number" asp-for="@Model.AppConfig.SMTPPort" class="form-control" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["SMTPEmail"]</label></div>
+        <div class="col-sm-9 col-lg-5">
+            <input type="email" asp-for="@Model.AppConfig.SMTPFromEmail" class="form-control" />
+        </div>
+    </div>
+    <hr />
+    <div class="form-group row">
         <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["LogDeleteFrequency"]</label></div>
         <div class="col-sm-9 col-lg-5">
-            <input type="text" asp-for="@Model.AppConfig.LogDeleteFrequency" class="form-control" />
+            <input id="freq" type="number" asp-for="@Model.AppConfig.LogDeleteFrequency" class="form-control" />
+            <script>$("#freq").change(function () { $("#total").val($("#max").val() * $("#freq").val()) })</script>
         </div>
     </div>
     <div class="form-group row">
         <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["LogMaxFileSize"]</label></div>
         <div class="col-sm-9 col-lg-5">
-            <input type="text" asp-for="@Model.AppConfig.LogMaxFileSize" class="form-control" />
+            <input id="max" type="number" asp-for="@Model.AppConfig.LogMaxFileSize" class="form-control" />
+            <script>$("#max").change(function () { $("#total").val($("#max").val() * $("#freq").val()) })</script>
         </div>
     </div>
     <div class="form-group row">
         <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["LogTotalMaxSize"]</label></div>
         <div class="col-sm-9 col-lg-5">
-            <input type="text" asp-for="@Model.AppConfig.LogTotalMaxSize" class="form-control" />
+            <input id="total" type="number" asp-for="@Model.AppConfig.LogTotalMaxSize" class="form-control" readonly />
         </div>
     </div>
-    @if (Model.AppConfig != null )
+    @if (Model.AppConfig != null)
     {
         <div class="">
             <table class="table">
                 <thead>
                     <tr>
                         <th>
-                            <label asp-for="@Model.AdminGroups.First().GUID" class="control-label"></label>
+                            <label class="control-label">@Localizer["AdminGroups"]</label>
                         </th>
 
                     </tr>
@@ -158,7 +201,7 @@
                 <thead>
                     <tr>
                         <th>
-                            <label asp-for="@Model.SuperAdminGroups.First().GUID" class="control-label"></label>
+                            <label class="control-label">@Localizer["SuperAdminGroups"]</label>
                         </th>
 
                     </tr>
@@ -185,6 +228,7 @@
     }
     <div class="form-group row">
         <div class="col-sm-4">
+            <b class="text-danger">@ViewBag.AppConfigError</b>
             @Html.ValidationSummary()
         </div>
     </div>

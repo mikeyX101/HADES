@@ -6,14 +6,19 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+using System.Collections;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Localization;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace HADES.Controllers
 {
-	public class UserConfigsController : Controller
+	public class UserConfigsController : LocalizedController<HomeController>
     {
         private readonly ApplicationDbContext db;
 
-        public UserConfigsController(ApplicationDbContext context)
+        public UserConfigsController(IStringLocalizer<HomeController> localizer, ApplicationDbContext context) : base(localizer)
         {
             db = context;
         }
@@ -23,6 +28,19 @@ namespace HADES.Controllers
         {
             UserConfigService service = new();
             var viewModel = await service.UserConfig(ConnexionUtil.CurrentUser(this.User).GetUserConfig());
+            viewModel.Languages = new List<SelectListItem>() 
+            {
+                new SelectListItem {Text = HADES.Strings.French, Value = "fr-CA"},
+                new SelectListItem {Text = HADES.Strings.English, Value = "en-US"},
+                new SelectListItem {Text = HADES.Strings.Spanish, Value = "es-US"},
+                new SelectListItem {Text = HADES.Strings.Portuguese, Value = "pt-BR"}
+            };
+            viewModel.Themes = new List<SelectListItem>()
+            {
+                new SelectListItem {Text = "deeppink", Value = "deeppink"},
+                new SelectListItem {Text = "chocolate", Value = "chocolate"}
+            };
+
 
             return View(viewModel);
         }
@@ -53,8 +71,10 @@ namespace HADES.Controllers
                 }
                 return RedirectToAction("UserConfig", new { id = viewModel.UserConfig.Id });
             }
-
-            return View(viewModel);
+            else
+            {
+                return View(viewModel);
+            }
         }
 
         [Authorize]

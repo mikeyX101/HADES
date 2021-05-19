@@ -117,16 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="EmailNotification" xml:space="preserve">
-    <value>Notifications par courriel</value>
+  <data name="ContenuDossier" xml:space="preserve">
+    <value>Contenu du dossier</value>
   </data>
-  <data name="Language" xml:space="preserve">
-    <value>Langue</value>
-  </data>
-  <data name="Save" xml:space="preserve">
-    <value>Sauvegarder</value>
-  </data>
-  <data name="Theme" xml:space="preserve">
-    <value>Thème</value>
+  <data name="DossierGroupe" xml:space="preserve">
+    <value>Dossiers et groupes</value>
   </data>
 </root>

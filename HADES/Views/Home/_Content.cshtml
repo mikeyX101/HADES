@@ -1,46 +1,19 @@
 ﻿@model MainViewViewModel
 
-
-
 <h3 class="mt-3">@Localizer["ContenuDossier"] @Model.SelectedNodeName</h3>
 
 <!-- Button trigger modal create OU -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="@Model.DataTarget" data-backdrop="false">
+    @Model.CreateButtonLabel
+</button>
 
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="@Model.DataTarget">
-        @Model.CreateButtonLabel
-    </button>
-
-@await Html.PartialAsync("CreateGroupModal", Model)
+<!-- Modal Create Group -->
+@await Html.PartialAsync("_CreateGroupModal", Model)
 
 <!-- Modal Create OU -->
-<div class="modal fade" id="createOuModal" role="dialog" aria-labelledby="createOuModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content" role="document">
-            <div class="modal-header text-center">
-                <h4 class="modal-title w-100 font-weight-bold" id="createOuModalLabel">@Localizer["EnterOUName"].Value</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body mx-3">
-                <div class="md-form">
-                    <form action="CreateOU" method="post">
-                        <div class="form-group row">
-                            <div class="col-10">
-                                <input id="NewName" type="text" name="NewName" value="" class="form-control validate" />
-                                <input type="hidden" name="SelectedPath" value="@Model.SelectedPath" />
-                            </div>
-                            <button type="submit" class="btn btn-primary col-2">@Localizer["OK"].Value</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+@await Html.PartialAsync("_CreateOuModal", Model)
 
 <!-- Liste des dossiers ou des groupes à partir de la sélection du treeview -->
-
 <table class="table">
     <thead>
     </thead>
@@ -49,20 +22,21 @@
 
         @for (int i = 0; i < Model.ADRoot.Count; i++)
         {
-            
-                var dataTarget = "#a" + i.ToString();
-                var id = "a" + i.ToString();
-            
-        if (Model.ADRoot[i].Path == Model.SelectedPath)
+
+            var dataTarget = "#a" + i.ToString();
+            var id = "a" + i.ToString();
+
+            if (Model.ADRoot[i].Path == Model.SelectedPath)
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => Model.ADRoot[i].SamAccountName)
+                        <a data-ajax="true" data-ajax-method="GET" data-ajax-mode="replace" data-ajax-update="#main"
+                           href='@Url.Action("UpdateContent","Home", new { selectedPathForContent = Model.SelectedPath + "/" + Model.ADRoot[i].SamAccountName })'>@Model.ADRoot[i].SamAccountName</a>
                     </td>
                     <td>
 
                         <!-- Button trigger modal rename OU -->
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="@dataTarget">
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="@dataTarget" data-backdrop="false">
                             @Model.EditLinkLabel
                         </button>
 
@@ -78,12 +52,15 @@
                                     </div>
                                     <div class="modal-body mx-3">
                                         <div class="md-form">
-                                            <form action="Rename" method="post">
+                                            <form class="needs-validation" asp-controller="Home" asp-action="Rename" data-ajax="true" data-ajax-method="POST" data-ajax-mode="replace" data-ajax-update="#main" novalidate>
                                                 <div class="form-group row">
                                                     <div class="col-10">
-                                                        <input type="text" name="NewName" value="@Model.ADRoot[i].SamAccountName" class="form-control validate" />
+                                                        <input type="text" name="NewName" value="@Model.ADRoot[i].SamAccountName" class="form-control validate" pattern='^[^/[\]:;|=+*?<>,"\\]*$' required />
                                                         <input type="hidden" name="SelectedPath" value="@Model.SelectedPath" />
                                                         <input type="hidden" name="SelectedContentName" value="@Model.ADRoot[i].SamAccountName" />
+                                                        <div class="invalid-tooltip">
+                                                            @Localizer["InvalidCharacters"]
+                                                        </div>
                                                     </div>
                                                     <button type="submit" class="btn btn-primary col-2">@Localizer["OK"].Value</button>
                                                 </div>
@@ -95,7 +72,7 @@
                         </div>
 
                         <!-- Button to delete -->
-                        <form action="Delete" method="post" onsubmit="return formSubmit(this)" style="display: inline-block">
+                        <form onsubmit="return formSubmit(this)" style="display: inline-block">
                             <button class="btn btn-primary">
                                 @Localizer["Delete"].Value
                             </button>
@@ -109,3 +86,6 @@
         }
     </tbody>
 </table>
+
+<script type="text/javascript" src="~/js/formValidation.js"></script>
+<script type="text/javascript" src="~/js/formFocus.js"></script> 

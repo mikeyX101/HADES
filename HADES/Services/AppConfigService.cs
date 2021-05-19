@@ -60,6 +60,7 @@ namespace HADES.Services
 
         public async Task UpdateAppConfig(AppConfigViewModel viewModel)
         {
+            db = new ApplicationDbContext();
             db.Update(viewModel.ActiveDirectory);
             viewModel.AppConfig.ActiveDirectory = viewModel.ActiveDirectory;
 

@@ -5,11 +5,12 @@ using HADES.Util;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace HADES.Controllers
 {
-	public class AppConfigController : Controller
+    public class AppConfigController : Controller
     {
         private readonly ApplicationDbContext db;
 
@@ -34,8 +35,9 @@ namespace HADES.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> AppConfig([Bind("ActiveDirectory,AdminGroups,SuperAdminGroups,DefaultUser,AppConfig")] AppConfigViewModel viewModel)
+        public async Task<IActionResult> AppConfig([Bind("ActiveDirectory,AdminGroups,SuperAdminGroups,DefaultUser,AppConfig")] AppConfigViewModel viewModel, string confirm, string confirmDN)
         {
+            ViewBag.AppConfigError = "";
 
             if (!ConnexionUtil.CurrentUser(this.User).GetRole().AppConfigAccess)
             {
@@ -45,8 +47,30 @@ namespace HADES.Controllers
 
             ValidateModelState();
 
-            if (ModelState.IsValid)
+            if (viewModel.ActiveDirectory.PasswordDN == null || viewModel.ActiveDirectory.PasswordDN.Equals(""))
             {
+                // Don't change Password
+               confirmDN = viewModel.ActiveDirectory.PasswordDN = service.AppConfigViewModelGET().Result.ActiveDirectory.PasswordDN;
+            }
+
+            bool hashed = false;
+            if (viewModel.DefaultUser.Password == null || viewModel.DefaultUser.Password.Equals(""))
+            {
+                // Don't change Password
+                confirm = viewModel.DefaultUser.Password = service.AppConfigViewModelGET().Result.DefaultUser.Password;
+                hashed = true;
+            }
+
+            if (confirm == null) confirm = "";
+            if (confirmDN == null) confirmDN = "";
+
+            if (confirmDN.Equals(viewModel.ActiveDirectory.PasswordDN) && confirm.Equals(viewModel.DefaultUser.Password) && (validatePassword(viewModel.DefaultUser.Password)||hashed) && TryValidateModel(viewModel))
+            {
+                if (!hashed)
+                {
+                    viewModel.DefaultUser.Password = ConnexionUtil.HashPassword(viewModel.DefaultUser.Password); // Password is now hashed
+                }
+
                 try
                 {
                     await service.UpdateAppConfig(viewModel);
@@ -64,7 +88,13 @@ namespace HADES.Controllers
                 }
                 return RedirectToAction(nameof(AppConfig));
             }
+            ViewBag.AppConfigError = HADES.Strings.ErrorSavingConfiguration;
             return View(viewModel);
+        }
+
+        private bool validatePassword(string pass)
+        {
+            return new Regex(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W)[a-zA-Z\d].{6,}$").IsMatch(pass);
         }
 
         [Authorize]
@@ -74,8 +104,8 @@ namespace HADES.Controllers
             {
                 return RedirectToAction("MainView", "Home");
             }
-            ViewBag.AppConfigId = id;
-            return View();
+            ViewBag.AppConfigId = id ??= db.AppConfig.FirstOrDefaultAsync().Result.Id; ;
+            return View(new AdminGroup());
         }
 
         [HttpPost]
@@ -124,8 +154,8 @@ namespace HADES.Controllers
                 return RedirectToAction("MainView", "Home");
             }
 
-            ViewBag.AppConfigId = id;
-            return View();
+            ViewBag.AppConfigId = id ??= db.AppConfig.FirstOrDefaultAsync().Result.Id;
+            return View(new SuperAdminGroup());
         }
 
 
@@ -175,6 +205,8 @@ namespace HADES.Controllers
             ModelState.Remove("DefaultUser.UserConfigId");
             ModelState.Remove("DefaultUser.RoleId");
             ModelState.Remove("AppConfig.Id");
+            ModelState.Remove("DefaultUser.Password");
+            ModelState.Remove("ActiveDirectory.PasswordDN");
         }
 
     }

@@ -117,16 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="EmailNotification" xml:space="preserve">
-    <value>Notifications par courriel</value>
+  <data name="ContenuDossier" xml:space="preserve">
+    <value>Folder content</value>
   </data>
-  <data name="Language" xml:space="preserve">
-    <value>Langue</value>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
   </data>
-  <data name="Save" xml:space="preserve">
-    <value>Sauvegarder</value>
+  <data name="EnterOUName" xml:space="preserve">
+    <value>Enter folder's name</value>
   </data>
-  <data name="Theme" xml:space="preserve">
-    <value>Thème</value>
+  <data name="InvalidCharacters" xml:space="preserve">
+    <value>These characters are not allowed:   " [ ] : ; | = + * ? &lt; &gt; / \ ,</value>
   </data>
 </root>
