@@ -113,5 +113,27 @@ namespace HADES {
                 return ResourceManager.GetString("Spanish", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to French.
+        /// </summary>
+        public static string French
+        {
+            get
+            {
+                return ResourceManager.GetString("French", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to English.
+        /// </summary>
+        public static string English
+        {
+            get
+            {
+                return ResourceManager.GetString("English", resourceCulture);
+            }
+        }
     }
 }
