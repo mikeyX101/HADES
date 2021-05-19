@@ -234,8 +234,11 @@ namespace HADES.Controllers
             {
                 return RedirectToAction("MainView", "Home");
             }
-            ad.createOU(viewModel.NewName);
-            Console.WriteLine("L'OU " + viewModel.NewName + " a été créé par l'utilisateur " + ConnexionUtil.CurrentUser(this.User).GetName());
+            if (ModelState.IsValid)
+            {
+                ad.createOU(viewModel.NewName);
+                Console.WriteLine("L'OU " + viewModel.NewName + " a été créé par l'utilisateur " + ConnexionUtil.CurrentUser(this.User).GetName());
+            }
             return RedirectToAction("UpdateContent", "Home", new { selectedPathForContent = viewModel.SelectedPath });
         }
 
