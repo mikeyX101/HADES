@@ -70,25 +70,16 @@ namespace HADES {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Anglais.
+        ///   Recherche une chaîne localisée semblable à La configuration n&apos;a pas pu être sauvegardée vérifier que les champs sont bien remplis.
         /// </summary>
-        public static string English {
+        public static string ErrorSavingConfiguration {
             get {
-                return ResourceManager.GetString("English", resourceCulture);
+                return ResourceManager.GetString("ErrorSavingConfiguration", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Français.
-        /// </summary>
-        public static string French {
-            get {
-                return ResourceManager.GetString("French", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to GlobalFR.
+        ///   Recherche une chaîne localisée semblable à GlobalFR.
         /// </summary>
         public static string GlobalString {
             get {
