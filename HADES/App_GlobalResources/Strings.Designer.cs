@@ -70,20 +70,101 @@ namespace HADES {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à La date d&apos;expiration est arrivée a échéance pour un groupe. .
+        /// </summary>
+        public static string email_ExpirationDateMessage {
+            get {
+                return ResourceManager.GetString("email_ExpirationDateMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à La date d&apos;expiration.
+        /// </summary>
+        public static string email_ExpirationDateSubject {
+            get {
+                return ResourceManager.GetString("email_ExpirationDateSubject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Un groupe a été créé..
+        /// </summary>
+        public static string email_GroupCreateMessage {
+            get {
+                return ResourceManager.GetString("email_GroupCreateMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à La création d&apos;un groupe.
+        /// </summary>
+        public static string email_GroupCreateSubject {
+            get {
+                return ResourceManager.GetString("email_GroupCreateSubject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Un groupe a été supprimé..
+        /// </summary>
+        public static string email_GroupDeleteMessage {
+            get {
+                return ResourceManager.GetString("email_GroupDeleteMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à La suppression d&apos;un groupe.
+        /// </summary>
+        public static string email_GroupDeleteSubject {
+            get {
+                return ResourceManager.GetString("email_GroupDeleteSubject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Des membres ont été ajouté à un groupe..
+        /// </summary>
+        public static string email_MemberAddMessage {
+            get {
+                return ResourceManager.GetString("email_MemberAddMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Ajout de Membres.
+        /// </summary>
+        public static string email_MemberAddSubject {
+            get {
+                return ResourceManager.GetString("email_MemberAddSubject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Des membres ont été supprimé d&apos;un groupe..
+        /// </summary>
+        public static string email_MemberRemovalMessage {
+            get {
+                return ResourceManager.GetString("email_MemberRemovalMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Suppression de membres.
+        /// </summary>
+        public static string email_MemberRemovalSubject {
+            get {
+                return ResourceManager.GetString("email_MemberRemovalSubject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à La configuration n&apos;a pas pu être sauvegardée vérifier que les champs sont bien remplis.
         /// </summary>
         public static string ErrorSavingConfiguration {
             get {
                 return ResourceManager.GetString("ErrorSavingConfiguration", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une chaîne localisée semblable à Date d&apos;expiration.
-        /// </summary>
-        public static string email_ExpirationDateSubject {
-            get {
-                return ResourceManager.GetString("email_ExpirationDateSubject", resourceCulture);
             }
         }
         

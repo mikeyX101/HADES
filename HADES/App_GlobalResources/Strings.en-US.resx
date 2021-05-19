@@ -130,6 +130,33 @@
     <value>The configuration couldn't be saved. Make sure the inputs fields are filled properly</value>
   </data>
   <data name="email_ExpirationDateMessage" xml:space="preserve">
-    <value>The expiration date has passed for the group</value>
+    <value>The expiration date has passed for a group.</value>
+  </data>
+  <data name="email_ExpirationDateSubject" xml:space="preserve">
+    <value>Expiration Date</value>
+  </data>
+  <data name="email_GroupCreateSubject" xml:space="preserve">
+    <value>Create a group</value>
+  </data>
+  <data name="email_GroupCreateMessage" xml:space="preserve">
+    <value>A group has been created.</value>
+  </data>
+  <data name="email_GroupDeleteSubject" xml:space="preserve">
+    <value>Delete a group</value>
+  </data>
+  <data name="email_GroupDeleteMessage" xml:space="preserve">
+    <value>A group has been deleted.</value>
+  </data>
+  <data name="email_MemberAddSubject" xml:space="preserve">
+    <value>Add member</value>
+  </data>
+  <data name="email_MemberAddMessage" xml:space="preserve">
+    <value>Members have been added to a group.</value>
+  </data>
+  <data name="email_MemberRemovalSubject" xml:space="preserve">
+    <value>Remove Member</value>
+  </data>
+  <data name="email_MemberRemovalMessage" xml:space="preserve">
+    <value>Members have been removed from a group.</value>
   </data>
 </root>

@@ -85,7 +85,7 @@ namespace HADES.Util
             try
             {
                 //Put a timeout (instead of using the default one) on the connection to reduce the time waiting AND avoiding Nginx to timeout with 504 Gateway Timeout
-                connection.ConnectionTimeout = 1000 * 15;
+                connection.ConnectionTimeout = 1000 * 5;
                 //Connect function will create a socket connection to the server
                 connection.Connect(ADSettingsCache.Ad.ServerAddress, ADSettingsCache.Ad.PortNumber);
                 Console.WriteLine("isConnected : " + connection.Connected);
@@ -350,6 +350,8 @@ namespace HADES.Util
 
             connection.Disconnect();
 
+
+      
             return root;
         }
 
