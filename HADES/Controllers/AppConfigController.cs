@@ -5,6 +5,7 @@ using HADES.Util;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -35,7 +36,7 @@ namespace HADES.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> AppConfig([Bind("ActiveDirectory,AdminGroups,SuperAdminGroups,DefaultUser,AppConfig")] AppConfigViewModel viewModel, string confirm, string confirmDN)
+        public async Task<IActionResult> AppConfig([Bind("ActiveDirectory,AdminGroups,SuperAdminGroups,DefaultUser,AppConfig")] AppConfigViewModel viewModel, string confirm, string confirmDN, string confirmSMTP, string useSMTPCred)
         {
             ViewBag.AppConfigError = "";
 
@@ -50,7 +51,20 @@ namespace HADES.Controllers
             if (viewModel.ActiveDirectory.PasswordDN == null || viewModel.ActiveDirectory.PasswordDN.Equals(""))
             {
                 // Don't change Password
-               confirmDN = viewModel.ActiveDirectory.PasswordDN = service.AppConfigViewModelGET().Result.ActiveDirectory.PasswordDN;
+                confirmDN = viewModel.ActiveDirectory.PasswordDN = service.AppConfigViewModelGET().Result.ActiveDirectory.PasswordDN;
+            }
+
+            if (useSMTPCred == "on" && (viewModel.AppConfig.SMTPPassword == null || viewModel.AppConfig.SMTPPassword.Equals("")))
+            {
+                // Don't change Password
+                confirmSMTP = viewModel.AppConfig.SMTPPassword = service.AppConfigViewModelGET().Result.AppConfig.SMTPPassword;
+            }
+
+            if (useSMTPCred != "on")
+            {
+                // Remove all credentials
+                viewModel.AppConfig.SMTPUsername = null;
+                viewModel.AppConfig.SMTPPassword = null;
             }
 
             bool hashed = false;
@@ -64,7 +78,7 @@ namespace HADES.Controllers
             if (confirm == null) confirm = "";
             if (confirmDN == null) confirmDN = "";
 
-            if (confirmDN.Equals(viewModel.ActiveDirectory.PasswordDN) && confirm.Equals(viewModel.DefaultUser.Password) && (validatePassword(viewModel.DefaultUser.Password)||hashed) && TryValidateModel(viewModel))
+            if (confirmDN.Equals(viewModel.ActiveDirectory.PasswordDN) && confirm.Equals(viewModel.DefaultUser.Password) && (validatePassword(viewModel.DefaultUser.Password) || hashed) && TryValidateModel(viewModel))
             {
                 if (!hashed)
                 {
@@ -209,5 +223,17 @@ namespace HADES.Controllers
             ModelState.Remove("ActiveDirectory.PasswordDN");
         }
 
+
+        public static string Encrypt(string pass)
+        {
+            DES des = DES.Create();
+            des.GenerateKey();
+            return null;
+        }
+
+        public static string Decrypt(string pass)
+        {
+            return null;
+        }
     }
 }

@@ -143,6 +143,33 @@
             <input type="email" asp-for="@Model.AppConfig.SMTPFromEmail" class="form-control" />
         </div>
     </div>
+    <div class="form-group row">
+        <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["SMTPuseCred"]</label></div>
+        <div class="col-sm-9 col-lg-5">
+            <input id="box" type="checkbox" name="useSMTPCred" class="form-control" />
+            <script>$(document).ready(function () { if ($("#SMTPUser").val().length > 0) $("#box").prop('checked', true) })</script>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["SMTPUser"]</label></div>
+        <div class="col-sm-9 col-lg-5">
+            <input id="SMTPUser" type="text" asp-for="@Model.AppConfig.SMTPUsername" class="form-control" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["SMTPPass"]</label></div>
+        <div class="col-sm-9 col-lg-5">
+            <input id="passSMTP" type="password" asp-for="@Model.AppConfig.SMTPPassword" class="form-control" />
+        </div>
+        <script>$("#passSMTP").change(function () { if ($("#passSMTP").val() != $("#passDefaultUserConfirm").val()) $("#passSMTPConfirm").css("border-color", "red"); else $("#passSMTPConfirm").css("border-color", "blue") })</script>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["DefaultUserPasswordConfirm"]</label></div>
+        <div class="col-sm-9 col-lg-5">
+            <input id="passSMTPConfirm" type="password" name="confirmSMTP" class="form-control" />
+        </div>
+        <script>$("#passSMTPConfirm").change(function () { if ($("#passSMTP").val() != $("#passSMTPConfirm").val()) $("#passSMTPConfirm").css("border-color", "red"); else $("#passSMTPConfirm").css("border-color", "blue") })</script>
+    </div>
     <hr />
     <div class="form-group row">
         <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["LogDeleteFrequency"]</label></div>
