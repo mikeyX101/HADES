@@ -48,14 +48,16 @@
     <div class="form-group row">
         <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["PasswordDN"]</label></div>
         <div class="col-sm-9 col-lg-5">
-            <input type="password" asp-for="@Model.ActiveDirectory.PasswordDN" class="form-control" />
+            <input id="DNpass" type="password" asp-for="@Model.ActiveDirectory.PasswordDN" class="form-control" />
         </div>
+        <script>$("#DNpass").change(function () { if ($("#DNpass").val() != $("#DNpassconfirm").val()) $("#DNpassconfirm").css("border-color", "red"); else $("#DNpassconfirm").css("border-color", "blue") })</script>
     </div>
     <div class="form-group row">
         <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["DefaultUserPasswordConfirm"]</label></div>
         <div class="col-sm-9 col-lg-5">
-            <input type="password" name="confirmDN" class="form-control" />
+            <input id="DNpassconfirm" type="password" name="confirmDN" class="form-control" />
         </div>
+        <script>$("#DNpassconfirm").change(function () { if ($("#DNpass").val() != $("#DNpassconfirm").val()) $("#DNpassconfirm").css("border-color", "red"); else $("#DNpassconfirm").css("border-color", "blue") })</script>
     </div>
     <div class="form-group row">
         <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["SyncField"]</label></div>
@@ -80,14 +82,16 @@
     <div class="form-group row">
         <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["DefaultUserPassword"]</label></div>
         <div class="col-sm-9 col-lg-5">
-            <input type="password" asp-for="@Model.DefaultUser.Password" class="form-control" />
+            <input id="passDefaultUser" type="password" asp-for="@Model.DefaultUser.Password" class="form-control" />
         </div>
+        <script>$("#passDefaultUser").change(function () { if ($("#passDefaultUser").val() != $("#passDefaultUserConfirm").val()) $("#passDefaultUserConfirm").css("border-color", "red"); else $("#passDefaultUserConfirm").css("border-color", "blue") })</script>
     </div>
     <div class="form-group row">
         <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["DefaultUserPasswordConfirm"]</label></div>
         <div class="col-sm-9 col-lg-5">
-            <input type="password" name="confirm" class="form-control" />
+            <input id="passDefaultUserConfirm" type="password" name="confirm" class="form-control" />
         </div>
+        <script>$("#passDefaultUserConfirm").change(function () { if ($("#passDefaultUser").val() != $("#passDefaultUserConfirm").val()) $("#passDefaultUserConfirm").css("border-color", "red"); else $("#passDefaultUserConfirm").css("border-color", "blue") })</script>
     </div>
     <hr />
     <div class="form-group row">
@@ -131,18 +135,6 @@
         <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["SMTPPort"]</label></div>
         <div class="col-sm-9 col-lg-5">
             <input type="number" asp-for="@Model.AppConfig.SMTPPort" class="form-control" />
-        </div>
-    </div>
-    <div class="form-group row">
-        <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["SMTPUser"]</label></div>
-        <div class="col-sm-9 col-lg-5">
-            <input type="text" asp-for="@Model.AppConfig.SMTPUsername" class="form-control" />
-        </div>
-    </div>
-    <div class="form-group row">
-        <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["SMTPPass"]</label></div>
-        <div class="col-sm-9 col-lg-5">
-            <input type="password" asp-for="@Model.AppConfig.SMTPPassword" class="form-control" />
         </div>
     </div>
     <div class="form-group row">
