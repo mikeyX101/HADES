@@ -148,13 +148,13 @@
     <value>Deletes this user from Hades without deleting in the Active Directory</value>
   </data>
   <data name="UserRemoveToolTip" xml:space="preserve">
-    <value>Remove this user from all of it's groups and assign this user as inactive</value>
+    <value>Remove this user rights from all of it's groups and assign this user as inactive. &lt;b&gt;An Admin or SuperAdmin cannot be removed&lt;/b&gt;</value>
   </data>
   <data name="RemoveConfirmationTitle" xml:space="preserve">
     <value>Remove User</value>
   </data>
   <data name="RemoveConfirmationMessage" xml:space="preserve">
-    <value>Are you sure you want to remove this user from all of their groups ?&lt;br&gt; They will be marked as inactive in Hades and won't be part of any group in the Active Directory.</value>
+    <value>Are you sure you want to remove this user rights ?&lt;br&gt; They will be marked as inactive in Hades. &lt;b&gt;Admins and SuperAdmins will be reactivated at next Synchronization&lt;/b&gt;</value>
   </data>
   <data name="DeleteConfirmationTitle" xml:space="preserve">
     <value>Delete User</value>

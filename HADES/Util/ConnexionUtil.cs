@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
+using Serilog;
 
 namespace HADES.Util
 {
@@ -81,11 +82,11 @@ namespace HADES.Util
                 if (u.Attempts > 5)
                 {
                     u.Attempts = 0;
-                    u.Date = DateTime.Now.AddMinutes(10);
-                    Console.WriteLine(u.GetName() + " LOCKED UNTIL " + u.Date.ToString());
+                    u.Date = DateTime.UtcNow.AddMinutes(10);
+                    Log.Information("{User} has been locked from login attempts. The user will unlock at {Date}", u.GetName(), u.Date.ToString());
                 }
                 db.SaveChanges();
-                return u.Date < DateTime.Now;
+                return u.Date < DateTime.UtcNow;
             }
             catch (Exception)
             {
@@ -102,16 +103,15 @@ namespace HADES.Util
                     u.Attempts++;
                     if (u.Attempts > 5)
                     {
-                        u.Date = DateTime.Now.AddMinutes(10);
-                        Console.WriteLine(u.GetName() + " LOCKED UNTIL " + u.Date.ToString());
+                        u.Date = DateTime.UtcNow.AddMinutes(10);
+                        Log.Information("{User} has been locked from login attempts. The user will unlock at {Date}", u.GetName(), u.Date.ToString());
                     }
                     db.SaveChanges();
-                    return u.Date < DateTime.Now;
+                    return u.Date < DateTime.UtcNow;
                 }
                 catch (ADException)
                 {
-                    Console.WriteLine("ADEXCEPTION");
-                    throw;
+                    throw; // Logged in login
                 }
                 catch (ForbiddenException)
                 {
@@ -119,7 +119,7 @@ namespace HADES.Util
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.Message);
+                    Log.Warning(e, "An unexepected error occured while validating login attempts");
                     // If anything Wrong happens then this User must not exist
                     return false;
                 }

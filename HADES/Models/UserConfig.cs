@@ -20,10 +20,12 @@ namespace HADES.Models
         public int Id { get; set; }
 
         [Required]
+        [LanguageExist]
         [Column("UCF_language")]
         public string Language { get; set; }
 
         [Required]
+        [ThemeFileExist]
         [Column("UCF_theme_file")]
         public string ThemeFile { get; set; }
 

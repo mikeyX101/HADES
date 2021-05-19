@@ -24,6 +24,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Net;
 using Serilog;
+using Serilog.Context;
 
 namespace HADES
 {
@@ -154,13 +155,19 @@ namespace HADES
 				{
 					scope.ServiceProvider.GetRequiredService<Data.ApplicationDbContext>().Database.Migrate();
 				}
-			}
-
-            app.UseStaticFiles();
+            }
+            Util.LogManager.RefreshLogger(new AppConfigService().GetAppConfig());
 
             app.UseRouting();
 
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+            app.UseUserLog();
+
             app.UseSerilogRequestLogging();
+
+            app.UseStaticFiles();
 
             app.UseContentSecurityPolicyHeader(
                 "default-src 'self'; img-src 'self' data:; media-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; font-src 'self'; frame-src 'self'",
@@ -172,9 +179,6 @@ namespace HADES
                     .SetIsOriginAllowed((host) => true)
                     .AllowCredentials()
             );
-
-            app.UseAuthentication();
-            app.UseAuthorization();
 
             app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = SameSiteMode.Strict, Secure = CookieSecurePolicy.Always });
 

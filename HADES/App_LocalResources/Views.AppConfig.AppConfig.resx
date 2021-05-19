@@ -174,8 +174,8 @@
   <data name="ServerAddress" xml:space="preserve">
     <value>Adresse du serveur</value>
   </data>
-  <data name="SMTP" xml:space="preserve">
-    <value>SMTP</value>
+  <data name="SMTPServer" xml:space="preserve">
+    <value>Adresse Serveur SMTP</value>
   </data>
   <data name="SuperAdminGroup" xml:space="preserve">
     <value>Groupes super administrateur</value>
@@ -185,5 +185,17 @@
   </data>
   <data name="DefaultUserPasswordConfirm" xml:space="preserve">
     <value>Confirmer Mot de passe</value>
+  </data>
+  <data name="SMTPUser" xml:space="preserve">
+    <value>Utilisateur SMTP</value>
+  </data>
+  <data name="SMTPPass" xml:space="preserve">
+    <value>Mot de Passe SMTP</value>
+  </data>
+  <data name="SMTPPort" xml:space="preserve">
+    <value>Port Serveur SMTP</value>
+  </data>
+  <data name="SMTPEmail" xml:space="preserve">
+    <value>Email Éxpediteur SMTP</value>
   </data>
 </root>
