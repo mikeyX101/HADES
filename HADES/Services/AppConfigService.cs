@@ -39,6 +39,11 @@ namespace HADES.Services
             return viewModel;
         }
 
+        public AppConfig GetAppConfig()
+        {
+            return db.AppConfig.FirstOrDefault();
+        }
+
         public async Task<ActiveDirectory> getADInfo()
         {
             var activeDirectory = await db.ActiveDirectory.FirstOrDefaultAsync();
@@ -79,6 +84,8 @@ namespace HADES.Services
             
             await db.SaveChangesAsync();
 
+            // Make these functions async and run them at the same time using Task.WaitAll()?
+            LogManager.RefreshLogger(viewModel.AppConfig);
             ADSettingsCache.Refresh();
             SMTPSettingsCache.Refresh();
         }
