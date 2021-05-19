@@ -129,4 +129,40 @@
   <data name="Spanish" xml:space="preserve">
     <value>Español</value>
   </data>
+  <data name="email_GroupCreateMessage" xml:space="preserve">
+    <value>Se ha creado un grupo.</value>
+  </data>
+  <data name="email_GroupDeleteMessage" xml:space="preserve">
+    <value>Se ha eliminado un grupo.</value>
+  </data>
+  <data name="email_MemberAddSubject" xml:space="preserve">
+    <value>Agregar miembros</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>Regreso</value>
+  </data>
+  <data name="email_GroupCreateSubject" xml:space="preserve">
+    <value>La creación de un grupo</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Eliminar</value>
+  </data>
+  <data name="email_GroupDeleteSubject" xml:space="preserve">
+    <value>Eliminar un grupo</value>
+  </data>
+  <data name="email_ExpirationDateSubject" xml:space="preserve">
+    <value>Fecha de caducidad</value>
+  </data>
+  <data name="email_MemberAddMessage" xml:space="preserve">
+    <value>Se han agregado miembros a un grupo.</value>
+  </data>
+  <data name="email_MemberRemovalMessage" xml:space="preserve">
+    <value>Los miembros han sido eliminados de un grupo.</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Eliminar</value>
+  </data>
+  <data name="email_MemberRemovalSubject" xml:space="preserve">
+    <value>Eliminar miembros</value>
+  </data>
 </root>

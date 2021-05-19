@@ -13,20 +13,24 @@ namespace HADES.Controllers.API
 	[ApiController]
 	public class CSPReportController : ControllerBase
 	{
+		// report is user input, be cautious with the data
 		[HttpPost]
 		[AllowAnonymous]
 		[Consumes("application/csp-report")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
-		public IActionResult Report([FromBody] CSPReportRequest report)
+		public IActionResult Report([FromBody] CSPReportRequest reportRequest)
 		{
-			if (report == null || report.CSPReport == null)
+			if (reportRequest == null || reportRequest.CSPReport == null)
 			{
 				return new BadRequestResult();
 			}
 
-			// Log user that made the report?
-			Console.WriteLine(report.ToString()); //TODO Log
+			CSPReport report = reportRequest.CSPReport;
+			Serilog.Log.Information("Content Security Policy Violation: Blocked Uri {BlockedUri} in page {DocumentUri} because of {ViolatedDirective}",
+				report.BlockedUri,
+				report.DocumentUri,
+				report.ViolatedDirective);
 
 			return new OkObjectResult("OK");
 		}

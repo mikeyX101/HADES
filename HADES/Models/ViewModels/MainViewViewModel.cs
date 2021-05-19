@@ -1,5 +1,6 @@
 ﻿using HADES.Util.ModelAD;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace HADES.Models
 {
@@ -27,6 +28,8 @@ namespace HADES.Models
 
         public string SelectedContentName { get; set; }
 
+        [Required]
+        [OuName]
         public string NewName { get; set; }
 
     }

@@ -144,4 +144,34 @@
   <data name="Back" xml:space="preserve">
     <value>Retour</value>
   </data>
+  <data name="email_ExpirationDateMessage" xml:space="preserve">
+    <value>La date d'expiration est arrivée a échéance pour un groupe.</value>
+  </data>
+  <data name="email_ExpirationDateSubject" xml:space="preserve">
+    <value>La date d'expiration</value>
+  </data>
+  <data name="email_GroupCreateSubject" xml:space="preserve">
+    <value>La création d'un groupe</value>
+  </data>
+  <data name="email_GroupCreateMessage" xml:space="preserve">
+    <value>Un groupe a été créé.</value>
+  </data>
+  <data name="email_GroupDeleteSubject" xml:space="preserve">
+    <value>La suppression d'un groupe</value>
+  </data>
+  <data name="email_GroupDeleteMessage" xml:space="preserve">
+    <value>Un groupe a été supprimé.</value>
+  </data>
+  <data name="email_MemberAddSubject" xml:space="preserve">
+    <value>Ajout de Membres</value>
+  </data>
+  <data name="email_MemberAddMessage" xml:space="preserve">
+    <value>Des membres ont été ajouté à un groupe.</value>
+  </data>
+  <data name="email_MemberRemovalSubject" xml:space="preserve">
+    <value>Suppression de membres</value>
+  </data>
+  <data name="email_MemberRemovalMessage" xml:space="preserve">
+    <value>Des membres ont été supprimé d'un groupe.</value>
+  </data>
 </root>

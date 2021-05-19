@@ -18,8 +18,7 @@ namespace HADES
             Serilog.Debugging.SelfLog.Enable(System.Console.WriteLine);
             // Logger used for ASP.NET Core initialization, is replaced when building host
             Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Override("Microsoft", LogEventLevel.Debug)
-                .WriteTo.Console(LogEventLevel.Debug)
+                .ReadFrom.Configuration(config)
                 .CreateBootstrapLogger();
 
             try
@@ -35,16 +34,15 @@ namespace HADES
             }
             finally
             {
+                Log.Information("Stopping web host");
                 Log.CloseAndFlush();
             }
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .UseSerilog((context, services, config) => config
-                    .ReadFrom.Configuration(context.Configuration)
-                    .ReadFrom.Services(services)
-                    .Enrich.FromLogContext()
+                .UseSerilog((context, services, config) => 
+                    Util.LogManager.Initialize(context, services, config)
                 )
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
