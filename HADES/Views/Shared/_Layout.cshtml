@@ -1,4 +1,5 @@
 ﻿<!DOCTYPE html>
+@{ HADES.Data.ApplicationDbContext tempdb = new(); }
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
@@ -25,20 +26,17 @@
                     <li class="nav-item">
                         @* TODO: Logo *@
                         <a class="navbar-brand" asp-action="MainView" asp-controller="Home" asp-area="">
-                            <img src="~/img/Logo.png" alt="*LOGO*" />
+                            <img src=@tempdb.AppConfig.FirstOrDefault().CompanyLogoFile alt="*LOGO*" height="60" />
                         </a>
                     </li>
                 </ul>
                 <ul class="navbar-nav mr-auto text-light">
                     <li class="nav-item">
-                        @* TODO: HADES - Nom de l'entreprise *@
-                        @{ HADES.Data.ApplicationDbContext tempdb = new(); }
                         HADES - @tempdb.AppConfig.FirstOrDefault().CompanyName
                     </li>
                 </ul>
                 <ul class="navbar-nav mr-auto text-light">
                     <li class="nav-item">
-                        @* TODO: Nom utilisateur (Role)*@
                         @{
                             IUser u = HADES.Util.ConnexionUtil.CurrentUser(Context.User);
 
