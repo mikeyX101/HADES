@@ -104,13 +104,17 @@
         <input type="hidden" asp-for="@Model.AppConfig.Id" />
         <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["CompanyLogoFile"]</label></div>
         <div class="col-sm-9 col-lg-5">
-            <input type="file" accept="image/*" asp-for="@Model.AppConfig.CompanyLogoFile" class="form-control" />
+            <input id="clogo" type="file" accept="image/*" asp-for="@Model.AppConfig.CompanyLogoFile" class="form-control" /> <img src=@Model.AppConfig.CompanyLogoFile width="80" />
+            <script>$("#clogo").change(function () { encodebase64url($("#clogo")[0].files[0], $("#b64l")) })</script>
+            <input id="b64l" type="hidden" name="base64logo" class="form-control" />
         </div>
     </div>
     <div class="form-group row">
         <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["CompanyBackgroundFile"]</label></div>
         <div class="col-sm-9 col-lg-5">
-            <input type="file" accept="image/*" asp-for="@Model.AppConfig.CompanyBackgroundFile" class="form-control" />
+            <input id="cbg" type="file" accept="image/*" asp-for="@Model.AppConfig.CompanyBackgroundFile" class="form-control" /> <img src=@Model.AppConfig.CompanyBackgroundFile width="80" />
+            <script>$("#cbg").change(function () { encodebase64url($("#cbg")[0].files[0], $("#b64bg")) })</script>
+            <input id="b64bg" type="hidden" name="base64bg" class="form-control" />
         </div>
     </div>
     <div class="form-group row">
@@ -142,6 +146,33 @@
         <div class="col-sm-9 col-lg-5">
             <input type="email" asp-for="@Model.AppConfig.SMTPFromEmail" class="form-control" />
         </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["SMTPuseCred"]</label></div>
+        <div class="col-sm-9 col-lg-5">
+            <input id="box" type="checkbox" name="useSMTPCred" class="form-control" />
+            <script>$(document).ready(function () { if ($("#SMTPUser").val().length > 0) $("#box").prop('checked', true) })</script>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["SMTPUser"]</label></div>
+        <div class="col-sm-9 col-lg-5">
+            <input id="SMTPUser" type="text" asp-for="@Model.AppConfig.SMTPUsername" class="form-control" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["SMTPPass"]</label></div>
+        <div class="col-sm-9 col-lg-5">
+            <input id="passSMTP" type="password" asp-for="@Model.AppConfig.SMTPPassword" class="form-control" />
+        </div>
+        <script>$("#passSMTP").change(function () { if ($("#passSMTP").val() != $("#passDefaultUserConfirm").val()) $("#passSMTPConfirm").css("border-color", "red"); else $("#passSMTPConfirm").css("border-color", "blue") })</script>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["DefaultUserPasswordConfirm"]</label></div>
+        <div class="col-sm-9 col-lg-5">
+            <input id="passSMTPConfirm" type="password" name="confirmSMTP" class="form-control" />
+        </div>
+        <script>$("#passSMTPConfirm").change(function () { if ($("#passSMTP").val() != $("#passSMTPConfirm").val()) $("#passSMTPConfirm").css("border-color", "red"); else $("#passSMTPConfirm").css("border-color", "blue") })</script>
     </div>
     <hr />
     <div class="form-group row">
@@ -238,3 +269,16 @@
         </div>
     </div>
 </form>
+
+<script>
+    function encodebase64url(file, out) {
+        if (file) {
+            var fr = new FileReader();
+            fr.onload = function () {
+                out.val(fr.result);
+            };
+
+            fr.readAsDataURL(file);
+        }
+    };
+</script>

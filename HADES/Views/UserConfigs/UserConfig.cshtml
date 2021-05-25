@@ -1,6 +1,6 @@
 ﻿@model UserConfigViewModel
 @{
-    ViewBag.Title = "Paramètres utilisateur";
+    ViewBag.Title = Localizer["UserConfig"];
 }
 
 @section scripts {
@@ -9,7 +9,7 @@
 }
 
 <div class="bg-primary text-white text-center">
-    <h1 class="m-3 p-3">Paramètres utilisateur</h1>
+    <h1 class="m-3 p-3">@Localizer["UserConfig"]</h1>
 </div>
 
 <form asp-action="UserConfig">

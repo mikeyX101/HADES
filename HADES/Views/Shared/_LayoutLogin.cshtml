@@ -11,7 +11,11 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
     @RenderSection("scripts", false)
 </head>
-<body>
+@{
+    // Get the image
+    ViewBag.img = new HADES.Data.ApplicationDbContext().AppConfig.FirstOrDefault().CompanyBackgroundFile;
+}
+<body style="background-image:url(@ViewBag.img);">
     <div class="container">
         <main>
             @RenderBody()

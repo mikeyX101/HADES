@@ -198,4 +198,7 @@
   <data name="SMTPEmail" xml:space="preserve">
     <value>Email Éxpediteur SMTP</value>
   </data>
+  <data name="SMTPuseCred" xml:space="preserve">
+    <value>Utiliser les informations de connexion SMTP</value>
+  </data>
 </root>

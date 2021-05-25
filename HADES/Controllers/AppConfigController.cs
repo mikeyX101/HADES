@@ -5,6 +5,9 @@ using HADES.Util;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -35,7 +38,7 @@ namespace HADES.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> AppConfig([Bind("ActiveDirectory,AdminGroups,SuperAdminGroups,DefaultUser,AppConfig")] AppConfigViewModel viewModel, string confirm, string confirmDN)
+        public async Task<IActionResult> AppConfig([Bind("ActiveDirectory,AdminGroups,SuperAdminGroups,DefaultUser,AppConfig")] AppConfigViewModel viewModel, string confirm, string confirmDN, string confirmSMTP, string useSMTPCred, string base64logo, string base64bg)
         {
             ViewBag.AppConfigError = "";
 
@@ -47,10 +50,26 @@ namespace HADES.Controllers
 
             ValidateModelState();
 
+            bool DNencrypted = false;
             if (viewModel.ActiveDirectory.PasswordDN == null || viewModel.ActiveDirectory.PasswordDN.Equals(""))
             {
                 // Don't change Password
-               confirmDN = viewModel.ActiveDirectory.PasswordDN = service.AppConfigViewModelGET().Result.ActiveDirectory.PasswordDN;
+                confirmDN = viewModel.ActiveDirectory.PasswordDN = service.AppConfigViewModelGET().Result.ActiveDirectory.PasswordDN;
+                DNencrypted = true;
+            }
+            bool SMTPencrypted = false;
+            if (useSMTPCred == "on" && (viewModel.AppConfig.SMTPPassword == null || viewModel.AppConfig.SMTPPassword.Equals("")))
+            {
+                // Don't change Password
+                confirmSMTP = viewModel.AppConfig.SMTPPassword = service.AppConfigViewModelGET().Result.AppConfig.SMTPPassword;
+                SMTPencrypted = true;
+            }
+
+            if (useSMTPCred != "on")
+            {
+                // Remove all credentials
+                viewModel.AppConfig.SMTPUsername = null;
+                viewModel.AppConfig.SMTPPassword = null;
             }
 
             bool hashed = false;
@@ -64,13 +83,45 @@ namespace HADES.Controllers
             if (confirm == null) confirm = "";
             if (confirmDN == null) confirmDN = "";
 
-            if (confirmDN.Equals(viewModel.ActiveDirectory.PasswordDN) && confirm.Equals(viewModel.DefaultUser.Password) && (validatePassword(viewModel.DefaultUser.Password)||hashed) && TryValidateModel(viewModel))
+            if (confirmSMTP == viewModel.AppConfig.SMTPPassword && confirmDN.Equals(viewModel.ActiveDirectory.PasswordDN) && confirm.Equals(viewModel.DefaultUser.Password) && (validatePassword(viewModel.DefaultUser.Password) || hashed) && TryValidateModel(viewModel))
             {
                 if (!hashed)
                 {
                     viewModel.DefaultUser.Password = ConnexionUtil.HashPassword(viewModel.DefaultUser.Password); // Password is now hashed
                 }
 
+                if (!DNencrypted)
+                {
+                    viewModel.ActiveDirectory.PasswordDN = Encrypt(viewModel.ActiveDirectory.PasswordDN); // Password is now encrypted
+                }
+
+                if (!SMTPencrypted && useSMTPCred=="on")
+                {
+                    viewModel.AppConfig.SMTPPassword = Encrypt(viewModel.AppConfig.SMTPPassword); // Password is now encrypted
+                }
+
+                string logopath = viewModel.AppConfig.CompanyLogoFile;
+                string backgroundpath = viewModel.AppConfig.CompanyBackgroundFile;
+
+                if (logopath != null && logopath != "")
+                {
+                    viewModel.AppConfig.CompanyLogoFile = base64logo; // change
+                }
+                else
+                {
+                    viewModel.AppConfig.CompanyLogoFile = service.AppConfigViewModelGET().Result.AppConfig.CompanyLogoFile; // don't change
+                }
+
+                if (backgroundpath != null && backgroundpath != "")
+                {
+                    viewModel.AppConfig.CompanyBackgroundFile = base64bg;  // change
+                }
+                else
+                {
+                    viewModel.AppConfig.CompanyBackgroundFile = service.AppConfigViewModelGET().Result.AppConfig.CompanyBackgroundFile; // don't change
+                }
+
+                // Now Update AppConfig
                 try
                 {
                     await service.UpdateAppConfig(viewModel);
@@ -209,5 +260,31 @@ namespace HADES.Controllers
             ModelState.Remove("ActiveDirectory.PasswordDN");
         }
 
+        private static byte[] key = new byte[] { 64, 5, 221, 17, 116, 101, 241, 129 };
+        private static byte[] iv = new byte[] { 100, 154, 137, 233, 200, 166, 106, 66 };
+
+        // Encrypt password
+        public static string Encrypt(string pass)
+        {
+            if (pass == null) return null;
+
+            SymmetricAlgorithm algorithm = DES.Create();
+            ICryptoTransform transform = algorithm.CreateEncryptor(key, iv);
+            byte[] inputbuffer = Encoding.Unicode.GetBytes(pass);
+            byte[] outputBuffer = transform.TransformFinalBlock(inputbuffer, 0, inputbuffer.Length);
+            return Convert.ToBase64String(outputBuffer);
+        }
+
+        // Decrypt password
+        public static string Decrypt(string pass)
+        {
+            if (pass == null) return null;
+
+            SymmetricAlgorithm algorithm = DES.Create();
+            ICryptoTransform transform = algorithm.CreateDecryptor(key, iv);
+            byte[] inputbuffer = Convert.FromBase64String(pass);
+            byte[] outputBuffer = transform.TransformFinalBlock(inputbuffer, 0, inputbuffer.Length);
+            return Encoding.Unicode.GetString(outputBuffer);
+        }
     }
 }
