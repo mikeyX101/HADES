@@ -237,4 +237,22 @@
   <data name="LanguageToolTip" xml:space="preserve">
     <value>The application default language. This language will be used in the login page and for every newly created Hades users</value>
   </data>
+  <data name="SMTPServerToolTip" xml:space="preserve">
+    <value>The IP adress or domain name of the SMTP server&lt;br&gt;&lt;i&gt;domain&lt;br&gt;192.255.255.255&lt;i&gt;</value>
+  </data>
+  <data name="SMTPPortToolTip" xml:space="preserve">
+    <value>SMTP port number on server&lt;br&gt;&lt;i&gt;465&lt;i&gt;</value>
+  </data>
+  <data name="SMTPEmailToolTip" xml:space="preserve">
+    <value>Email Adress to use for sending emails&lt;br&gt;&lt;i&gt;notification@hades.com&lt;i&gt;</value>
+  </data>
+  <data name="SMTPUserToolTip" xml:space="preserve">
+    <value>Credentials for SMTP user. Leave password field empty if you don't want to change password</value>
+  </data>
+  <data name="LogFreqToolTip" xml:space="preserve">
+    <value>Log deletion frequency in days</value>
+  </data>
+  <data name="LogMaxToolTip" xml:space="preserve">
+    <value>Max size of a log file in bytes&lt;br&gt;&lt;i&gt;2147483648&lt;i&gt;</value>
+  </data>
 </root>

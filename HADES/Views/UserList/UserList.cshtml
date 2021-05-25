@@ -36,7 +36,7 @@ else
                     <td>@u.SamAccount</td>
                     <td>@u.Role</td>
                     <td>@u.OwnerOf</td>
-                    <td><button class="btn btn-danger" data-toggle="tooltip" data-placement="top" title=@Localizer["UserRemoveToolTip"]>@HADES.Strings.Remove</button></td>
+                    <td><button class="btn btn-danger" data-toggle="tooltip" data-html="true" data-placement="top" title=@Localizer["UserRemoveToolTip"]>@HADES.Strings.Remove</button></td>
                 </tr>
             }
         </tbody>
@@ -67,7 +67,7 @@ else
                     <td>@u.OwnerOf</td>
                     <td>
                         <form action="Delete" method="post" onsubmit="return deleteUser(this)" style="display: inline-block">
-                            <button class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="@Localizer["UserDeleteToolTip"]">@HADES.Strings.Delete</button>
+                            <button class="btn btn-danger" data-toggle="tooltip" data-html="true" data-placement="top" title="@Localizer["UserDeleteToolTip"]">@HADES.Strings.Delete</button>
                             <input type="hidden" name="guid" value=@u.GUID />
                         </form>
                     </td>
@@ -76,6 +76,11 @@ else
         </tbody>
     </table>
 
+    <script>
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
 
     <!-- dialogs -->
     <div id="dialog-confirmation-remove" title=@Localizer["RemoveConfirmationTitle"].Value>@Localizer["RemoveConfirmationMessage"]</div>
