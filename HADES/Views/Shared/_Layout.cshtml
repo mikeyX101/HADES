@@ -1,15 +1,19 @@
 ﻿<!DOCTYPE html>
 @{ HADES.Data.ApplicationDbContext tempdb = new(); }
+@{
+    IUser u = HADES.Util.ConnexionUtil.CurrentUser(Context.User);
+}
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>HADES</title>
     <link rel="stylesheet" type="text/css" href="~/lib/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="~/lib/fontawesome/css/all.min.css">
-    <link rel="stylesheet" href="~/css/site.css">
+    <link rel="stylesheet" href="~/css/@u.GetUserConfig().ThemeFile">
     <link rel="stylesheet" href="~/lib/bootstrap-icons/bootstrap-icons.min.css">
 
     <script src="~/lib/jquery/jquery.min.js"></script>
+    <script src="~/lib/popper.js/umd/popper.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
     @RenderSection("scripts", false)
 </head>
@@ -37,11 +41,6 @@
                 </ul>
                 <ul class="navbar-nav mr-auto text-light">
                     <li class="nav-item">
-                        @{
-                            IUser u = HADES.Util.ConnexionUtil.CurrentUser(Context.User);
-
-
-                        }
                         @u?.GetName() (@u?.GetRole().Name)
 
                     </li>
@@ -69,7 +68,7 @@
                     </div>
                 }
 
-                <div class="dropdown">
+                <div class="dropdown btn">
                     <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                         @Localizer["MenuUtilisateur"]
                     </button>

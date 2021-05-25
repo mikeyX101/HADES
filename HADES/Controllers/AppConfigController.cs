@@ -30,6 +30,7 @@ namespace HADES.Controllers
                 return RedirectToAction("MainView", "Home");
             }
             AppConfigService service = new();
+            ViewBag.ThemeFile = ConnexionUtil.CurrentUser(this.User).GetUserConfig().ThemeFile;
 
             return View(await service.AppConfigViewModelGET());
         }
@@ -49,6 +50,8 @@ namespace HADES.Controllers
             AppConfigService service = new();
 
             ValidateModelState();
+            if (viewModel.AppConfig.LogDeleteFrequency < 1 || viewModel.AppConfig.LogMaxFileSize < 1) ModelState.AddModelError("LogsInvalid",HADES.Strings.NegativeValueError);
+
 
             bool DNencrypted = false;
             if (viewModel.ActiveDirectory.PasswordDN == null || viewModel.ActiveDirectory.PasswordDN.Equals(""))

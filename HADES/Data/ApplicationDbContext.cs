@@ -37,14 +37,14 @@ namespace HADES.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<AdminGroup>().ToTable("AdminGroup_ADG");
+            modelBuilder.Entity<AdminGroup>().ToTable("AdminGroup_ADG").HasIndex(a=> a.GUID).IsUnique();
             modelBuilder.Entity<AppConfig>().ToTable("AppConfig_ACF");
             modelBuilder.Entity<DefaultUser>().ToTable("DefaultUser_DUS");
             modelBuilder.Entity<Email>().ToTable("Email_EMA");
-            modelBuilder.Entity<OwnerGroup>().ToTable("OwnerGroup_GRP");
+            modelBuilder.Entity<OwnerGroup>().ToTable("OwnerGroup_GRP").HasIndex(a => a.GUID).IsUnique();
             modelBuilder.Entity<Role>().ToTable("Role_ROL");
-            modelBuilder.Entity<SuperAdminGroup>().ToTable("SuperAdminGroup_SUG");
-            modelBuilder.Entity<User>().ToTable("User_USE");
+            modelBuilder.Entity<SuperAdminGroup>().ToTable("SuperAdminGroup_SUG").HasIndex(a => a.GUID).IsUnique();
+            modelBuilder.Entity<User>().ToTable("User_USE").HasIndex(a => a.GUID).IsUnique();
             modelBuilder.Entity<UserConfig>().ToTable("UserConfig_UCF");
 
             // CREATE ROLES

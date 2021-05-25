@@ -16,7 +16,7 @@ namespace HADES.Models
             if (value is string)
             {
                 themeFileName = (string) value;
-                themeFilePath = System.IO.Directory.GetCurrentDirectory() + "\\wwwroot\\css\\themes\\" + themeFileName + ".css";
+                themeFilePath = System.IO.Directory.GetCurrentDirectory() + "\\wwwroot\\css\\" + themeFileName;
                 if (File.Exists(themeFilePath))
                 {
                     return ValidationResult.Success;
