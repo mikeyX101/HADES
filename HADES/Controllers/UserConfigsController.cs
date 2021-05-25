@@ -37,10 +37,12 @@ namespace HADES.Controllers
             };
             viewModel.Themes = new List<SelectListItem>()
             {
-                new SelectListItem {Text = "deeppink", Value = "deeppink"},
-                new SelectListItem {Text = "chocolate", Value = "chocolate"}
+                new SelectListItem {Text = "site", Value = "site.css"},
+                new SelectListItem {Text = "deeppink", Value = "deeppink.css"},
+                new SelectListItem {Text = "chocolate", Value = "chocolate.css"}
             };
 
+            ViewBag.ThemeFile = ConnexionUtil.CurrentUser(this.User).GetUserConfig().ThemeFile;
 
             return View(viewModel);
         }
