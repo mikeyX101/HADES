@@ -30,7 +30,6 @@ namespace HADES.Controllers
                 return RedirectToAction("MainView", "Home");
             }
             AppConfigService service = new();
-            ViewBag.ThemeFile = ConnexionUtil.CurrentUser(this.User).GetUserConfig().ThemeFile;
 
             return View(await service.AppConfigViewModelGET());
         }

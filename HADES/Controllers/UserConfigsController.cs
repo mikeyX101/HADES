@@ -42,8 +42,6 @@ namespace HADES.Controllers
                 new SelectListItem {Text = "chocolate", Value = "chocolate.css"}
             };
 
-            ViewBag.ThemeFile = ConnexionUtil.CurrentUser(this.User).GetUserConfig().ThemeFile;
-
             return View(viewModel);
         }
 
