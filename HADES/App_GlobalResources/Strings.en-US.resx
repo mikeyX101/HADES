@@ -174,4 +174,7 @@
   <data name="email_MemberRemovalMessage" xml:space="preserve">
     <value>Members have been removed from a group.</value>
   </data>
+  <data name="NegativeValueError" xml:space="preserve">
+    <value>A negative value was entered when the application was expecting a positive value</value>
+  </data>
 </root>

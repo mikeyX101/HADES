@@ -205,6 +205,15 @@ namespace HADES {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Une valeur négative à été entrée alors que l&apos;application attendaient une valeur positive.
+        /// </summary>
+        public static string NegativeValueError {
+            get {
+                return ResourceManager.GetString("NegativeValueError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Portugais.
         /// </summary>
         public static string Portuguese {
