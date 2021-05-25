@@ -83,8 +83,10 @@ namespace HADES.Services
                     processing = false;
                     return;
                 }
+
+                processing = false; // Just to be sure
             }
-            processing = false; // Just to be sure
+         
         }
 
         private static void UpdateAdminSuperAdmin(ApplicationDbContext db)

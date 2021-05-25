@@ -12,7 +12,8 @@ using System.Globalization;
 
 namespace HADES.Util
 {
-    public enum NotificationType {
+    public enum NotificationType
+    {
         ExpirationDate,
         GroupCreate,
         GroupDelete,
@@ -30,93 +31,112 @@ namespace HADES.Util
         private static string subject = "";
         private static string message = "";
 
-        public static void SendEmail(NotificationType type, string groupGUID) {
+        public static void SendEmail(NotificationType type, string groupGUID)
+        {
+            Console.WriteLine("yo " + groupGUID);
 
-                          ApplicationDbContext db = new ApplicationDbContext();
-                          List<Email> emails = null;
-                          switch (type) {
-                              case NotificationType.ExpirationDate:
-                                  emails = db.Email.Include(c => c.UserConfig).ThenInclude(c => c.DefaultUser).Include(c => c.UserConfig).ThenInclude(c => c.User).ThenInclude(c => c.OwnerGroupUsers).ThenInclude(c => c.OwnerGroup).Include(c => c.UserConfig).ThenInclude(c => c.User).ThenInclude(c => c.Role).Where(c => c.ExpirationDate == true && c.UserConfig.Notification == true).ToList();
-                                  break;
-                              case NotificationType.GroupCreate:
-                                  emails = db.Email.Include(c => c.UserConfig).ThenInclude(c => c.DefaultUser).Include(c => c.UserConfig).ThenInclude(c => c.User).ThenInclude(c => c.OwnerGroupUsers).ThenInclude(c => c.OwnerGroup).Include(c => c.UserConfig).ThenInclude(c => c.User).ThenInclude(c => c.Role).Where(c => c.GroupCreate == true && c.UserConfig.Notification == true).ToList();
-                                  break;
-                              case NotificationType.GroupDelete:
-                                  emails = db.Email.Include(c => c.UserConfig).ThenInclude(c => c.DefaultUser).Include(c => c.UserConfig).ThenInclude(c => c.User).ThenInclude(c => c.OwnerGroupUsers).ThenInclude(c => c.OwnerGroup).Include(c => c.UserConfig).ThenInclude(c => c.User).ThenInclude(c => c.Role).Where(c => c.GroupDelete == true && c.UserConfig.Notification == true).ToList();
-                                  break;
-                              case NotificationType.MemberAdd:
-                                  emails = db.Email.Include(c => c.UserConfig).ThenInclude(c => c.DefaultUser).Include(c => c.UserConfig).ThenInclude(c => c.User).ThenInclude(c => c.OwnerGroupUsers).ThenInclude(c => c.OwnerGroup).Include(c => c.UserConfig).ThenInclude(c => c.User).ThenInclude(c => c.Role).Where(c => c.MemberAdd == true && c.UserConfig.Notification == true).ToList();
-                                  break;
-                              case NotificationType.MemberRemoval:
-                                   emails = db.Email.Include(c => c.UserConfig).ThenInclude(c => c.DefaultUser).Include(c => c.UserConfig).ThenInclude(c => c.User).ThenInclude(c => c.OwnerGroupUsers).ThenInclude(c => c.OwnerGroup).Include(c => c.UserConfig).ThenInclude(c => c.User).ThenInclude(c => c.Role).Where(c => c.MemberRemoval == true && c.UserConfig.Notification == true).ToList();
-                                  break;
-                          }
-
-
-                           foreach (var e in emails)
-                           {
-                               //Is a DefautUser
-                               if (e.UserConfig.DefaultUser != null) {
-                                  Console.WriteLine("Send Email to " + e.Address + " " + e.UserConfig.Language);
-                                     EmailHelper.addToList(e.Address, e.UserConfig.Language);
-                               //Is a AD user
-                               } else if (e.UserConfig.User != null) {
-                                  //Is a SuperAdmin or an Admin
-                                   if (e.UserConfig.User.Role.Id == (int)RolesID.SuperAdmin || e.UserConfig.User.Role.Id == (int)RolesID.Admin)
-                                   {
-                                      Console.WriteLine("Send Email to " + e.Address + " " + e.UserConfig.Language);
-                                      EmailHelper.addToList(e.Address, e.UserConfig.Language);
-                                   } 
-                                   //Is owner og the group
-                                   else if (e.UserConfig.User.RoleId == (int)RolesID.Owner)
-                                   {
-                                      foreach (var g in e.UserConfig.User.OwnerGroupUsers)
-                                      {
-                                          Console.WriteLine(g.OwnerGroup.GUID);
-                                          if (g.OwnerGroup.GUID == groupGUID) {
-                                            Console.WriteLine("Send Email to (Owner)" + e.Address + " " + e.UserConfig.Language);
-                                            EmailHelper.addToList(e.Address, e.UserConfig.Language);
-                                          }
-                                      }
-                                   }
-                               }  
-                           }
-
-            //Save the Current 
-             CultureInfo currentC = Strings.Culture;
-
-            //FR
-            Strings.Culture = new System.Globalization.CultureInfo("fr-CA");
-            EmailHelper.setMsgVariable(type);
-            using (EmailSink sink = new(EmailHelper.emailsToNotifyFr, EmailHelper.subject))
+            ApplicationDbContext db = new ApplicationDbContext();
+            List<Email> emails = null;
+            switch (type)
             {
-                sink.AddMessage(LogEventLevel.Information, EmailHelper.message);
+                case NotificationType.ExpirationDate:
+                    emails = db.Email.Include(c => c.UserConfig).ThenInclude(c => c.DefaultUser).Include(c => c.UserConfig).ThenInclude(c => c.User).ThenInclude(c => c.OwnerGroupUsers).ThenInclude(c => c.OwnerGroup).Include(c => c.UserConfig).ThenInclude(c => c.User).ThenInclude(c => c.Role).Where(c => c.ExpirationDate == true && c.UserConfig.Notification == true).ToList();
+                    break;
+                case NotificationType.GroupCreate:
+                    emails = db.Email.Include(c => c.UserConfig).ThenInclude(c => c.DefaultUser).Include(c => c.UserConfig).ThenInclude(c => c.User).ThenInclude(c => c.OwnerGroupUsers).ThenInclude(c => c.OwnerGroup).Include(c => c.UserConfig).ThenInclude(c => c.User).ThenInclude(c => c.Role).Where(c => c.GroupCreate == true && c.UserConfig.Notification == true).ToList();
+                    break;
+                case NotificationType.GroupDelete:
+                    emails = db.Email.Include(c => c.UserConfig).ThenInclude(c => c.DefaultUser).Include(c => c.UserConfig).ThenInclude(c => c.User).ThenInclude(c => c.OwnerGroupUsers).ThenInclude(c => c.OwnerGroup).Include(c => c.UserConfig).ThenInclude(c => c.User).ThenInclude(c => c.Role).Where(c => c.GroupDelete == true && c.UserConfig.Notification == true).ToList();
+                    break;
+                case NotificationType.MemberAdd:
+                    emails = db.Email.Include(c => c.UserConfig).ThenInclude(c => c.DefaultUser).Include(c => c.UserConfig).ThenInclude(c => c.User).ThenInclude(c => c.OwnerGroupUsers).ThenInclude(c => c.OwnerGroup).Include(c => c.UserConfig).ThenInclude(c => c.User).ThenInclude(c => c.Role).Where(c => c.MemberAdd == true && c.UserConfig.Notification == true).ToList();
+                    break;
+                case NotificationType.MemberRemoval:
+                    emails = db.Email.Include(c => c.UserConfig).ThenInclude(c => c.DefaultUser).Include(c => c.UserConfig).ThenInclude(c => c.User).ThenInclude(c => c.OwnerGroupUsers).ThenInclude(c => c.OwnerGroup).Include(c => c.UserConfig).ThenInclude(c => c.User).ThenInclude(c => c.Role).Where(c => c.MemberRemoval == true && c.UserConfig.Notification == true).ToList();
+                    break;
             }
 
-            //ENG
-            Strings.Culture = new System.Globalization.CultureInfo("en-US");
-            EmailHelper.setMsgVariable(type);
-            using (EmailSink sink = new(EmailHelper.emailsToNotifyEng, EmailHelper.subject))
+
+            foreach (var e in emails)
             {
-                sink.AddMessage(LogEventLevel.Information, EmailHelper.message);
+                //Is a DefautUser
+                if (e.UserConfig.DefaultUser != null)
+                {
+                    Console.WriteLine("Send Email to " + e.Address + " " + e.UserConfig.Language);
+                    EmailHelper.addToList(e.Address, e.UserConfig.Language);
+                    //Is a AD user
+                }
+                else if (e.UserConfig.User != null)
+                {
+                    //Is a SuperAdmin or an Admin
+                    if (e.UserConfig.User.Role.Id == (int)RolesID.SuperAdmin || e.UserConfig.User.Role.Id == (int)RolesID.Admin)
+                    {
+                        Console.WriteLine("Send Email to " + e.Address + " " + e.UserConfig.Language);
+                        EmailHelper.addToList(e.Address, e.UserConfig.Language);
+                    }
+                    //Is owner og the group
+                    else if (e.UserConfig.User.RoleId == (int)RolesID.Owner)
+                    {
+                        foreach (var g in e.UserConfig.User.OwnerGroupUsers)
+                        {
+                            Console.WriteLine(g.OwnerGroup.GUID);
+                            if (g.OwnerGroup.GUID == groupGUID)
+                            {
+                                Console.WriteLine("Send Email to (Owner)" + e.Address + " " + e.UserConfig.Language);
+                                EmailHelper.addToList(e.Address, e.UserConfig.Language);
+                            }
+                        }
+                    }
+                }
+            }
+
+            //Save the Current 
+            CultureInfo currentC = Strings.Culture;
+
+            //FR
+            if (EmailHelper.emailsToNotifyFr.Count > 0)
+            {
+                Strings.Culture = new System.Globalization.CultureInfo("fr-CA");
+                EmailHelper.setMsgVariable(type);
+                using (EmailSink sink = new(EmailHelper.emailsToNotifyFr, EmailHelper.subject))
+                {
+                    sink.AddMessage(LogEventLevel.Information, EmailHelper.message);
+                }
+            }
+
+
+            //ENG
+            if (EmailHelper.emailsToNotifyEng.Count > 0)
+            {
+                Strings.Culture = new System.Globalization.CultureInfo("en-US");
+                EmailHelper.setMsgVariable(type);
+                using (EmailSink sink = new(EmailHelper.emailsToNotifyEng, EmailHelper.subject))
+                {
+                    sink.AddMessage(LogEventLevel.Information, EmailHelper.message);
+                }
             }
 
             //ESP
-            Strings.Culture = new System.Globalization.CultureInfo("es-US");
-            EmailHelper.setMsgVariable(type);
-            using (EmailSink sink = new(EmailHelper.emailsToNotifyEsp, EmailHelper.subject))
+            if (EmailHelper.emailsToNotifyEsp.Count > 0)
             {
-                sink.AddMessage(LogEventLevel.Information, EmailHelper.message);
+                Strings.Culture = new System.Globalization.CultureInfo("es-US");
+                EmailHelper.setMsgVariable(type);
+                using (EmailSink sink = new(EmailHelper.emailsToNotifyEsp, EmailHelper.subject))
+                {
+                    sink.AddMessage(LogEventLevel.Information, EmailHelper.message);
+                }
             }
 
             //PT
-            Strings.Culture = new System.Globalization.CultureInfo("pt-BR");
-            EmailHelper.setMsgVariable(type);
-            using (EmailSink sink = new(EmailHelper.emailsToNotifyPor, EmailHelper.subject))
+            if (EmailHelper.emailsToNotifyPor.Count > 0)
             {
-                sink.AddMessage(LogEventLevel.Information, EmailHelper.message);
+                Strings.Culture = new System.Globalization.CultureInfo("pt-BR");
+                EmailHelper.setMsgVariable(type);
+                using (EmailSink sink = new(EmailHelper.emailsToNotifyPor, EmailHelper.subject))
+                {
+                    sink.AddMessage(LogEventLevel.Information, EmailHelper.message);
+                }
             }
-
 
             //End Clean up
             Strings.Culture = currentC;
@@ -127,8 +147,10 @@ namespace HADES.Util
         }
 
         //Add the email to the list base on the language
-        private static void addToList(string email, string langue) {
-            switch (langue) {
+        private static void addToList(string email, string langue)
+        {
+            switch (langue)
+            {
                 case "fr-CA":
                     EmailHelper.emailsToNotifyFr.Add(email);
                     break;
@@ -145,7 +167,8 @@ namespace HADES.Util
         }
 
         // Set the right subject and the message with the type of the notification
-        private static void setMsgVariable(NotificationType type) {
+        private static void setMsgVariable(NotificationType type)
+        {
             switch (type)
             {
                 case NotificationType.ExpirationDate:
@@ -173,14 +196,14 @@ namespace HADES.Util
 
 
 
-   
+
         private sealed class EmailSink : IDisposable
-		{
+        {
 
             private readonly Serilog.Core.Logger log;
 
             public EmailSink(IEnumerable<string> toEmails, string subject)
-			{
+            {
                 if (SMTPSettingsCache.SMTP == null)
                 {
                     SMTPSettingsCache.Refresh();
@@ -189,18 +212,21 @@ namespace HADES.Util
 
                 string emails = "";
                 foreach (string email in toEmails)
-				{
+                {
                     emails += $"{email};";
-				}
+                }
                 Serilog.Sinks.Email.EmailConnectionInfo emailConfig = new Serilog.Sinks.Email.EmailConnectionInfo()
                 {
                     EnableSsl = true,
                     MailServer = settings.SMTPServer,
                     Port = settings.SMTPPort,
+                    NetworkCredentials = new NetworkCredential(settings.SMTPUsername, settings.SMTPPassword),
                     EmailSubject = subject,
                     FromEmail = settings.SMTPFromEmail,
                     ToEmail = emails
                 };
+
+
 
                 log = new LoggerConfiguration()
                     .MinimumLevel.Debug()
@@ -211,41 +237,41 @@ namespace HADES.Util
             }
 
             public void AddMessage(LogEventLevel logLevel, string message)
-			{
-				switch (logLevel)
-				{
+            {
+                switch (logLevel)
+                {
                     // Shouldn't be used
-					case LogEventLevel.Verbose:
+                    case LogEventLevel.Verbose:
                         Log.Verbose(message);
                         log.Verbose(message);
                         break;
-					case LogEventLevel.Debug:
+                    case LogEventLevel.Debug:
                         Log.Debug(message);
                         log.Debug(message);
                         break;
-					case LogEventLevel.Information:
+                    case LogEventLevel.Information:
                         Log.Information(message);
                         log.Information(message);
                         break;
-					case LogEventLevel.Warning:
+                    case LogEventLevel.Warning:
                         Log.Warning(message);
                         log.Warning(message);
                         break;
-					case LogEventLevel.Error:
+                    case LogEventLevel.Error:
                         Log.Error(message);
                         log.Error(message);
                         break;
-					case LogEventLevel.Fatal:
+                    case LogEventLevel.Fatal:
                         Log.Fatal(message);
                         log.Fatal(message);
                         break;
-				}
-			}
+                }
+            }
 
-			public void Dispose()
-			{
+            public void Dispose()
+            {
                 log.Dispose();
-			}
-		}
+            }
+        }
     }
 }

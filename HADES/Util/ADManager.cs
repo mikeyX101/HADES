@@ -338,7 +338,10 @@ namespace HADES.Util
 
             connection.Disconnect();
 
-
+            // TEST
+            // createGroup("Dossierbbbb", "test3","desc","vero@vero.yo","no", new List<UserAD>());
+           // deleteGroup("CN=Group26,OU=ello_dossier,OU=hades_root,DC=R991-AD,DC=lan");
+          //  getGroupGUIDByDn("CN=Group5,OU=Dossier36,OU=hades_root,DC=R991-AD,DC=lan");
       
             return root;
         }
@@ -515,7 +518,7 @@ namespace HADES.Util
                 }
                 addMemberToGroup(dn, add);
 
-               // EmailHelper.SendEmail(NotificationType.GroupCreate, this.getGroupGUIDByDn(dn));
+                EmailHelper.SendEmail(NotificationType.GroupCreate, this.getGroupGUIDByDn(dn));
                 return true;
             }
             catch (Exception e)
@@ -602,9 +605,9 @@ namespace HADES.Util
             LdapConnection connection = createConnection();
             try
             {
+                EmailHelper.SendEmail(NotificationType.GroupDelete, this.getGroupGUIDByDn(dnGroupToDelete));
                 connection.Delete(dnGroupToDelete);
                 connection.Disconnect();
-              //EmailHelper.SendEmail(NotificationType.MemberRemoval, this.getGroupGUIDByDn(dnGroupToDelete));
                 return true;
             }
             catch (Exception e)
@@ -656,6 +659,7 @@ namespace HADES.Util
             }
             return b;
         }
+
         public string getGroupDnByGUID(string GUID)
         {
             LdapConnection connection = createConnection();
@@ -720,12 +724,9 @@ namespace HADES.Util
             try
             {
                 LdapSearchResults lsc = (LdapSearchResults)connection.Search(getBaseAd(), LdapConnection.ScopeSub, "(&(objectClass=group)(distinguishedName=" + Dn + "))", null, false);
-                LdapEntry nextEntry = null;
-                while (lsc.HasMore())
-                {
-                    nextEntry = lsc.Next();
-                    GUID = getObjectGUID(nextEntry);
-                }
+                LdapEntry nextEntry = lsc.Next();
+                GUID = getObjectGUID(nextEntry);
+                
             }
             catch (Exception e)
             {
@@ -902,7 +903,7 @@ namespace HADES.Util
 
                 connection.Disconnect();
 
-                //EmailHelper.SendEmail(NotificationType.MemberAdd, this.getGroupGUIDByDn(groupDn));
+                EmailHelper.SendEmail(NotificationType.MemberAdd, this.getGroupGUIDByDn(groupDn));
                 return true;
             }
             catch (Exception e)
@@ -933,7 +934,7 @@ namespace HADES.Util
                 connection.Modify(groupDn, mods);
 
                 connection.Disconnect();
-               //EmailHelper.SendEmail(NotificationType.MemberRemoval, this.getGroupGUIDByDn(groupDn));
+               EmailHelper.SendEmail(NotificationType.MemberRemoval, this.getGroupGUIDByDn(groupDn));
                 return true;
             }
             catch (Exception e)
