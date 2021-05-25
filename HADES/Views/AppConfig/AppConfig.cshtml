@@ -12,43 +12,43 @@
         <input type="hidden" asp-for="@Model.ActiveDirectory.Id" />
         <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["RootOu"]</label></div>
         <div class="col-sm-9 col-lg-5">
-            <input type="text" asp-for="@Model.ActiveDirectory.RootOu" class="form-control" />
+            <input data-toggle="tooltip" data-placement="right" title="@Localizer["RootOuToolTip"]" type="text" asp-for="@Model.ActiveDirectory.RootOu" class="form-control" />
         </div>
     </div>
     <div class="form-group row">
         <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["PortNumber"]</label></div>
         <div class="col-sm-9 col-lg-5">
-            <input type="number" asp-for="@Model.ActiveDirectory.PortNumber" class="form-control" />
+            <input data-toggle="tooltip" data-placement="right" title="@Localizer["PortNumberToolTip"]" type="number" asp-for="@Model.ActiveDirectory.PortNumber" class="form-control" />
         </div>
     </div>
     <div class="form-group row">
         <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["ServerAddress"]</label></div>
         <div class="col-sm-9 col-lg-5">
-            <input type="text" asp-for="@Model.ActiveDirectory.ServerAddress" class="form-control" />
+            <input data-toggle="tooltip" data-placement="right" title="@Localizer["ServerAddressToolTip"]" type="text" asp-for="@Model.ActiveDirectory.ServerAddress" class="form-control" />
         </div>
     </div>
     <div class="form-group row">
         <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["ConnectionFilter"]</label></div>
         <div class="col-sm-9 col-lg-5">
-            <input type="text" asp-for="@Model.ActiveDirectory.ConnectionFilter" class="form-control" />
+            <input data-toggle="tooltip" data-placement="right" title="@Localizer["ConnectionFilterToolTip"]" type="text" asp-for="@Model.ActiveDirectory.ConnectionFilter" class="form-control" />
         </div>
     </div>
     <div class="form-group row">
         <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["BaseDN"]</label></div>
         <div class="col-sm-9 col-lg-5">
-            <input type="text" asp-for="@Model.ActiveDirectory.BaseDN" class="form-control" />
+            <input data-toggle="tooltip" data-placement="right" title="@Localizer["BaseDNToolTip"]" type="text" asp-for="@Model.ActiveDirectory.BaseDN" class="form-control" />
         </div>
     </div>
     <div class="form-group row">
         <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["AccountDN"]</label></div>
         <div class="col-sm-9 col-lg-5">
-            <input type="text" asp-for="@Model.ActiveDirectory.AccountDN" class="form-control" />
+            <input data-toggle="tooltip" data-placement="right" title="@Localizer["AccountDNToolTip"]" type="text" asp-for="@Model.ActiveDirectory.AccountDN" class="form-control" />
         </div>
     </div>
     <div class="form-group row">
         <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["PasswordDN"]</label></div>
         <div class="col-sm-9 col-lg-5">
-            <input id="DNpass" type="password" asp-for="@Model.ActiveDirectory.PasswordDN" class="form-control" />
+            <input data-toggle="tooltip" data-placement="right" title="@Localizer["AccountDNToolTip"]" id="DNpass" type="password" asp-for="@Model.ActiveDirectory.PasswordDN" class="form-control" />
         </div>
         <script>$("#DNpass").change(function () { if ($("#DNpass").val() != $("#DNpassconfirm").val()) $("#DNpassconfirm").css("border-color", "red"); else $("#DNpassconfirm").css("border-color", "blue") })</script>
     </div>
@@ -62,7 +62,7 @@
     <div class="form-group row">
         <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["SyncField"]</label></div>
         <div class="col-sm-9 col-lg-5">
-            <select id="syncfield" asp-for="@Model.ActiveDirectory.SyncField" class="form-control">
+            <select data-toggle="tooltip" data-placement="right" title="@Localizer["SyncFieldToolTip"]" id="syncfield" asp-for="@Model.ActiveDirectory.SyncField" class="form-control">
                 <option value="samaccountname">samaccountName</option>
                 <option value="mail">mail</option>
                 <option value="userprincipalname">userprincipalname</option>
@@ -76,13 +76,13 @@
         <input type="hidden" asp-for="@Model.DefaultUser.RoleId" />
         <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["DefaultUser"]</label></div>
         <div class="col-sm-9 col-lg-5">
-            <input type="text" asp-for="@Model.DefaultUser.UserName" class="form-control" />
+            <input data-toggle="tooltip" data-placement="right" title="@Localizer["DefaultUserToolTip"]" type="text" asp-for="@Model.DefaultUser.UserName" class="form-control" />
         </div>
     </div>
     <div class="form-group row">
         <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["DefaultUserPassword"]</label></div>
         <div class="col-sm-9 col-lg-5">
-            <input id="passDefaultUser" type="password" asp-for="@Model.DefaultUser.Password" class="form-control" />
+            <input data-toggle="tooltip" data-placement="right" title="@Localizer["DefaultUserToolTip"]" id="passDefaultUser" type="password" asp-for="@Model.DefaultUser.Password" class="form-control" />
         </div>
         <script>$("#passDefaultUser").change(function () { if ($("#passDefaultUser").val() != $("#passDefaultUserConfirm").val()) $("#passDefaultUserConfirm").css("border-color", "red"); else $("#passDefaultUserConfirm").css("border-color", "blue") })</script>
     </div>
@@ -97,14 +97,14 @@
     <div class="form-group row">
         <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["CompanyName"]</label></div>
         <div class="col-sm-9 col-lg-5">
-            <input type="text" asp-for="@Model.AppConfig.CompanyName" class="form-control" />
+            <input data-toggle="tooltip" data-placement="right" title="@Localizer["CompanyNameToolTip"]" type="text" asp-for="@Model.AppConfig.CompanyName" class="form-control" />
         </div>
     </div>
     <div class="form-group row">
         <input type="hidden" asp-for="@Model.AppConfig.Id" />
         <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["CompanyLogoFile"]</label></div>
         <div class="col-sm-9 col-lg-5">
-            <input id="clogo" type="file" accept="image/*" asp-for="@Model.AppConfig.CompanyLogoFile" class="form-control" /> <img src=@Model.AppConfig.CompanyLogoFile width="80" />
+            <input data-toggle="tooltip" data-placement="right" title="@Localizer["LogoToolTip"]" id="clogo" type="file" accept="image/*" asp-for="@Model.AppConfig.CompanyLogoFile" class="form-control" /> <img src=@Model.AppConfig.CompanyLogoFile width="80" />
             <script>$("#clogo").change(function () { encodebase64url($("#clogo")[0].files[0], $("#b64l")) })</script>
             <input id="b64l" type="hidden" name="base64logo" class="form-control" />
         </div>
@@ -112,7 +112,7 @@
     <div class="form-group row">
         <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["CompanyBackgroundFile"]</label></div>
         <div class="col-sm-9 col-lg-5">
-            <input id="cbg" type="file" accept="image/*" asp-for="@Model.AppConfig.CompanyBackgroundFile" class="form-control" /> <img src=@Model.AppConfig.CompanyBackgroundFile width="80" />
+            <input data-toggle="tooltip" data-placement="right" title="@Localizer["BackgroundToolTip"]" id="cbg" type="file" accept="image/*" asp-for="@Model.AppConfig.CompanyBackgroundFile" class="form-control" /> <img src=@Model.AppConfig.CompanyBackgroundFile width="80" />
             <script>$("#cbg").change(function () { encodebase64url($("#cbg")[0].files[0], $("#b64bg")) })</script>
             <input id="b64bg" type="hidden" name="base64bg" class="form-control" />
         </div>
@@ -120,7 +120,7 @@
     <div class="form-group row">
         <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["DefaultLanguage"]</label></div>
         <div class="col-sm-9 col-lg-5">
-            <select id="language" asp-for="@Model.AppConfig.DefaultLanguage" class="form-control">
+            <select data-toggle="tooltip" data-placement="right" title="@Localizer["LanguageToolTip"]" id="language" asp-for="@Model.AppConfig.DefaultLanguage" class="form-control">
                 <option value="fr-CA">@HADES.Strings.French</option>
                 <option value="en-US">@HADES.Strings.English</option>
                 <option value="es-US">@HADES.Strings.Spanish</option>
@@ -132,19 +132,19 @@
     <div class="form-group row">
         <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["SMTPServer"]</label></div>
         <div class="col-sm-9 col-lg-5">
-            <input type="text" asp-for="@Model.AppConfig.SMTPServer" class="form-control" />
+            <input data-toggle="tooltip" data-placement="right" title="@Localizer["SMTPServerToolTip"]" type="text" asp-for="@Model.AppConfig.SMTPServer" class="form-control" />
         </div>
     </div>
     <div class="form-group row">
         <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["SMTPPort"]</label></div>
         <div class="col-sm-9 col-lg-5">
-            <input type="number" asp-for="@Model.AppConfig.SMTPPort" class="form-control" />
+            <input data-toggle="tooltip" data-placement="right" title="@Localizer["SMTPPortToolTip"]" type="number" asp-for="@Model.AppConfig.SMTPPort" class="form-control" />
         </div>
     </div>
     <div class="form-group row">
         <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["SMTPEmail"]</label></div>
         <div class="col-sm-9 col-lg-5">
-            <input type="email" asp-for="@Model.AppConfig.SMTPFromEmail" class="form-control" />
+            <input data-toggle="tooltip" data-placement="right" title="@Localizer["SMTPEmailToolTip"]" type="email" asp-for="@Model.AppConfig.SMTPFromEmail" class="form-control" />
         </div>
     </div>
     <div class="form-group row">
@@ -157,13 +157,13 @@
     <div class="form-group row">
         <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["SMTPUser"]</label></div>
         <div class="col-sm-9 col-lg-5">
-            <input id="SMTPUser" type="text" asp-for="@Model.AppConfig.SMTPUsername" class="form-control" />
+            <input data-toggle="tooltip" data-placement="right" title="@Localizer["SMTPUserToolTip"]" id="SMTPUser" type="text" asp-for="@Model.AppConfig.SMTPUsername" class="form-control" />
         </div>
     </div>
     <div class="form-group row">
         <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["SMTPPass"]</label></div>
         <div class="col-sm-9 col-lg-5">
-            <input id="passSMTP" type="password" asp-for="@Model.AppConfig.SMTPPassword" class="form-control" />
+            <input data-toggle="tooltip" data-placement="right" title="@Localizer["SMTPUserToolTip"]" id="passSMTP" type="password" asp-for="@Model.AppConfig.SMTPPassword" class="form-control" />
         </div>
         <script>$("#passSMTP").change(function () { if ($("#passSMTP").val() != $("#passDefaultUserConfirm").val()) $("#passSMTPConfirm").css("border-color", "red"); else $("#passSMTPConfirm").css("border-color", "blue") })</script>
     </div>
@@ -178,14 +178,14 @@
     <div class="form-group row">
         <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["LogDeleteFrequency"]</label></div>
         <div class="col-sm-9 col-lg-5">
-            <input id="freq" type="number" asp-for="@Model.AppConfig.LogDeleteFrequency" class="form-control" />
+            <input data-toggle="tooltip" data-placement="right" title="@Localizer["LogFreqToolTip"]" id="freq" type="number" asp-for="@Model.AppConfig.LogDeleteFrequency" class="form-control" />
             <script>$("#freq").change(function () { $("#total").val($("#max").val() * $("#freq").val()) })</script>
         </div>
     </div>
     <div class="form-group row">
         <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["LogMaxFileSize"]</label></div>
         <div class="col-sm-9 col-lg-5">
-            <input id="max" type="number" asp-for="@Model.AppConfig.LogMaxFileSize" class="form-control" />
+            <input data-toggle="tooltip" data-placement="right" title="@Localizer["LogMaxToolTip"]" id="max" type="number" asp-for="@Model.AppConfig.LogMaxFileSize" class="form-control" />
             <script>$("#max").change(function () { $("#total").val($("#max").val() * $("#freq").val()) })</script>
         </div>
     </div>

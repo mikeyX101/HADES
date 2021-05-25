@@ -118,16 +118,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AccountDN" xml:space="preserve">
-    <value>DN Account</value>
+    <value>Account DN</value>
   </data>
   <data name="AdminGroup" xml:space="preserve">
     <value>Administrator group</value>
   </data>
   <data name="BaseDN" xml:space="preserve">
-    <value>DN Base</value>
-  </data>
-  <data name="CompanyBackgroundFile" xml:space="preserve">
-    <value>Company background file</value>
+    <value>Base DN</value>
   </data>
   <data name="CompanyLogoFile" xml:space="preserve">
     <value>Company logo file</value>
@@ -160,7 +157,7 @@
     <value>Application settings</value>
   </data>
   <data name="PasswordDN" xml:space="preserve">
-    <value>DN password</value>
+    <value>AD password</value>
   </data>
   <data name="PortNumber" xml:space="preserve">
     <value>Port number</value>
@@ -200,5 +197,44 @@
   </data>
   <data name="SMTPuseCred" xml:space="preserve">
     <value>Use Credentials for SMTP</value>
+  </data>
+  <data name="RootOuToolTip" xml:space="preserve">
+    <value>The DN of Hades root folder(OU)&lt;br&gt;&lt;i&gt;OU=hades_root,DC=domain,DC=lan&lt;i&gt;</value>
+  </data>
+  <data name="PortNumberToolTip" xml:space="preserve">
+    <value>LDAP port number on server&lt;br&gt;&lt;i&gt;389&lt;i&gt;</value>
+  </data>
+  <data name="ServerAddressToolTip" xml:space="preserve">
+    <value>The IP adress or domain name of the server hosting your Active Directory&lt;br&gt;&lt;i&gt;domain&lt;br&gt;192.255.255.255&lt;i&gt;</value>
+  </data>
+  <data name="ConnectionFilterToolTip" xml:space="preserve">
+    <value>Filter that indicts object types that are allowed to Login in Hades&lt;br&gt;&lt;i&gt;(&amp;(objectClass=user)(objectCategory=person))&lt;i&gt;</value>
+  </data>
+  <data name="BaseDNToolTip" xml:space="preserve">
+    <value>The DN of the folder(OU) containing all users from the Active Directory&lt;br&gt;&lt;i&gt;CN=Users,DC=domain,DC=lan&lt;i&gt;</value>
+  </data>
+  <data name="AccountDNToolTip" xml:space="preserve">
+    <value>The account DN and password of the Hades Application user in the Active Directory. Hades will use this account to handle actions on the Active Directory (Must have Read/Write rights)&lt;br&gt;&lt;i&gt;CN=hades,CN=Users,DC=domain,DC=lan&lt;i&gt;</value>
+  </data>
+  <data name="SyncFieldToolTip" xml:space="preserve">
+    <value>Indicates the Active Directory field that user will use in order to authenticate&lt;br&gt;&lt;i&gt;samaccountname&lt;i&gt;</value>
+  </data>
+  <data name="DefaultUserToolTip" xml:space="preserve">
+    <value>Credentials for Hades Default User. Leave password field empty if you don't want to change password</value>
+  </data>
+  <data name="CompanyNameToolTip" xml:space="preserve">
+    <value>Your organization name that will display in the navigation bar on top</value>
+  </data>
+  <data name="LogoToolTip" xml:space="preserve">
+    <value>The logo that will display in the navigation bar on top</value>
+  </data>
+  <data name="BackgroundToolTip" xml:space="preserve">
+    <value>The background that will display on the login page</value>
+  </data>
+  <data name="CompanyBackgroundFile" xml:space="preserve">
+    <value>Company background file</value>
+  </data>
+  <data name="LanguageToolTip" xml:space="preserve">
+    <value>The application default language. This language will be used in the login page and for every newly created Hades users</value>
   </data>
 </root>
