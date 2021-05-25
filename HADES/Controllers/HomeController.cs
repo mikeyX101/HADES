@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
+using HADES.Models.API;
 
 namespace HADES.Controllers
 {
@@ -157,7 +158,7 @@ namespace HADES.Controllers
             {
                 ad.deleteGroup(DN);
             }*/
-            Console.WriteLine("L'OU " + DN + " a été supprimé par l'utilisateur " + ConnexionUtil.CurrentUser(this.User).GetName());
+            Serilog.Log.Information("Le dossier(OU) " + DN + " a été supprimé");
             return RedirectToAction("UpdateContent", "Home", new { selectedPathForContent = viewModel.SelectedPath });
         }
 
@@ -171,7 +172,7 @@ namespace HADES.Controllers
             }
             var DN = FindDN(viewModel.SelectedPath, viewModel.SelectedContentName);
             ad.renameOU(DN, viewModel.NewName);
-            Console.WriteLine("L'OU " + DN + " a été renommé par l'utilisateur " + ConnexionUtil.CurrentUser(this.User).GetName());
+            Serilog.Log.Information("Le dossier(OU) " + DN + " a été renommé");
             return RedirectToAction("UpdateContent", "Home", new { selectedPathForContent = viewModel.SelectedPath });
         }
 
@@ -240,7 +241,7 @@ namespace HADES.Controllers
             if (ModelState.IsValid)
             {
                 ad.createOU(viewModel.NewName);
-                Console.WriteLine("L'OU " + viewModel.NewName + " a été créé par l'utilisateur " + ConnexionUtil.CurrentUser(this.User).GetName());
+                Serilog.Log.Information("Le dossier(OU) " + viewModel.NewName + " a été créé");
             }
             return RedirectToAction("UpdateContent", "Home", new { selectedPathForContent = viewModel.SelectedPath });
         }
@@ -255,7 +256,6 @@ namespace HADES.Controllers
         {
             List<RootDataInformation> adRootSorted = new List<RootDataInformation>();
 
-            // TODO : sort
             adRootSorted = adRoot.OrderBy(data => data.Path + '/' + data.SamAccountName).ToList();
 
             return adRootSorted;
