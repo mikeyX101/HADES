@@ -9,6 +9,7 @@ using Serilog;
 using Serilog.Events;
 using System.Net;
 using System.Globalization;
+using HADES.Util.ModelAD;
 
 namespace HADES.Util
 {
@@ -31,8 +32,9 @@ namespace HADES.Util
         private static string subject = "";
         private static string message = "";
 
-        public static void SendEmail(NotificationType type, string groupGUID)
+        public static void SendEmail(NotificationType type,  GroupAD group, string usersAddedorDeleted)
         {
+            string groupGUID = group.ObjectGUID;
             Console.WriteLine("yo " + groupGUID);
 
             ApplicationDbContext db = new ApplicationDbContext();
@@ -97,7 +99,7 @@ namespace HADES.Util
             if (EmailHelper.emailsToNotifyFr.Count > 0)
             {
                 Strings.Culture = new System.Globalization.CultureInfo("fr-CA");
-                EmailHelper.setMsgVariable(type);
+                EmailHelper.setMsgVariable(type,group, usersAddedorDeleted);
                 using (EmailSink sink = new(EmailHelper.emailsToNotifyFr, EmailHelper.subject))
                 {
                     sink.AddMessage(LogEventLevel.Information, EmailHelper.message);
@@ -109,7 +111,7 @@ namespace HADES.Util
             if (EmailHelper.emailsToNotifyEng.Count > 0)
             {
                 Strings.Culture = new System.Globalization.CultureInfo("en-US");
-                EmailHelper.setMsgVariable(type);
+                EmailHelper.setMsgVariable(type, group, usersAddedorDeleted);
                 using (EmailSink sink = new(EmailHelper.emailsToNotifyEng, EmailHelper.subject))
                 {
                     sink.AddMessage(LogEventLevel.Information, EmailHelper.message);
@@ -120,7 +122,7 @@ namespace HADES.Util
             if (EmailHelper.emailsToNotifyEsp.Count > 0)
             {
                 Strings.Culture = new System.Globalization.CultureInfo("es-US");
-                EmailHelper.setMsgVariable(type);
+                EmailHelper.setMsgVariable(type, group, usersAddedorDeleted);
                 using (EmailSink sink = new(EmailHelper.emailsToNotifyEsp, EmailHelper.subject))
                 {
                     sink.AddMessage(LogEventLevel.Information, EmailHelper.message);
@@ -131,7 +133,7 @@ namespace HADES.Util
             if (EmailHelper.emailsToNotifyPor.Count > 0)
             {
                 Strings.Culture = new System.Globalization.CultureInfo("pt-BR");
-                EmailHelper.setMsgVariable(type);
+                EmailHelper.setMsgVariable(type, group, usersAddedorDeleted);
                 using (EmailSink sink = new(EmailHelper.emailsToNotifyPor, EmailHelper.subject))
                 {
                     sink.AddMessage(LogEventLevel.Information, EmailHelper.message);
@@ -167,35 +169,40 @@ namespace HADES.Util
         }
 
         // Set the right subject and the message with the type of the notification
-        private static void setMsgVariable(NotificationType type)
+        private static void setMsgVariable(NotificationType type, GroupAD groupDn, string usersAddedorDeleted)
         {
+            String members = "";
+            foreach (var m in groupDn.Members)
+            {
+                members += m.FirstName + " " + m.LastName + ", ";
+            }
+
+
             switch (type)
             {
                 case NotificationType.ExpirationDate:
-                    EmailHelper.subject = Strings.email_ExpirationDateSubject;
-                    EmailHelper.message = Strings.email_ExpirationDateMessage;
+                    EmailHelper.subject = Strings.email_ExpirationDateSubject + " (" + groupDn.SamAccountName + " )"; ;
+                    
+                    EmailHelper.message = Strings.email_ExpirationDateMessage + "\n" + Strings.email_name + " " + groupDn.SamAccountName + "\n" + Strings.email_Members + members;
                     break;
                 case NotificationType.GroupCreate:
-                    EmailHelper.subject = Strings.email_GroupCreateSubject;
-                    EmailHelper.message = Strings.email_GroupCreateMessage;
+                    EmailHelper.subject = Strings.email_GroupCreateSubject + " (" + groupDn.SamAccountName + " )"; ;
+                    EmailHelper.message = Strings.email_GroupCreateMessage + "\n" + Strings.email_name + " " + groupDn.SamAccountName;
                     break;
                 case NotificationType.GroupDelete:
-                    EmailHelper.subject = Strings.email_GroupDeleteSubject;
-                    EmailHelper.message = Strings.email_GroupDeleteMessage;
+                    EmailHelper.subject = Strings.email_GroupDeleteSubject + " (" + groupDn.SamAccountName + " )"; ;
+                    EmailHelper.message = Strings.email_GroupDeleteMessage + "\n" + Strings.email_name + " " + groupDn.SamAccountName + "\n" + Strings.email_Members + members;
                     break;
                 case NotificationType.MemberAdd:
-                    EmailHelper.subject = Strings.email_MemberAddSubject;
-                    EmailHelper.message = Strings.email_MemberAddMessage;
+                    EmailHelper.subject = Strings.email_MemberAddSubject + " (" + groupDn.SamAccountName + " )";
+                    EmailHelper.message = Strings.email_MemberAddMessage + "\n" + Strings.email_name + " " + groupDn.SamAccountName + "\n" + Strings.email_Members + members + "\n" + Strings.email_membersaddes + usersAddedorDeleted;
                     break;
                 case NotificationType.MemberRemoval:
-                    EmailHelper.subject = Strings.email_MemberRemovalSubject;
-                    EmailHelper.message = Strings.email_MemberRemovalMessage;
+                    EmailHelper.subject = Strings.email_MemberRemovalSubject + " (" + groupDn.SamAccountName + " )"; ;
+                    EmailHelper.message = Strings.email_MemberRemovalMessage + "\n" + Strings.email_name + " " + groupDn.SamAccountName + "\n" + Strings.email_Members + members + "\n" + Strings.email_membersSup + usersAddedorDeleted;
                     break;
             }
         }
-
-
-
 
         private sealed class EmailSink : IDisposable
         {

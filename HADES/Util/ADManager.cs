@@ -339,8 +339,11 @@ namespace HADES.Util
             connection.Disconnect();
 
             // TEST
-            // createGroup("Dossierbbbb", "test3","desc","vero@vero.yo","no", new List<UserAD>());
-           // deleteGroup("CN=Group26,OU=ello_dossier,OU=hades_root,DC=R991-AD,DC=lan");
+          /*  Dictionary<UserAD, Action> users = new Dictionary<UserAD, Action>();
+            UserAD u1 = getUserAD("\\7d\\d7\\05\\fb\\4c\\c3\\da\\48\\bd\\1f\\b0\\32\\d0\\18\\54\\36", true);
+            users.Add(u1,Action.DELETE);
+             modifyGroup("CN=Dossier88,OU=test3,OU=hades_root,DC=R991-AD,DC=lan","Dossier88", "test3","desc","vero@vero.yo","notesss", users);*/
+           // deleteGroup("CN=testyo,OU=Dossier225,OU=hades_root,DC=R991-AD,DC=lan");
           //  getGroupGUIDByDn("CN=Group5,OU=Dossier36,OU=hades_root,DC=R991-AD,DC=lan");
       
             return root;
@@ -511,14 +514,11 @@ namespace HADES.Util
                 connection.Add(newEntry);
                 connection.Disconnect();
 
-                //Add members
-                List<string> add = new List<string>();
-                foreach (UserAD m in members) {
-                    add.Add(m.Dn);
-                }
-                addMemberToGroup(dn, add);
+                EmailHelper.SendEmail(NotificationType.GroupCreate, this.getGroupInformation(dn), "");
 
-                EmailHelper.SendEmail(NotificationType.GroupCreate, this.getGroupGUIDByDn(dn));
+                //Add members
+                addMemberToGroup(dn, members);
+
                 return true;
             }
             catch (Exception e)
@@ -567,19 +567,19 @@ namespace HADES.Util
 
                 connection.Disconnect();
 
-                List<string> add = new List<string>();
-                List<string> delete = new List<string>();
+                List<UserAD> add = new List<UserAD>();
+                List<UserAD> delete = new List<UserAD>();
                 //Modify members
                 foreach (KeyValuePair<UserAD, Action> entry in members)
                 {
                     if (entry.Value == Action.ADD)
                     {
-                        add.Add(entry.Key.Dn);
+                        add.Add(entry.Key);
 
                     }
                     else if (entry.Value == Action.DELETE)
                     {
-                        delete.Add(entry.Key.Dn);
+                        delete.Add(entry.Key);
                     }
                 }
 
@@ -605,7 +605,7 @@ namespace HADES.Util
             LdapConnection connection = createConnection();
             try
             {
-                EmailHelper.SendEmail(NotificationType.GroupDelete, this.getGroupGUIDByDn(dnGroupToDelete));
+                EmailHelper.SendEmail(NotificationType.GroupDelete, this.getGroupInformation(dnGroupToDelete), "");
                 connection.Delete(dnGroupToDelete);
                 connection.Disconnect();
                 return true;
@@ -882,16 +882,22 @@ namespace HADES.Util
             return users;
         }
 
-        public bool addMemberToGroup(string groupDn, List<string> usersDn)
+        public bool addMemberToGroup(string groupDn, List<UserAD> users)
         {
             LdapConnection connection = createConnection();
             try
             {
+                string usersAdded = "";
+
                 List<LdapModification> modList = new List<LdapModification>();
 
-                foreach (string dn in usersDn)
+                foreach (UserAD u in users)
                 {
-                    LdapAttribute attribute = new LdapAttribute("member", dn);
+                   
+                    if (u != null) {
+                        usersAdded += u.FirstName + " " + u.LastName + ", ";
+                    }
+                    LdapAttribute attribute = new LdapAttribute("member", u.Dn);
                     modList.Add(new LdapModification(LdapModification.Add, attribute));
                 }
 
@@ -903,7 +909,7 @@ namespace HADES.Util
 
                 connection.Disconnect();
 
-                EmailHelper.SendEmail(NotificationType.MemberAdd, this.getGroupGUIDByDn(groupDn));
+                EmailHelper.SendEmail(NotificationType.MemberAdd, this.getGroupInformation(groupDn), usersAdded);
                 return true;
             }
             catch (Exception e)
@@ -914,16 +920,22 @@ namespace HADES.Util
             }
         }
 
-        public bool deleteMemberToGroup(string groupDn, List<string> usersDn)
+        public bool deleteMemberToGroup(string groupDn, List<UserAD> users)
         {
             LdapConnection connection = createConnection();
             try
             {
                 List<LdapModification> modList = new List<LdapModification>();
-
-                foreach (string dn in usersDn)
+                string usersDeleted = "";
+                foreach (UserAD u in users)
                 {
-                    LdapAttribute attribute = new LdapAttribute("member", dn);
+
+                    if (u != null)
+                    {
+                        usersDeleted += u.FirstName + " " + u.LastName + ", ";
+                    }
+
+                    LdapAttribute attribute = new LdapAttribute("member", u.Dn);
                     modList.Add(new LdapModification(LdapModification.Delete, attribute));
                 }
 
@@ -934,7 +946,7 @@ namespace HADES.Util
                 connection.Modify(groupDn, mods);
 
                 connection.Disconnect();
-               EmailHelper.SendEmail(NotificationType.MemberRemoval, this.getGroupGUIDByDn(groupDn));
+                EmailHelper.SendEmail(NotificationType.MemberRemoval, this.getGroupInformation(groupDn),usersDeleted);
                 return true;
             }
             catch (Exception e)

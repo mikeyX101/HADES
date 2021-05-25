@@ -169,6 +169,42 @@ namespace HADES {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Membres:.
+        /// </summary>
+        public static string email_Members {
+            get {
+                return ResourceManager.GetString("email_Members", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Membres ajoutés: .
+        /// </summary>
+        public static string email_membersaddes {
+            get {
+                return ResourceManager.GetString("email_membersaddes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Membres supprimés: .
+        /// </summary>
+        public static string email_membersSup {
+            get {
+                return ResourceManager.GetString("email_membersSup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Nom:.
+        /// </summary>
+        public static string email_name {
+            get {
+                return ResourceManager.GetString("email_name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Anglais.
         /// </summary>
         public static string English {
