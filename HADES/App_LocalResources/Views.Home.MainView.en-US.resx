@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="DeleteConfirmationMessage" xml:space="preserve">
-    <value>Are you sure you want to delete the folder ?</value>
+    <value>Are you sure you want to delete the item</value>
   </data>
   <data name="DeleteConfirmationTitle" xml:space="preserve">
     <value>Confirmation</value>

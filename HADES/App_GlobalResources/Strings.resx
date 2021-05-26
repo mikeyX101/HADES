@@ -174,8 +174,20 @@
   <data name="email_MemberRemovalMessage" xml:space="preserve">
     <value>Des membres ont été supprimé d'un groupe.</value>
   </data>
-  <data name="NegativeValueError" xml:space="preserve">
+  <data name="email_name" xml:space="preserve">
+    <value>Nom:</value>
+  </data>
+    <data name="NegativeValueError" xml:space="preserve">
     <value>Une valeur négative à été entrée alors que l'application attendaient une valeur positive</value>
+  </data>
+  <data name="email_Members" xml:space="preserve">
+    <value>Membres:</value>
+  </data>
+  <data name="email_membersaddes" xml:space="preserve">
+    <value>Membres ajoutés: </value>
+  </data>
+  <data name="email_membersSup" xml:space="preserve">
+    <value>Membres supprimés: </value>
   </data>
   <data name="MainView" xml:space="preserve">
     <value>Dossiers et groupes</value>

@@ -1,0 +1,14 @@
+﻿body {
+    background-color: chocolate;
+    padding-bottom: 60px;
+}
+
+.table td, .table th {
+    vertical-align: middle;
+    padding: .5rem;
+}
+
+span.icon {
+    width: 12px;
+    margin-right: 1rem;
+}

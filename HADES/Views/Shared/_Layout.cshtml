@@ -2,6 +2,7 @@
 @{ HADES.Data.ApplicationDbContext tempdb = new(); }
 @{
     IUser u = HADES.Util.ConnexionUtil.CurrentUser(Context.User);
+    string themeFileCss = u.GetUserConfig().ThemeFile.ToString() + ".css";
 }
 <html>
 <head>
@@ -9,7 +10,7 @@
     <title>HADES</title>
     <link rel="stylesheet" type="text/css" href="~/lib/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="~/lib/fontawesome/css/all.min.css">
-    <link rel="stylesheet" href="~/css/@u.GetUserConfig().ThemeFile">
+    <link rel="stylesheet" href="~/css/@u.GetUserConfig().ThemeFile/@themeFileCss">
     <link rel="stylesheet" href="~/lib/bootstrap-icons/bootstrap-icons.min.css">
 
     <script src="~/lib/jquery/jquery.min.js"></script>
@@ -47,11 +48,11 @@
                 </ul>
                 @if (u.GetRole().AppConfigAccess || u.GetRole().EventLogAccess || u.GetRole().UserListAccess)
                 {
-                    <div class="dropdown">
+                    <div class="dropdown dropmenu">
                         <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                            @Localizer["MenuAdministrateur"]
+                            <i class="fa fa-cog"></i>
                         </button>
-                        <div class="dropdown-menu">
+                        <div class="dropdown-menu dropdown-menu-right">
                             @if (u.GetRole().AppConfigAccess)
                             {
                                 <a class="dropdown-item" asp-action="AppConfig" asp-controller="AppConfig" asp-area="">@Localizer["ParametreApplication"]</a>
@@ -68,11 +69,11 @@
                     </div>
                 }
 
-                <div class="dropdown btn">
+                <div class="dropdown dropmenu">
                     <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                        @Localizer["MenuUtilisateur"]
+                        <i class="fa fa-bars"></i>
                     </button>
-                    <div class="dropdown-menu">
+                    <div class="dropdown-menu dropdown-menu-right">
                         <a class="dropdown-item" asp-action="UserConfig" asp-controller="UserConfigs">@Localizer["ParametreUtilisateur"]</a>
                         <a class="dropdown-item" asp-action="LogOut" asp-controller="Account">@Localizer["Deconnexion"]</a>
                     </div>

@@ -37,10 +37,11 @@ namespace HADES.Controllers
             };
             viewModel.Themes = new List<SelectListItem>()
             {
-                new SelectListItem {Text = "site", Value = "site.css"},
-                new SelectListItem {Text = "deeppink", Value = "deeppink.css"},
-                new SelectListItem {Text = "chocolate", Value = "chocolate.css"},
-                new SelectListItem {Text = "white", Value = "white.css"}
+                new SelectListItem {Text = "site", Value = "site"},
+                new SelectListItem {Text = "deeppink", Value = "deeppink"},
+                new SelectListItem {Text = "chocolate", Value = "chocolate"},
+                new SelectListItem {Text = "greenmint", Value = "greenmint"},
+                new SelectListItem {Text = "white", Value = "white"}
             };
 
             return View(viewModel);

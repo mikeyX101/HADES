@@ -46,7 +46,7 @@ namespace HADES.Util
 			if (appConfig != null)
 			{
 				LoggerConfiguration logConfig = new LoggerConfiguration()
-					.MinimumLevel.Verbose()
+					.MinimumLevel.Information()
 					.MinimumLevel.Override("Microsoft", Serilog.Events.LogEventLevel.Information)
 					.MinimumLevel.Override("System", Serilog.Events.LogEventLevel.Debug);
 
