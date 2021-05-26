@@ -179,7 +179,7 @@ namespace HADES.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateAdminGroup([Bind("Id,SamAccount,AppConfigId")] AdminGroup adminGroup)
+        public async Task<IActionResult> CreateAdminGroup(string DN, int appconfig)
         {
             if (!ConnexionUtil.CurrentUser(this.User).GetRole().AppConfigAccess)
             {
@@ -187,12 +187,13 @@ namespace HADES.Controllers
             }
 
             AppConfigService service = new();
-            if (ModelState.IsValid)
+            string GroupGUID = new ADManager().getGroupGUIDByDn(DN);
+            if (GroupGUID != "")
             {
-                await service.AddAdminGroup(adminGroup);
-                return RedirectToAction("AppConfig", new { id = adminGroup.AppConfigId });
+                await service.AddAdminGroup(new AdminGroup() { GUID = GroupGUID, AppConfigId = appconfig });
+                return RedirectToAction("AppConfig");
             }
-            return View(adminGroup);
+            return View();
         }
 
         [Authorize]
@@ -230,7 +231,7 @@ namespace HADES.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateSuperAdminGroup([Bind("Id,SamAccount,AppConfigId")] SuperAdminGroup superAdminGroup)
+        public async Task<IActionResult> CreateSuperAdminGroup(string DN, int appconfig)
         {
             if (!ConnexionUtil.CurrentUser(this.User).GetRole().AppConfigAccess)
             {
@@ -238,12 +239,13 @@ namespace HADES.Controllers
             }
 
             AppConfigService service = new();
-            if (ModelState.IsValid)
+            string GroupGUID = new ADManager().getGroupGUIDByDn(DN);
+            if (GroupGUID != "")
             {
-                await service.AddSuperAdminGroup(superAdminGroup);
-                return RedirectToAction("AppConfig", new { id = superAdminGroup.AppConfigId });
+                await service.AddSuperAdminGroup(new SuperAdminGroup() { GUID = GroupGUID, AppConfigId = appconfig});
+                return RedirectToAction("AppConfig");
             }
-            return View(superAdminGroup);
+            return View();
         }
 
         [Authorize]
