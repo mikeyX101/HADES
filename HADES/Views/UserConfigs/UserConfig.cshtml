@@ -1,6 +1,6 @@
 ﻿@model UserConfigViewModel
 @{
-    ViewBag.Title = Localizer["UserConfig"];
+    ViewBag.Title = @HADES.Strings.UserConfig;
 }
 
 @section scripts {
@@ -8,8 +8,15 @@
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 }
 
+<nav class="breadcrumb-awesome" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href='@Url.Action("MainView","Home")'>HADES</a></li>
+        <li class="breadcrumb-item active">@HADES.Strings.UserConfig</li>
+    </ol>
+</nav>
+
 <div class="bg-primary text-white text-center">
-    <h1 class="m-3 p-3">@Localizer["UserConfig"]</h1>
+    <h1 class="m-3 p-3">@HADES.Strings.UserConfig</h1>
 </div>
 
 <form asp-action="UserConfig">

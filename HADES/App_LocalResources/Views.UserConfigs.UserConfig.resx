@@ -129,7 +129,4 @@
   <data name="Theme" xml:space="preserve">
     <value>Thème</value>
   </data>
-  <data name="UserConfig" xml:space="preserve">
-    <value>Paramètres de l'utilisateur</value>
-  </data>
 </root>

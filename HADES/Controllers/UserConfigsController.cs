@@ -39,7 +39,8 @@ namespace HADES.Controllers
             {
                 new SelectListItem {Text = "site", Value = "site.css"},
                 new SelectListItem {Text = "deeppink", Value = "deeppink.css"},
-                new SelectListItem {Text = "chocolate", Value = "chocolate.css"}
+                new SelectListItem {Text = "chocolate", Value = "chocolate.css"},
+                new SelectListItem {Text = "white", Value = "white.css"}
             };
 
             return View(viewModel);

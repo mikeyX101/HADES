@@ -174,4 +174,22 @@
   <data name="email_MemberRemovalMessage" xml:space="preserve">
     <value>Members have been removed from a group.</value>
   </data>
+  <data name="MainView" xml:space="preserve">
+    <value>Folders and groups</value>
+  </data>
+  <data name="AppConfig" xml:space="preserve">
+    <value>Application configuration</value>
+  </data>
+  <data name="UserConfig" xml:space="preserve">
+    <value>User configuration</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
 </root>
