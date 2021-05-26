@@ -365,6 +365,7 @@ namespace HADES.Util
 
             connection.Disconnect();
 
+           
             return root;
         }
 
@@ -678,7 +679,7 @@ namespace HADES.Util
 
             try
             {
-                LdapSearchResults lsc = (LdapSearchResults)connection.Search(ADSettingsCache.Ad.RootOu, LdapConnection.ScopeSub, "(objectGUID =" + GUID + ")", null, false);
+                LdapSearchResults lsc = (LdapSearchResults)connection.Search(getBaseAd(), LdapConnection.ScopeSub, "(objectGUID =" + GUID + ")", null, false);
 
                 if (lsc.HasMore())
                 {
@@ -721,13 +722,10 @@ namespace HADES.Util
             try
             {
                 LdapSearchResults lsc = (LdapSearchResults)connection.Search(getBaseAd(), LdapConnection.ScopeSub, "(objectGUID =" + GUID + ")", null, false);
-                LdapEntry nextEntry = null;
-                while (lsc.HasMore())
-                {
 
-                    nextEntry = lsc.Next();
+                LdapEntry nextEntry = lsc.Next();
                     dn = nextEntry.Dn;
-                }
+                
             }
             catch (Exception e)
             {
@@ -912,6 +910,7 @@ namespace HADES.Util
                     u.FirstName = getAttributeValue(nextEntry, "givenName");
                     u.LastName = getAttributeValue(nextEntry, "sn");
                     u.Dn = nextEntry.Dn;
+                    u.ObjectGUID = getObjectGUID(nextEntry);
                     users.Add(u);
 
                 }
