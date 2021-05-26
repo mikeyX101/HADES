@@ -1,3 +1,28 @@
 ﻿body {
     background-color: chocolate;
+    padding-bottom: 60px;
+}
+
+.breadcrumb-awesome {
+    margin: 1rem 0px 0px 0px;
+}
+
+.breadcrumb {
+    margin-bottom: 0px;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+    font-family: "Font Awesome 5 Free";
+    content: "\f105";
+    font-weight: 900;
+}
+
+.table td, .table th {
+    vertical-align: middle;
+    padding: .5rem;
+}
+
+span.icon {
+    width: 12px;
+    margin-right: 1rem;
 }

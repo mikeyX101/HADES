@@ -3,7 +3,7 @@
 @section scripts
 {
     <link rel="stylesheet" href="~/lib/bootstrap-treeview/css/bootstrap-treeview.css">
-    <link rel="stylesheet" href="~/lib/jquery-ui/jquery-ui.min.css">
+    <link rel="stylesheet" href="~/lib/jquery-ui/themes/ui-darkness/jquery-ui.min.css">
     <script type="text/javascript" src="~/lib/bootstrap-treeview/js/bootstrap-treeview.js"></script>
     <script src="~/lib/jquery-ui/jquery-ui.min.js"></script>
     <script type="text/javascript" src="~/js/treeview.js"></script>
@@ -11,6 +11,17 @@
 }
 
 @* Main *@
+
+<nav class="breadcrumb-awesome" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href='@Url.Action("MainView","Home")'>HADES</a></li>
+        <li class="breadcrumb-item active">@HADES.Strings.MainView</li>
+    </ol>
+</nav>
+
+<div class="bg-primary text-white text-center">
+    <h1 class="m-3 p-3">@HADES.Strings.MainView</h1>
+</div>
 
 <div class="row" id="main">
     @await Html.PartialAsync("_Main", Model)

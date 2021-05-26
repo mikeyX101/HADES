@@ -1,6 +1,6 @@
 ﻿@model MainViewViewModel
 
-<h3 class="mt-3">@Localizer["ContenuDossier"] @Model.SelectedNodeName</h3>
+<h3 class="mt-1">@Localizer["Folder"] @Model.SelectedNodeName</h3>
 
 <!-- Button trigger modal create OU -->
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="@Model.DataTarget" data-backdrop="false">
@@ -25,13 +25,24 @@
 
             var dataTarget = "#a" + i.ToString();
             var id = "a" + i.ToString();
+            var selectedPathLength = Model.SelectedPath.Split('/').Length;
 
             if (Model.ADRoot[i].Path == Model.SelectedPath)
             {
                 <tr>
                     <td>
                         <a data-ajax="true" data-ajax-method="GET" data-ajax-mode="replace" data-ajax-update="#main"
-                           href='@Url.Action("UpdateContent","Home", new { selectedPathForContent = Model.SelectedPath + "/" + Model.ADRoot[i].SamAccountName })'>@Model.ADRoot[i].SamAccountName</a>
+                           href='@Url.Action("UpdateContent","Home", new { selectedPathForContent = Model.SelectedPath + (selectedPathLength == 2 ? "/" + Model.ADRoot[i].SamAccountName : "")})'>
+                            @if (selectedPathLength == 2)
+                            {
+                                <span class="icon fa fa-folder"></span>
+                            }
+                            else 
+                            { 
+                                <span class="icon fa fa-users"></span>
+                            }
+                            @Model.ADRoot[i].SamAccountName
+                        </a>
                     </td>
                     <td>
 
@@ -62,7 +73,7 @@
                                                             @Localizer["InvalidCharacters"]
                                                         </div>
                                                     </div>
-                                                    <button type="submit" class="btn btn-primary col-2">@Localizer["OK"].Value</button>
+                                                    <button type="submit" class="btn btn-primary col-2">@HADES.Strings.OK</button>
                                                 </div>
                                             </form>
                                         </div>
@@ -74,7 +85,7 @@
                         <!-- Button to delete -->
                         <form onsubmit="return formSubmit(this)" style="display: inline-block">
                             <button class="btn btn-primary">
-                                @Localizer["Delete"].Value
+                                @HADES.Strings.Delete
                             </button>
                             <input type="hidden" name="SelectedPath" value="@Model.SelectedPath" />
                             <input type="hidden" name="SelectedContentName" value="@Model.ADRoot[i].SamAccountName" />

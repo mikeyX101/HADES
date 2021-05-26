@@ -3,8 +3,15 @@
     ViewBag.Title = Localizer["AppConfigTitle"];
 }
 
+<nav class="breadcrumb-awesome" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href='@Url.Action("MainView","Home")'>HADES</a></li>
+        <li class="breadcrumb-item active">@HADES.Strings.AppConfig</li>
+    </ol>
+</nav>
+
 <div class="bg-primary text-white text-center">
-    <h1 class="m-3 p-3">@Localizer["ParametreApplication"]</h1>
+    <h1 class="m-3 p-3">@HADES.Strings.AppConfig</h1>
 </div>
 
 <form asp-action="AppConfig" method="post">
@@ -265,7 +272,7 @@
     </div>
     <div class="row">
         <div class="col-sm-12 col-lg-12">
-            <button type="submit" class="btn btn-primary btn-lg btn-block">@Localizer["Save"]</button>
+            <button type="submit" class="btn btn-primary btn-lg btn-block">@HADES.Strings.Save</button>
         </div>
     </div>
 </form>

@@ -45,8 +45,6 @@ namespace HADES.Controllers
                 viewModel.EditLinkLabel = Localizer["Rename"];
                 viewModel.DataTarget = "#OuCreate";
 
-                ViewBag.ThemeFile = ConnexionUtil.CurrentUser(this.User).GetUserConfig().ThemeFile;
-
                 return View(viewModel);
             }
             catch (ADException) // Connection à l'AD impossible

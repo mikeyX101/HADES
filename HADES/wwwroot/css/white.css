@@ -1,5 +1,4 @@
 ﻿body {
-    background-color: deeppink;
     padding-bottom: 60px;
 }
 
@@ -25,9 +24,4 @@
 span.icon {
     width: 12px;
     margin-right: 1rem;
-} 
-
-.btn
-{
-    border-radius: 1rem;
 }

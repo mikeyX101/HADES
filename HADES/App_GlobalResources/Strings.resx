@@ -189,4 +189,22 @@
   <data name="email_membersSup" xml:space="preserve">
     <value>Membres supprimés: </value>
   </data>
+  <data name="MainView" xml:space="preserve">
+    <value>Dossiers et groupes</value>
+  </data>
+  <data name="AppConfig" xml:space="preserve">
+    <value>Paramètres de l'application</value>
+  </data>
+  <data name="UserConfig" xml:space="preserve">
+    <value>Paramètres de l'utilisateur</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Sauvegarder</value>
+  </data>
+  <data name="OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Abandonner</value>
+  </data>
 </root>
