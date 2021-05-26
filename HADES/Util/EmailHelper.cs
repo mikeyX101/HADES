@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Serilog;
 using Serilog.Events;
 using System.Net;
@@ -22,7 +21,6 @@ namespace HADES.Util
         MemberRemoval
     }
 
-
     public static class EmailHelper
     {
         private static List<string> emailsToNotifyFr = new List<string>();
@@ -32,7 +30,7 @@ namespace HADES.Util
         private static string subject = "";
         private static string message = "";
 
-        public static void SendEmail(NotificationType type,  GroupAD group, string usersAddedorDeleted)
+        public static void SendEmail(NotificationType type,  GroupAD group, string usersAddedorDeleted, int nbExpirationDate)
         {
             string groupGUID = group.ObjectGUID;
             Console.WriteLine("yo " + groupGUID);
@@ -99,7 +97,7 @@ namespace HADES.Util
             if (EmailHelper.emailsToNotifyFr.Count > 0)
             {
                 Strings.Culture = new System.Globalization.CultureInfo("fr-CA");
-                EmailHelper.setMsgVariable(type,group, usersAddedorDeleted);
+                EmailHelper.setMsgVariable(type,group, usersAddedorDeleted, nbExpirationDate);
                 using (EmailSink sink = new(EmailHelper.emailsToNotifyFr, EmailHelper.subject))
                 {
                     sink.AddMessage(LogEventLevel.Information, EmailHelper.message);
@@ -111,7 +109,7 @@ namespace HADES.Util
             if (EmailHelper.emailsToNotifyEng.Count > 0)
             {
                 Strings.Culture = new System.Globalization.CultureInfo("en-US");
-                EmailHelper.setMsgVariable(type, group, usersAddedorDeleted);
+                EmailHelper.setMsgVariable(type, group, usersAddedorDeleted, nbExpirationDate);
                 using (EmailSink sink = new(EmailHelper.emailsToNotifyEng, EmailHelper.subject))
                 {
                     sink.AddMessage(LogEventLevel.Information, EmailHelper.message);
@@ -122,7 +120,7 @@ namespace HADES.Util
             if (EmailHelper.emailsToNotifyEsp.Count > 0)
             {
                 Strings.Culture = new System.Globalization.CultureInfo("es-US");
-                EmailHelper.setMsgVariable(type, group, usersAddedorDeleted);
+                EmailHelper.setMsgVariable(type, group, usersAddedorDeleted, nbExpirationDate);
                 using (EmailSink sink = new(EmailHelper.emailsToNotifyEsp, EmailHelper.subject))
                 {
                     sink.AddMessage(LogEventLevel.Information, EmailHelper.message);
@@ -133,7 +131,7 @@ namespace HADES.Util
             if (EmailHelper.emailsToNotifyPor.Count > 0)
             {
                 Strings.Culture = new System.Globalization.CultureInfo("pt-BR");
-                EmailHelper.setMsgVariable(type, group, usersAddedorDeleted);
+                EmailHelper.setMsgVariable(type, group, usersAddedorDeleted, nbExpirationDate);
                 using (EmailSink sink = new(EmailHelper.emailsToNotifyPor, EmailHelper.subject))
                 {
                     sink.AddMessage(LogEventLevel.Information, EmailHelper.message);
@@ -169,7 +167,7 @@ namespace HADES.Util
         }
 
         // Set the right subject and the message with the type of the notification
-        private static void setMsgVariable(NotificationType type, GroupAD groupDn, string usersAddedorDeleted)
+        private static void setMsgVariable(NotificationType type, GroupAD groupDn, string usersAddedorDeleted, int nbExpirationDate)
         {
             String members = "";
             foreach (var m in groupDn.Members)
@@ -181,25 +179,32 @@ namespace HADES.Util
             switch (type)
             {
                 case NotificationType.ExpirationDate:
-                    EmailHelper.subject = Strings.email_ExpirationDateSubject + " (" + groupDn.SamAccountName + " )"; ;
-                    
-                    EmailHelper.message = Strings.email_ExpirationDateMessage + "\n" + Strings.email_name + " " + groupDn.SamAccountName + "\n" + Strings.email_Members + members;
+                    if (nbExpirationDate == -1)
+                    {
+                        EmailHelper.subject = Strings.email_ExpirationDateSubject + " (" + groupDn.SamAccountName + " )"; ;
+                        EmailHelper.message = "\n" + Strings.email_ExpirationDateMessage + "\n" + Strings.email_name + " " + groupDn.SamAccountName + "\n" + Strings.email_Members + members + "\n" + Strings.email_ExpirationDateSubject + ": " + groupDn.ExpirationDate.ToString();
+
+                    }
+                    else {
+                        EmailHelper.subject = Strings.email_ExpirationDateSubject + " (" + groupDn.SamAccountName + " )"; ;
+                        EmailHelper.message = "\n" + Strings.email_ExpirationDateSoonMsg + " " + nbExpirationDate +" " + Strings.email_ExpirationDateSoonMsg02  + "\n" + Strings.email_name + " " + groupDn.SamAccountName + "\n" + Strings.email_Members + members + "\n" + Strings.email_ExpirationDateSubject + ": " + groupDn.ExpirationDate.ToString();
+                    }
                     break;
                 case NotificationType.GroupCreate:
                     EmailHelper.subject = Strings.email_GroupCreateSubject + " (" + groupDn.SamAccountName + " )"; ;
-                    EmailHelper.message = Strings.email_GroupCreateMessage + "\n" + Strings.email_name + " " + groupDn.SamAccountName;
+                    EmailHelper.message = "\n" + Strings.email_GroupCreateMessage + "\n" + Strings.email_name + " " + groupDn.SamAccountName;
                     break;
                 case NotificationType.GroupDelete:
                     EmailHelper.subject = Strings.email_GroupDeleteSubject + " (" + groupDn.SamAccountName + " )"; ;
-                    EmailHelper.message = Strings.email_GroupDeleteMessage + "\n" + Strings.email_name + " " + groupDn.SamAccountName + "\n" + Strings.email_Members + members;
+                    EmailHelper.message = "\n" + Strings.email_GroupDeleteMessage + "\n" + Strings.email_name + " " + groupDn.SamAccountName + "\n" + Strings.email_Members + members;
                     break;
                 case NotificationType.MemberAdd:
                     EmailHelper.subject = Strings.email_MemberAddSubject + " (" + groupDn.SamAccountName + " )";
-                    EmailHelper.message = Strings.email_MemberAddMessage + "\n" + Strings.email_name + " " + groupDn.SamAccountName + "\n" + Strings.email_Members + members + "\n" + Strings.email_membersaddes + usersAddedorDeleted;
+                    EmailHelper.message = "\n" + Strings.email_MemberAddMessage + "\n" + Strings.email_name + " " + groupDn.SamAccountName + "\n" + Strings.email_Members + members + "\n" + Strings.email_membersaddes + usersAddedorDeleted;
                     break;
                 case NotificationType.MemberRemoval:
                     EmailHelper.subject = Strings.email_MemberRemovalSubject + " (" + groupDn.SamAccountName + " )"; ;
-                    EmailHelper.message = Strings.email_MemberRemovalMessage + "\n" + Strings.email_name + " " + groupDn.SamAccountName + "\n" + Strings.email_Members + members + "\n" + Strings.email_membersSup + usersAddedorDeleted;
+                    EmailHelper.message = "\n" + Strings.email_MemberRemovalMessage + "\n" + Strings.email_name + " " + groupDn.SamAccountName + "\n" + Strings.email_Members + members + "\n" + Strings.email_membersSup + usersAddedorDeleted;
                     break;
             }
         }
