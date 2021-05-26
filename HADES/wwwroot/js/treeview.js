@@ -4,6 +4,7 @@ var selectedNode;
 var selectedDepth;
 var selectedContentName;
 var isValid = false;
+var dialogConfirmationContent;
 
 /**
  * Show treeview
@@ -116,6 +117,9 @@ function setIcons() {
  * Setup dialog settings after document is ready
  */
 $(function () {
+
+    dialogConfirmationContent = $("#dialog-confirmation-delete").text();
+
     $("#dialog-error-delete").dialog({
         autoOpen: false,
         modal: true,
@@ -163,7 +167,6 @@ $(function () {
  */
 function deleteOU(form) {
 
-    // validation here
     selectedPath = form[1].value;
     selectedContentName = form[2].value;
 
@@ -178,6 +181,8 @@ function deleteOU(form) {
     isValid = foundNodes[0] && foundNodes[0].parentId == 0 && typeof foundNodes[0].nodes === 'undefined';
 
     if (isValid) {
+        $("#dialog-confirmation-delete").empty();
+        $("#dialog-confirmation-delete").append(dialogConfirmationContent + ' ' + selectedContentName + ' ?');
         // confirmation dialog
         $("#dialog-confirmation-delete").data('form', form).dialog("open");
     }
@@ -191,6 +196,7 @@ function deleteOU(form) {
 
 function deleteGroup(form) {
 
+    selectedPath = form[1].value;
     selectedContentName = form[2].value;
 
     // search for selectedContentName
@@ -204,6 +210,8 @@ function deleteGroup(form) {
     isValid = foundNodes[0] && foundNodes[0].parentId !== 0 && typeof foundNodes[0].nodes === 'undefined';
 
     if (isValid) {
+        $("#dialog-confirmation-delete").empty();
+        $("#dialog-confirmation-delete").append(dialogConfirmationContent + ' ' + selectedContentName + ' ?');
         // confirmation dialog
         $("#dialog-confirmation-delete").data('form', form).dialog("open");
     }
