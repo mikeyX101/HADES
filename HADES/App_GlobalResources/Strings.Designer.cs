@@ -223,6 +223,16 @@ namespace HADES {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Une valeur négative à été entrée alors que l&apos;application attendaient une valeur positive.
+        /// </summary>
+        public static string NegativeValueError {
+            get {
+                return ResourceManager.GetString("NegativeValueError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Portugais.
         ///   Looks up a localized string similar to Dossiers et groupes.
         /// </summary>
         public static string MainView {
