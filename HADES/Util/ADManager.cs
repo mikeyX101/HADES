@@ -5,6 +5,7 @@ using Novell.Directory.Ldap;
 using System;
 using System.Collections.Generic;
 using Serilog;
+using System.Globalization;
 
 namespace HADES.Util
 {
@@ -41,6 +42,32 @@ namespace HADES.Util
             try
             {
                 return entry.GetAttribute(attribute).StringValue;
+            }
+            catch (KeyNotFoundException)
+            {
+                // The key is not set 
+                return null;
+            }
+            catch (Exception e)
+            {
+                Log.Warning(e, GenericErrorLogTemplate, "getAttributeValue()");
+                return null;
+            }
+        }
+
+
+        /*****************************************************
+         GETATTRIBUTE in AD
+         ******************************************************/
+        private DateTime? getDateExp(LdapEntry entry)
+        {
+           
+            try
+            {
+                string dateExp = entry.GetAttribute("expirationDateHades").StringValue;
+                string format = "yyMMddHHmmss'Z'";
+                DateTime d = DateTime.ParseExact(dateExp, format, CultureInfo.InvariantCulture);
+                return d;
             }
             catch (KeyNotFoundException)
             {
@@ -338,14 +365,8 @@ namespace HADES.Util
 
             connection.Disconnect();
 
-            // TEST
-          /*  Dictionary<UserAD, Action> users = new Dictionary<UserAD, Action>();
-            UserAD u1 = getUserAD("\\7d\\d7\\05\\fb\\4c\\c3\\da\\48\\bd\\1f\\b0\\32\\d0\\18\\54\\36", true);
-            users.Add(u1,Action.DELETE);
-             modifyGroup("CN=Dossier88,OU=test3,OU=hades_root,DC=R991-AD,DC=lan","Dossier88", "test3","desc","vero@vero.yo","notesss", users);*/
-           // deleteGroup("CN=testyo,OU=Dossier225,OU=hades_root,DC=R991-AD,DC=lan");
-          //  getGroupGUIDByDn("CN=Group5,OU=Dossier36,OU=hades_root,DC=R991-AD,DC=lan");
-      
+            createGroup("blablabla","Dossier36", "","",DateTime.Now,"", new List<UserAD>());
+
             return root;
         }
 
@@ -370,6 +391,8 @@ namespace HADES.Util
                     group.Description = getAttributeValue(nextEntry, "description");
                     group.Members = GetMembersOfGroup(nextEntry.Dn, connection);
                     group.ObjectGUID = getObjectGUID(nextEntry);
+                    group.ExpirationDate = getDateExp(nextEntry);
+
                     root.Add(group);
                     
                 }
@@ -404,6 +427,7 @@ namespace HADES.Util
                     group.Description = getAttributeValue(nextEntry, "description");
                     group.Members = GetMembersOfGroup(groupDN,connection);
                     group.ObjectGUID = getObjectGUID(nextEntry);
+                    group.ExpirationDate = getDateExp(nextEntry);
                 }
                 catch (LdapException e)
                 {
@@ -492,8 +516,20 @@ namespace HADES.Util
         /*****************************************************
          GROUP
          ******************************************************/
-        public bool createGroup(string name, string ouName, string description, string email, string notes, List<UserAD> members)
+        public bool createGroup(string name, string ouName, string description, string email, DateTime dateExpiration, string notes, List<UserAD> members)
         {
+            if (description == "")
+            {
+                description = " ";
+            }
+            if (email == "")
+            {
+                email = " ";
+            }
+            if (notes == "")
+            {
+                notes = " ";
+            }
 
             LdapConnection connection = createConnection();
             try
@@ -507,6 +543,8 @@ namespace HADES.Util
                 attributeSet.Add(new LdapAttribute("description", description));
                 attributeSet.Add(new LdapAttribute("mail", email));
                 attributeSet.Add(new LdapAttribute("info", notes));
+                string format = "yyMMddHHmmss'Z'";
+                attributeSet.Add(new LdapAttribute("expirationDateHades", dateExpiration.ToString(format)));
                 // DN of the entry to be added
                 string dn = "CN=" + name + "," + "OU=" + ouName + "," + ADSettingsCache.Ad.RootOu;
                 LdapEntry newEntry = new LdapEntry(dn, attributeSet);
@@ -530,8 +568,19 @@ namespace HADES.Util
         }
 
 
-        public bool modifyGroup(string dnGroupToModify, string name, string ouGroup, string description, string email, string notes, Dictionary<UserAD, Action> members)
+        public bool modifyGroup(string dnGroupToModify, string name, string ouGroup, string description, string email, DateTime dateExpiration, string notes, Dictionary<UserAD, Action> members)
         {
+            if (description == "") {
+                description = " ";
+            }
+            if (email == "")
+            {
+                email = " ";
+            }
+            if (notes == "")
+            {
+                notes = " ";
+            }
             try
 			{
                 LdapConnection connection = createConnection();
@@ -550,15 +599,21 @@ namespace HADES.Util
                 modList.Add(new LdapModification(LdapModification.Replace, attribute));
 
                 //Email
-                attribute = new LdapAttribute("mail", email);
-                modList.Add(new LdapModification(LdapModification.Replace, attribute));
-
+                
+                 attribute = new LdapAttribute("mail", email);
+                 modList.Add(new LdapModification(LdapModification.Replace, attribute));
+               
                 //Notes
                 attribute = new LdapAttribute("info", notes);
                 modList.Add(new LdapModification(LdapModification.Replace, attribute));
 
                 //SamAccountName 
                 attribute = new LdapAttribute("samaccountname", name);
+                modList.Add(new LdapModification(LdapModification.Replace, attribute));
+
+                //DateExp 
+                string format = "yyMMddHHmmss'Z'";
+                attribute = new LdapAttribute("expirationDateHades", dateExpiration.ToString(format));
                 modList.Add(new LdapModification(LdapModification.Replace, attribute));
 
                 LdapModification[] mods = new LdapModification[modList.Count];
