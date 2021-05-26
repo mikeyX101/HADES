@@ -106,6 +106,24 @@ namespace HADES {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Le groupe expirera dans.
+        /// </summary>
+        public static string email_ExpirationDateSoonMsg {
+            get {
+                return ResourceManager.GetString("email_ExpirationDateSoonMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à jour(s)..
+        /// </summary>
+        public static string email_ExpirationDateSoonMsg02 {
+            get {
+                return ResourceManager.GetString("email_ExpirationDateSoonMsg02", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à La date d&apos;expiration.
         /// </summary>
         public static string email_ExpirationDateSubject {
@@ -187,7 +205,7 @@ namespace HADES {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Anglais.
+        ///   Recherche une chaîne localisée semblable à Membres:.
         /// </summary>
         public static string email_Members {
             get {
@@ -223,6 +241,7 @@ namespace HADES {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Anglais.
         /// </summary>
         public static string English {
             get {
@@ -231,7 +250,7 @@ namespace HADES {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Un fichier est trop grand.
+        ///   Recherche une chaîne localisée semblable à La configuration n&apos;a pas pu être sauvegardée vérifier que les champs sont bien remplis.
         /// </summary>
         public static string errorFileSize {
             get {

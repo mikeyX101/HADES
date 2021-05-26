@@ -89,8 +89,9 @@ namespace HADES
                 options.Filters.Add(new AuthorizeFilter());
             });
 
-            // Adds service that updates DB
+            // Adds service that updates DB and verify the expirationDate of the groups ion the Active directory
             services.AddHostedService<DatabaseSyncService>();
+            services.AddHostedService<DateExpirationService>();
 
             #region Localization Setup
             // Configure localization
