@@ -144,6 +144,7 @@ namespace HADES.Controllers
             var DN = FindDN(viewModel.SelectedPath, viewModel.SelectedContentName);
             var split = viewModel.SelectedPath.Split('/');
             var selectedNodeName = split.Length == 2 ? split[1] : split[2];
+            // Delete OU
             if (split.Length == 2)
             {
                 /* TODO : validations dossier ne contient pas de groupes */
@@ -153,11 +154,16 @@ namespace HADES.Controllers
                 }
                 
             }
-            /* TODO : supprimer Group */
-            /*if (split.Length == 3)
+            // Delete Group
+            if (split.Length == 3)
             {
-                ad.deleteGroup(DN);
-            }*/
+                /* TODO : validations group */
+                if (true)
+                {
+                    ad.deleteGroup(DN);
+                }
+                
+            }
             Serilog.Log.Information("Le dossier(OU) " + DN + " a été supprimé");
             return RedirectToAction("UpdateContent", "Home", new { selectedPathForContent = viewModel.SelectedPath });
         }
