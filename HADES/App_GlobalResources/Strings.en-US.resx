@@ -213,4 +213,7 @@
   <data name="email_ExpirationDateSoonMsg02" xml:space="preserve">
     <value>days(s).</value>
   </data>
+  <data name="errorFileSize" xml:space="preserve">
+    <value>A file is too big</value>
+  </data>
 </root>

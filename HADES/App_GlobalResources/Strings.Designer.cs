@@ -252,6 +252,15 @@ namespace HADES {
         /// <summary>
         ///   Recherche une chaîne localisée semblable à La configuration n&apos;a pas pu être sauvegardée vérifier que les champs sont bien remplis.
         /// </summary>
+        public static string errorFileSize {
+            get {
+                return ResourceManager.GetString("errorFileSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à La configuration n&apos;a pas pu être sauvegardée vérifier que les champs sont bien remplis.
+        /// </summary>
         public static string ErrorSavingConfiguration {
             get {
                 return ResourceManager.GetString("ErrorSavingConfiguration", resourceCulture);

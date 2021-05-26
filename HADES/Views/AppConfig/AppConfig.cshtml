@@ -4,10 +4,10 @@
 }
 
 <div class="bg-primary text-white text-center">
-    <h1 class="m-3 p-3">@HADES.Strings.AppConfig</h1>
+    <h1 class="m-3 p-3">@Localizer["ParametreApplication"]</h1>
 </div>
 
-<form asp-action="AppConfig" method="post">
+<form asp-action="AppConfig" method="post" enctype="multipart/form-data">
     <div class="form-group row">
         <input type="hidden" asp-for="@Model.ActiveDirectory.Id" />
         <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["RootOu"]</label></div>
@@ -104,17 +104,13 @@
         <input type="hidden" asp-for="@Model.AppConfig.Id" />
         <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["CompanyLogoFile"]</label></div>
         <div class="col-sm-9 col-lg-5">
-            <input data-toggle="tooltip" data-html="true" data-placement="right" title="@Localizer["LogoToolTip"]" id="clogo" type="file" accept="image/*" asp-for="@Model.AppConfig.CompanyLogoFile" class="form-control" /> <img src=@Model.AppConfig.CompanyLogoFile width="80" />
-            <script>$("#clogo").change(function () { encodebase64url($("#clogo")[0].files[0], $("#b64l")) })</script>
-            <input id="b64l" type="hidden" name="base64logo" class="form-control" />
+            <input data-toggle="tooltip" data-html="true" data-placement="right" title="@Localizer["LogoToolTip"]" id="clogo" type="file" accept="image/*" name="ico" class="form-control" /> <img src=@Model.AppConfig.CompanyLogoFile width="80" />
         </div>
     </div>
     <div class="form-group row">
         <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["CompanyBackgroundFile"]</label></div>
         <div class="col-sm-9 col-lg-5">
-            <input data-toggle="tooltip" data-html="true" data-placement="right" title="@Localizer["BackgroundToolTip"]" id="cbg" type="file" accept="image/*" asp-for="@Model.AppConfig.CompanyBackgroundFile" class="form-control" /> <img src=@Model.AppConfig.CompanyBackgroundFile width="80" />
-            <script>$("#cbg").change(function () { encodebase64url($("#cbg")[0].files[0], $("#b64bg")) })</script>
-            <input id="b64bg" type="hidden" name="base64bg" class="form-control" />
+            <input data-toggle="tooltip" data-html="true" data-placement="right" title="@Localizer["BackgroundToolTip"]" id="cbg" type="file" accept="image/*" name="bg" class="form-control" /> <img src=@Model.AppConfig.CompanyBackgroundFile width="80" />
         </div>
     </div>
     <div class="form-group row">
@@ -265,7 +261,7 @@
     </div>
     <div class="row">
         <div class="col-sm-12 col-lg-12">
-            <button type="submit" class="btn btn-primary btn-lg btn-block">@HADES.Strings.Save</button>
+            <button type="submit" class="btn btn-primary btn-lg btn-block">@Localizer["Save"]</button>
         </div>
     </div>
 </form>
@@ -274,17 +270,4 @@
     $(document).ready(function () {
         $('[data-toggle="tooltip"]').tooltip();
     });
-</script>
-
-<script>
-    function encodebase64url(file, out) {
-        if (file) {
-            var fr = new FileReader();
-            fr.onload = function () {
-                out.val(fr.result);
-            };
-
-            fr.readAsDataURL(file);
-        }
-    };
 </script>
