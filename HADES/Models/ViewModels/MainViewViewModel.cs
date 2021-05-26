@@ -1,21 +1,24 @@
-﻿using System;
+﻿using HADES.Util.ModelAD;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using HADES.Util.ModelAD;
 using Newtonsoft.Json;
+using HADES.Util;
 
 namespace HADES.Models
 {
-    public class MainViewViewModel
+	public class MainViewViewModel
     {
         public List<RootDataInformation> ADRoot { get; set; }
 
         public TreeNode<string> ADRootTreeNode { get; set; }
-        
+
         public GroupAD GroupAD { get; set; }
-        
+
+        public ADManager ADManager { get; set; }
+
         public string ADRootTreeNodeJson { get; set; }
 
         public string SelectedPath { get; set; }
@@ -32,7 +35,14 @@ namespace HADES.Models
 
         public string SelectedContentName { get; set; }
 
+        [Required]
+        [OuName]
         public string NewName { get; set; }
+
+        public string SelectedUsers { get; set; }
+        public string BeforeEditMembers { get; set; }
+        public string OuGroup { get; set; }
+        public string UsersAD { get; set; }
 
     }
 }

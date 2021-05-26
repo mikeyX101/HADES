@@ -31,9 +31,11 @@ namespace HADES.Controllers
         // Returns the Main Application View parameter is the selected Folder
         public IActionResult MainView(string selectedPath)
         {
+
             try
             {
                 viewModel.ADRoot = ad.getRoot();
+                viewModel.ADManager = ad;
                 BuildRootTreeNode(viewModel.ADRoot); // conversion List<RootDataInformation> en TreeNode<string>
                 viewModel.ADRootTreeNodeJson = TreeNodeToJson(viewModel.ADRootTreeNode); // conversion TreeNode<string> en Json
 
@@ -62,9 +64,16 @@ namespace HADES.Controllers
             }
         }
 
+
+
         [Authorize]
         public IActionResult UpdateContent(string selectedPathForContent)
         {
+
+            string users = JsonConvert.SerializeObject(ad.getAllUsers().Select(x => x.SamAccountName));
+            viewModel.UsersAD = users;
+            viewModel.ADManager = ad;
+
             viewModel.ADRoot = ad.getRoot();
             viewModel.SelectedPath = selectedPathForContent;
             var split = viewModel.SelectedPath.Split('/');
@@ -95,7 +104,8 @@ namespace HADES.Controllers
             {
                 path = item.Path?.Split("/");
 
-                if (viewModel.ADRootTreeNode == null) {
+                if (viewModel.ADRootTreeNode == null)
+                {
                     viewModel.ADRootTreeNode = new TreeNode<string>(item.SamAccountName);
                 }
 
@@ -106,7 +116,7 @@ namespace HADES.Controllers
                 else if (path.Length == 2)
                 {
                     ou = viewModel.ADRootTreeNode.AddChild(item.SamAccountName);
-                    
+
                 }
                 else if (path.Length == 3)
                 {
@@ -136,7 +146,7 @@ namespace HADES.Controllers
                                                 .Replace("\"nodes\": []", "");
         }
 
-      
+
 
         [HttpPost]
         [Authorize]
@@ -144,7 +154,7 @@ namespace HADES.Controllers
         {
             if (!ConnexionUtil.CurrentUser(this.User).GetRole().AdCrudAccess)
             {
-                return RedirectToAction("MainView","Home");
+                return RedirectToAction("MainView", "Home");
             }
             var DN = FindDN(viewModel.SelectedPath, viewModel.SelectedContentName);
             var split = viewModel.SelectedPath.Split('/');
@@ -156,7 +166,7 @@ namespace HADES.Controllers
                 {
                     ad.deleteOU(DN);
                 }
-                
+
             }
             /* TODO : supprimer Group */
             /*if (split.Length == 3)
@@ -183,58 +193,67 @@ namespace HADES.Controllers
         }
 
 
-        public IActionResult CreateGroupModal()
-        {
-            return PartialView();
-        }
-
-
         [HttpPost]
         [ValidateAntiForgeryToken]
-
-        public async Task<IActionResult> CreateGroupModal([Bind("GroupAD, SelectedNodeName, SelectedContentName, SelectedPath")] MainViewViewModel viewModel)
+        public async Task<IActionResult> CreateGroupModal([Bind("GroupAD, SelectedNodeName, SelectedContentName, SelectedPath, SelectedUsers")] MainViewViewModel viewModel)
         {
+            //viewModel.SelectedNodeName
+            //////////////
             var split = viewModel.SelectedPath.Split('/');
             var selectedNodeName = split.Length == 2 ? split[1] : split[2];
-
+            //////
             var groupAD = viewModel.GroupAD;
+            //var sd = viewModel.UsersAD;
+
+
+            //////////GetSelectedUsersSamAccount()
+            List<UserAD> members = new();
+            if (viewModel.SelectedUsers != null)
+            {
+                List<string> selectedUsers = JsonConvert.DeserializeObject<List<string>>(viewModel.SelectedUsers);
+                members = ad.getAllUsers().Where(x => selectedUsers.Contains(x.SamAccountName)).ToList();
+            }
+            ///////
+
             if (ModelState.IsValid)
             {
-                ad.createGroup(groupAD.SamAccountName, selectedNodeName, groupAD.Description, groupAD.Email, groupAD.Notes, groupAD.Members);
-                //return RedirectToAction("EditGroupModal");
+                //refactor pour reduire nombre de param, 
+                //ad.createGroup(groupAD.SamAccountName, selectedNodeName, groupAD.Description, groupAD.Email, groupAD.Notes, members);
+
+                DateTime dateExp = (DateTime)groupAD.ExpirationDate;
+                ad.createGroup(groupAD.SamAccountName, selectedNodeName, groupAD.Description, groupAD.Email, dateExp, groupAD.Notes, groupAD.Members);
+
                 return RedirectToAction("MainView");
             }
-            return View(groupAD);
+            return View(viewModel);
         }
 
-        public IActionResult EditGroupModal()
-        {
-            var DN = FindDN(viewModel.SelectedPath, viewModel.SelectedContentName);
-
-            var group = ad.getGroupInformation(DN);
-
-            return View(group);
-        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditGroupModal([Bind("GroupAD, SelectedNodeName, SelectedContentName, SelectedPath")] MainViewViewModel viewModel)
+        //ancien samaccountname pour le rename admanager
+        public async Task<IActionResult> EditGroupModal([Bind("GroupAD, SelectedNodeName, SelectedPath, BeforeEditMembers, SelectedUsers, OuGroup")] MainViewViewModel viewModel)
         {
-            //var DN = FindDN(viewModel.SelectedPath, viewModel.SelectedContentName);
+            GroupAD group = viewModel.GroupAD;
+            string DN = FindDN(viewModel.SelectedPath, viewModel.OuGroup);
+            string selectedNodeName = viewModel.SelectedNodeName;
+
+            Dictionary<UserAD, Util.Action> updatedGroupMembers = UpdatedGroupMembersKeyValueActions(viewModel);
+
+
             if (ModelState.IsValid)
             {
-                try
-                {
-                    //ad.modifyGroup(DN);
-                }
-                catch (Exception e)
-                {
+                //ad.modifyGroup(DN, group.SamAccountName, selectedNodeName, group.Description, group.Email, group.Notes, updatedGroupMembers);
 
-                }
+                //changer signature de la methode à vero dans admanager. GARDER OUGROUP (3e param)
+                //public bool modifyGroup(string dnGroupToModify, GroupAD group, Dictionary<UserAD, Action> members)
+
                 return RedirectToAction("MainView");
             }
             return View(viewModel.GroupAD);
         }
+
+
         [HttpPost]
         [Authorize]
         public IActionResult CreateOU(MainViewViewModel viewModel)
@@ -251,7 +270,44 @@ namespace HADES.Controllers
         private string FindDN(string selectedPath, string selectedContentName)
         {
             viewModel.ADRoot = ad.getRoot();
-            return viewModel.ADRoot.Find(e => e.Path == selectedPath && e.SamAccountName == selectedContentName).Dn;
+            return viewModel.ADRoot.Find(e => e.Path == selectedPath && e.SamAccountName == selectedContentName)?.Dn;
+        }
+
+        private Dictionary<UserAD, Util.Action> UpdatedGroupMembersKeyValueActions(MainViewViewModel viewModel)
+        {
+            //deserialize?
+            ////////////////////////
+            List<UserAD> initialUsers = new();
+            List<UserAD> modifiedUsers = new();
+
+            List<string> selectedUsers = new();
+            List<string> beforeEditUsers = new();
+
+            if (viewModel.SelectedUsers != null)
+                selectedUsers = JsonConvert.DeserializeObject<List<string>>(viewModel.SelectedUsers);
+            if (viewModel.BeforeEditMembers != null)
+                beforeEditUsers = JsonConvert.DeserializeObject<List<string>>(viewModel.BeforeEditMembers);
+            //////////////////////////////////
+
+
+            modifiedUsers = ad.getAllUsers().Where(x => selectedUsers.Contains(x.SamAccountName)).ToList();
+            initialUsers = ad.getAllUsers().Where(x => beforeEditUsers.Contains(x.SamAccountName)).ToList();
+
+            Dictionary<UserAD, Util.Action> updatedKeyValueActions = new();
+
+            foreach (var member in modifiedUsers)
+            {
+                if (!initialUsers.Contains(member))
+                    updatedKeyValueActions.Add(member, Util.Action.ADD);
+            }
+
+            foreach (var member in initialUsers)
+            {
+                if (!modifiedUsers.Contains(member))
+                    updatedKeyValueActions.Add(member, Util.Action.DELETE);
+            }
+
+            return updatedKeyValueActions;
         }
     }
 

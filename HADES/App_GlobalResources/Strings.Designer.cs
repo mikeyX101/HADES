@@ -61,11 +61,272 @@ namespace HADES {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Paramètres de l&apos;application.
+        /// </summary>
+        public static string AppConfig {
+            get {
+                return ResourceManager.GetString("AppConfig", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Retour.
+        /// </summary>
+        public static string Back {
+            get {
+                return ResourceManager.GetString("Back", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Abandonner.
+        /// </summary>
+        public static string Cancel {
+            get {
+                return ResourceManager.GetString("Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Supprimer.
+        /// </summary>
+        public static string Delete {
+            get {
+                return ResourceManager.GetString("Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to La date d&apos;expiration est arrivée a échéance pour un groupe..
+        /// </summary>
+        public static string email_ExpirationDateMessage {
+            get {
+                return ResourceManager.GetString("email_ExpirationDateMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to La date d&apos;expiration.
+        /// </summary>
+        public static string email_ExpirationDateSubject {
+            get {
+                return ResourceManager.GetString("email_ExpirationDateSubject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Un groupe a été créé..
+        /// </summary>
+        public static string email_GroupCreateMessage {
+            get {
+                return ResourceManager.GetString("email_GroupCreateMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to La création d&apos;un groupe.
+        /// </summary>
+        public static string email_GroupCreateSubject {
+            get {
+                return ResourceManager.GetString("email_GroupCreateSubject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Un groupe a été supprimé..
+        /// </summary>
+        public static string email_GroupDeleteMessage {
+            get {
+                return ResourceManager.GetString("email_GroupDeleteMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to La suppression d&apos;un groupe.
+        /// </summary>
+        public static string email_GroupDeleteSubject {
+            get {
+                return ResourceManager.GetString("email_GroupDeleteSubject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Des membres ont été ajouté à un groupe..
+        /// </summary>
+        public static string email_MemberAddMessage {
+            get {
+                return ResourceManager.GetString("email_MemberAddMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ajout de Membres.
+        /// </summary>
+        public static string email_MemberAddSubject {
+            get {
+                return ResourceManager.GetString("email_MemberAddSubject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Des membres ont été supprimé d&apos;un groupe..
+        /// </summary>
+        public static string email_MemberRemovalMessage {
+            get {
+                return ResourceManager.GetString("email_MemberRemovalMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Suppression de membres.
+        /// </summary>
+        public static string email_MemberRemovalSubject {
+            get {
+                return ResourceManager.GetString("email_MemberRemovalSubject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Anglais.
+        /// </summary>
+        public static string email_Members {
+            get {
+                return ResourceManager.GetString("email_Members", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Membres ajoutés: .
+        /// </summary>
+        public static string email_membersaddes {
+            get {
+                return ResourceManager.GetString("email_membersaddes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Membres supprimés: .
+        /// </summary>
+        public static string email_membersSup {
+            get {
+                return ResourceManager.GetString("email_membersSup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Nom:.
+        /// </summary>
+        public static string email_name {
+            get {
+                return ResourceManager.GetString("email_name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// </summary>
+        public static string English {
+            get {
+                return ResourceManager.GetString("English", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to La configuration n&apos;a pas pu être sauvegardée vérifier que les champs sont bien remplis.
+        /// </summary>
+        public static string ErrorSavingConfiguration {
+            get {
+                return ResourceManager.GetString("ErrorSavingConfiguration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Français.
+        /// </summary>
+        public static string French {
+            get {
+                return ResourceManager.GetString("French", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to GlobalFR.
         /// </summary>
         public static string GlobalString {
             get {
                 return ResourceManager.GetString("GlobalString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Une valeur négative à été entrée alors que l&apos;application attendaient une valeur positive.
+        /// </summary>
+        public static string NegativeValueError {
+            get {
+                return ResourceManager.GetString("NegativeValueError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Portugais.
+        ///   Looks up a localized string similar to Dossiers et groupes.
+        /// </summary>
+        public static string MainView {
+            get {
+                return ResourceManager.GetString("MainView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OK.
+        /// </summary>
+        public static string OK {
+            get {
+                return ResourceManager.GetString("OK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Portugais.
+        /// </summary>
+        public static string Portuguese {
+            get {
+                return ResourceManager.GetString("Portuguese", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Retirer.
+        /// </summary>
+        public static string Remove {
+            get {
+                return ResourceManager.GetString("Remove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sauvegarder.
+        /// </summary>
+        public static string Save {
+            get {
+                return ResourceManager.GetString("Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Espagnol.
+        /// </summary>
+        public static string Spanish {
+            get {
+                return ResourceManager.GetString("Spanish", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Paramètres de l&apos;utilisateur.
+        /// </summary>
+        public static string UserConfig {
+            get {
+                return ResourceManager.GetString("UserConfig", resourceCulture);
             }
         }
     }

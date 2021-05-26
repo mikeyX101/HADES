@@ -1,39 +1,44 @@
+using HADES.Middlewares;
+using HADES.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.ObjectPool;
 using Microsoft.Extensions.Options;
-using Microsoft.AspNetCore.HttpOverrides;
 using System;
-using System.Linq;
+using System.Buffers;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
-using HADES.Services;
-using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Mvc.Filters;
-using HADES.Middlewares;
+using System.Net;
+using Serilog;
+using Serilog.Context;
 
 namespace HADES
 {
-    public class Startup
+	public class Startup
     {
         public Startup(IConfiguration configuration)
         {
-            // Use settings to access appsettings.json 
             Settings.Initiate(configuration);
         }
 
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-			// Should be before anything else
+			// Should be before anything network related
 			#region Reverse Proxy Setup
 			services.Configure<ForwardedHeadersOptions>(options =>
 			{
@@ -65,7 +70,20 @@ namespace HADES
             services.AddDbContext<Data.ApplicationDbContext>(options =>
                 options.UseSqlite(Settings.AppSettings.SqlLiteConnectionString));
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddNewtonsoftJson();
+            // For CSP Reports, see: https://stackoverflow.com/questions/59811255/415-unsupported-media-type-for-content-type-application-csp-report-in-asp-ne
+            services.AddOptions<MvcOptions>().PostConfigure<IOptions<JsonOptions>, IOptions<MvcNewtonsoftJsonOptions>, ArrayPool<char>, ObjectPoolProvider, ILoggerFactory>(
+                (mvcOptions, jsonOpts, newtonJsonOpts, charPool, objectPoolProvider, loggerFactory) =>
+                {
+                    foreach (InputFormatter formatter in mvcOptions.InputFormatters.OfType<InputFormatter>())
+					{
+                        formatter.SupportedMediaTypes.Add("application/csp-report");
+                    }
+                }
+            );
+
+            services.AddCors();
+
             services.AddMvc(options =>
             {
                 options.Filters.Add(new AuthorizeFilter());
@@ -116,9 +134,9 @@ namespace HADES
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 		{
+            app.UseHttpsRedirection();
             if (env.IsDevelopment())
 			{
-				app.UseHttpsRedirection();
 				app.UseDeveloperExceptionPage();
 			}
 			else if (env.IsProduction())
@@ -129,24 +147,38 @@ namespace HADES
                 app.UseExceptionHandler("/Errors");
                 app.UseHadesErrorHandling();
 
-                app.UseHttpsRedirection();
-				// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-				app.UseHsts();
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
 
-
-				// If production build, run migrations to keep database up-to-date.
-				using (IServiceScope scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+                // If production build, run migrations to keep database up-to-date.
+                using (IServiceScope scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
 				{
 					scope.ServiceProvider.GetRequiredService<Data.ApplicationDbContext>().Database.Migrate();
 				}
-			}
-
-            app.UseStaticFiles();
+            }
+            Util.LogManager.RefreshLogger(new AppConfigService().GetAppConfig());
 
             app.UseRouting();
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseUserLog();
+
+            app.UseSerilogRequestLogging();
+
+            app.UseStaticFiles();
+
+            app.UseContentSecurityPolicyHeader(
+                "default-src 'self'; img-src 'self' data:; media-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; font-src 'self'; frame-src 'self'",
+                "/api/CSPReport"
+            );
+            app.UseCors(policyBuilder => policyBuilder
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .SetIsOriginAllowed((host) => true)
+                    .AllowCredentials()
+            );
 
             app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = SameSiteMode.Strict, Secure = CookieSecurePolicy.Always });
 
@@ -181,7 +213,7 @@ namespace HADES
 				{
                     string queryStringLanguage = context.Request.Query["l"].ToString();
                     locale =
-                        !string.IsNullOrWhiteSpace(queryStringLanguage) ? queryStringLanguage : null ??     // TEMP, CHECK l IN QUERY STRING. TO BE REMOVED, THIS IS AN UNFILTERED USER INPUT ENTRY POINT
+                        !string.IsNullOrWhiteSpace(queryStringLanguage) ? queryStringLanguage : null ??     //TODO TEMP, CHECK l IN QUERY STRING. TO BE REMOVED, THIS IS AN UNFILTERED USER INPUT ENTRY POINT
                         connectedUser?.GetUserConfig().Language ??                                          // Get from connected user.
                         db.AppConfig.FirstOrDefault()?.DefaultLanguage ??                                   // Get from app config.
                         Settings.AppSettings.DefaultCulture;                                                // Get default in appsettings.json (Always defined)

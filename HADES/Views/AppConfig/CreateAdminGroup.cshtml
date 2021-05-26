@@ -1,10 +1,8 @@
 ﻿@model HADES.Models.AdminGroup
 
 @{
-    ViewData["Title"] = "View";
+    ViewData["Title"] = "CreateAdminGroup";
 }
-
-<h1>View</h1>
 
 <h4>Admin Group</h4>
 <hr />
@@ -13,9 +11,8 @@
         <form asp-action="CreateAdminGroup">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="GUID" class="control-label"></label>
-                <input asp-for="GUID" class="form-control" />
-                <span asp-validation-for="GUID" class="text-danger"></span>
+                <label class="control-label">DN</label>
+                <input name="DN" class="form-control" />
             </div>
             <div class="form-group">
                 <input type="hidden" asp-for="@Model.AppConfigId" value="@ViewBag.AppConfigId" />
@@ -27,7 +24,7 @@
     </div>
 </div>
 <div>
-    <a asp-action="AppConfig" asp-route-id="@ViewBag.AppConfigId">Back to List</a>
+    <a asp-action="AppConfig" asp-route-id="@ViewBag.AppConfigId">@HADES.Strings.Back</a>
 </div>
 
 @section Scripts {

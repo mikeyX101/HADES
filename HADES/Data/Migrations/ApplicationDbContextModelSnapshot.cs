@@ -101,6 +101,9 @@ namespace HADES.Migrations
 
                     b.HasIndex("AppConfigId");
 
+                    b.HasIndex("GUID")
+                        .IsUnique();
+
                     b.ToTable("AdminGroup_ADG");
                 });
 
@@ -140,9 +143,25 @@ namespace HADES.Migrations
                         .HasColumnType("INTEGER")
                         .HasColumnName("ACF_log_max_file_size");
 
-                    b.Property<string>("SMTP")
+                    b.Property<string>("SMTPFromEmail")
                         .HasColumnType("TEXT")
-                        .HasColumnName("ACF_SMTP");
+                        .HasColumnName("ACF_SMTP_from_email");
+
+                    b.Property<string>("SMTPPassword")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("ACF_SMTP_password");
+
+                    b.Property<int>("SMTPPort")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("ACF_SMTP_port");
+
+                    b.Property<string>("SMTPServer")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("ACF_SMTP_server");
+
+                    b.Property<string>("SMTPUsername")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("ACF_SMTP_username");
 
                     b.HasKey("Id");
 
@@ -160,9 +179,13 @@ namespace HADES.Migrations
                             CompanyLogoFile = "logo.png",
                             CompanyName = "YourCompanyName",
                             DefaultLanguage = "fr-CA",
-                            LogDeleteFrequency = 1,
-                            LogMaxFileSize = 1,
-                            SMTP = ""
+                            LogDeleteFrequency = 31,
+                            LogMaxFileSize = 100000000,
+                            SMTPFromEmail = "",
+                            SMTPPassword = "",
+                            SMTPPort = 465,
+                            SMTPServer = "",
+                            SMTPUsername = ""
                         });
                 });
 
@@ -277,6 +300,9 @@ namespace HADES.Migrations
                         .HasColumnName("GRP_guid");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("GUID")
+                        .IsUnique();
 
                     b.ToTable("OwnerGroup_GRP");
                 });
@@ -412,6 +438,9 @@ namespace HADES.Migrations
 
                     b.HasIndex("AppConfigId");
 
+                    b.HasIndex("GUID")
+                        .IsUnique();
+
                     b.ToTable("SuperAdminGroup_SUG");
                 });
 
@@ -444,6 +473,9 @@ namespace HADES.Migrations
                         .HasColumnName("USE_UCF_id");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("GUID")
+                        .IsUnique();
 
                     b.HasIndex("RoleId");
 

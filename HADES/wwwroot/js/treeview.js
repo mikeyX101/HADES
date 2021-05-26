@@ -4,6 +4,7 @@ var selectedNode;
 var selectedDepth;
 var selectedContentName;
 var isValid = false;
+var dialogConfirmationContent;
 
 /**
  * Show treeview
@@ -20,6 +21,7 @@ function showTreeView(userObj, nodeName) {
             color: "#428bca",
             expandIcon: 'fa fa-plus',
             collapseIcon: 'fa fa-minus',
+            emptyIcon: 'fa',
             showBorder: false,
             highlightSelected: true,
             highlightSearchResults: false,
@@ -75,7 +77,7 @@ function showTreeView(userObj, nodeName) {
                 type: "GET",
                 data: { selectedPathForContent: selectedPathForContent },
                 success: function (msg) {
-                    $('#content').html(msg);
+                    $('#main').html(msg);
                 }
             });
 
@@ -115,6 +117,9 @@ function setIcons() {
  * Setup dialog settings after document is ready
  */
 $(function () {
+
+    dialogConfirmationContent = $("#dialog-confirmation-delete").text();
+
     $("#dialog-error-delete").dialog({
         autoOpen: false,
         modal: true,
@@ -131,7 +136,18 @@ $(function () {
         buttons: {
             OK: function () {
                 $(this).dialog("close");
-                $(this).data('form').submit();
+                $(this).data('form');
+                $.ajax({
+                    url: '/Home/Delete',
+                    type: "POST",
+                    data: {
+                        SelectedPath: $(this).data('form')[1].value,
+                        SelectedContentName: $(this).data('form')[2].value
+                    },
+                    success: function (msg) {
+                        $('#main').html(msg);
+                    }
+                });
             },
             Cancel: function () {
                 $(this).dialog("close");
@@ -151,20 +167,22 @@ $(function () {
  */
 function deleteOU(form) {
 
-    //validation here
     selectedPath = form[1].value;
     selectedContentName = form[2].value;
 
     // search for selectedContentName
     var foundNodes = $('#mytreeview').treeview('search', [selectedContentName, {
-        ignoreCase: false,     // case insensitive
-        exactMatch: true,    // like or equals
-        revealResults: true,  // reveal matching nodes
+        ignoreCase: false,      // case insensitive
+        exactMatch: true,       // like or equals
+        revealResults: true,    // reveal matching nodes
     }]);
 
+    // OU is valid if it does not contain Groups(il a un parent qui est root et n'a pas d'enfant)
     isValid = foundNodes[0] && foundNodes[0].parentId == 0 && typeof foundNodes[0].nodes === 'undefined';
 
     if (isValid) {
+        $("#dialog-confirmation-delete").empty();
+        $("#dialog-confirmation-delete").append(dialogConfirmationContent + ' ' + selectedContentName + ' ?');
         // confirmation dialog
         $("#dialog-confirmation-delete").data('form', form).dialog("open");
     }
@@ -174,6 +192,36 @@ function deleteOU(form) {
     }
     
     return false; // pour ne pas faire de submit avant d'avoir eu la réponse de la boite de dialog
+}
+
+function deleteGroup(form) {
+
+    selectedPath = form[1].value;
+    selectedContentName = form[2].value;
+
+    // search for selectedContentName
+    var foundNodes = $('#mytreeview').treeview('search', [selectedContentName, {
+        ignoreCase: false,      // case insensitive
+        exactMatch: true,       // like or equals
+        revealResults: true,    // reveal matching nodes
+    }]);
+
+    // Group is valid if 
+    isValid = foundNodes[0] && foundNodes[0].parentId !== 0 && typeof foundNodes[0].nodes === 'undefined';
+
+    if (isValid) {
+        $("#dialog-confirmation-delete").empty();
+        $("#dialog-confirmation-delete").append(dialogConfirmationContent + ' ' + selectedContentName + ' ?');
+        // confirmation dialog
+        $("#dialog-confirmation-delete").data('form', form).dialog("open");
+    }
+    else {
+        // error dialog
+        $("#dialog-error-delete").dialog("open");
+    }
+
+    return false; // pour ne pas faire de submit avant d'avoir eu la réponse de la boite de dialog
+
 }
 
 /**
@@ -186,7 +234,8 @@ function formSubmit(form) {
     } 
     /* TODO : implémenter la fonctionnalité deleteGroup */
     if (isGroup(form[1].value)) {
-        alert("Implémenter la fonctionalité de suppression d'un groupe")
+        deleteGroup(form)
+        //alert("Implémenter la fonctionalité de suppression d'un groupe")
     }
     return false; // pour ne pas faire de submit avant d'avoir eu la réponse de la boite de dialog
 }

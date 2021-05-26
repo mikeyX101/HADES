@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Web;
 
 namespace HADES.Models
 {
-    [Table("Email_EMA")]
+	[Table("Email_EMA")]
     public class Email
     {
         [Key]
@@ -16,6 +12,7 @@ namespace HADES.Models
         public int Id { get; set; }
 
         [Required]
+        [EmailAddress]
         [Column("EMA_email")]
         public string Address { get; set; }
 

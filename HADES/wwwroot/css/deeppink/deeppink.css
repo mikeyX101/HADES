@@ -1,0 +1,19 @@
+﻿body {
+    background-color: deeppink;
+    padding-bottom: 60px;
+}
+
+.table td, .table th {
+    vertical-align: middle;
+    padding: .5rem;
+}
+
+span.icon {
+    width: 12px;
+    margin-right: 1rem;
+} 
+
+.btn
+{
+    border-radius: 1rem;
+}

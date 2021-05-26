@@ -1,0 +1,258 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AccountDN" xml:space="preserve">
+    <value>DN Compte</value>
+  </data>
+  <data name="AdminGroup" xml:space="preserve">
+    <value>Groupe administrateur</value>
+  </data>
+  <data name="BaseDN" xml:space="preserve">
+    <value>DN Base</value>
+  </data>
+  <data name="CompanyBackgroundFile" xml:space="preserve">
+    <value>Fond d'écran de la compagnie</value>
+  </data>
+  <data name="CompanyLogoFile" xml:space="preserve">
+    <value>Logo de la compagnie</value>
+  </data>
+  <data name="CompanyName" xml:space="preserve">
+    <value>Nom de la compagnie</value>
+  </data>
+  <data name="ConnectionFilter" xml:space="preserve">
+    <value>Filtre de connexion</value>
+  </data>
+  <data name="DefaultLanguage" xml:space="preserve">
+    <value>Langue par défaut</value>
+  </data>
+  <data name="DefaultUser" xml:space="preserve">
+    <value>Utilisateur par défaut</value>
+  </data>
+  <data name="DefaultUserPassword" xml:space="preserve">
+    <value>Mot de passe par défaut</value>
+  </data>
+  <data name="LogDeleteFrequency" xml:space="preserve">
+    <value>Fréquence de suppression des fichiers de log</value>
+  </data>
+  <data name="LogMaxFileSize" xml:space="preserve">
+    <value>Taille maximale des fichiers de log</value>
+  </data>
+  <data name="LogTotalMaxSize" xml:space="preserve">
+    <value>Taille totale maximale des fichiers de log</value>
+  </data>
+  <data name="ParametreApplication" xml:space="preserve">
+    <value>Paramètres de l'application</value>
+  </data>
+  <data name="PasswordDN" xml:space="preserve">
+    <value>Mot de passe AD</value>
+  </data>
+  <data name="PortNumber" xml:space="preserve">
+    <value>Numéro de port</value>
+  </data>
+  <data name="RootOu" xml:space="preserve">
+    <value>Dossier racine</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Sauvegarder</value>
+  </data>
+  <data name="ServerAddress" xml:space="preserve">
+    <value>Adresse du serveur</value>
+  </data>
+  <data name="SMTPServer" xml:space="preserve">
+    <value>Adresse Serveur SMTP</value>
+  </data>
+  <data name="SuperAdminGroup" xml:space="preserve">
+    <value>Groupes super administrateur</value>
+  </data>
+  <data name="SyncField" xml:space="preserve">
+    <value>Champ de synchronisation</value>
+  </data>
+  <data name="DefaultUserPasswordConfirm" xml:space="preserve">
+    <value>Confirmer Mot de passe</value>
+  </data>
+  <data name="SMTPUser" xml:space="preserve">
+    <value>Utilisateur SMTP</value>
+  </data>
+  <data name="SMTPPass" xml:space="preserve">
+    <value>Mot de Passe SMTP</value>
+  </data>
+  <data name="SMTPPort" xml:space="preserve">
+    <value>Port Serveur SMTP</value>
+  </data>
+  <data name="SMTPEmail" xml:space="preserve">
+    <value>Email Éxpediteur SMTP</value>
+  </data>
+  <data name="SMTPuseCred" xml:space="preserve">
+    <value>Utiliser les informations de connexion SMTP</value>
+  </data>
+  <data name="RootOuToolTip" xml:space="preserve">
+    <value>Le DN du dossier(OU) à la racine d'Hades&lt;br&gt;&lt;i&gt;OU=hades_root,DC=domain,DC=lan&lt;i&gt;</value>
+  </data>
+  <data name="PortNumberToolTip" xml:space="preserve">
+    <value>Le numéro de port LDAP sur le serveur&lt;br&gt;&lt;i&gt;389&lt;i&gt;</value>
+  </data>
+  <data name="ServerAddressToolTip" xml:space="preserve">
+    <value>L'adresse IP ou le nom de domaine du serveur qui héberge l'Active DIrectory&lt;br&gt;&lt;i&gt;domain&lt;br&gt;192.255.255.255&lt;i&gt;</value>
+  </data>
+  <data name="ConnectionFilterToolTip" xml:space="preserve">
+    <value>Filtre qui indique quel type d'objet peut se connecter à Hades&lt;br&gt;&lt;i&gt;(&amp;(objectClass=user)(objectCategory=person))&lt;i&gt;</value>
+  </data>
+  <data name="BaseDNToolTip" xml:space="preserve">
+    <value>Le DN du dossier(OU) qui contient les Utilisateurs de l'Active Directory&lt;br&gt;&lt;i&gt;CN=Users,DC=domain,DC=lan&lt;i&gt;</value>
+  </data>
+  <data name="AccountDNToolTip" xml:space="preserve">
+    <value>Le DN ainsi que le mot de passe du compte de l'utilisateur Application Hades dans l'Active Directory. Hades utilisera ce compte pour effectuer des Actions sur votre Active DIrectory (doit obligatoirement posséder des droits d'écriture et de lecture)&lt;br&gt;&lt;i&gt;CN=hades,CN=Users,DC=domain,DC=lan&lt;i&gt;</value>
+  </data>
+  <data name="SyncFieldToolTip" xml:space="preserve">
+    <value>Indique le champs dans l'Active Directory que les utilisateur d'Hades utiliseront pour s'identifier&lt;br&gt;&lt;i&gt;samaccountname&lt;i&gt;</value>
+  </data>
+  <data name="DefaultUserToolTip" xml:space="preserve">
+    <value>Les informations de connexion de l'utilisateur par défaut d'Hades. Laisser le champs mot de passe vide si vous ne souhaiter pas le modifier</value>
+  </data>
+  <data name="CompanyNameToolTip" xml:space="preserve">
+    <value>Le nom de votre Organisation qui s'affichera dans la barre de navigation supérieure</value>
+  </data>
+  <data name="LogoToolTip" xml:space="preserve">
+    <value>Le logo qui s'affichera dans la barre de navigation supérieure</value>
+  </data>
+  <data name="BackgroundToolTip" xml:space="preserve">
+    <value>L'arrière plan qui s'affichera sur la page de connexion</value>
+  </data>
+  <data name="LanguageToolTip" xml:space="preserve">
+    <value>La langue par défaut de l'application. Cette langue sera utilisée pour la page de connexion ainsi que tous les nouveaux utilisateur d'Hades</value>
+  </data>
+  <data name="SMTPServerToolTip" xml:space="preserve">
+    <value>L'adresse IP ou le nom de domaine du serveur SMTP&lt;br&gt;&lt;i&gt;domain&lt;br&gt;192.255.255.255&lt;i&gt;</value>
+  </data>
+  <data name="SMTPPortToolTip" xml:space="preserve">
+    <value>Le numéro de port SMTP sur le serveur&lt;br&gt;&lt;i&gt;465&lt;i&gt;</value>
+  </data>
+  <data name="SMTPEmailToolTip" xml:space="preserve">
+    <value>Adresse Email utilisé pour envoyer les courriels&lt;br&gt;&lt;i&gt;notification@hades.com&lt;i&gt;</value>
+  </data>
+  <data name="SMTPUserToolTip" xml:space="preserve">
+    <value>Les informations de connexion de l'utilisateur SMTP. Laisser le champs mot de passe vide si vous ne souhaiter pas le modifier</value>
+  </data>
+  <data name="LogFreqToolTip" xml:space="preserve">
+    <value>La fréquence de suppressions des logs en jour</value>
+  </data>
+  <data name="LogMaxToolTip" xml:space="preserve">
+    <value>Taille maximale d'un fichier de log en octets&lt;br&gt;&lt;i&gt;2147483648&lt;i&gt;</value>
+  </data>
+</root>

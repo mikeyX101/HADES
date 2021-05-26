@@ -1,23 +1,20 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using HADES.Models;
-using Microsoft.Extensions.Localization;
+﻿using HADES.Models;
 using HADES.Util;
 using HADES.Util.Exceptions;
-using Novell.Directory.Ldap;
-using HADES.Data;
-using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
+using Serilog;
+using System;
+using System.Collections.Generic;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace HADES.Controllers
 {
-    public class AccountController : LocalizedController<AccountController>
+	public class AccountController : LocalizedController<AccountController>
     {
 
         public AccountController(IStringLocalizer<AccountController> localizer) : base(localizer)
@@ -51,21 +48,22 @@ namespace HADES.Controllers
                 {
                     IUser User = ConnexionUtil.Login(model.Username, model.Password);
 
-                        Console.WriteLine(User.GetName() + " CONNECTED"); // Change this by log
-                        var claims = new List<Claim>{
-                                new Claim("id", User.GetId().ToString()),
-                                new Claim("isDefault", User.IsDefaultUser().ToString())
-                        };
+                    Log.Information("{User} logged on from login page", User.GetName());
+                    var claims = new List<Claim>{
+                            new Claim("id", User.GetId().ToString()),
+                            new Claim("isDefault", User.IsDefaultUser().ToString()),
+                            new Claim(ClaimTypes.Name, User.GetName(), ClaimValueTypes.String)
+                    };
 
-                        var claimsIdentity = new ClaimsIdentity(
-                          claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                        var authProperties = new AuthenticationProperties();
+                    var claimsIdentity = new ClaimsIdentity(
+                        claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                    var authProperties = new AuthenticationProperties();
 
-                        await HttpContext.SignInAsync(
-                          CookieAuthenticationDefaults.AuthenticationScheme,
-                          new ClaimsPrincipal(claimsIdentity),
-                          authProperties);
-                        return RedirectToAction("MainView", "Home");
+                    await HttpContext.SignInAsync(
+                        CookieAuthenticationDefaults.AuthenticationScheme,
+                        new ClaimsPrincipal(claimsIdentity),
+                        authProperties);
+                    return RedirectToAction("MainView", "Home");
                 }
                 catch (ForbiddenException)
                 {

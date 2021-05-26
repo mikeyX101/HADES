@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Web;
 
 namespace HADES.Models
 {
-    [Table("Role_ROL")]
+	[Table("Role_ROL")]
     public class Role
     {
         [Key]
@@ -46,6 +43,12 @@ namespace HADES.Models
 
         public virtual ICollection<User> Users { get; set; }
         public virtual ICollection<DefaultUser> DefaultUsers { get; set; }
+    }
+
+    // List of roles to be cast in int for the right ID
+    public enum RolesID
+    {
+        SuperAdmin = 1, Admin=2, Owner=3, Inactive = 4
     }
 
 }

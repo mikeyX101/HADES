@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace HADES.Middlewares
@@ -16,21 +13,21 @@ namespace HADES.Middlewares
 
 		private sealed class HttpErrorHandlingMiddleware
 		{
-			private readonly RequestDelegate _next;
+			private readonly RequestDelegate next;
 
 			public HttpErrorHandlingMiddleware(RequestDelegate next)
 			{
-				_next = next;
+				this.next = next;
 			}
 
 			public async Task Invoke(HttpContext context)
 			{
-				await _next(context);
+				await next(context);
 				// TODO Only use for pages, not for general error codes
 				if (context.Request.Method == "GET" && context.Response.StatusCode >= 400 && context.Response.StatusCode <= 599)
 				{
 					context.Request.Path = $"/Errors/{context.Response.StatusCode}";
-					await _next(context);
+					await next(context);
 				}
 			}
 		}

@@ -117,20 +117,17 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ADConnectionError" xml:space="preserve">
-    <value>Enable to connect to Active Directory</value>
+  <data name="DeleteConfirmationMessage" xml:space="preserve">
+    <value>Are you sure you want to delete the item</value>
   </data>
-  <data name="ContenuDossier" xml:space="preserve">
-    <value>Folder content</value>
+  <data name="DeleteConfirmationTitle" xml:space="preserve">
+    <value>Confirmation</value>
   </data>
   <data name="DeleteFailedMessage" xml:space="preserve">
     <value>Folder is not empty.
 Delete groups first and then delete empty folder.</value>
   </data>
   <data name="DeleteFailedTitle" xml:space="preserve">
-    <value>Folder not deleted</value>
-  </data>
-  <data name="DossierGroupe" xml:space="preserve">
-    <value>Folders and groups</value>
+    <value>Error</value>
   </data>
 </root>

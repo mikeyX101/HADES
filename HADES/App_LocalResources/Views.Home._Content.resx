@@ -117,13 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ContenuDossier" xml:space="preserve">
-    <value>Contenu du dossier</value>
+  <data name="Folder" xml:space="preserve">
+    <value>Dossier</value>
   </data>
-  <data name="Delete" xml:space="preserve">
-    <value>Supprimer</value>
-  </data>
-  <data name="EnterOUName" xml:space="preserve">
-    <value>Renseignez le nom du dossier</value>
+  <data name="InvalidCharacters" xml:space="preserve">
+    <value>Ces caractères sont interdits:   " [ ] : ; | = + * ? &lt; &gt; / \ ,</value>
   </data>
 </root>

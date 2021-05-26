@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace HADES.Util.ModelAD
 {
-    public class GroupAD
+	public class GroupAD
     {
 
         private List<UserAD> members;
         private string description;
         private string email;
         private string notes;
+        private DateTime? expirationDate;
         private string samAccountName;
         private string objectGUID;
 
@@ -23,9 +22,10 @@ namespace HADES.Util.ModelAD
             this.Email = null;
             this.Notes = null;
             this.ObjectGUID = null;
+            this.expirationDate = null;
         }
 
-        public GroupAD(string samAccountName, List<UserAD> members, string description, string email, string notes, string objectGUID)
+        public GroupAD(string samAccountName, List<UserAD> members, string description, string email, string notes, string objectGUID, DateTime expirationDate)
         {
             this.SamAccountName = samAccountName;
             this.Members = members;
@@ -33,6 +33,7 @@ namespace HADES.Util.ModelAD
             this.Email = email;
             this.Notes = notes;
             this.ObjectGUID = objectGUID;
+            this.expirationDate = expirationDate;
         }
 
         public List<UserAD> Members { get => members; set => members = value; }
@@ -41,6 +42,7 @@ namespace HADES.Util.ModelAD
         public string Notes { get => notes; set => notes = value; }
         public string SamAccountName { get => samAccountName; set => samAccountName = value; }
         public string ObjectGUID { get => objectGUID; set => objectGUID = value; }
+        public DateTime? ExpirationDate { get => expirationDate; set => expirationDate = value; }
 
         public override string ToString()
         {
@@ -49,7 +51,7 @@ namespace HADES.Util.ModelAD
                 m += Members[i] + " | ";
             }
 
-            return "[ SamAccountName: " + SamAccountName + ", Members: " + m + ", Description: "+ Description + ", Email: " + Email + ", Notes: "+ Notes+ ", ObjectGUID: " + ObjectGUID + "]";
+            return "[ SamAccountName: " + SamAccountName + ", Members: " + m + ", Description: "+ Description + ", Email: " + Email + ", Notes: "+ Notes+ ", ObjectGUID: " + ObjectGUID  +", DateExp: " + ExpirationDate.ToString() + "]";
         }
     }
 }

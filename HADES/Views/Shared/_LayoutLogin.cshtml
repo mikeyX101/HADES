@@ -5,16 +5,17 @@
     <meta name="viewport" content="width=device-width" />
     <title>HADES</title>
     <link rel="stylesheet" type="text/css" href="~/lib/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet"
-          href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
-          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
-          crossorigin="anonymous">
+    <link rel="stylesheet" href="~/lib/fontawesome/v5.8.1/all.css">
     <link href="~/css/site.css" rel="stylesheet" />
     <script src="~/lib/jquery/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
     @RenderSection("scripts", false)
 </head>
-<body>
+@{
+    // Get the image
+    ViewBag.img = new HADES.Data.ApplicationDbContext().AppConfig.FirstOrDefault().CompanyBackgroundFile;
+}
+<body style="background-image:url(@ViewBag.img);">
     <div class="container">
         <main>
             @RenderBody()

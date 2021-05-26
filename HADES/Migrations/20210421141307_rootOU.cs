@@ -2,7 +2,7 @@
 
 namespace HADES.Migrations
 {
-    public partial class rootOU : Migration
+	public partial class rootOU : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

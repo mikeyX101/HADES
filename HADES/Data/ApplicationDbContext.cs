@@ -1,15 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using HADES.Models;
+﻿using HADES.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace HADES.Data
 {
 
-    public class ApplicationDbContext : DbContext
+	public class ApplicationDbContext : DbContext
     {
         public ApplicationDbContext()
             : base()
@@ -42,21 +37,21 @@ namespace HADES.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<AdminGroup>().ToTable("AdminGroup_ADG");
+            modelBuilder.Entity<AdminGroup>().ToTable("AdminGroup_ADG").HasIndex(a=> a.GUID).IsUnique();
             modelBuilder.Entity<AppConfig>().ToTable("AppConfig_ACF");
             modelBuilder.Entity<DefaultUser>().ToTable("DefaultUser_DUS");
             modelBuilder.Entity<Email>().ToTable("Email_EMA");
-            modelBuilder.Entity<OwnerGroup>().ToTable("OwnerGroup_GRP");
+            modelBuilder.Entity<OwnerGroup>().ToTable("OwnerGroup_GRP").HasIndex(a => a.GUID).IsUnique();
             modelBuilder.Entity<Role>().ToTable("Role_ROL");
-            modelBuilder.Entity<SuperAdminGroup>().ToTable("SuperAdminGroup_SUG");
-            modelBuilder.Entity<User>().ToTable("User_USE");
+            modelBuilder.Entity<SuperAdminGroup>().ToTable("SuperAdminGroup_SUG").HasIndex(a => a.GUID).IsUnique();
+            modelBuilder.Entity<User>().ToTable("User_USE").HasIndex(a => a.GUID).IsUnique();
             modelBuilder.Entity<UserConfig>().ToTable("UserConfig_UCF");
 
             // CREATE ROLES
-            modelBuilder.Entity<Role>().HasData(new Role { Id = 1, Name = "SuperAdmin", AppConfigAccess = true, AdCrudAccess = true, UserListAccess = true, EventLogAccess = true, DefineOwner = true, HadesAccess = true });
-            modelBuilder.Entity<Role>().HasData(new Role { Id = 2, Name = "Admin", AppConfigAccess = false, AdCrudAccess = true, UserListAccess = true, EventLogAccess = true, DefineOwner = true, HadesAccess = true });
-            modelBuilder.Entity<Role>().HasData(new Role { Id = 3, Name = "Owner", AppConfigAccess = false, AdCrudAccess = false, UserListAccess = false, EventLogAccess = false, DefineOwner = false, HadesAccess = true });
-            modelBuilder.Entity<Role>().HasData(new Role { Id = 4, Name = "inactive", AppConfigAccess = false, AdCrudAccess = false, UserListAccess = false, EventLogAccess = false, DefineOwner = false, HadesAccess = false });
+            modelBuilder.Entity<Role>().HasData(new Role { Id = (int)RolesID.SuperAdmin, Name = "SuperAdmin", AppConfigAccess = true, AdCrudAccess = true, UserListAccess = true, EventLogAccess = true, DefineOwner = true, HadesAccess = true });
+            modelBuilder.Entity<Role>().HasData(new Role { Id = (int)RolesID.Admin, Name = "Admin", AppConfigAccess = false, AdCrudAccess = true, UserListAccess = true, EventLogAccess = true, DefineOwner = true, HadesAccess = true });
+            modelBuilder.Entity<Role>().HasData(new Role { Id = (int)RolesID.Owner, Name = "Owner", AppConfigAccess = false, AdCrudAccess = false, UserListAccess = false, EventLogAccess = false, DefineOwner = false, HadesAccess = true });
+            modelBuilder.Entity<Role>().HasData(new Role { Id = (int)RolesID.Inactive, Name = "inactive", AppConfigAccess = false, AdCrudAccess = false, UserListAccess = false, EventLogAccess = false, DefineOwner = false, HadesAccess = false });
 
             // CREATE DEFAULT USERCONFIG
             modelBuilder.Entity<UserConfig>().HasData(new UserConfig { Id = 1, Notification = false, Language = "fr-CA", ThemeFile = "site.css" });
@@ -70,7 +65,7 @@ namespace HADES.Data
             modelBuilder.Entity<ActiveDirectory>().HasData(new ActiveDirectory { Id=1, RootOu= "OU=hades_root,DC=R991-AD,DC=lan", PortNumber=389, ServerAddress= "172.20.48.10", ConnectionFilter= "(&(objectClass=user)(objectCategory=person))", BaseDN= "CN=Users,DC=R991-AD,DC=lan", AccountDN= "CN=hades,CN=Users,DC=R991-AD,DC=lan", PasswordDN= "Toto123!", SyncField= "samaccountName" });
 
             // ADD DEFAULT APP CONFIG
-            modelBuilder.Entity<AppConfig>().HasData(new AppConfig { Id=1, CompanyName="YourCompanyName", CompanyBackgroundFile="background.png", CompanyLogoFile="logo.png", DefaultLanguage="fr-CA", SMTP="", LogDeleteFrequency=1, LogMaxFileSize=1, ActiveDirectoryId=1 });
+            modelBuilder.Entity<AppConfig>().HasData(new AppConfig { Id=1, CompanyName="YourCompanyName", CompanyBackgroundFile="background.png", CompanyLogoFile="logo.png", DefaultLanguage="fr-CA", SMTPServer="", SMTPPort = 465, SMTPUsername = "", SMTPPassword = "", SMTPFromEmail = "", LogDeleteFrequency=31, LogMaxFileSize=100000000, ActiveDirectoryId=1 });
         }
     }
 }

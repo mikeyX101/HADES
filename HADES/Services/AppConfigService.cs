@@ -1,16 +1,14 @@
 ﻿using HADES.Data;
 using HADES.Models;
 using HADES.Util;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace HADES.Services
 {
-    public class AppConfigService
+	public class AppConfigService
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
@@ -41,14 +39,28 @@ namespace HADES.Services
             return viewModel;
         }
 
+        public AppConfig GetAppConfig()
+        {
+            return db.AppConfig.FirstOrDefault();
+        }
+
         public async Task<ActiveDirectory> getADInfo()
         {
             var activeDirectory = await db.ActiveDirectory.FirstOrDefaultAsync();
             return activeDirectory;
         }
 
-            public async Task UpdateAppConfig(AppConfigViewModel viewModel)
+        public async Task<SMTPSettings> getSMTPInfo()
         {
+            SMTPSettings settings = await db.AppConfig.Select(app => 
+                new SMTPSettings(app.SMTPServer, app.SMTPPort, app.SMTPUsername, app.SMTPPassword, app.SMTPFromEmail)
+            ).FirstOrDefaultAsync();
+            return settings;
+        }
+
+        public async Task UpdateAppConfig(AppConfigViewModel viewModel)
+        {
+            db = new ApplicationDbContext();
             db.Update(viewModel.ActiveDirectory);
             viewModel.AppConfig.ActiveDirectory = viewModel.ActiveDirectory;
 
@@ -73,7 +85,10 @@ namespace HADES.Services
             
             await db.SaveChangesAsync();
 
+            // Make these functions async and run them at the same time using Task.WaitAll()?
+            LogManager.RefreshLogger(viewModel.AppConfig);
             ADSettingsCache.Refresh();
+            SMTPSettingsCache.Refresh();
         }
 
         public bool AppConfigExists(AppConfigViewModel viewModel)

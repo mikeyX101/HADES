@@ -1,0 +1,88 @@
+﻿@model MainViewViewModel
+
+<div class="modal fade" id="GroupCreate" tabindex="-1" role="dialog" aria-labelledby="GroupCreateLbl"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="GroupCreateLbl">Create new group</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <nav>
+                    <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                        <a class="nav-item nav-link active" id="nav-groupName-tab" data-toggle="tab" href="#nav-groupName"
+                           role="tab" aria-controls="nav-home" aria-selected="true">General</a>
+                        @{
+                            var tabClass = Model != null ? "nav-item nav-link" : "nav-item nav-link disabled";
+                        }
+                        <a class="@tabClass" id="nav-members-tab" data-toggle="tab" href="#nav-members"
+                           role="tab" aria-controls="nav-members" aria-selected="false">Members</a>
+                        <a class="@tabClass" id="nav-owners-tab" data-toggle="tab" href="#nav-owners"
+                           role="tab" aria-controls="nav-owners" aria-selected="false">Owners</a>
+                    </div>
+                </nav>
+                <div class="tab-content" id="nav-tabContent">
+                    <form asp-action="CreateGroupModal">
+                        <div class="tab-pane fade show active" id="nav-groupName" role="tabpanel" aria-labelledby="nav-groupName-tab">
+                            <!-- general form -->
+                            <input type="hidden" name="SelectedPath" value="@Model.SelectedPath" />
+                            <input type="hidden" name="SelectedPath" value="@Model.SelectedNodeName" />
+                            <input type="hidden" name="SelectedPath" value="@Model.SelectedContentName" />
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                            <div class="form-group row">
+                                <label asp-for="GroupAD.SamAccountName" class="col-sm-2 col-form-label">Group Name</label>
+                                <div class="col-sm-10">
+                                    <input asp-for="GroupAD.SamAccountName" class="form-control" placeholder="Group name">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label asp-for="GroupAD.Description" class="col-sm-2 col-form-label">Description</label>
+                                <div class="col-sm-10">
+                                    <input asp-for="GroupAD.Description" class="form-control" placeholder="Description">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label asp-for="GroupAD.Email" class="col-sm-2 col-form-label">Email</label>
+                                <div class="col-sm-10">
+                                    <input asp-for="GroupAD.Email" type="Email" class="form-control" id="Email" placeholder="Email">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label asp-for="GroupAD.Notes">Notes</label>
+                                <textarea asp-for="GroupAD.Notes" class="form-control" id="Notes" rows="3"></textarea>
+                            </div>
+
+                        </div>
+                        
+                        <div class="tab-pane fade" id="nav-members" role="tabpanel" aria-labelledby="nav-members-tab">
+                            <!-- members form -->
+                            <div>
+                                <div class="directorist-select directorist-select-multi" id="multiSelect" data-isSearch="true" data-multiSelect='@Model.UsersAD'>
+                                    <input type="hidden" asp-for="@Model.SelectedUsers">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="nav-owners" role="tabpanel" aria-labelledby="nav-owners-tab">
+                            <!-- Owners form -->
+                            ...
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary" id="btnSave">Ok</button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/lib/pureScriptSelect-master/script.js"></script>
+<script type="text/javascript">
+    pureScriptSelect('#multiSelect');
+    pureScriptSelect('#selectImg');
+    pureScriptSelect('#selectIcon');    
+</script>
