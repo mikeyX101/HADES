@@ -29,8 +29,7 @@ namespace HADES.Util
 
         public ADManager()
         {
-            if (ADSettingsCache.Ad == null)
-            {
+            if (ADSettingsCache.Ad == null) {
                 ADSettingsCache.Refresh();
             } 
         }
@@ -249,8 +248,7 @@ namespace HADES.Util
             {
                 lsc = (LdapSearchResults)connection.Search(ADSettingsCache.Ad.BaseDN, LdapConnection.ScopeSub, ADSettingsCache.Ad.ConnectionFilter.Remove(ADSettingsCache.Ad.ConnectionFilter.Length - 1) + "(" + ADSettingsCache.Ad.SyncField + "=" + usernameOrGUID + "))", null, false);
             }
-            else
-            {
+            else {
                 lsc = (LdapSearchResults)connection.Search(ADSettingsCache.Ad.BaseDN, LdapConnection.ScopeSub, "(objectGUID=" + usernameOrGUID + ")", null, false);
             }
 
@@ -586,18 +584,18 @@ namespace HADES.Util
 			{
                 LdapConnection connection = createConnection();
 
-            //Rename 
-            string newRdn = "CN=" + name;
-            connection.Rename(dnGroupToModify, newRdn, true);
+                //Rename 
+                string newRdn = "CN=" + name;
+                connection.Rename(dnGroupToModify, newRdn, true);
 
-            dnGroupToModify = newRdn + ",OU=" + ouGroup + "," + ADSettingsCache.Ad.RootOu;
+                dnGroupToModify = newRdn + ",OU=" + ouGroup + "," + ADSettingsCache.Ad.RootOu;
 
-            //Modify Attribute
-            List<LdapModification> modList = new List<LdapModification>();
+                //Modify Attribute
+                List<LdapModification> modList = new List<LdapModification>();
 
-            //Description
-            LdapAttribute attribute = new LdapAttribute("description", description);
-            modList.Add(new LdapModification(LdapModification.Replace, attribute));
+                //Description
+                LdapAttribute attribute = new LdapAttribute("description", description);
+                modList.Add(new LdapModification(LdapModification.Replace, attribute));
 
                 //Email
                 
@@ -608,9 +606,9 @@ namespace HADES.Util
                 attribute = new LdapAttribute("info", notes);
                 modList.Add(new LdapModification(LdapModification.Replace, attribute));
 
-            //SamAccountName 
-            attribute = new LdapAttribute("samaccountname", name);
-            modList.Add(new LdapModification(LdapModification.Replace, attribute));
+                //SamAccountName 
+                attribute = new LdapAttribute("samaccountname", name);
+                modList.Add(new LdapModification(LdapModification.Replace, attribute));
 
                 //DateExp 
                 string format = "yyMMddHHmmss'Z'";
@@ -621,7 +619,7 @@ namespace HADES.Util
                 mods = modList.ToArray();
                 connection.Modify(dnGroupToModify, mods);
 
-            connection.Disconnect();
+                connection.Disconnect();
 
                 List<UserAD> add = new List<UserAD>();
                 List<UserAD> delete = new List<UserAD>();
