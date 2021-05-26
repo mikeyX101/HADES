@@ -365,8 +365,6 @@ namespace HADES.Util
 
             connection.Disconnect();
 
-            createGroup("blablabla","Dossier36", "","",DateTime.Now,"", new List<UserAD>());
-
             return root;
         }
 
