@@ -82,9 +82,9 @@ namespace HADES.Controllers
                 confirm = viewModel.DefaultUser.Password = service.AppConfigViewModelGET().Result.DefaultUser.Password;
                 hashed = true;
             }
-            if(bg?.Length > 10485760)
+            if (bg?.Length > 10485760)
             {
-                ModelState.AddModelError("bgimg",HADES.Strings.errorFileSize);
+                ModelState.AddModelError("bgimg", HADES.Strings.errorFileSize);
             }
             if (ico?.Length > 10485760)
             {
@@ -190,7 +190,12 @@ namespace HADES.Controllers
             string GroupGUID = new ADManager().getGroupGUIDByDn(DN);
             if (GroupGUID != "")
             {
-                await service.AddAdminGroup(new AdminGroup() { GUID = GroupGUID, AppConfigId = appconfig });
+                try
+                {
+                    await service.AddAdminGroup(new AdminGroup() { GUID = GroupGUID, AppConfigId = appconfig });
+                }
+                catch (Exception) { }
+
                 return RedirectToAction("AppConfig");
             }
             return View();
@@ -242,7 +247,12 @@ namespace HADES.Controllers
             string GroupGUID = new ADManager().getGroupGUIDByDn(DN);
             if (GroupGUID != "")
             {
-                await service.AddSuperAdminGroup(new SuperAdminGroup() { GUID = GroupGUID, AppConfigId = appconfig});
+                try
+                {
+                    await service.AddSuperAdminGroup(new SuperAdminGroup() { GUID = GroupGUID, AppConfigId = appconfig });
+                }
+                catch (Exception) { }
+
                 return RedirectToAction("AppConfig");
             }
             return View();

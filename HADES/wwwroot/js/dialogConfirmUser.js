@@ -14,7 +14,13 @@ $(function () {
         modal: true,
         width: 600,
         buttons: {
-            OK: function () { $(this).dialog("close"); }
+            OK: function () {
+                $(this).dialog("close");
+                $(this).data('form').submit();
+            },
+            Cancel: function () {
+                $(this).dialog("close");
+            }
         },
     });
 
@@ -55,7 +61,7 @@ function deleteUser(form) {
 function removeUser(form) {
 
     // confirmation dialog{
-    $("#dialog-confirmation-delete").data('form', form).dialog("open");
+    $("#dialog-confirmation-remove").data('form', form).dialog("open");
 
 
     return false; // pour ne pas faire de submit avant d'avoir eu la réponse de la boite de dialog
