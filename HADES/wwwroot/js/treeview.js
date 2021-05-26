@@ -163,15 +163,15 @@ $(function () {
  */
 function deleteOU(form) {
 
-    //validation here
+    // validation here
     selectedPath = form[1].value;
     selectedContentName = form[2].value;
 
     // search for selectedContentName
     var foundNodes = $('#mytreeview').treeview('search', [selectedContentName, {
-        ignoreCase: false,     // case insensitive
-        exactMatch: true,    // like or equals
-        revealResults: true,  // reveal matching nodes
+        ignoreCase: false,      // case insensitive
+        exactMatch: true,       // like or equals
+        revealResults: true,    // reveal matching nodes
     }]);
 
     // OU is valid if it does not contain Groups(il a un parent qui est root et n'a pas d'enfant)
@@ -189,6 +189,33 @@ function deleteOU(form) {
     return false; // pour ne pas faire de submit avant d'avoir eu la réponse de la boite de dialog
 }
 
+function deleteGroup(form) {
+
+    selectedContentName = form[2].value;
+
+    // search for selectedContentName
+    var foundNodes = $('#mytreeview').treeview('search', [selectedContentName, {
+        ignoreCase: false,      // case insensitive
+        exactMatch: true,       // like or equals
+        revealResults: true,    // reveal matching nodes
+    }]);
+
+    // Group is valid if 
+    isValid = foundNodes[0] && foundNodes[0].parentId !== 0 && typeof foundNodes[0].nodes === 'undefined';
+
+    if (isValid) {
+        // confirmation dialog
+        $("#dialog-confirmation-delete").data('form', form).dialog("open");
+    }
+    else {
+        // error dialog
+        $("#dialog-error-delete").dialog("open");
+    }
+
+    return false; // pour ne pas faire de submit avant d'avoir eu la réponse de la boite de dialog
+
+}
+
 /**
  * Submit the form for deleting OU or Group
  * @param {any} form
@@ -199,7 +226,8 @@ function formSubmit(form) {
     } 
     /* TODO : implémenter la fonctionnalité deleteGroup */
     if (isGroup(form[1].value)) {
-        alert("Implémenter la fonctionalité de suppression d'un groupe")
+        deleteGroup(form)
+        //alert("Implémenter la fonctionalité de suppression d'un groupe")
     }
     return false; // pour ne pas faire de submit avant d'avoir eu la réponse de la boite de dialog
 }
