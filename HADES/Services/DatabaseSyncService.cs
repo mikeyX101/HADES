@@ -168,6 +168,18 @@ namespace HADES.Services
                 superadminsAD.AddRange(ad.GetMembersOfGroup(ad.getGroupDnByGUID(sag.GUID), null));
             }
 
+            // Add Users from AD Admin & AD SuperAdmin if not in DB
+            foreach(UserAD adminU in adminsAD)
+            {
+                if(db.User.Where(u=>u.GUID == adminU.ObjectGUID).FirstOrDefault()==null)
+                db.User.Add(new User() { GUID = adminU.ObjectGUID, UserConfig = new UserConfig(), RoleId = (int)RolesID.Admin});
+            }
+            foreach (UserAD superU in superadminsAD)
+            {
+                if (db.User.Where(u => u.GUID == superU.ObjectGUID).FirstOrDefault() == null)
+                    db.User.Add(new User() { GUID = superU.ObjectGUID, UserConfig = new UserConfig(), RoleId = (int)RolesID.SuperAdmin });
+            }
+
             foreach (User u in dblist)
             {
                 // First Delete Users that are not in the Active Directory

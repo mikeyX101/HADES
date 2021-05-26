@@ -551,7 +551,7 @@ namespace HADES.Util
                 connection.Add(newEntry);
                 connection.Disconnect();
 
-                EmailHelper.SendEmail(NotificationType.GroupCreate, this.getGroupInformation(dn), "");
+                EmailHelper.SendEmail(NotificationType.GroupCreate, this.getGroupInformation(dn), "",-1);
 
                 //Add members
                 addMemberToGroup(dn, members);
@@ -659,7 +659,7 @@ namespace HADES.Util
             LdapConnection connection = createConnection();
             try
             {
-                EmailHelper.SendEmail(NotificationType.GroupDelete, this.getGroupInformation(dnGroupToDelete), "");
+                EmailHelper.SendEmail(NotificationType.GroupDelete, this.getGroupInformation(dnGroupToDelete), "",-1);
                 connection.Delete(dnGroupToDelete);
                 connection.Disconnect();
                 return true;
@@ -961,7 +961,7 @@ namespace HADES.Util
 
                 connection.Disconnect();
 
-                EmailHelper.SendEmail(NotificationType.MemberAdd, this.getGroupInformation(groupDn), usersAdded);
+                EmailHelper.SendEmail(NotificationType.MemberAdd, this.getGroupInformation(groupDn), usersAdded,-1);
                 return true;
             }
             catch (Exception e)
@@ -998,7 +998,7 @@ namespace HADES.Util
                 connection.Modify(groupDn, mods);
 
                 connection.Disconnect();
-                EmailHelper.SendEmail(NotificationType.MemberRemoval, this.getGroupInformation(groupDn),usersDeleted);
+                EmailHelper.SendEmail(NotificationType.MemberRemoval, this.getGroupInformation(groupDn),usersDeleted,-1);
                 return true;
             }
             catch (Exception e)
