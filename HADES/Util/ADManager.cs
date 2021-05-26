@@ -5,6 +5,7 @@ using Novell.Directory.Ldap;
 using System;
 using System.Collections.Generic;
 using Serilog;
+using System.Globalization;
 
 namespace HADES.Util
 {
@@ -41,6 +42,32 @@ namespace HADES.Util
             try
             {
                 return entry.GetAttribute(attribute).StringValue;
+            }
+            catch (KeyNotFoundException)
+            {
+                // The key is not set 
+                return null;
+            }
+            catch (Exception e)
+            {
+                Log.Warning(e, GenericErrorLogTemplate, "getAttributeValue()");
+                return null;
+            }
+        }
+
+
+        /*****************************************************
+         GETATTRIBUTE in AD
+         ******************************************************/
+        private DateTime? getDateExp(LdapEntry entry)
+        {
+           
+            try
+            {
+                string dateExp = entry.GetAttribute("expirationDateHades").StringValue;
+                string format = "yyMMddHHmmss'Z'";
+                DateTime d = DateTime.ParseExact(dateExp, format, CultureInfo.InvariantCulture);
+                return d;
             }
             catch (KeyNotFoundException)
             {
@@ -338,8 +365,6 @@ namespace HADES.Util
 
             connection.Disconnect();
 
-
-      
             return root;
         }
 
@@ -364,6 +389,8 @@ namespace HADES.Util
                     group.Description = getAttributeValue(nextEntry, "description");
                     group.Members = GetMembersOfGroup(nextEntry.Dn, connection);
                     group.ObjectGUID = getObjectGUID(nextEntry);
+                    group.ExpirationDate = getDateExp(nextEntry);
+
                     root.Add(group);
                     
                 }
@@ -398,6 +425,7 @@ namespace HADES.Util
                     group.Description = getAttributeValue(nextEntry, "description");
                     group.Members = GetMembersOfGroup(groupDN,connection);
                     group.ObjectGUID = getObjectGUID(nextEntry);
+                    group.ExpirationDate = getDateExp(nextEntry);
                 }
                 catch (LdapException e)
                 {
@@ -486,8 +514,20 @@ namespace HADES.Util
         /*****************************************************
          GROUP
          ******************************************************/
-        public bool createGroup(string name, string ouName, string description, string email, string notes, List<UserAD> members)
+        public bool createGroup(string name, string ouName, string description, string email, DateTime dateExpiration, string notes, List<UserAD> members)
         {
+            if (description == "")
+            {
+                description = " ";
+            }
+            if (email == "")
+            {
+                email = " ";
+            }
+            if (notes == "")
+            {
+                notes = " ";
+            }
 
             LdapConnection connection = createConnection();
             try
@@ -501,6 +541,8 @@ namespace HADES.Util
                 attributeSet.Add(new LdapAttribute("description", description));
                 attributeSet.Add(new LdapAttribute("mail", email));
                 attributeSet.Add(new LdapAttribute("info", notes));
+                string format = "yyMMddHHmmss'Z'";
+                attributeSet.Add(new LdapAttribute("expirationDateHades", dateExpiration.ToString(format)));
                 // DN of the entry to be added
                 string dn = "CN=" + name + "," + "OU=" + ouName + "," + ADSettingsCache.Ad.RootOu;
                 LdapEntry newEntry = new LdapEntry(dn, attributeSet);
@@ -508,14 +550,11 @@ namespace HADES.Util
                 connection.Add(newEntry);
                 connection.Disconnect();
 
-                //Add members
-                List<string> add = new List<string>();
-                foreach (UserAD m in members) {
-                    add.Add(m.Dn);
-                }
-                addMemberToGroup(dn, add);
+                EmailHelper.SendEmail(NotificationType.GroupCreate, this.getGroupInformation(dn), "");
 
-               // EmailHelper.SendEmail(NotificationType.GroupCreate, this.getGroupGUIDByDn(dn));
+                //Add members
+                addMemberToGroup(dn, members);
+
                 return true;
             }
             catch (Exception e)
@@ -527,8 +566,19 @@ namespace HADES.Util
         }
 
 
-        public bool modifyGroup(string dnGroupToModify, string name, string ouGroup, string description, string email, string notes, Dictionary<UserAD, Action> members)
+        public bool modifyGroup(string dnGroupToModify, string name, string ouGroup, string description, string email, DateTime dateExpiration, string notes, Dictionary<UserAD, Action> members)
         {
+            if (description == "") {
+                description = " ";
+            }
+            if (email == "")
+            {
+                email = " ";
+            }
+            if (notes == "")
+            {
+                notes = " ";
+            }
             try
 			{
                 LdapConnection connection = createConnection();
@@ -547,9 +597,10 @@ namespace HADES.Util
                 modList.Add(new LdapModification(LdapModification.Replace, attribute));
 
                 //Email
-                attribute = new LdapAttribute("mail", email);
-                modList.Add(new LdapModification(LdapModification.Replace, attribute));
-
+                
+                 attribute = new LdapAttribute("mail", email);
+                 modList.Add(new LdapModification(LdapModification.Replace, attribute));
+               
                 //Notes
                 attribute = new LdapAttribute("info", notes);
                 modList.Add(new LdapModification(LdapModification.Replace, attribute));
@@ -558,25 +609,30 @@ namespace HADES.Util
                 attribute = new LdapAttribute("samaccountname", name);
                 modList.Add(new LdapModification(LdapModification.Replace, attribute));
 
+                //DateExp 
+                string format = "yyMMddHHmmss'Z'";
+                attribute = new LdapAttribute("expirationDateHades", dateExpiration.ToString(format));
+                modList.Add(new LdapModification(LdapModification.Replace, attribute));
+
                 LdapModification[] mods = new LdapModification[modList.Count];
                 mods = modList.ToArray();
                 connection.Modify(dnGroupToModify, mods);
 
                 connection.Disconnect();
 
-                List<string> add = new List<string>();
-                List<string> delete = new List<string>();
+                List<UserAD> add = new List<UserAD>();
+                List<UserAD> delete = new List<UserAD>();
                 //Modify members
                 foreach (KeyValuePair<UserAD, Action> entry in members)
                 {
                     if (entry.Value == Action.ADD)
                     {
-                        add.Add(entry.Key.Dn);
+                        add.Add(entry.Key);
 
                     }
                     else if (entry.Value == Action.DELETE)
                     {
-                        delete.Add(entry.Key.Dn);
+                        delete.Add(entry.Key);
                     }
                 }
 
@@ -602,9 +658,9 @@ namespace HADES.Util
             LdapConnection connection = createConnection();
             try
             {
+                EmailHelper.SendEmail(NotificationType.GroupDelete, this.getGroupInformation(dnGroupToDelete), "");
                 connection.Delete(dnGroupToDelete);
                 connection.Disconnect();
-              //EmailHelper.SendEmail(NotificationType.MemberRemoval, this.getGroupGUIDByDn(dnGroupToDelete));
                 return true;
             }
             catch (Exception e)
@@ -656,6 +712,7 @@ namespace HADES.Util
             }
             return b;
         }
+
         public string getGroupDnByGUID(string GUID)
         {
             LdapConnection connection = createConnection();
@@ -720,12 +777,9 @@ namespace HADES.Util
             try
             {
                 LdapSearchResults lsc = (LdapSearchResults)connection.Search(getBaseAd(), LdapConnection.ScopeSub, "(&(objectClass=group)(distinguishedName=" + Dn + "))", null, false);
-                LdapEntry nextEntry = null;
-                while (lsc.HasMore())
-                {
-                    nextEntry = lsc.Next();
-                    GUID = getObjectGUID(nextEntry);
-                }
+                LdapEntry nextEntry = lsc.Next();
+                GUID = getObjectGUID(nextEntry);
+                
             }
             catch (Exception e)
             {
@@ -881,16 +935,22 @@ namespace HADES.Util
             return users;
         }
 
-        public bool addMemberToGroup(string groupDn, List<string> usersDn)
+        public bool addMemberToGroup(string groupDn, List<UserAD> users)
         {
             LdapConnection connection = createConnection();
             try
             {
+                string usersAdded = "";
+
                 List<LdapModification> modList = new List<LdapModification>();
 
-                foreach (string dn in usersDn)
+                foreach (UserAD u in users)
                 {
-                    LdapAttribute attribute = new LdapAttribute("member", dn);
+                   
+                    if (u != null) {
+                        usersAdded += u.FirstName + " " + u.LastName + ", ";
+                    }
+                    LdapAttribute attribute = new LdapAttribute("member", u.Dn);
                     modList.Add(new LdapModification(LdapModification.Add, attribute));
                 }
 
@@ -902,7 +962,7 @@ namespace HADES.Util
 
                 connection.Disconnect();
 
-                //EmailHelper.SendEmail(NotificationType.MemberAdd, this.getGroupGUIDByDn(groupDn));
+                EmailHelper.SendEmail(NotificationType.MemberAdd, this.getGroupInformation(groupDn), usersAdded);
                 return true;
             }
             catch (Exception e)
@@ -913,16 +973,22 @@ namespace HADES.Util
             }
         }
 
-        public bool deleteMemberToGroup(string groupDn, List<string> usersDn)
+        public bool deleteMemberToGroup(string groupDn, List<UserAD> users)
         {
             LdapConnection connection = createConnection();
             try
             {
                 List<LdapModification> modList = new List<LdapModification>();
-
-                foreach (string dn in usersDn)
+                string usersDeleted = "";
+                foreach (UserAD u in users)
                 {
-                    LdapAttribute attribute = new LdapAttribute("member", dn);
+
+                    if (u != null)
+                    {
+                        usersDeleted += u.FirstName + " " + u.LastName + ", ";
+                    }
+
+                    LdapAttribute attribute = new LdapAttribute("member", u.Dn);
                     modList.Add(new LdapModification(LdapModification.Delete, attribute));
                 }
 
@@ -933,7 +999,7 @@ namespace HADES.Util
                 connection.Modify(groupDn, mods);
 
                 connection.Disconnect();
-               //EmailHelper.SendEmail(NotificationType.MemberRemoval, this.getGroupGUIDByDn(groupDn));
+                EmailHelper.SendEmail(NotificationType.MemberRemoval, this.getGroupInformation(groupDn),usersDeleted);
                 return true;
             }
             catch (Exception e)

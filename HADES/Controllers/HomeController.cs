@@ -199,7 +199,8 @@ namespace HADES.Controllers
             var groupAD = viewModel.GroupAD;
             if (ModelState.IsValid)
             {
-                ad.createGroup(groupAD.SamAccountName, selectedNodeName, groupAD.Description, groupAD.Email, groupAD.Notes, groupAD.Members);
+                DateTime dateExp = (DateTime)groupAD.ExpirationDate;
+                ad.createGroup(groupAD.SamAccountName, selectedNodeName, groupAD.Description, groupAD.Email, dateExp, groupAD.Notes, groupAD.Members);
                 //return RedirectToAction("EditGroupModal");
                 return RedirectToAction("MainView");
             }
