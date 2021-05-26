@@ -195,4 +195,7 @@
   <data name="Cancel" xml:space="preserve">
     <value>Abandonner</value>
   </data>
+  <data name="errorFileSize" xml:space="preserve">
+    <value>Un fichier est trop grand</value>
+  </data>
 </root>

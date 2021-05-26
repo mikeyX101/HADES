@@ -3,9 +3,11 @@ using HADES.Models;
 using HADES.Services;
 using HADES.Util;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -38,7 +40,7 @@ namespace HADES.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> AppConfig([Bind("ActiveDirectory,AdminGroups,SuperAdminGroups,DefaultUser,AppConfig")] AppConfigViewModel viewModel, string confirm, string confirmDN, string confirmSMTP, string useSMTPCred, string base64logo, string base64bg)
+        public async Task<IActionResult> AppConfig([Bind("ActiveDirectory,AdminGroups,SuperAdminGroups,DefaultUser,AppConfig")] AppConfigViewModel viewModel, [FromForm] string confirm, [FromForm] string confirmDN, [FromForm] string confirmSMTP, [FromForm] string useSMTPCred, [FromForm] IFormFile bg, [FromForm] IFormFile ico)
         {
             ViewBag.AppConfigError = "";
 
@@ -49,8 +51,7 @@ namespace HADES.Controllers
             AppConfigService service = new();
 
             ValidateModelState();
-            if (viewModel.AppConfig.LogDeleteFrequency < 1 || viewModel.AppConfig.LogMaxFileSize < 1) ModelState.AddModelError("LogsInvalid",HADES.Strings.NegativeValueError);
-
+            if (viewModel.AppConfig.LogDeleteFrequency < 1 || viewModel.AppConfig.LogMaxFileSize < 1) ModelState.AddModelError("LogsInvalid", HADES.Strings.NegativeValueError);
 
             bool DNencrypted = false;
             if (viewModel.ActiveDirectory.PasswordDN == null || viewModel.ActiveDirectory.PasswordDN.Equals(""))
@@ -81,7 +82,14 @@ namespace HADES.Controllers
                 confirm = viewModel.DefaultUser.Password = service.AppConfigViewModelGET().Result.DefaultUser.Password;
                 hashed = true;
             }
-
+            if(bg?.Length > 10485760)
+            {
+                ModelState.AddModelError("bgimg",HADES.Strings.errorFileSize);
+            }
+            if (ico?.Length > 10485760)
+            {
+                ModelState.AddModelError("icoimg", HADES.Strings.errorFileSize);
+            }
             if (confirm == null) confirm = "";
             if (confirmDN == null) confirmDN = "";
 
@@ -97,26 +105,33 @@ namespace HADES.Controllers
                     viewModel.ActiveDirectory.PasswordDN = Encrypt(viewModel.ActiveDirectory.PasswordDN); // Password is now encrypted
                 }
 
-                if (!SMTPencrypted && useSMTPCred=="on")
+                if (!SMTPencrypted && useSMTPCred == "on")
                 {
                     viewModel.AppConfig.SMTPPassword = Encrypt(viewModel.AppConfig.SMTPPassword); // Password is now encrypted
                 }
 
-                string logopath = viewModel.AppConfig.CompanyLogoFile;
-                string backgroundpath = viewModel.AppConfig.CompanyBackgroundFile;
-
-                if (logopath != null && logopath != "")
+                if (ico != null && ico.Length < 10485760)
                 {
-                    viewModel.AppConfig.CompanyLogoFile = base64logo; // change
+                    using (var ms = new MemoryStream())
+                    {
+                        ico.CopyTo(ms);
+                        var fileBytes = ms.ToArray();
+                        viewModel.AppConfig.CompanyLogoFile = "data:" + ico.ContentType + ";base64," + Convert.ToBase64String(fileBytes);
+                    }
                 }
                 else
                 {
                     viewModel.AppConfig.CompanyLogoFile = service.AppConfigViewModelGET().Result.AppConfig.CompanyLogoFile; // don't change
                 }
 
-                if (backgroundpath != null && backgroundpath != "")
+                if (bg != null)
                 {
-                    viewModel.AppConfig.CompanyBackgroundFile = base64bg;  // change
+                    using (var ms = new MemoryStream())
+                    {
+                        bg.CopyTo(ms);
+                        var fileBytes = ms.ToArray();
+                        viewModel.AppConfig.CompanyBackgroundFile = "data:" + bg.ContentType + ";base64," + Convert.ToBase64String(fileBytes);
+                    }
                 }
                 else
                 {
