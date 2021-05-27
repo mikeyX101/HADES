@@ -97,6 +97,15 @@ namespace HADES {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à HADES  a été développé dans le cadre d&apos;un cours collégial. L&apos;application n&apos;offre donc pas de support. C’est un outil qui permet la gestion des groupes de l’Active Directory (AD). Le principe est de rendre conviviale la gestion de ces groupes afin que des personnes externes au département des techniciens informatiques puissent gérer des permissions. En plus, la plateforme contient un gestionnaire d’événements (les logs) et un système de notification par courriel configurable. .
+        /// </summary>
+        public static string Doc_intro {
+            get {
+                return ResourceManager.GetString("Doc_intro", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à L’utilisation du champ de la date d’expiration pour les groupes nécessite une configuration spéciale. Pour que le champ de la date d’expiration des groupes soit fonctionnel, il faut ajouter un attribut personnalisé et l’ajouter à la classe groupe de votre Active Directory. Ainsi, cette information ne sera pas conservée dans la base de données d’Hades, mais bien directement, dans votre Active Directory. .
         /// </summary>
         public static string doc_notexp01 {
