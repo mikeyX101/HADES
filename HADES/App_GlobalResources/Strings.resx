@@ -177,7 +177,7 @@
   <data name="email_name" xml:space="preserve">
     <value>Nom:</value>
   </data>
-    <data name="NegativeValueError" xml:space="preserve">
+  <data name="NegativeValueError" xml:space="preserve">
     <value>Une valeur négative à été entrée alors que l'application attendaient une valeur positive</value>
   </data>
   <data name="email_Members" xml:space="preserve">
@@ -206,5 +206,14 @@
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>Abandonner</value>
+  </data>
+  <data name="email_ExpirationDateSoonMsg" xml:space="preserve">
+    <value>Le groupe expirera dans</value>
+  </data>
+  <data name="email_ExpirationDateSoonMsg02" xml:space="preserve">
+    <value>jour(s).</value>
+  </data>
+  <data name="errorFileSize" xml:space="preserve">
+    <value>Un fichier est trop grand</value>
   </data>
 </root>

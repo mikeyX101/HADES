@@ -365,6 +365,7 @@ namespace HADES.Util
 
             connection.Disconnect();
 
+           
             return root;
         }
 
@@ -550,7 +551,7 @@ namespace HADES.Util
                 connection.Add(newEntry);
                 connection.Disconnect();
 
-                EmailHelper.SendEmail(NotificationType.GroupCreate, this.getGroupInformation(dn), "");
+                EmailHelper.SendEmail(NotificationType.GroupCreate, this.getGroupInformation(dn), "",-1);
 
                 //Add members
                 addMemberToGroup(dn, members);
@@ -658,7 +659,7 @@ namespace HADES.Util
             LdapConnection connection = createConnection();
             try
             {
-                EmailHelper.SendEmail(NotificationType.GroupDelete, this.getGroupInformation(dnGroupToDelete), "");
+                EmailHelper.SendEmail(NotificationType.GroupDelete, this.getGroupInformation(dnGroupToDelete), "",-1);
                 connection.Delete(dnGroupToDelete);
                 connection.Disconnect();
                 return true;
@@ -678,7 +679,7 @@ namespace HADES.Util
 
             try
             {
-                LdapSearchResults lsc = (LdapSearchResults)connection.Search(ADSettingsCache.Ad.RootOu, LdapConnection.ScopeSub, "(objectGUID =" + GUID + ")", null, false);
+                LdapSearchResults lsc = (LdapSearchResults)connection.Search(getBaseAd(), LdapConnection.ScopeSub, "(objectGUID =" + GUID + ")", null, false);
 
                 if (lsc.HasMore())
                 {
@@ -721,13 +722,10 @@ namespace HADES.Util
             try
             {
                 LdapSearchResults lsc = (LdapSearchResults)connection.Search(getBaseAd(), LdapConnection.ScopeSub, "(objectGUID =" + GUID + ")", null, false);
-                LdapEntry nextEntry = null;
-                while (lsc.HasMore())
-                {
 
-                    nextEntry = lsc.Next();
+                LdapEntry nextEntry = lsc.Next();
                     dn = nextEntry.Dn;
-                }
+                
             }
             catch (Exception e)
             {
@@ -912,6 +910,7 @@ namespace HADES.Util
                     u.FirstName = getAttributeValue(nextEntry, "givenName");
                     u.LastName = getAttributeValue(nextEntry, "sn");
                     u.Dn = nextEntry.Dn;
+                    u.ObjectGUID = getObjectGUID(nextEntry);
                     users.Add(u);
 
                 }
@@ -962,7 +961,7 @@ namespace HADES.Util
 
                 connection.Disconnect();
 
-                EmailHelper.SendEmail(NotificationType.MemberAdd, this.getGroupInformation(groupDn), usersAdded);
+                EmailHelper.SendEmail(NotificationType.MemberAdd, this.getGroupInformation(groupDn), usersAdded,-1);
                 return true;
             }
             catch (Exception e)
@@ -999,7 +998,7 @@ namespace HADES.Util
                 connection.Modify(groupDn, mods);
 
                 connection.Disconnect();
-                EmailHelper.SendEmail(NotificationType.MemberRemoval, this.getGroupInformation(groupDn),usersDeleted);
+                EmailHelper.SendEmail(NotificationType.MemberRemoval, this.getGroupInformation(groupDn),usersDeleted,-1);
                 return true;
             }
             catch (Exception e)
