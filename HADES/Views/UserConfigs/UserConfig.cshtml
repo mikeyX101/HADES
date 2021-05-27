@@ -100,7 +100,7 @@
                         <td>
                             <input class="form-control" asp-for="@Model.Emails[i].MemberRemoval" />
                         </td>
-                        <td><a asp-action="EmailDelete" asp-route-id="@Model.Emails[i].Id"><h2><i class="fa fa-trash-alt"></i></h2></a></td>
+                        <td><a asp-action="EmailDelete" asp-route-id="@Model.Emails[i].Id" style="text-align: center;"><h2><i class="fa fa-trash-alt"></i></h2></a></td>
                     </tr>
                 }
             }
