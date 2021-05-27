@@ -10,7 +10,7 @@ namespace HADES.Models
         public UserConfig()
         {
             Language = "fr-CA";
-            ThemeFile = "site.css";
+            ThemeFile = "site";
             Notification = false;
         }
 

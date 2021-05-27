@@ -1,7 +1,21 @@
 ﻿body {
     background-image: linear-gradient(ligthgreen,green);
+    margin-bottom: 60px;
 }
 
 .btn {
     border-color:darkgreen;
+}
+
+.table td, .table th {
+    vertical-align: middle;
+    padding: 1px;
+}
+
+.dropmenu {
+    margin: 0px 20px 0px 0px;
+}
+
+span.icon {
+    padding-right: 1.5em;
 }

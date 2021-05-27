@@ -9,7 +9,7 @@
 }
 
 <div class="bg-primary text-white text-center">
-    <h1 class="m-3 p-3">@HADES.Strings.UserConfig</h1>
+    <h1 class="m-3 p-3"><i class="fa fa-users-cog fa-fw mr-3"></i>@HADES.Strings.UserConfig</h1>
 </div>
 
 <form asp-action="UserConfig">
@@ -100,18 +100,18 @@
                         <td>
                             <input class="form-control" asp-for="@Model.Emails[i].MemberRemoval" />
                         </td>
-                        <td><a asp-action="EmailDelete" asp-route-id="@Model.Emails[i].Id"><h2><i class="bi bi-trash"></i></h2></a></td>
+                        <td><a asp-action="EmailDelete" asp-route-id="@Model.Emails[i].Id" style="text-align: center;"><h2><i class="fa fa-trash-alt"></i></h2></a></td>
                     </tr>
                 }
             }
             <tr>
-                <td><a asp-action="CreateEmail" asp-route-id="@Model.UserConfig.Id"><h2><i class="bi bi-person-plus-fill"></i></h2></a></td>
+                <td><a asp-action="CreateEmail" asp-route-id="@Model.UserConfig.Id"><h2><i class="fa fa-user-plus"></i></h2></a></td>
             </tr>
         </table>
     </div>
     <div class="row">
         <div class="col-sm-12 col-lg-12">
-            <button type="submit" value="Save" class="btn btn-primary btn-lg btn-block">@Localizer["Save"]</button>
+            <button type="submit" value="Save" class="btn btn-primary btn-lg btn-block"><i class="fa fa-save fa-fw mr-3"></i>@Localizer["Save"]</button>
         </div>
     </div>
 </form>

@@ -1,17 +1,17 @@
 ﻿body {
-    padding-bottom: 60px;
+    background-color: white;
+    margin-bottom: 60px;
 }
 
 .table td, .table th {
     vertical-align: middle;
-    padding: .5rem;
-}
-
-span.icon {
-    width: 12px;
-    margin-right: 1rem;
+    padding: 8px;
 }
 
 .dropmenu {
     margin: 0px 20px 0px 0px;
+}
+
+span.icon {
+    padding-right: 1.5em;
 }

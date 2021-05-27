@@ -1,11 +1,14 @@
 ﻿@model MainViewViewModel
 
-<h3 class="mt-1">@Localizer["Folder"] @Model.SelectedNodeName</h3>
-
-<!-- Button trigger modal create OU -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="@Model.DataTarget" data-backdrop="false">
-    @Model.CreateButtonLabel
-</button>
+<h3 class="mt-1 mb-2 pr-2">
+    @Localizer["Folder"] @Model.SelectedNodeName
+    <!-- Button trigger modal create OU -->
+    <button type="button" class="btn btn-primary float-right" style="margin-right: 0.125rem;" data-toggle="modal" data-target="@Model.DataTarget" data-backdrop="false">
+        <span data-toggle="tooltip" data-html="true" data-placement="right" title="@Model.CreateButtonLabel">
+            <i class="fa fa-plus fa-fw mr-4 ml-4"></i>
+        </span>
+    </button>
+</h3>
 
 <!-- Modal Create Group -->
 @await Html.PartialAsync("_CreateGroupModal", Model)
@@ -18,7 +21,7 @@
     <thead>
     </thead>
     <tbody>
-
+        <tr><td style="border-top:none;"></td></tr>
 
         @for (int i = 0; i < Model.ADRoot.Count; i++)
         {
@@ -35,16 +38,16 @@
                            href='@Url.Action("UpdateContent","Home", new { selectedPathForContent = Model.SelectedPath + (selectedPathLength == 2 ? "/" + Model.ADRoot[i].SamAccountName : "")})'>
                             @if (selectedPathLength == 2)
                             {
-                                <span class="icon fa fa-folder"></span>
+                                <i class="icon fa fa-folder mr-2"></i>
                             }
                             else
                             {
-                                <span class="icon fa fa-users"></span>
+                                <i class="icon fa fa-users mr-2"></i>
                             }
                             @Model.ADRoot[i].SamAccountName
                         </a>
                     </td>
-                    <td>
+                    <td style="text-align: right">
 
                         <!-- Button trigger modal rename OU -->
                         <!-- Modal Rename OU -->
@@ -59,7 +62,9 @@
                             var navOwnersTab = "nav-owners" + i;
                         }
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="@dataTarget" data-backdrop="false">
-                            @Model.EditLinkLabel
+                            <span data-toggle="tooltip" data-html="true" data-placement="right" title="@Model.EditLinkLabel">
+                                <i class="fa fa-edit fa-fw"></i>
+                            </span>
                         </button>
                         <div class="modal fade" id="@id" tabindex="-1" role="dialog" aria-labelledby="GroupCreateLbl"
                              aria-hidden="true">
@@ -193,8 +198,8 @@
 
                         <!-- Button to delete -->
                         <form onsubmit="return formSubmit(this)" style="display: inline-block">
-                            <button class="btn btn-primary">
-                                @HADES.Strings.Delete
+                            <button class="btn btn-primary" data-toggle="tooltip" data-html="true" data-placement="right" title="@HADES.Strings.Delete">
+                                <i class="fa fa-trash-alt fa-fw"></i>
                             </button>
                             <input type="hidden" name="SelectedPath" value="@Model.SelectedPath" />
                             <input type="hidden" name="SelectedContentName" value="@Model.ADRoot[i].SamAccountName" />
@@ -208,4 +213,4 @@
 </table>
 
 <script type="text/javascript" src="~/js/formValidation.js"></script>
-<script type="text/javascript" src="~/js/formFocus.js"></script> 
+<script type="text/javascript" src="~/js/formFocus.js"></script>

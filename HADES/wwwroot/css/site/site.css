@@ -3,12 +3,7 @@ for details on configuring this project to bundle and minify static web assets. 
 
 .table td, .table th {
     vertical-align: middle;
-    padding: .5rem;
-}
-
-span.icon {
-    width: 12px;
-    margin-right: 1rem;
+    padding: 1px;
 }
 
 a.navbar-brand {
@@ -17,6 +12,13 @@ a.navbar-brand {
   word-break: break-all;
 }
 
+.dropmenu {
+    margin: 0px 20px 0px 0px;
+}
+
+span.icon {
+    padding-right: 1.5em;
+}
 
 /* Sticky footer styles
 -------------------------------------------------- */

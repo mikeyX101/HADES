@@ -3,8 +3,19 @@
     ViewBag.Title = Localizer["AppConfigTitle"];
 }
 
+@{
+    IUser currentUser = HADES.Util.ConnexionUtil.CurrentUser(Context.User);
+}
+
+@section scriptPreBootStrap
+{
+    <link rel="stylesheet" href="~/css/@currentUser.GetUserConfig().ThemeFile/jquery-ui.min.css">
+    <script src="~/lib/jquery-ui/jquery-ui.min.js"></script>
+    <script src="~/lib/popper.js/umd/popper.min.js"></script>
+}
+
 <div class="bg-primary text-white text-center">
-    <h1 class="m-3 p-3">@Localizer["ParametreApplication"]</h1>
+    <h1 class="m-3 p-3"><i class="fa fa-cog fa-fw mr-3"></i>@HADES.Strings.AppConfig</h1>
 </div>
 
 <form asp-action="AppConfig" method="post" enctype="multipart/form-data">
@@ -213,12 +224,12 @@
                                 <input type="hidden" asp-for="@Model.AdminGroups[i].AppConfigId" />
                                 <input class="form-control" asp-for="@Model.AdminGroups[i].GUID" />
                             </td>
-                            <td><a asp-action="AdminGroupDelete" asp-route-id="@Model.AdminGroups[i].Id"><h2><i class="bi bi-trash"></i></h2></a></td>
+                            <td><a asp-action="AdminGroupDelete" asp-route-id="@Model.AdminGroups[i].Id"><h2><i class="fa fa-trash-alt"></i></h2></a></td>
                         </tr>
                     }
                 }
                 <tr>
-                    <td><a asp-action="CreateAdminGroup" asp-route-id="@Model.AppConfig.Id"><h2><i class="bi bi-person-plus-fill"></i></h2></a></td>
+                    <td><a asp-action="CreateAdminGroup" asp-route-id="@Model.AppConfig.Id"><h2><i class="fa fa-user-plus"></i></h2></a></td>
                 </tr>
             </table>
         </div>
@@ -243,12 +254,12 @@
                                 <input type="hidden" asp-for="@Model.SuperAdminGroups[i].AppConfigId" />
                                 <input class="form-control" asp-for="@Model.SuperAdminGroups[i].GUID" />
                             </td>
-                            <td><a asp-action="SuperAdminGroupDelete" asp-route-id="@Model.SuperAdminGroups[i].Id"><h2><i class="bi bi-trash"></i></h2></a></td>
+                            <td><a asp-action="SuperAdminGroupDelete" asp-route-id="@Model.SuperAdminGroups[i].Id"><h2><i class="fa fa-trash-alt"></i></h2></a></td>
                         </tr>
                     }
                 }
                 <tr>
-                    <td><a asp-action="CreateSuperAdminGroup" asp-route-id="@Model.AppConfig.Id"><h2><i class="bi bi-person-plus-fill"></i></h2></a></td>
+                    <td><a asp-action="CreateSuperAdminGroup" asp-route-id="@Model.AppConfig.Id"><h2><i class="fa fa-user-plus"></i></h2></a></td>
                 </tr>
             </table>
         </div>
@@ -261,7 +272,7 @@
     </div>
     <div class="row">
         <div class="col-sm-12 col-lg-12">
-            <button type="submit" class="btn btn-primary btn-lg btn-block">@Localizer["Save"]</button>
+            <button type="submit" class="btn btn-primary btn-lg btn-block"><i class="fa fa-save fa-fw mr-3"></i>@HADES.Strings.Save</button>
         </div>
     </div>
 </form>

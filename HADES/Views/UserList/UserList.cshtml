@@ -1,10 +1,15 @@
 ﻿@model UserListViewModel
 
-@section scripts
+@{
+    IUser currentUser = HADES.Util.ConnexionUtil.CurrentUser(Context.User);
+}
+
+@section scriptPreBootStrap
 {
-    <link rel="stylesheet" href="~/lib/jquery-ui/jquery-ui.min.css">
+    <link rel="stylesheet" href="~/css/@currentUser.GetUserConfig().ThemeFile/jquery-ui.min.css">
     <script src="~/lib/jquery-ui/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="~/js/dialogConfirmUser.js"></script>
+    <script src="~/js/dialogConfirmUser.js"></script>
+    <script src="~/lib/popper.js/umd/popper.min.js"></script>
 }
 
 @if (Model == null)
@@ -14,7 +19,7 @@
 else
 {
     <div class="bg-primary text-white text-center">
-        <h1 class="m-3 p-3">@Localizer["UserList"]</h1>
+        <h1 class="m-3 p-3"><i class="fa fa-users fa-fw mr-3"></i>@Localizer["UserList"]</h1>
     </div>
 
     <table class="table">
@@ -36,7 +41,14 @@ else
                     <td>@u.SamAccount</td>
                     <td>@u.Role</td>
                     <td>@u.OwnerOf</td>
-                    <td><button class="btn btn-danger" data-toggle="tooltip" data-html="true" data-placement="top" title=@Localizer["UserRemoveToolTip"]>@HADES.Strings.Remove</button></td>
+                    <td>
+                        <form action="Remove" method="post" onsubmit="return removeUser(this)" style="display: inline-block">
+                            <div data-toggle="tooltip" data-html="true" data-placement="top" title="@Localizer["UserRemoveToolTip"]">
+                                <button class="btn btn-danger">@HADES.Strings.Remove</button>
+                                <input type="hidden" name="guid" value=@u.GUID />
+                            </div>
+                        </form>
+                    </td>
                 </tr>
             }
         </tbody>
@@ -44,7 +56,7 @@ else
     <hr />
 
     <div class="bg-danger text-white text-center">
-        <h2 class="m-3 p-3">@Localizer["Inactive"]</h2>
+        <h2 class="m-3 p-3"><i class="fa fa-users-slash fa-fw mr-3"></i>@Localizer["Inactive"]</h2>
     </div>
     <table class="table table-danger">
         <thead>
@@ -67,8 +79,10 @@ else
                     <td>@u.OwnerOf</td>
                     <td>
                         <form action="Delete" method="post" onsubmit="return deleteUser(this)" style="display: inline-block">
-                            <button class="btn btn-danger" data-toggle="tooltip" data-html="true" data-placement="top" title="@Localizer["UserDeleteToolTip"]">@HADES.Strings.Delete</button>
-                            <input type="hidden" name="guid" value=@u.GUID />
+                            <div data-toggle="tooltip" data-html="true" data-placement="top" title="@Localizer["UserDeleteToolTip"]">
+                                <button class="btn btn-danger">@HADES.Strings.Delete</button>
+                                <input type="hidden" name="guid" value=@u.GUID />
+                            </div>
                         </form>
                     </td>
                 </tr>
