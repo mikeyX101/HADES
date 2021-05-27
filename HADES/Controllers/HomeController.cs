@@ -211,7 +211,7 @@ namespace HADES.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult EditGroupModal([Bind("GroupAD, SelectedNodeName, SelectedPath, BeforeEditMembers, SelectedUsers, OuGroup")] MainViewViewModel viewModel)
+        public IActionResult EditGroupModal([Bind("GroupAD, SelectedNodeName, SelectedPath, BeforeEditMembers, SelectedMembers, OuGroup")] MainViewViewModel viewModel)
         {
             GroupAD group = viewModel.GroupAD;
             string DN = FindDN(viewModel.SelectedPath, viewModel.OuGroup);
