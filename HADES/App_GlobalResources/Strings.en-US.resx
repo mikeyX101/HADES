@@ -261,4 +261,7 @@
   <data name="link_generator" xml:space="preserve">
     <value>Link to the Generator</value>
   </data>
+  <data name="Doc_intro" xml:space="preserve">
+    <value>HADES was developed as part of a college course. The application therefore does not offer support. It is a tool that allows the management of Active Directory (AD) groups. The principle is to make the management of these groups user-friendly so that people outside the IT technicians department can manage permissions. In addition, the platform contains an event manager (logs) and a configurable email notification system.</value>
+  </data>
 </root>
