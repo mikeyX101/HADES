@@ -1,0 +1,27 @@
+﻿.table {
+    background-color: white;
+}
+
+.dt-header {
+    background-color: darkgray;
+}
+
+.dt-cell-verbose {
+    background-color: #17a2b8;
+}
+
+.dt-cell-debug {
+    background-color: #20c997;
+}
+
+.dt-cell-warning {
+    background-color: #ffc107;
+}
+
+.dt-cell-error {
+    background-color: #fd7e14;
+}
+
+.dt-cell-fatal {
+    background-color: #dc3545;
+}

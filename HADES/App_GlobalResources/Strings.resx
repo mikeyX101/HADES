@@ -264,4 +264,7 @@
   <data name="Doc_intro" xml:space="preserve">
     <value>HADES  a été développé dans le cadre d'un cours collégial. L'application n'offre donc pas de support. C’est un outil qui permet la gestion des groupes de l’Active Directory (AD). Le principe est de rendre conviviale la gestion de ces groupes afin que des personnes externes au département des techniciens informatiques puissent gérer des permissions. En plus, la plateforme contient un gestionnaire d’événements (les logs) et un système de notification par courriel configurable. </value>
   </data>
+  <data name="NoLog" xml:space="preserve">
+    <value>Aucun journal n'a été trouvé pour cette journée.</value>
+  </data>
 </root>
