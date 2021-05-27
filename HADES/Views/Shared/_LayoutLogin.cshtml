@@ -7,6 +7,7 @@
     <link rel="stylesheet" type="text/css" href="~/lib/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="~/lib/fontawesome/v5.8.1/all.css">
     <link href="~/css/site/site.css" rel="stylesheet" />
+    <link href="~/css/login.css" rel="stylesheet" />
     <script src="~/lib/jquery/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
     @RenderSection("scripts", false)
@@ -15,7 +16,7 @@
     // Get the image
     ViewBag.img = new HADES.Data.ApplicationDbContext().AppConfig.FirstOrDefault().CompanyBackgroundFile;
 }
-<body style="background-image:url(@ViewBag.img);">
+<body style="background-image:url(@ViewBag.img),url('img/HADESBG.png');">
     <div class="container">
         <main>
             @RenderBody()

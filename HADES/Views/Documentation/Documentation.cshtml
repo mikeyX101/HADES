@@ -10,6 +10,7 @@
 @section scriptPreBootStrap
 {
     <link rel="stylesheet" href="~/css/@currentUser.GetUserConfig().ThemeFile/jquery-ui.min.css">
+    <link rel="stylesheet" href="~/css/Documentation.css">
     <script src="~/lib/jquery-ui/jquery-ui.min.js"></script>
     <script src="~/lib/popper.js/umd/popper.min.js"></script>
 }
@@ -19,6 +20,13 @@
 <div class="bg-primary text-white text-center">
     <h1 class="m-3 p-3"><i class="fa fa-info-circle fa-fw mr-3"></i>@HADES.Strings.Documentation</h1>
 </div>
+<h1>HADES(Helpful Active Directory External System)</h1>
+
+<div id="introSection">
+    <p></p>
+</div>
+
+
 
 <div id="ExpirationDateSection">
     <h3>@HADES.Strings.doc_notexpdateTitle</h3>
@@ -36,9 +44,7 @@
         <li>@HADES.Strings.doc_notexp011 <i class="fa fa-info-circle fa-fw mr-3" data-toggle="tooltip" data-html="true" data-placement="bottom" title="<img src='\img\image6.png' alt='image9'>"></i></li>
         <li>@HADES.Strings.doc_notexp012 <i class="fa fa-info-circle fa-fw mr-3" data-toggle="tooltip" data-html="true" data-placement="bottom" title="<img src='\img\image4.png' alt='image10'>"></i></li>
     </ol>
-
 </div>
-
 
 
 <script>
