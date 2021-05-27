@@ -52,7 +52,6 @@ namespace HADES.Services
                     //If the group is expire an email is send every 24h
                     if (group.ExpirationDate != null && group.ExpirationDate <= DateTime.Now)
                     {
-                        Console.WriteLine("Group is Expired");
                         EmailHelper.SendEmail(NotificationType.ExpirationDate, group, "", -1);
                     }
 
@@ -63,7 +62,6 @@ namespace HADES.Services
                         DateTime dateExp = (DateTime)group.ExpirationDate;
                         if (dateExp.Date.CompareTo(date.Date) == 0)
                         {
-                            Console.WriteLine("Group wil Expire in 15");
                             EmailHelper.SendEmail(NotificationType.ExpirationDate, group, "", 15);
                         }
                     }
@@ -75,8 +73,6 @@ namespace HADES.Services
                 Log.Warning(e, "An unexepected error occured while doing an operation with the Expiration Date Service in function {Function}", "verifyExpirationForAllGroup()");
 
             }
-
-
          
         }
 
