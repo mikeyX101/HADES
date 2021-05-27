@@ -412,6 +412,15 @@ namespace HADES {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Lien vers le Genérateur.
+        /// </summary>
+        public static string link_generator {
+            get {
+                return ResourceManager.GetString("link_generator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Dossiers et groupes.
         /// </summary>
         public static string MainView {
