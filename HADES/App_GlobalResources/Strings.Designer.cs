@@ -223,6 +223,15 @@ namespace HADES {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Il y a trois rôles: Super-Administrateur, Administrateur et propriétaire. Dans HADES, les rôles nous permettent de gérer les permissions des utilisateurs connectés.  Il n’y a pas de concept de propriétaire  dans l’AD, c’est nous qui allons l&apos;implanter. Le Super-Administrateur a tout les droits. l&apos;Administrateur a tout les droits sauf qu&apos;il ne peux pas accéder au panneau de configuration de l&apos;application. Le propriétaire a beaucoup moins de droit. Il peut seulement voir, ajouter et supprimer des membres des  [le reste de la chaîne a été tronqué]&quot;;.
+        /// </summary>
+        public static string doc_roleText {
+            get {
+                return ResourceManager.GetString("doc_roleText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Documentation.
         /// </summary>
         public static string Documentation {
@@ -471,6 +480,15 @@ namespace HADES {
         public static string Remove {
             get {
                 return ResourceManager.GetString("Remove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Role.
+        /// </summary>
+        public static string roleTitle {
+            get {
+                return ResourceManager.GetString("roleTitle", resourceCulture);
             }
         }
         

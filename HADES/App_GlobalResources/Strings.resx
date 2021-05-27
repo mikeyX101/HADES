@@ -264,4 +264,10 @@
   <data name="Doc_intro" xml:space="preserve">
     <value>HADES  a été développé dans le cadre d'un cours collégial. L'application n'offre donc pas de support. C’est un outil qui permet la gestion des groupes de l’Active Directory (AD). Le principe est de rendre conviviale la gestion de ces groupes afin que des personnes externes au département des techniciens informatiques puissent gérer des permissions. En plus, la plateforme contient un gestionnaire d’événements (les logs) et un système de notification par courriel configurable. </value>
   </data>
+  <data name="roleTitle" xml:space="preserve">
+    <value>Role</value>
+  </data>
+  <data name="doc_roleText" xml:space="preserve">
+    <value>Il y a trois rôles: Super-Administrateur, Administrateur et propriétaire. Dans HADES, les rôles nous permettent de gérer les permissions des utilisateurs connectés.  Il n’y a pas de concept de propriétaire  dans l’AD, c’est nous qui allons l'implanter. Le Super-Administrateur a tout les droits. l'Administrateur a tout les droits sauf qu'il ne peux pas accéder au panneau de configuration de l'application. Le propriétaire a beaucoup moins de droit. Il peut seulement voir, ajouter et supprimer des membres des groupes dont il est propriétaire. </value>
+  </data>
 </root>
