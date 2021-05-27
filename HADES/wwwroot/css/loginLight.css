@@ -1,5 +1,5 @@
 ﻿.main-content {
-    width: 50%;
+    width: 70%;
     border-radius: 20px;
     box-shadow: 0 5px 5px rgba(0,0,0,.4);
     margin: 5em auto;
@@ -20,9 +20,13 @@
     font-size: 3em;
 }
 
+.title {
+margin-bottom: 10px;
+}
+
 @media screen and (max-width: 640px) {
     .main-content {
-        width: 90%;
+        width: 90% ;
     }
 
     .company__info {
@@ -37,12 +41,16 @@
 
 @media screen and (min-width: 642px) and (max-width:800px) {
     .main-content {
-        width: 70%;
+        width: 80%;
     }
 }
 
 .row > h2 {
     color: black;
+}
+
+.row {
+    justify-content: center;
 }
 
 .login_form {
@@ -51,6 +59,7 @@
     border-bottom-right-radius: 20px;
     border-top: 1px solid black;
     border-right: 1px solid black;
+    padding: 10px;
 }
 
 form {
