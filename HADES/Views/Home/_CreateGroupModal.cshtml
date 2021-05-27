@@ -57,52 +57,21 @@
                             </div>
 
                         </div>
-                        @if (Model.GroupAD != null)
-                        {
-                            <div class="tab-pane fade" id="nav-members" role="tabpanel" aria-labelledby="nav-members-tab">
-                                <!-- members form -->
-                                <div>
-                                    <table class="table">
-                                        <thead>
-                                            <tr>
-                                                <th>
-                                                    <label asp-for="GroupAD.Members.First().SamAccountName" class="control-label"></label>
-                                                </th>
-                                                <th>
-                                                    <label asp-for="GroupAD.Members.First().Dn" class="control-label"></label>
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        @if (Model.GroupAD.Members != null)
-                                        {
-                                            for (var i = 0; i < Model.GroupAD.Members.Count(); i++)
-                                            {
-                                                <tr>
-                                                    <td>
-                                                        <input class="form-control" asp-for="GroupAD.Members[i].SamAccountName" />
-                                                    </td>
-                                                    <td>
-                                                        <input class="form-control" asp-for="GroupAD.Members[i].Dn" />
-                                                    </td>
-                                                </tr>
-                                            }
-                                        }
-                                    </table>
+                        
+                        <div class="tab-pane fade" id="nav-members" role="tabpanel" aria-labelledby="nav-members-tab">
+                            <!-- members form -->
+                            <div>
+                                <div class="directorist-select directorist-select-multi" id="multiSelect" data-isSearch="true" data-multiSelect='@Model.UsersAD'>
+                                    <input type="hidden" asp-for="@Model.SelectedUsers">
                                 </div>
-                                <div>
-                                    <button type="button" class="btn ">Add</button>
-                                    <button type="button" class="btn ">Remove</button>
-                                </div>
-
-
                             </div>
-                            <div class="tab-pane fade" id="nav-owners" role="tabpanel" aria-labelledby="nav-owners-tab">
-                                <!-- Owners form -->
-                                ...
-                            </div>
-                        }
+                        </div>
+                        <div class="tab-pane fade" id="nav-owners" role="tabpanel" aria-labelledby="nav-owners-tab">
+                            <!-- Owners form -->
+                            ...
+                        </div>
                         <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">Ok</button>
+                            <button type="submit" class="btn btn-primary" id="btnSave">Ok</button>
                             <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
                         </div>
                     </form>
@@ -111,3 +80,9 @@
         </div>
     </div>
 </div>
+<script src="~/lib/pureScriptSelect-master/script.js"></script>
+<script type="text/javascript">
+    pureScriptSelect('#multiSelect');
+    pureScriptSelect('#selectImg');
+    pureScriptSelect('#selectIcon');    
+</script>
