@@ -126,16 +126,13 @@
   <data name="ListeUtilisateurs" xml:space="preserve">
     <value>Users list</value>
   </data>
-  <data name="MenuAdministrateur" xml:space="preserve">
-    <value>Administrator menu</value>
-  </data>
-  <data name="MenuUtilisateur" xml:space="preserve">
-    <value>User menu</value>
-  </data>
   <data name="ParametreApplication" xml:space="preserve">
     <value>Application settings</value>
   </data>
   <data name="ParametreUtilisateur" xml:space="preserve">
     <value>User settings</value>
+  </data>
+  <data name="Documentation" xml:space="preserve">
+    <value>Documentation</value>
   </data>
 </root>

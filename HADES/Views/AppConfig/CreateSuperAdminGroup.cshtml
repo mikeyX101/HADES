@@ -12,10 +12,10 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label class="control-label">DN</label>
-                <input name="name" class="form-control" />
+                <input name="DN" class="form-control" />
             </div>
             <div class="form-group">
-                <input type="hidden" asp-for="@Model.AppConfigId" value="@ViewBag.AppConfigId" />
+                <input type="hidden" name="appconfig" value="@ViewBag.AppConfigId" />
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

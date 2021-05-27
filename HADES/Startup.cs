@@ -89,8 +89,9 @@ namespace HADES
                 options.Filters.Add(new AuthorizeFilter());
             });
 
-            // Adds service that updates DB
+            // Adds service that updates DB and verify the expirationDate of the groups ion the Active directory
             services.AddHostedService<DatabaseSyncService>();
+            services.AddHostedService<DateExpirationService>();
 
             // Adds service to delete old temporary files
             services.AddHostedService<TempFileCleanupService>();
@@ -197,6 +198,13 @@ namespace HADES
 					pattern: "{controller=Account}/{action=LogIn}");
 				endpoints.MapRazorPages();
 			});
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Documentation}/{action=Documentation}");
+            });
 
         }
 

@@ -37,14 +37,14 @@ namespace HADES.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<AdminGroup>().ToTable("AdminGroup_ADG");
+            modelBuilder.Entity<AdminGroup>().ToTable("AdminGroup_ADG").HasIndex(a=> a.GUID).IsUnique();
             modelBuilder.Entity<AppConfig>().ToTable("AppConfig_ACF");
             modelBuilder.Entity<DefaultUser>().ToTable("DefaultUser_DUS");
             modelBuilder.Entity<Email>().ToTable("Email_EMA");
-            modelBuilder.Entity<OwnerGroup>().ToTable("OwnerGroup_GRP");
+            modelBuilder.Entity<OwnerGroup>().ToTable("OwnerGroup_GRP").HasIndex(a => a.GUID).IsUnique();
             modelBuilder.Entity<Role>().ToTable("Role_ROL");
-            modelBuilder.Entity<SuperAdminGroup>().ToTable("SuperAdminGroup_SUG");
-            modelBuilder.Entity<User>().ToTable("User_USE");
+            modelBuilder.Entity<SuperAdminGroup>().ToTable("SuperAdminGroup_SUG").HasIndex(a => a.GUID).IsUnique();
+            modelBuilder.Entity<User>().ToTable("User_USE").HasIndex(a => a.GUID).IsUnique();
             modelBuilder.Entity<UserConfig>().ToTable("UserConfig_UCF");
 
             // CREATE ROLES
@@ -59,13 +59,11 @@ namespace HADES.Data
             // ADD DEFAULT USER
             modelBuilder.Entity<DefaultUser>().HasData(new DefaultUser {Id=1, UserName = "admin", Password = "teWqcWW3Ks4yNoq84+Akbx+4feKr/tp+ZVU2CjCbKwI=", RoleId = 1, UserConfigId = 1 });
 
-            // --- TESTS TEMPORAIRE (En attendant le Wizard AppConfig) ---
-
             // ADD DEFAULT ACTIVE DIRECTORY
-            modelBuilder.Entity<ActiveDirectory>().HasData(new ActiveDirectory { Id=1, RootOu= "OU=hades_root,DC=R991-AD,DC=lan", PortNumber=389, ServerAddress= "172.20.48.10", ConnectionFilter= "(&(objectClass=user)(objectCategory=person))", BaseDN= "CN=Users,DC=R991-AD,DC=lan", AccountDN= "CN=hades,CN=Users,DC=R991-AD,DC=lan", PasswordDN= "Toto123!", SyncField= "samaccountName" });
+            modelBuilder.Entity<ActiveDirectory>().HasData(new ActiveDirectory { Id=1, RootOu= "OU=hades_root,DC=R991-AD,DC=lan", PortNumber=389, ServerAddress= "172.20.48.10", ConnectionFilter= "(&(objectClass=user)(objectCategory=person))", BaseDN= "CN=Users,DC=R991-AD,DC=lan", AccountDN= "CN=hades,CN=Users,DC=R991-AD,DC=lan", PasswordDN= "Ncr4Ix+48wVfeAC30A5agpX7PlcS18Zy", SyncField= "samaccountName" });
 
             // ADD DEFAULT APP CONFIG
-            modelBuilder.Entity<AppConfig>().HasData(new AppConfig { Id=1, CompanyName="YourCompanyName", CompanyBackgroundFile="background.png", CompanyLogoFile="logo.png", DefaultLanguage="fr-CA", SMTPServer="", SMTPPort = 465, SMTPUsername = "", SMTPPassword = "", SMTPFromEmail = "", LogDeleteFrequency=31, LogMaxFileSize=100000000, ActiveDirectoryId=1 });
+            modelBuilder.Entity<AppConfig>().HasData(new AppConfig { Id=1, CompanyName="YourCompanyName", CompanyBackgroundFile="", CompanyLogoFile= "", DefaultLanguage="fr-CA", SMTPServer="", SMTPPort = 465, SMTPUsername = "", SMTPPassword = "", SMTPFromEmail = "", LogDeleteFrequency=31, LogMaxFileSize=100000000, ActiveDirectoryId=1 });
         }
     }
 }

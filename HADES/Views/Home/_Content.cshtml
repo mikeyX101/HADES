@@ -1,11 +1,14 @@
 ﻿@model MainViewViewModel
 
-<h3 class="mt-3">@Localizer["ContenuDossier"] @Model.SelectedNodeName</h3>
-
-<!-- Button trigger modal create OU -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="@Model.DataTarget" data-backdrop="false">
-    @Model.CreateButtonLabel
-</button>
+<h3 class="mt-1 mb-2 pr-2">
+    @Localizer["Folder"] @Model.SelectedNodeName
+    <!-- Button trigger modal create OU -->
+    <button type="button" class="btn btn-primary float-right" style="margin-right: 0.125rem;" data-toggle="modal" data-target="@Model.DataTarget" data-backdrop="false">
+        <span data-toggle="tooltip" data-html="true" data-placement="right" title="@Model.CreateButtonLabel">
+            <i class="fa fa-plus fa-fw mr-4 ml-4"></i>
+        </span>
+    </button>
+</h3>
 
 <!-- Modal Create Group -->
 @await Html.PartialAsync("_CreateGroupModal", Model)
@@ -18,26 +21,39 @@
     <thead>
     </thead>
     <tbody>
-
+        <tr><td style="border-top:none;"></td></tr>
 
         @for (int i = 0; i < Model.ADRoot.Count; i++)
         {
 
             var dataTarget = "#a" + i.ToString();
             var id = "a" + i.ToString();
+            var selectedPathLength = Model.SelectedPath.Split('/').Length;
 
             if (Model.ADRoot[i].Path == Model.SelectedPath)
             {
                 <tr>
                     <td>
                         <a data-ajax="true" data-ajax-method="GET" data-ajax-mode="replace" data-ajax-update="#main"
-                           href='@Url.Action("UpdateContent","Home", new { selectedPathForContent = Model.SelectedPath + "/" + Model.ADRoot[i].SamAccountName })'>@Model.ADRoot[i].SamAccountName</a>
+                           href='@Url.Action("UpdateContent","Home", new { selectedPathForContent = Model.SelectedPath + (selectedPathLength == 2 ? "/" + Model.ADRoot[i].SamAccountName : "")})'>
+                            @if (selectedPathLength == 2)
+                            {
+                                <i class="icon fa fa-folder mr-2"></i>
+                            }
+                            else
+                            {
+                                <i class="icon fa fa-users mr-2"></i>
+                            }
+                            @Model.ADRoot[i].SamAccountName
+                        </a>
                     </td>
-                    <td>
+                    <td style="text-align: right">
 
                         <!-- Button trigger modal rename OU -->
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="@dataTarget" data-backdrop="false">
-                            @Model.EditLinkLabel
+                            <span data-toggle="tooltip" data-html="true" data-placement="right" title="@Model.EditLinkLabel">
+                                <i class="fa fa-edit fa-fw"></i>
+                            </span>
                         </button>
 
                         <!-- Modal Rename OU -->
@@ -45,7 +61,9 @@
                             <div class="modal-dialog">
                                 <div class="modal-content" role="document">
                                     <div class="modal-header text-center">
-                                        <h4 class="modal-title w-100 font-weight-bold" id="@Model.ADRoot[i].SamAccountName">@Model.EditLinkLabel</h4>
+                                        <h4 class="modal-title w-100 font-weight-bold" id="@Model.ADRoot[i].SamAccountName">
+                                            <i class="fa fa-edit fa-fw mr-2"></i>@Model.EditLinkLabel
+                                        </h4>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
@@ -62,7 +80,7 @@
                                                             @Localizer["InvalidCharacters"]
                                                         </div>
                                                     </div>
-                                                    <button type="submit" class="btn btn-primary col-2">@Localizer["OK"].Value</button>
+                                                    <button type="submit" class="btn btn-primary col-2">@HADES.Strings.OK</button>
                                                 </div>
                                             </form>
                                         </div>
@@ -73,8 +91,8 @@
 
                         <!-- Button to delete -->
                         <form onsubmit="return formSubmit(this)" style="display: inline-block">
-                            <button class="btn btn-primary">
-                                @Localizer["Delete"].Value
+                            <button class="btn btn-primary" data-toggle="tooltip" data-html="true" data-placement="right" title="@HADES.Strings.Delete">
+                                <i class="fa fa-trash-alt fa-fw"></i>
                             </button>
                             <input type="hidden" name="SelectedPath" value="@Model.SelectedPath" />
                             <input type="hidden" name="SelectedContentName" value="@Model.ADRoot[i].SamAccountName" />
@@ -88,4 +106,4 @@
 </table>
 
 <script type="text/javascript" src="~/js/formValidation.js"></script>
-<script type="text/javascript" src="~/js/formFocus.js"></script> 
+<script type="text/javascript" src="~/js/formFocus.js"></script>

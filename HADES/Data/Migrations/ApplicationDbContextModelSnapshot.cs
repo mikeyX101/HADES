@@ -73,7 +73,7 @@ namespace HADES.Migrations
                             AccountDN = "CN=hades,CN=Users,DC=R991-AD,DC=lan",
                             BaseDN = "CN=Users,DC=R991-AD,DC=lan",
                             ConnectionFilter = "(&(objectClass=user)(objectCategory=person))",
-                            PasswordDN = "Toto123!",
+                            PasswordDN = "Ncr4Ix+48wVfeAC30A5agpX7PlcS18Zy",
                             PortNumber = 389,
                             RootOu = "OU=hades_root,DC=R991-AD,DC=lan",
                             ServerAddress = "172.20.48.10",
@@ -100,6 +100,9 @@ namespace HADES.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AppConfigId");
+
+                    b.HasIndex("GUID")
+                        .IsUnique();
 
                     b.ToTable("AdminGroup_ADG");
                 });
@@ -172,12 +175,12 @@ namespace HADES.Migrations
                         {
                             Id = 1,
                             ActiveDirectoryId = 1,
-                            CompanyBackgroundFile = "background.png",
-                            CompanyLogoFile = "logo.png",
+                            CompanyBackgroundFile = "",
+                            CompanyLogoFile = "",
                             CompanyName = "YourCompanyName",
                             DefaultLanguage = "fr-CA",
-                            LogDeleteFrequency = 1,
-                            LogMaxFileSize = 1,
+                            LogDeleteFrequency = 31,
+                            LogMaxFileSize = 100000000,
                             SMTPFromEmail = "",
                             SMTPPassword = "",
                             SMTPPort = 465,
@@ -297,6 +300,9 @@ namespace HADES.Migrations
                         .HasColumnName("GRP_guid");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("GUID")
+                        .IsUnique();
 
                     b.ToTable("OwnerGroup_GRP");
                 });
@@ -432,6 +438,9 @@ namespace HADES.Migrations
 
                     b.HasIndex("AppConfigId");
 
+                    b.HasIndex("GUID")
+                        .IsUnique();
+
                     b.ToTable("SuperAdminGroup_SUG");
                 });
 
@@ -464,6 +473,9 @@ namespace HADES.Migrations
                         .HasColumnName("USE_UCF_id");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("GUID")
+                        .IsUnique();
 
                     b.HasIndex("RoleId");
 

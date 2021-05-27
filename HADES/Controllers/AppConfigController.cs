@@ -3,8 +3,13 @@ using HADES.Models;
 using HADES.Services;
 using HADES.Util;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.IO;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -35,7 +40,7 @@ namespace HADES.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> AppConfig([Bind("ActiveDirectory,AdminGroups,SuperAdminGroups,DefaultUser,AppConfig")] AppConfigViewModel viewModel, string confirm, string confirmDN)
+        public async Task<IActionResult> AppConfig([Bind("ActiveDirectory,AdminGroups,SuperAdminGroups,DefaultUser,AppConfig")] AppConfigViewModel viewModel, [FromForm] string confirm, [FromForm] string confirmDN, [FromForm] string confirmSMTP, [FromForm] string useSMTPCred, [FromForm] IFormFile bg, [FromForm] IFormFile ico)
         {
             ViewBag.AppConfigError = "";
 
@@ -46,11 +51,28 @@ namespace HADES.Controllers
             AppConfigService service = new();
 
             ValidateModelState();
+            if (viewModel.AppConfig.LogDeleteFrequency < 1 || viewModel.AppConfig.LogMaxFileSize < 1) ModelState.AddModelError("LogsInvalid", HADES.Strings.NegativeValueError);
 
+            bool DNencrypted = false;
             if (viewModel.ActiveDirectory.PasswordDN == null || viewModel.ActiveDirectory.PasswordDN.Equals(""))
             {
                 // Don't change Password
-               confirmDN = viewModel.ActiveDirectory.PasswordDN = service.AppConfigViewModelGET().Result.ActiveDirectory.PasswordDN;
+                confirmDN = viewModel.ActiveDirectory.PasswordDN = service.AppConfigViewModelGET().Result.ActiveDirectory.PasswordDN;
+                DNencrypted = true;
+            }
+            bool SMTPencrypted = false;
+            if (useSMTPCred == "on" && (viewModel.AppConfig.SMTPPassword == null || viewModel.AppConfig.SMTPPassword.Equals("")))
+            {
+                // Don't change Password
+                confirmSMTP = viewModel.AppConfig.SMTPPassword = service.AppConfigViewModelGET().Result.AppConfig.SMTPPassword;
+                SMTPencrypted = true;
+            }
+
+            if (useSMTPCred != "on")
+            {
+                // Remove all credentials
+                viewModel.AppConfig.SMTPUsername = null;
+                viewModel.AppConfig.SMTPPassword = null;
             }
 
             bool hashed = false;
@@ -60,17 +82,64 @@ namespace HADES.Controllers
                 confirm = viewModel.DefaultUser.Password = service.AppConfigViewModelGET().Result.DefaultUser.Password;
                 hashed = true;
             }
+            if (bg?.Length > 10485760)
+            {
+                ModelState.AddModelError("bgimg", HADES.Strings.errorFileSize);
+            }
+            if (ico?.Length > 10485760)
+            {
+                ModelState.AddModelError("icoimg", HADES.Strings.errorFileSize);
+            }
 
             if (confirm == null) confirm = "";
             if (confirmDN == null) confirmDN = "";
 
-            if (confirmDN.Equals(viewModel.ActiveDirectory.PasswordDN) && confirm.Equals(viewModel.DefaultUser.Password) && (validatePassword(viewModel.DefaultUser.Password)||hashed) && TryValidateModel(viewModel))
+            if (confirmSMTP == viewModel.AppConfig.SMTPPassword && confirmDN.Equals(viewModel.ActiveDirectory.PasswordDN) && confirm.Equals(viewModel.DefaultUser.Password) && (validatePassword(viewModel.DefaultUser.Password) || hashed) && TryValidateModel(viewModel))
             {
                 if (!hashed)
                 {
                     viewModel.DefaultUser.Password = ConnexionUtil.HashPassword(viewModel.DefaultUser.Password); // Password is now hashed
                 }
 
+                if (!DNencrypted)
+                {
+                    viewModel.ActiveDirectory.PasswordDN = EncryptionUtil.Encrypt(viewModel.ActiveDirectory.PasswordDN); // Password is now encrypted
+                }
+
+                if (!SMTPencrypted && useSMTPCred == "on")
+                {
+                    viewModel.AppConfig.SMTPPassword = EncryptionUtil.Encrypt(viewModel.AppConfig.SMTPPassword); // Password is now encrypted
+                }
+
+                if (ico != null)
+                {
+                    using (var ms = new MemoryStream())
+                    {
+                        ico.CopyTo(ms);
+                        var fileBytes = ms.ToArray();
+                        viewModel.AppConfig.CompanyLogoFile = "data:" + ico.ContentType + ";base64," + Convert.ToBase64String(fileBytes);
+                    }
+                }
+                else
+                {
+                    viewModel.AppConfig.CompanyLogoFile = service.AppConfigViewModelGET().Result.AppConfig.CompanyLogoFile; // don't change
+                }
+
+                if (bg != null)
+                {
+                    using (var ms = new MemoryStream())
+                    {
+                        bg.CopyTo(ms);
+                        var fileBytes = ms.ToArray();
+                        viewModel.AppConfig.CompanyBackgroundFile = "data:" + bg.ContentType + ";base64," + Convert.ToBase64String(fileBytes);
+                    }
+                }
+                else
+                {
+                    viewModel.AppConfig.CompanyBackgroundFile = service.AppConfigViewModelGET().Result.AppConfig.CompanyBackgroundFile; // don't change
+                }
+
+                // Now Update AppConfig
                 try
                 {
                     await service.UpdateAppConfig(viewModel);
@@ -111,20 +180,33 @@ namespace HADES.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateAdminGroup([Bind("Id,SamAccount,AppConfigId")] AdminGroup adminGroup)
+        public async Task<IActionResult> CreateAdminGroup(string DN, int appconfig)
         {
             if (!ConnexionUtil.CurrentUser(this.User).GetRole().AppConfigAccess)
             {
                 return RedirectToAction("MainView", "Home");
             }
-
-            AppConfigService service = new();
-            if (ModelState.IsValid)
+            try
             {
-                await service.AddAdminGroup(adminGroup);
-                return RedirectToAction("AppConfig", new { id = adminGroup.AppConfigId });
+                AppConfigService service = new();
+                string GroupGUID = new ADManager().getGroupGUIDByDn(DN);
+                if (GroupGUID != "")
+                {
+                    try
+                    {
+                        await service.AddAdminGroup(new AdminGroup() { GUID = GroupGUID, AppConfigId = appconfig });
+                    }
+                    catch (Exception) { }
+
+                    return RedirectToAction("AppConfig");
+                }
             }
-            return View(adminGroup);
+            catch (Exception)
+            {
+                return RedirectToAction("AppConfig");
+            }
+           
+            return View();
         }
 
         [Authorize]
@@ -162,20 +244,35 @@ namespace HADES.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateSuperAdminGroup([Bind("Id,SamAccount,AppConfigId")] SuperAdminGroup superAdminGroup)
+        public async Task<IActionResult> CreateSuperAdminGroup(string DN, int appconfig)
         {
             if (!ConnexionUtil.CurrentUser(this.User).GetRole().AppConfigAccess)
             {
                 return RedirectToAction("MainView", "Home");
             }
 
-            AppConfigService service = new();
-            if (ModelState.IsValid)
+            try
             {
-                await service.AddSuperAdminGroup(superAdminGroup);
-                return RedirectToAction("AppConfig", new { id = superAdminGroup.AppConfigId });
+                AppConfigService service = new();
+                string GroupGUID = new ADManager().getGroupGUIDByDn(DN);
+
+                if (GroupGUID != "")
+                {
+                    try
+                    {
+                        await service.AddSuperAdminGroup(new SuperAdminGroup() { GUID = GroupGUID, AppConfigId = appconfig });
+                    }
+                    catch (Exception) { }
+
+                    return RedirectToAction("AppConfig");
+                }
             }
-            return View(superAdminGroup);
+            catch (Exception)
+            {
+                return RedirectToAction("AppConfig");
+            }
+
+            return View();
         }
 
         [Authorize]
@@ -209,5 +306,6 @@ namespace HADES.Controllers
             ModelState.Remove("ActiveDirectory.PasswordDN");
         }
 
+        
     }
 }

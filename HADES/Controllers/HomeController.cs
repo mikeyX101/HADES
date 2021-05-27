@@ -10,6 +10,8 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
+using HADES.Models.API;
 
 namespace HADES.Controllers
 {
@@ -33,6 +35,7 @@ namespace HADES.Controllers
             try
             {
                 viewModel.ADRoot = ad.getRoot();
+                viewModel.ADRoot = SortADRoot(viewModel.ADRoot);
                 BuildRootTreeNode(viewModel.ADRoot); // conversion List<RootDataInformation> en TreeNode<string>
                 viewModel.ADRootTreeNodeJson = TreeNodeToJson(viewModel.ADRootTreeNode); // conversion TreeNode<string> en Json
                 viewModel.SelectedPath = "/" + viewModel.ADRoot[0].SamAccountName; // select root OU par défaut
@@ -56,6 +59,7 @@ namespace HADES.Controllers
         {
             viewModel.SelectedPath = selectedPathForContent;
             viewModel.ADRoot = ad.getRoot();
+            viewModel.ADRoot = SortADRoot(viewModel.ADRoot);
             BuildRootTreeNode(viewModel.ADRoot); // conversion List<RootDataInformation> en TreeNode<string>
             viewModel.ADRootTreeNodeJson = TreeNodeToJson(viewModel.ADRootTreeNode); // conversion TreeNode<string> en Json
             var split = viewModel.SelectedPath.Split('/');
@@ -140,21 +144,19 @@ namespace HADES.Controllers
             var DN = FindDN(viewModel.SelectedPath, viewModel.SelectedContentName);
             var split = viewModel.SelectedPath.Split('/');
             var selectedNodeName = split.Length == 2 ? split[1] : split[2];
+            // Delete OU, an empty OU has split.Length == 2
             if (split.Length == 2)
             {
-                /* TODO : validations dossier ne contient pas de groupes */
-                if (true)
-                {
-                    ad.deleteOU(DN);
-                }
-                
+                // at this point, the OU does not contain groups since split.Length == 2
+                ad.deleteOU(DN);
+                Serilog.Log.Information("Le dossier(OU) " + DN + " a été supprimé");
             }
-            /* TODO : supprimer Group */
-            /*if (split.Length == 3)
+            // Delete Group, a Group has split.Length == 3
+            if (split.Length == 3)
             {
                 ad.deleteGroup(DN);
-            }*/
-            Console.WriteLine("L'OU " + DN + " a été supprimé par l'utilisateur " + ConnexionUtil.CurrentUser(this.User).GetName());
+                Serilog.Log.Information("Le groupe " + DN + " a été supprimé");
+            }
             return RedirectToAction("UpdateContent", "Home", new { selectedPathForContent = viewModel.SelectedPath });
         }
 
@@ -167,8 +169,12 @@ namespace HADES.Controllers
                 return RedirectToAction("MainView", "Home");
             }
             var DN = FindDN(viewModel.SelectedPath, viewModel.SelectedContentName);
-            ad.renameOU(DN, viewModel.NewName);
-            Console.WriteLine("L'OU " + DN + " a été renommé par l'utilisateur " + ConnexionUtil.CurrentUser(this.User).GetName());
+            if (ModelState.IsValid)
+            {
+                ad.renameOU(DN, viewModel.NewName);
+                Serilog.Log.Information("Le dossier(OU) " + DN + " a été renommé");
+            }
+            
             return RedirectToAction("UpdateContent", "Home", new { selectedPathForContent = viewModel.SelectedPath });
         }
 
@@ -189,7 +195,8 @@ namespace HADES.Controllers
             var groupAD = viewModel.GroupAD;
             if (ModelState.IsValid)
             {
-                ad.createGroup(groupAD.SamAccountName, selectedNodeName, groupAD.Description, groupAD.Email, groupAD.Notes, groupAD.Members);
+                DateTime dateExp = (DateTime)groupAD.ExpirationDate;
+                ad.createGroup(groupAD.SamAccountName, selectedNodeName, groupAD.Description, groupAD.Email, dateExp, groupAD.Notes, groupAD.Members);
                 //return RedirectToAction("EditGroupModal");
                 return RedirectToAction("MainView");
             }
@@ -234,8 +241,11 @@ namespace HADES.Controllers
             {
                 return RedirectToAction("MainView", "Home");
             }
-            ad.createOU(viewModel.NewName);
-            Console.WriteLine("L'OU " + viewModel.NewName + " a été créé par l'utilisateur " + ConnexionUtil.CurrentUser(this.User).GetName());
+            if (ModelState.IsValid)
+            {
+                ad.createOU(viewModel.NewName);
+                Serilog.Log.Information("Le dossier(OU) " + viewModel.NewName + " a été créé");
+            }
             return RedirectToAction("UpdateContent", "Home", new { selectedPathForContent = viewModel.SelectedPath });
         }
 
@@ -244,9 +254,16 @@ namespace HADES.Controllers
             viewModel.ADRoot = ad.getRoot();
             return viewModel.ADRoot.Find(e => e.Path == selectedPath && e.SamAccountName == selectedContentName).Dn;
         }
+
+        private List<RootDataInformation> SortADRoot(List<RootDataInformation> adRoot)
+        {
+            List<RootDataInformation> adRootSorted = new List<RootDataInformation>();
+
+            adRootSorted = adRoot.OrderBy(data => data.Path + '/' + data.SamAccountName).ToList();
+
+            return adRootSorted;
+        }
+
     }
-
-
-
 
 }

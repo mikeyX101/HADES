@@ -1,9 +1,13 @@
 ﻿@model MainViewViewModel
 
+@{
+    IUser u = HADES.Util.ConnexionUtil.CurrentUser(Context.User);
+}
+
 @section scripts
 {
     <link rel="stylesheet" href="~/lib/bootstrap-treeview/css/bootstrap-treeview.css">
-    <link rel="stylesheet" href="~/lib/jquery-ui/jquery-ui.min.css">
+    <link rel="stylesheet" href="~/css/@u.GetUserConfig().ThemeFile/jquery-ui.min.css">
     <script type="text/javascript" src="~/lib/bootstrap-treeview/js/bootstrap-treeview.js"></script>
     <script src="~/lib/jquery-ui/jquery-ui.min.js"></script>
     <script type="text/javascript" src="~/js/treeview.js"></script>
@@ -11,6 +15,10 @@
 }
 
 @* Main *@
+
+<div class="bg-primary text-white text-center">
+    <h1 class="m-3 p-3"><i class="fa fa-folder fa-fw mr-3"></i>@HADES.Strings.MainView</h1>
+</div>
 
 <div class="row" id="main">
     @await Html.PartialAsync("_Main", Model)

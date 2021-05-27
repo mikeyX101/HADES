@@ -126,4 +126,7 @@
   <data name="Password" xml:space="preserve">
     <value>Password</value>
   </data>
+  <data name="LoginInvitation" xml:space="preserve">
+    <value>Please enter your login and password!</value>
+  </data>
 </root>
