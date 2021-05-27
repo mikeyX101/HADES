@@ -93,6 +93,9 @@ namespace HADES
             services.AddHostedService<DatabaseSyncService>();
             services.AddHostedService<DateExpirationService>();
 
+            // Adds service to delete old temporary files
+            services.AddHostedService<TempFileCleanupService>();
+
             #region Localization Setup
             // Configure localization
             services.Configure<RequestLocalizationOptions>(options =>
@@ -164,11 +167,10 @@ namespace HADES
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseUserLog();
-
-            app.UseSerilogRequestLogging();
-
             app.UseStaticFiles();
+
+            app.UseUserLog();
+            app.UseSerilogRequestLogging();
 
             app.UseContentSecurityPolicyHeader(
                 "default-src 'self'; img-src 'self' data:; media-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; font-src 'self'; frame-src 'self'",

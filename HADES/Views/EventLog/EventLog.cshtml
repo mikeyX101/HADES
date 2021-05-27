@@ -1,0 +1,284 @@
+﻿@{
+    ViewBag.Title = Localizer["Title"];
+
+    DateTime minDate = (DateTime)ViewData["MinDate"];
+    string tableId = "logDataTable";
+}
+
+@section scripts {
+    <link rel="stylesheet" href="~/lib/datatables/DataTables-1.10.24/css/dataTables.bootstrap4.min.css" type="text/css" />
+    <link rel="stylesheet" href="~/lib/datatables/Responsive-2.2.7/css/responsive.bootstrap4.min.css" type="text/css" />
+    <link rel="stylesheet" href="~/lib/datatables/DataTables-1.10.24/css/datatables-additions.css" type="text/css" />
+
+    <script type="text/javascript" src="~/lib/jquery-ui/i18n/datepicker-fr-CA.js"></script>
+    <script type="text/javascript" src="~/lib/jquery-ui/i18n/datepicker-es.js"></script>
+    <script type="text/javascript" src="~/lib/jquery-ui/i18n/datepicker-pt-BR.js"></script>
+    <script type="text/javascript" src="~/lib/datatables/DataTables-1.10.24/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="~/lib/datatables/DataTables-1.10.24/js/dataTables.bootstrap4.min.js"></script>
+    <script type="text/javascript" src="~/lib/datatables/Responsive-2.2.7/js/dataTables.responsive.min.js"></script>
+    <script type="text/javascript" src="~/lib/datatables/Responsive-2.2.7/js/responsive.bootstrap4.min.js"></script>
+}
+
+@section scriptsPreBootStrap {
+    <link rel="stylesheet" href="~/lib/jquery-ui/jquery-ui.css" type="text/css" />
+    <script type="text/javascript" src="~/lib/jquery-ui/jquery-ui.js"></script>
+    <script type="text/javascript" src="~/lib/popper.js/umd/popper.js"></script>
+}
+
+<style>
+    .hidden {
+        display: none;
+    }
+</style>
+
+<script type="text/javascript">
+    $(document).ready(() => {
+        let cacheRefreshButton = $('#cacheRefreshButton');
+        let csvButton = $('#csvExportButton');
+        $("[data-toggle='tooltip']").tooltip();
+
+        $.datepicker.setDefaults($.datepicker.regional["@ViewData["JQueryUILanguage"]"]);
+        $.fn.dataTable.ext.errMode = 'none';
+
+        $("#datepicker")
+            .val(new Date().toLocaleDateString())
+            .datepicker({
+                defaultDate: new Date(),
+                minDate: new Date(@minDate.Year, @minDate.Month, @minDate.Day),
+                maxDate: new Date(),
+                dateFormat: "yy-mm-dd",
+                onSelect: onDateChange
+        });
+
+        let tableApi = $("#@tableId").DataTable({
+            language: {
+                url: "@ViewData["DataTablesLanguage"]"
+            },
+            serverSide: true,
+            ajax: {
+                url: "@Url.Action("Data", "EventLog")",
+                type: "POST",
+                dataType: "json",
+                data: (d) => {
+                    d.date = $("#datepicker").datepicker("getDate").toLocaleDateString();
+                },
+                dataSrc: (json) => {
+                    if (!json.error) {
+                        $("#errorMessage").text("");
+                    }
+
+                    json.data = JSON.parse(json.data);
+
+                    console.log(json);
+                    return json.data;
+                },
+            },
+            deferRender: true,
+            processing: true,
+            stateSave: false,
+            ordering: false,
+            responsive: true,
+            headerCallback: (thead) => {
+                $(thead).addClass("dt-header");
+            },
+            initComplete: () => {
+                $("#errorMessage").text("");
+
+                $('#@(tableId)_filter input').unbind().css("height", "35px");
+                $('#@(tableId)_filter input').bind('keyup', function (e) {
+                    if (e.keyCode == 13) {
+                        tableApi.search(this.value).draw();
+                    }
+                });
+                $("#@(tableId)_filter").append("<button id='searchButton' class='btn btn-primary' style='margin-bottom: 1px;'><i class='fas fa-arrow-right'></i></button>");
+                $("#searchButton").click(() => {
+                    tableApi.search($('#@(tableId)_filter input').val()).draw();
+                });
+            },
+            columns: [
+                {
+                    width: "20%",
+                    className: "",
+                    data: "t",
+                    title: "@Localizer["Timestamp"]"
+                },
+                {
+                    className: "",
+                    data: "l",
+                    title: "@Localizer["Level"]",
+                    defaultContent: "Information",
+                    createdCell: (cell, cellData) => {
+                        let bgClass;
+                        if (cellData == "Verbose") {
+                            bgClass = "dt-cell-verbose";
+                        }
+                        else if (cellData == "Debug") {
+                            bgClass = "dt-cell-debug";
+                        }
+                        else if (cellData == "Warning") {
+                            bgClass = "dt-cell-warning";
+                        }
+                        else if (cellData == "Error") {
+                            bgClass = "dt-cell-error";
+                        }
+                        else if (cellData == "Fatal") {
+                            bgClass = "dt-cell-fatal";
+                        }
+
+                        if (bgClass) {
+                            $(cell).addClass(bgClass);
+                        }
+                    }
+                },
+                {
+                    className: "",
+                    data: "User",
+                    title: "@Localizer["User"]",
+                    defaultContent: "unknown"
+                },
+                {
+                    className: "",
+                    data: "m",
+                    title: "@Localizer["Message"]"
+                },
+                {
+                    width: "10%",
+                    className: "",
+                    data: "x",
+                    title: "@Localizer["Exception"]",
+                    defaultContent: "-",
+                    render: (data, type, row) => {
+                        if (data && type == "display") {
+                            return `<button class="btn btn-primary" onclick="showExceptionModal(this);" data-exception='${data.replaceAll("'", "\'")}'>@Localizer["ShowException"]</button>`
+                        }
+                        return data;
+                    }
+                },
+            ]
+        }).on("error.dt", (event, settings, techNote, message) => {
+            let serverMessage = message.replaceAll("DataTables warning: table id=@tableId - ", "");
+            $("#errorMessage").text(serverMessage);
+        });
+
+        function onDateChange(date) {
+            if (date == new Date().toLocaleDateString()) {
+                cacheRefreshButton.removeAttr("disabled");
+            }
+            else {
+                cacheRefreshButton.attr("disabled", "disabled");
+            }
+            refreshDataTable();
+        }
+
+        function refreshDataTable() {
+            tableApi.ajax.reload();
+        }
+
+        cacheRefreshButton.click(() => {
+            $("[data-toggle='tooltip']").tooltip("hide");
+            document.activeElement.blur()
+            $.ajax({
+                url: "@Url.Action("Refresh", "EventLog")",
+                type: "POST",
+                success: () => {
+                    refreshDataTable();
+                }
+            });
+        });
+
+        csvButton.click(() => {
+            $("[data-toggle='tooltip']").tooltip("hide");
+            csvButton.attr("disabled", "disabled");
+            document.activeElement.blur()
+            let progress = $("#csvProgressDiv");
+            $.ajax({
+                url: "@Url.Action("CSV", "EventLog")",
+                type: "POST",
+                data: tableApi.ajax.params(),
+                success: (response) => {
+                    response = JSON.parse(response);
+                    progress.addClass("hidden");
+                    csvButton.removeAttr("disabled");
+                    window.location.assign(`/File/File?id=${response.id}`);
+                },
+                error: (err) => {
+                    progress.addClass("hidden");
+                    csvButton.removeAttr("disabled");
+                    if (err.status == 404) {
+                        $("#errorMessage").text("@Strings.NoLog");
+                    }
+                    else {
+                        $("#errorMessage").text("@Localizer["CsvError"]");
+                    }
+                }
+            });
+            progress.removeClass("hidden");
+        });
+    });
+
+    function showExceptionModal(identifier) {
+        $("#exceptionModalContent").text($(identifier).data("exception"));
+        $("#exceptionModal").modal("show");
+    }
+</script>
+
+<div class="bg-primary text-white text-center">
+    <h1 class="m-3 p-3">@Localizer["Title"]</h1>
+</div>
+
+<h3 class="text-center">@Localizer["Day"]</h3>
+<div class="form-group row">
+    <div class="col-sm col-md col-lg"></div>
+    <div class="col-xs col-sm col-md col-lg text-center">
+        <input id="datepicker" class="text-center form-control-sm" type="text" value="" readonly />
+        <span data-toggle="tooltip" data-placement="bottom" title="@Localizer["CacheRefresh"]">
+            <button id="cacheRefreshButton" class="btn btn-primary text-center"><i class="fas fa-sync"></i></button>
+        </span>
+    </div>
+    <div class="col-sm col-md col-lg"></div>
+</div>
+
+<div class="form-group row">
+    <div id="tableButton" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
+        <span data-toggle="tooltip" data-html="true" data-placement="bottom" title="@Localizer["CsvTooltip"]">
+            <button id="csvExportButton" class="btn btn-primary">CSV</button>
+        </span>
+        <div id="csvProgressDiv" class="hidden">
+            <span>
+                <i class="fa fa-spinner fa-spin" style="font-size:24px"></i>
+            </span>
+            @Localizer["Converting"]
+        </div>
+    </div>
+</div>
+
+<div class="form-group row">
+    <div id="errorMessage" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
+
+    </div>
+</div>
+
+<div class="form-group row">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <table id="@tableId" class="table table-bordered cell-border hover" style="width: 100%;"></table>
+    </div>
+</div>
+
+<div id="exceptionModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">@Localizer["Exception"]</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="exceptionModalContent" class="overflow-auto"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,10 +1,30 @@
 ﻿body {
-    background-image: linear-gradient(ligthgreen,green);
+    background: repeating-linear-gradient(lightgreen,green,lightgreen);
     margin-bottom: 60px;
 }
 
-.btn {
-    border-color:darkgreen;
+.btn-primary {
+    border-color: darkgreen;
+    background: linear-gradient(white,green,darkgreen,green,white);
+}
+
+.bg-primary {
+    border-color: darkgreen;
+    background: linear-gradient(white,green,darkgreen,green,white);
+}
+
+.btn-danger {
+    border-color: darkgreen;
+    background: linear-gradient(white,red,darkred,red,white);
+}
+
+a{
+    color: white;
+}
+
+.bg-danger {
+    border-color: darkgreen;
+    background: linear-gradient(white,red,darkred,red,white);
 }
 
 .table td, .table th {

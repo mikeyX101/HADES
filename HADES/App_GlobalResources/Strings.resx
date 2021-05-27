@@ -266,6 +266,9 @@
   </data>
   <data name="roleTitle" xml:space="preserve">
     <value>Role</value>
+     </data>
+  <data name="NoLog" xml:space="preserve">
+    <value>Aucun journal n'a été trouvé pour cette journée.</value>
   </data>
   <data name="doc_roleText" xml:space="preserve">
     <value>Il y a trois rôles: Super-Administrateur, Administrateur et propriétaire. Dans HADES, les rôles nous permettent de gérer les permissions des utilisateurs connectés.  Il n’y a pas de concept de propriétaire  dans l’AD, c’est nous qui allons l'implanter. Le Super-Administrateur a tout les droits. l'Administrateur a tout les droits sauf qu'il ne peux pas accéder au panneau de configuration de l'application. Le propriétaire a beaucoup moins de droit. Il peut seulement voir, ajouter et supprimer des membres des groupes dont il est propriétaire. </value>
