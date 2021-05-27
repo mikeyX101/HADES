@@ -90,6 +90,7 @@ namespace HADES.Controllers
             {
                 ModelState.AddModelError("icoimg", HADES.Strings.errorFileSize);
             }
+
             if (confirm == null) confirm = "";
             if (confirmDN == null) confirmDN = "";
 
@@ -110,7 +111,7 @@ namespace HADES.Controllers
                     viewModel.AppConfig.SMTPPassword = Encrypt(viewModel.AppConfig.SMTPPassword); // Password is now encrypted
                 }
 
-                if (ico != null && ico.Length < 10485760)
+                if (ico != null)
                 {
                     using (var ms = new MemoryStream())
                     {
