@@ -15,7 +15,7 @@
     // Get the image
     ViewBag.img = new HADES.Data.ApplicationDbContext().AppConfig.FirstOrDefault().CompanyBackgroundFile;
 }
-<body style="background-image:url(@ViewBag.img);">
+<body style="background-image:url(@ViewBag.img),url('img/HADESBG.png');">
     <div class="container">
         <main>
             @RenderBody()
