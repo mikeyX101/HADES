@@ -97,6 +97,132 @@ namespace HADES {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à L’utilisation du champ de la date d’expiration pour les groupes nécessite une configuration spéciale. Pour que le champ de la date d’expiration des groupes soit fonctionnel, il faut ajouter un attribut personnalisé et l’ajouter à la classe groupe de votre Active Directory. Ainsi, cette information ne sera pas conservée dans la base de données d’Hades, mais bien directement, dans votre Active Directory. .
+        /// </summary>
+        public static string doc_notexp01 {
+            get {
+                return ResourceManager.GetString("doc_notexp01", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Sur l&apos;outil d&apos;administration du schéma Active Directory, accédez à Classes, sélectionnez group puis accédez à ses propriétés..
+        /// </summary>
+        public static string doc_notexp010 {
+            get {
+                return ResourceManager.GetString("doc_notexp010", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Allez dans l&apos;onglet Attributs, cliquez sur Ajouter, puis ajoutez dateDexpirationHades Une fois terminé, sélectionnez l&apos;attribut à ajouter et cliquez sur OK. Cliquer sur Appliquer..
+        /// </summary>
+        public static string doc_notexp011 {
+            get {
+                return ResourceManager.GetString("doc_notexp011", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Pour que la nouvelle attribut soit disponible dans votre Active Directory, vous devez redémarrez votre serveur. Pour valider que votre nouvelle attribut est disponible, vous pouvez aller voir dans l&apos;éditeur d&apos;attributes d&apos;un groupe dans votre Active Directory..
+        /// </summary>
+        public static string doc_notexp012 {
+            get {
+                return ResourceManager.GetString("doc_notexp012", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Voici un petit guide étape par étape pour vous aider à réaliser cette configuration..
+        /// </summary>
+        public static string doc_notexp02 {
+            get {
+                return ResourceManager.GetString("doc_notexp02", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Pour commencer il faut installer le composant logiciel de schéma Active Directory. Vous devez exécuter la commande regsvr32 schmmgmt.dll à l&apos;aide d&apos;une invite de commande élevée (en utilisant l&apos;option Exécuter en tant qu&apos;administrateur)..
+        /// </summary>
+        public static string doc_notexp03 {
+            get {
+                return ResourceManager.GetString("doc_notexp03", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Une fois l&apos;outil d&apos;administration du schéma Active Directory installé, il sera disponible sur MMC..
+        /// </summary>
+        public static string doc_notexp04 {
+            get {
+                return ResourceManager.GetString("doc_notexp04", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Ensuite, vous devez ajouter le Schéma Active Directory comme Snap-in. Cliquer sur Fichier et sur Ajouter/Supprimer des Snap-in....
+        /// </summary>
+        public static string doc_notexp05 {
+            get {
+                return ResourceManager.GetString("doc_notexp05", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Sélectionnez Active Directory Schéma et sélectionnez ajouter. Cliquer sur Ok..
+        /// </summary>
+        public static string doc_notexp06 {
+            get {
+                return ResourceManager.GetString("doc_notexp06", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Dans l&apos;outil d&apos;administration du schéma Active Directory, faites un clic droit sur Attributs, puis sélectionnez Créer un attribut… .
+        /// </summary>
+        public static string doc_notexp07 {
+            get {
+                return ResourceManager.GetString("doc_notexp07", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Cliquez sur Continuer (l&apos;avertissement qui s&apos;affiche est pour informer que la création d&apos;un nouvel attribut Active Directory n&apos;est pas une opération réversible et qu&apos;il ne peut pas être supprimé une fois terminé).
+        /// </summary>
+        public static string doc_notexp08 {
+            get {
+                return ResourceManager.GetString("doc_notexp08", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Renseignez les informations suivantes. Il est très important que les informations soient écrites exactement de cette façon. Le nom commun est ExpirationDateHades. Le nom de LDAP est expirationDateHades. Pour le Object ID, vous devez en générer un. Vous trouverez un lien ci-dessous vers un générateur, mais n&apos;importe quel générateur peux faire l&apos;affaire. La syntaxe est UTC Coded Time. Le restant des champs sont optionnels..
+        /// </summary>
+        public static string doc_notexp09 {
+            get {
+                return ResourceManager.GetString("doc_notexp09", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à La date d&apos;expiration des groupes.
+        /// </summary>
+        public static string doc_notexpdateTitle {
+            get {
+                return ResourceManager.GetString("doc_notexpdateTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Documentation.
+        /// </summary>
+        public static string Documentation {
+            get {
+                return ResourceManager.GetString("Documentation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à La date d&apos;expiration est arrivée a échéance pour un groupe..
         /// </summary>
         public static string email_ExpirationDateMessage {
@@ -250,7 +376,7 @@ namespace HADES {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à La configuration n&apos;a pas pu être sauvegardée vérifier que les champs sont bien remplis.
+        ///   Recherche une chaîne localisée semblable à Un fichier est trop grand.
         /// </summary>
         public static string errorFileSize {
             get {

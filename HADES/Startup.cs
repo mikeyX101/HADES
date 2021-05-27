@@ -197,6 +197,13 @@ namespace HADES
 				endpoints.MapRazorPages();
 			});
 
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Documentation}/{action=Documentation}");
+            });
+
         }
 
         private class HadesCultureProvider : CustomRequestCultureProvider

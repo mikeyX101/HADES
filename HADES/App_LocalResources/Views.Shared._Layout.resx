@@ -132,4 +132,7 @@
   <data name="ParametreUtilisateur" xml:space="preserve">
     <value>Paramètres de l'utilisateur</value>
   </data>
+  <data name="Documentation" xml:space="preserve">
+    <value>Documentation</value>
+  </data>
 </root>

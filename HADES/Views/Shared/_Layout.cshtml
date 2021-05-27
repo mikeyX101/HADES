@@ -55,23 +55,30 @@
                         <div class="dropdown-menu dropdown-menu-right">
                             @if (u.GetRole().AppConfigAccess)
                             {
-                            <a class="dropdown-item" asp-action="AppConfig" asp-controller="AppConfig" asp-area="">
-                                <i class="fa fa-cog fa-fw mr-2"></i>
-                                @Localizer["ParametreApplication"]
-                            </a>
+                                <a class="dropdown-item" asp-action="AppConfig" asp-controller="AppConfig" asp-area="">
+                                    <i class="fa fa-cog fa-fw mr-2"></i>
+                                    @Localizer["ParametreApplication"]
+                                </a>
                             }
                             @if (u.GetRole().EventLogAccess)
                             {
-                        <a class="dropdown-item" asp-action="MainView" asp-controller="Home" asp-area="">
-                            <i class="fa fa-book fa-fw mr-2"></i>
-                            @Localizer["JournalEvenements"]
-                        </a>
+                                <a class="dropdown-item" asp-action="MainView" asp-controller="Home" asp-area="">
+                                    <i class="fa fa-book fa-fw mr-2"></i>
+                                    @Localizer["JournalEvenements"]
+                                </a>
                             }
                             @if (u.GetRole().UserListAccess)
                             {
-                        <a class="dropdown-item" asp-action="UserList" asp-controller="UserList" asp-area="">
-                            <i class="fa fa-users fa-fw mr-2"></i>
-                            @Localizer["ListeUtilisateurs"]
+                                <a class="dropdown-item" asp-action="UserList" asp-controller="UserList" asp-area="">
+                                    <i class="fa fa-users fa-fw mr-2"></i>
+                                    @Localizer["ListeUtilisateurs"]
+                                </a>
+                            }
+                            @if (u.GetRole().AppConfigAccess)
+                            {
+                        <a class="dropdown-item" asp-action="Documentation" asp-controller="Documentation" asp-area="">
+                            <i class="fa fa-info-circle fa-fw mr-2"></i>
+                            @Localizer["Documentation"]
                         </a>
                             }
                         </div>
