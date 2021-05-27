@@ -144,4 +144,7 @@
   <data name="Back" xml:space="preserve">
     <value>Retour</value>
   </data>
+  <data name="NoLog" xml:space="preserve">
+    <value>Aucun journal n'a été trouvé pour cette journée.</value>
+  </data>
 </root>

@@ -46,14 +46,16 @@ namespace HADES.Util
 			if (appConfig != null)
 			{
 				LoggerConfiguration logConfig = new LoggerConfiguration()
-					.MinimumLevel.Verbose()
-					.MinimumLevel.Override("Microsoft", Serilog.Events.LogEventLevel.Information)
-					.MinimumLevel.Override("System", Serilog.Events.LogEventLevel.Debug);
+					.MinimumLevel.Debug()
+					.MinimumLevel.Override("Microsoft", Serilog.Events.LogEventLevel.Warning)
+					.MinimumLevel.Override("Microsoft.AspNetCore", Serilog.Events.LogEventLevel.Warning)
+					.MinimumLevel.Override("System", Serilog.Events.LogEventLevel.Information);
 
 				if (Environment == Env.Development)
 				{
 					logConfig = logConfig.WriteTo.Async(config =>
 						config.Console(
+							restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Debug,
 							outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level}] [{User}] {Message:lj}{NewLine}{Exception}"
 						)
 					);
@@ -62,11 +64,13 @@ namespace HADES.Util
 				log = logConfig
 					.WriteTo.Async(config =>
 						config.File(new Serilog.Formatting.Compact.CompactJsonFormatter(), "Logs/log.json",
+							restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Information,
 							rollingInterval: RollingInterval.Day,
 							rollOnFileSizeLimit: false,
 							fileSizeLimitBytes: appConfig.LogMaxFileSize,
 							retainedFileCountLimit: appConfig.LogDeleteFrequency,
-							buffered: true))
+							buffered: true,
+							flushToDiskInterval: TimeSpan.FromMinutes(1)))
 					.Enrich.FromLogContext()
 					.ReadFrom.Services(Services)
 					.CreateLogger();

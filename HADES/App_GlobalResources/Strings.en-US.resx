@@ -144,4 +144,7 @@
   <data name="Back" xml:space="preserve">
     <value>Back</value>
   </data>
+  <data name="NoLog" xml:space="preserve">
+    <value>No log file has been found for that day.</value>
+  </data>
 </root>
