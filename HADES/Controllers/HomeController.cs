@@ -180,14 +180,14 @@ namespace HADES.Controllers
                 ad.renameOU(DN, viewModel.NewName);
                 Serilog.Log.Information("Le dossier(OU) " + DN + " a été renommé");
             }
-            
+
             return RedirectToAction("UpdateContent", "Home", new { selectedPathForContent = viewModel.SelectedPath });
         }
 
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateGroupModal([Bind("GroupAD, SelectedNodeName, SelectedContentName, SelectedPath, SelectedUsers")] MainViewViewModel viewModel)
+        public IActionResult CreateGroupModal([Bind("GroupAD, SelectedNodeName, SelectedContentName, SelectedPath, SelectedUsers")] MainViewViewModel viewModel)
         {
             string[] split = viewModel.SelectedPath.Split('/');
             string selectedNodeName = split.Length == 2 ? split[1] : split[2];
@@ -198,7 +198,8 @@ namespace HADES.Controllers
 
             if (ModelState.IsValid)
             {
-                //ajouter datepicker
+                //datepicker sam
+                //ajouter owner
                 DateTime dateExp = DateTime.Now;
                 ad.createGroup(selectedNodeName, group, dateExp, members);
 
@@ -210,23 +211,20 @@ namespace HADES.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        //ancien samaccountname pour le rename admanager
-        public async Task<IActionResult> EditGroupModal([Bind("GroupAD, SelectedNodeName, SelectedPath, BeforeEditMembers, SelectedUsers, OuGroup")] MainViewViewModel viewModel)
+        public IActionResult EditGroupModal([Bind("GroupAD, SelectedNodeName, SelectedPath, BeforeEditMembers, SelectedUsers, OuGroup")] MainViewViewModel viewModel)
         {
             GroupAD group = viewModel.GroupAD;
             string DN = FindDN(viewModel.SelectedPath, viewModel.OuGroup);
-            string selectedNodeName = viewModel.SelectedNodeName;
 
             Dictionary<UserAD, Util.Action> updatedGroupMembers = UpdatedGroupMembersKeyValueActions(viewModel);
 
             ModelState.Remove("NewName");
             if (ModelState.IsValid)
             {
+                //datepicker sam
+                //edit owner
                 DateTime dateExp = DateTime.Now;
-                ad.modifyGroup(DN, group.SamAccountName, selectedNodeName, group.Description, group.Email, dateExp, group.Notes, updatedGroupMembers);
-
-                //changer signature de la methode à vero dans admanager. GARDER OUGROUP (3e param)
-                //public bool modifyGroup(string dnGroupToModify, GroupAD group, Dictionary<UserAD, Action> members)
+                ad.modifyGroup(DN, group, viewModel.SelectedNodeName, dateExp, updatedGroupMembers);
 
                 return RedirectToAction("MainView");
             }
@@ -264,49 +262,34 @@ namespace HADES.Controllers
             return adRootSorted;
         }
 
+
         private Dictionary<UserAD, Util.Action> UpdatedGroupMembersKeyValueActions(MainViewViewModel viewModel)
         {
-            //deserialize?
-            ////////////////////////
-            List<UserAD> initialUsers = new();
-            List<UserAD> modifiedUsers = new();
+            List<string> beforeEditUsers = DeserializeUsers(viewModel.BeforeEditMembers);
+            List<string> selectedUsers = DeserializeUsers(viewModel.SelectedMembers);
 
-            List<string> selectedUsers = new();
-            List<string> beforeEditUsers = new();
+            IEnumerable<string> usersToDelete = beforeEditUsers.Except(selectedUsers);
+            IEnumerable<string> usersToAdd = selectedUsers.Except(beforeEditUsers);
 
-            if (viewModel.SelectedUsers != null)
-                selectedUsers = JsonConvert.DeserializeObject<List<string>>(viewModel.SelectedUsers);
-            if (viewModel.BeforeEditMembers != null)
-                beforeEditUsers = JsonConvert.DeserializeObject<List<string>>(viewModel.BeforeEditMembers);
-            //////////////////////////////////
+            Dictionary<UserAD, Util.Action> keyValueToDelete = ad.getAllUsers().Where(x => usersToDelete.Contains(x.SamAccountName)).ToDictionary(x => x, x => Util.Action.DELETE);
+            Dictionary<UserAD, Util.Action> keyValueToAdd = ad.getAllUsers().Where(x => usersToAdd.Contains(x.SamAccountName)).ToDictionary(x => x, x => Util.Action.ADD);
 
-
-            modifiedUsers = ad.getAllUsers().Where(x => selectedUsers.Contains(x.SamAccountName)).ToList();
-            initialUsers = ad.getAllUsers().Where(x => beforeEditUsers.Contains(x.SamAccountName)).ToList();
-
-            Dictionary<UserAD, Util.Action> updatedKeyValueActions = new();
-
-            foreach (var member in modifiedUsers)
-            {
-                if (!initialUsers.Contains(member))
-                    updatedKeyValueActions.Add(member, Util.Action.ADD);
-            }
-
-            foreach (var member in initialUsers)
-            {
-                if (!modifiedUsers.Contains(member))
-                    updatedKeyValueActions.Add(member, Util.Action.DELETE);
-            }
-
-            return updatedKeyValueActions;
+            return keyValueToDelete.Concat(keyValueToAdd).ToDictionary(x => x.Key, x => x.Value);
         }
+
+
+        private List<String> DeserializeUsers(string serializedUsers)
+        {
+            return serializedUsers != null ? JsonConvert.DeserializeObject<List<string>>(serializedUsers) : new();
+        }
+
 
         public List<UserAD> GetSelectedUsersSamAccount(MainViewViewModel viewModel)
         {
             List<UserAD> members = new();
-            if (viewModel.SelectedUsers != null)
+            if (viewModel.SelectedMembers != null)
             {
-                List<string> selectedUsers = JsonConvert.DeserializeObject<List<string>>(viewModel.SelectedUsers);
+                List<string> selectedUsers = JsonConvert.DeserializeObject<List<string>>(viewModel.SelectedMembers);
                 members = ad.getAllUsers().Where(x => selectedUsers.Contains(x.SamAccountName)).ToList();
             }
             return members;

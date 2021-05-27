@@ -136,12 +136,12 @@
 
                                                     if (users.Count() > 0)
                                                     {
-                                                        Model.SelectedUsers = Newtonsoft.Json.JsonConvert.SerializeObject(users);
+                                                        Model.SelectedMembers = Newtonsoft.Json.JsonConvert.SerializeObject(users);
                                                         Model.BeforeEditMembers = Newtonsoft.Json.JsonConvert.SerializeObject(users);
                                                     }
                                                     else
                                                     {
-                                                        Model.SelectedUsers = "";
+                                                        Model.SelectedMembers = "";
                                                         Model.BeforeEditMembers = "";
                                                     }
                                                 }
@@ -182,7 +182,7 @@
                                                 <div class="tab-pane fade" id="@navMembersTab" role="tabpanel" aria-labelledby="nav-members-tab">
                                                     <div>
                                                         <div class="directorist-select directorist-select-multi" id="multiSelect" data-isSearch="true" data-multiSelect='@Model.UsersAD'>
-                                                            <input type="hidden" asp-for="@Model.SelectedUsers">
+                                                            <input type="hidden" asp-for="@Model.SelectedMembers">
                                                             <input type="hidden" asp-for="@Model.BeforeEditMembers" />
                                                         </div>
                                                     </div>
@@ -202,8 +202,6 @@
                                 </div>
                             </div>
                         </div>
-
-
 
                         <!-- Button to delete -->
                         <form onsubmit="return formSubmit(this)" style="display: inline-block">

@@ -568,25 +568,26 @@ namespace HADES.Util
         }
 
 
-        public bool modifyGroup(string dnGroupToModify, string name, string ouGroup, string description, string email, DateTime dateExpiration, string notes, Dictionary<UserAD, Action> members)
+        //public bool modifyGroup(string dnGroupToModify, string name, string ouGroup, string description, string email, DateTime dateExpiration, string notes, Dictionary<UserAD, Action> members)
+        public bool modifyGroup(string dnGroupToModify, GroupAD group, string ouGroup,  DateTime dateExpiration, Dictionary<UserAD, Action> members)
         {
-            if (description == "") {
-                description = " ";
+            if (group.Description == "") {
+                group.Description = " ";
             }
-            if (email == "")
+            if (group.Email == "")
             {
-                email = " ";
+                group.Email = " ";
             }
-            if (notes == "")
+            if (group.Notes == "")
             {
-                notes = " ";
+                group.Notes = " ";
             }
             try
 			{
                 LdapConnection connection = createConnection();
 
                 //Rename 
-                string newRdn = "CN=" + name;
+                string newRdn = "CN=" + group.SamAccountName;
                 connection.Rename(dnGroupToModify, newRdn, true);
 
                 dnGroupToModify = newRdn + ",OU=" + ouGroup + "," + ADSettingsCache.Ad.RootOu;
@@ -595,20 +596,20 @@ namespace HADES.Util
                 List<LdapModification> modList = new List<LdapModification>();
 
                 //Description
-                LdapAttribute attribute = new LdapAttribute("description", description);
+                LdapAttribute attribute = new LdapAttribute("description", group.Description);
                 modList.Add(new LdapModification(LdapModification.Replace, attribute));
 
                 //Email
                 
-                 attribute = new LdapAttribute("mail", email);
+                 attribute = new LdapAttribute("mail", group.Email);
                  modList.Add(new LdapModification(LdapModification.Replace, attribute));
                
                 //Notes
-                attribute = new LdapAttribute("info", notes);
+                attribute = new LdapAttribute("info", group.Notes);
                 modList.Add(new LdapModification(LdapModification.Replace, attribute));
 
                 //SamAccountName 
-                attribute = new LdapAttribute("samaccountname", name);
+                attribute = new LdapAttribute("samaccountname", group.SamAccountName);
                 modList.Add(new LdapModification(LdapModification.Replace, attribute));
 
                 //DateExp 

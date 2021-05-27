@@ -31,7 +31,7 @@ namespace HADES.Models
 
         public string BeforeEditMembers { get; set; }
 
-        public string SelectedUsers { get; set; }
+        public string SelectedMembers { get; set; }
 
         public string OuGroup { get; set; }
         public ADManager ADManager { get; set; }
