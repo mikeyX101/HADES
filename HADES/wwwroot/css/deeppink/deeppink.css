@@ -1,19 +1,18 @@
 ﻿body {
     background-color: deeppink;
-    padding-bottom: 60px;
+    margin-bottom: 60px;
 }
 
 .table td, .table th {
     vertical-align: middle;
-    padding: .5rem;
+    padding: 1px;
 }
-
-span.icon {
-    width: 12px;
-    margin-right: 1rem;
-} 
 
 .btn
 {
     border-radius: 1rem;
+}
+
+.dropmenu {
+    margin: 0px 20px 0px 0px;
 }

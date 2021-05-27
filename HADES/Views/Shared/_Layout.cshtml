@@ -50,20 +50,29 @@
                 {
                     <div class="dropdown dropmenu">
                         <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                            <i class="fa fa-cog"></i>
+                            <i class="fa fa-cog mr-2"></i>
                         </button>
                         <div class="dropdown-menu dropdown-menu-right">
                             @if (u.GetRole().AppConfigAccess)
                             {
-                                <a class="dropdown-item" asp-action="AppConfig" asp-controller="AppConfig" asp-area="">@Localizer["ParametreApplication"]</a>
+                            <a class="dropdown-item" asp-action="AppConfig" asp-controller="AppConfig" asp-area="">
+                                <i class="fa fa-cog fa-fw mr-2"></i>
+                                @Localizer["ParametreApplication"]
+                            </a>
                             }
                             @if (u.GetRole().EventLogAccess)
                             {
-                                <a class="dropdown-item" asp-action="MainView" asp-controller="Home" asp-area="">@Localizer["JournalEvenements"]</a>
+                        <a class="dropdown-item" asp-action="MainView" asp-controller="Home" asp-area="">
+                            <i class="fa fa-book fa-fw mr-2"></i>
+                            @Localizer["JournalEvenements"]
+                        </a>
                             }
                             @if (u.GetRole().UserListAccess)
                             {
-                                <a class="dropdown-item" asp-action="UserList" asp-controller="UserList" asp-area="">@Localizer["ListeUtilisateurs"]</a>
+                        <a class="dropdown-item" asp-action="UserList" asp-controller="UserList" asp-area="">
+                            <i class="fa fa-users fa-fw mr-2"></i>
+                            @Localizer["ListeUtilisateurs"]
+                        </a>
                             }
                         </div>
                     </div>
@@ -71,11 +80,17 @@
 
                 <div class="dropdown dropmenu">
                     <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                        <i class="fa fa-bars"></i>
+                        <i class="fa fa-bars mr-2"></i>
                     </button>
                     <div class="dropdown-menu dropdown-menu-right">
-                        <a class="dropdown-item" asp-action="UserConfig" asp-controller="UserConfigs">@Localizer["ParametreUtilisateur"]</a>
-                        <a class="dropdown-item" asp-action="LogOut" asp-controller="Account">@Localizer["Deconnexion"]</a>
+                        <a class="dropdown-item" asp-action="UserConfig" asp-controller="UserConfigs">
+                            <i class="fa fa-users-cog fa-fw mr-2"></i>
+                            @Localizer["ParametreUtilisateur"]
+                        </a>
+                        <a class="dropdown-item" asp-action="LogOut" asp-controller="Account">
+                            <i class="fa fa-sign-out-alt fa-fw mr-2"></i>
+                            @Localizer["Deconnexion"]
+                        </a>
                     </div>
                 </div>
             </div>

@@ -18,12 +18,17 @@ function showTreeView(userObj, nodeName) {
 
         // configure treeview options
         $('#mytreeview').treeview({
-            color: "#428bca",
+            color: "#007bff",                       // text color
+            backColor: "#FFFFFF",                   // background color
+            highlightSelected: true,
+            selectedColor: "#FFFFFF",               // selected text color
+            selectedBackColor: "#007bff",           // selected background color
+            showBorder: false,
+            borderColor: "#007bff",
+            onhoverColor: '#F5F5F5',                // Default: '#F5F5F5'
             expandIcon: 'fa fa-plus',
             collapseIcon: 'fa fa-minus',
             emptyIcon: 'fa',
-            showBorder: false,
-            highlightSelected: true,
             highlightSearchResults: false,
             data: rootData
         });

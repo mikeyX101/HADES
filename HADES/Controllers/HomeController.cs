@@ -144,27 +144,19 @@ namespace HADES.Controllers
             var DN = FindDN(viewModel.SelectedPath, viewModel.SelectedContentName);
             var split = viewModel.SelectedPath.Split('/');
             var selectedNodeName = split.Length == 2 ? split[1] : split[2];
-            // Delete OU
+            // Delete OU, an empty OU has split.Length == 2
             if (split.Length == 2)
             {
-                /* TODO : validations dossier ne contient pas de groupes */
-                if (true)
-                {
-                    ad.deleteOU(DN);
-                }
-                
+                // at this point, the OU does not contain groups since split.Length == 2
+                ad.deleteOU(DN);
+                Serilog.Log.Information("Le dossier(OU) " + DN + " a été supprimé");
             }
-            // Delete Group
+            // Delete Group, a Group has split.Length == 3
             if (split.Length == 3)
             {
-                /* TODO : validations group */
-                if (true)
-                {
-                    ad.deleteGroup(DN);
-                }
-                
+                ad.deleteGroup(DN);
+                Serilog.Log.Information("Le groupe " + DN + " a été supprimé");
             }
-            Serilog.Log.Information("Le dossier(OU) " + DN + " a été supprimé");
             return RedirectToAction("UpdateContent", "Home", new { selectedPathForContent = viewModel.SelectedPath });
         }
 
@@ -177,8 +169,12 @@ namespace HADES.Controllers
                 return RedirectToAction("MainView", "Home");
             }
             var DN = FindDN(viewModel.SelectedPath, viewModel.SelectedContentName);
-            ad.renameOU(DN, viewModel.NewName);
-            Serilog.Log.Information("Le dossier(OU) " + DN + " a été renommé");
+            if (ModelState.IsValid)
+            {
+                ad.renameOU(DN, viewModel.NewName);
+                Serilog.Log.Information("Le dossier(OU) " + DN + " a été renommé");
+            }
+            
             return RedirectToAction("UpdateContent", "Home", new { selectedPathForContent = viewModel.SelectedPath });
         }
 

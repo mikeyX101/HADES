@@ -3,8 +3,8 @@
 <h3 class="mt-1">@Localizer["Folder"] @Model.SelectedNodeName</h3>
 
 <!-- Button trigger modal create OU -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="@Model.DataTarget" data-backdrop="false">
-    @Model.CreateButtonLabel
+<button type="button" class="btn btn-primary mr-2" data-toggle="modal" data-target="@Model.DataTarget" data-backdrop="false">
+    <i class="fa fa-plus fa-fw mr-2"></i>@Model.CreateButtonLabel
 </button>
 
 <!-- Modal Create Group -->
@@ -35,20 +35,20 @@
                            href='@Url.Action("UpdateContent","Home", new { selectedPathForContent = Model.SelectedPath + (selectedPathLength == 2 ? "/" + Model.ADRoot[i].SamAccountName : "")})'>
                             @if (selectedPathLength == 2)
                             {
-                                <span class="icon fa fa-folder"></span>
+                                <i class="icon fa fa-folder mr-2"></i>
                             }
                             else 
                             { 
-                                <span class="icon fa fa-users"></span>
+                                <i class="icon fa fa-users mr-2"></i>
                             }
                             @Model.ADRoot[i].SamAccountName
                         </a>
                     </td>
-                    <td>
+                    <td style="text-align: right">
 
                         <!-- Button trigger modal rename OU -->
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="@dataTarget" data-backdrop="false">
-                            @Model.EditLinkLabel
+                            <i class="fa fa-edit fa-fw mr-2"></i>@Model.EditLinkLabel
                         </button>
 
                         <!-- Modal Rename OU -->
@@ -56,7 +56,9 @@
                             <div class="modal-dialog">
                                 <div class="modal-content" role="document">
                                     <div class="modal-header text-center">
-                                        <h4 class="modal-title w-100 font-weight-bold" id="@Model.ADRoot[i].SamAccountName">@Model.EditLinkLabel</h4>
+                                        <h4 class="modal-title w-100 font-weight-bold" id="@Model.ADRoot[i].SamAccountName">
+                                            <i class="fa fa-edit fa-fw mr-2"></i>@Model.EditLinkLabel
+                                        </h4>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
@@ -85,7 +87,7 @@
                         <!-- Button to delete -->
                         <form onsubmit="return formSubmit(this)" style="display: inline-block">
                             <button class="btn btn-primary">
-                                @HADES.Strings.Delete
+                                <i class="fa fa-trash-alt fa-fw mr-2"></i>@HADES.Strings.Delete
                             </button>
                             <input type="hidden" name="SelectedPath" value="@Model.SelectedPath" />
                             <input type="hidden" name="SelectedContentName" value="@Model.ADRoot[i].SamAccountName" />
