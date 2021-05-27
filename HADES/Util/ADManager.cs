@@ -130,7 +130,8 @@ namespace HADES.Util
                 else
                 {
                     Log.Verbose("serverCredential");
-                    connection.Bind(ADSettingsCache.Ad.AccountDN, ADSettingsCache.Ad.PasswordDN);
+                    string p = EncryptionUtil.Decrypt(ADSettingsCache.Ad.PasswordDN);
+                    connection.Bind(ADSettingsCache.Ad.AccountDN, p);
                 }
 
                 Log.Verbose("isAuthenticated : {Bound}", connection.Bound);
