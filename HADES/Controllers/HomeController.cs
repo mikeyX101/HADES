@@ -219,10 +219,11 @@ namespace HADES.Controllers
 
             Dictionary<UserAD, Util.Action> updatedGroupMembers = UpdatedGroupMembersKeyValueActions(viewModel);
 
-
+            ModelState.Remove("NewName");
             if (ModelState.IsValid)
             {
-                //ad.modifyGroup(DN, group.SamAccountName, selectedNodeName, group.Description, group.Email, group.Notes, updatedGroupMembers);
+                DateTime dateExp = DateTime.Now;
+                ad.modifyGroup(DN, group.SamAccountName, selectedNodeName, group.Description, group.Email, dateExp, group.Notes, updatedGroupMembers);
 
                 //changer signature de la methode à vero dans admanager. GARDER OUGROUP (3e param)
                 //public bool modifyGroup(string dnGroupToModify, GroupAD group, Dictionary<UserAD, Action> members)

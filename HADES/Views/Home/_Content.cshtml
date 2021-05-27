@@ -25,10 +25,15 @@
 
         @for (int i = 0; i < Model.ADRoot.Count; i++)
         {
-
-            var dataTarget = "#a" + i.ToString();
-            var id = "a" + i.ToString();
             var selectedPathLength = Model.SelectedPath.Split('/').Length;
+
+            var dataTarget = "";
+            //selectedPathLength == 2 ? "#a" + i.ToString() : "#b" + i.ToString();
+            var id = "a" + i.ToString();
+            var groupId = "b" + i.ToString();
+
+
+
 
             if (Model.ADRoot[i].Path == Model.SelectedPath)
             {
@@ -39,10 +44,12 @@
                             @if (selectedPathLength == 2)
                             {
                                 <i class="icon fa fa-folder mr-2"></i>
+                                dataTarget = "#a" + i.ToString();
                             }
                             else
                             {
                                 <i class="icon fa fa-users mr-2"></i>
+                                dataTarget = "#b" + i.ToString();
                             }
                             @Model.ADRoot[i].SamAccountName
                         </a>
@@ -51,6 +58,36 @@
 
                         <!-- Button trigger modal rename OU -->
                         <!-- Modal Rename OU -->
+
+                        <div class="modal fade" id="@id" role="dialog" aria-labelledby="@Model.ADRoot[i].SamAccountName" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content" role="document">
+                                    <div class="modal-header text-center">
+                                        <h4 class="modal-title w-100 font-weight-bold" id="@Model.ADRoot[i].SamAccountName">@Model.EditLinkLabel</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body mx-3">
+                                        <div class="md-form">
+                                            <form class="needs-validation" asp-controller="Home" asp-action="Rename" data-ajax="true" data-ajax-method="POST" data-ajax-mode="replace" data-ajax-update="#main" novalidate>
+                                                <div class="form-group row">
+                                                    <div class="col-10">
+                                                        <input type="text" name="NewName" value="@Model.ADRoot[i].SamAccountName" class="form-control validate" pattern='^[^/[\]:;|=+*?<>,"\\]*$' required />
+                                                        <input type="hidden" name="SelectedPath" value="@Model.SelectedPath" />
+                                                        <input type="hidden" name="SelectedContentName" value="@Model.ADRoot[i].SamAccountName" />
+                                                        <div class="invalid-tooltip">
+                                                            @Localizer["InvalidCharacters"]
+                                                        </div>
+                                                    </div>
+                                                    <button type="submit" class="btn btn-primary col-2">@HADES.Strings.OK</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         @{
                             var navGroupInfo = "#nav-groupInfo" + i;
                             var navGroupInfoTab = "nav-groupInfo" + i;
@@ -60,13 +97,14 @@
 
                             var navOwners = "#nav-owners" + i;
                             var navOwnersTab = "nav-owners" + i;
+
                         }
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="@dataTarget" data-backdrop="false">
                             <span data-toggle="tooltip" data-html="true" data-placement="right" title="@Model.EditLinkLabel">
                                 <i class="fa fa-edit fa-fw"></i>
                             </span>
                         </button>
-                        <div class="modal fade" id="@id" tabindex="-1" role="dialog" aria-labelledby="GroupCreateLbl"
+                        <div class="modal fade" id="@groupId" tabindex="-1" role="dialog" aria-labelledby="GroupCreateLbl"
                              aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
@@ -166,35 +204,7 @@
                             </div>
                         </div>
 
-                        @*<div class="modal fade" id="@id" role="dialog" aria-labelledby="@Model.ADRoot[i].SamAccountName" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content" role="document">
-                    <div class="modal-header text-center">
-                        <h4 class="modal-title w-100 font-weight-bold" id="@Model.ADRoot[i].SamAccountName">@Model.EditLinkLabel</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body mx-3">
-                        <div class="md-form">
-                            <form class="needs-validation" asp-controller="Home" asp-action="Rename" data-ajax="true" data-ajax-method="POST" data-ajax-mode="replace" data-ajax-update="#main" novalidate>
-                                <div class="form-group row">
-                                    <div class="col-10">
-                                        <input type="text" name="NewName" value="@Model.ADRoot[i].SamAccountName" class="form-control validate" pattern='^[^/[\]:;|=+*?<>,"\\]*$' required />
-                                        <input type="hidden" name="SelectedPath" value="@Model.SelectedPath" />
-                                        <input type="hidden" name="SelectedContentName" value="@Model.ADRoot[i].SamAccountName" />
-                                        <div class="invalid-tooltip">
-                                            @Localizer["InvalidCharacters"]
-                                        </div>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary col-2">@HADES.Strings.OK</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>*@
+
 
                         <!-- Button to delete -->
                         <form onsubmit="return formSubmit(this)" style="display: inline-block">
