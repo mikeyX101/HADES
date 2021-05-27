@@ -5,6 +5,7 @@
 
 @{
     IUser currentUser = HADES.Util.ConnexionUtil.CurrentUser(Context.User);
+    HADES.Util.ADManager ad = new();
 }
 
 @section scriptsPreBootStrap
@@ -218,12 +219,30 @@
                 {
                     for (var i = 0; i < Model.AdminGroups.Count(); i++)
                     {
+                        
+                        string display = Model.AdminGroups[i].GUID;
+                        // Look Up DN for GUID
+                        if (ad != null)
+                        {
+                            try
+                            {
+                                display = ad.getGroupDnByGUID(Model.AdminGroups[i].GUID);
+                            }
+                            catch (Exception)
+                            {
+                                ad = null;
+                            }
+
+                        }
+
                         <tr>
                             <td>
                                 <input type="hidden" asp-for="@Model.AdminGroups[i].Id" />
                                 <input type="hidden" asp-for="@Model.AdminGroups[i].AppConfigId" />
-                                <input class="form-control" asp-for="@Model.AdminGroups[i].GUID" />
+                                <input type="hidden" asp-for="@Model.AdminGroups[i].GUID" />
+                                <input class="form-control" type="text" value="@display" readonly />
                             </td>
+
                             <td><a asp-action="AdminGroupDelete" asp-route-id="@Model.AdminGroups[i].Id"><h2><i class="fa fa-trash-alt"></i></h2></a></td>
                         </tr>
                     }
@@ -248,11 +267,28 @@
                 {
                     for (var i = 0; i < Model.SuperAdminGroups.Count(); i++)
                     {
+
+                        string display = Model.SuperAdminGroups[i].GUID;
+                        // Look Up DN for GUID
+                        if (ad != null)
+                        {
+                            try
+                            {
+                                display = ad.getGroupDnByGUID(Model.SuperAdminGroups[i].GUID);
+                            }
+                            catch (Exception)
+                            {
+                                ad = null;
+                            }
+
+                        }
+
                         <tr>
                             <td>
                                 <input type="hidden" asp-for="@Model.SuperAdminGroups[i].Id" />
                                 <input type="hidden" asp-for="@Model.SuperAdminGroups[i].AppConfigId" />
-                                <input class="form-control" asp-for="@Model.SuperAdminGroups[i].GUID" />
+                                <input type="hidden" asp-for="@Model.SuperAdminGroups[i].GUID" />
+                                <input class="form-control" type="text" value="@display" readonly />
                             </td>
                             <td><a asp-action="SuperAdminGroupDelete" asp-route-id="@Model.SuperAdminGroups[i].Id"><h2><i class="fa fa-trash-alt"></i></h2></a></td>
                         </tr>
