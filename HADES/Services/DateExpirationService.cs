@@ -1,6 +1,7 @@
 ﻿using HADES.Util;
 using HADES.Util.ModelAD;
 using Microsoft.Extensions.Hosting;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,10 +18,11 @@ namespace HADES.Services
         public Task StartAsync(CancellationToken cancellationToken)
         {
             // timer repeats call to Send email notification
-            _timer = new Timer(
-                (object state) => verifyExpirationForAllGroup(),
-                null,
-                TimeSpan.Zero,
+ 
+                _timer = new Timer(
+              (object state) => verifyExpirationForAllGroup(),
+              null,
+              TimeSpan.Zero,
 #if DEBUG
                 TimeSpan.FromSeconds(60)
 #endif
@@ -29,36 +31,53 @@ namespace HADES.Services
                 TimeSpan.FromHours(24)
 #endif
             );
+           
+          
 
             return Task.CompletedTask;
         }
 
         private static void verifyExpirationForAllGroup() {
-            Console.WriteLine("The system verify the expiration date of the group in the active directory");
-            ADManager ad = new ADManager();
-            // Get all the groups in the AD Root
-            List<GroupAD> groups = ad.getGroupsInRoot();
-
-            foreach (var group in groups)
+            
+            try
             {
-                //If the group is expire an email is send every 24h
-                if (group.ExpirationDate != null && group.ExpirationDate <= DateTime.Now) {
-                    Console.WriteLine("Group is Expired");
-                    EmailHelper.SendEmail(NotificationType.ExpirationDate, group, "", -1);
-                }
+                Log.Information("The system verify the expiration date of the group in the active directory {Function}", "verifyExpirationForAllGroup()");
 
-                //Send one email if the group expire will expire in the next 15 days
-                if (group.ExpirationDate != null) {
-                    DateTime date = DateTime.Now.AddDays(15);
-                    DateTime dateExp = (DateTime)group.ExpirationDate;
-                    if (dateExp.Date.CompareTo(date.Date) == 0)
+                // Get all the groups in the AD Root
+                ADManager ad = new ADManager();
+                List<GroupAD> groups = ad.getGroupsInRoot();
+
+                foreach (var group in groups)
+                {
+                    //If the group is expire an email is send every 24h
+                    if (group.ExpirationDate != null && group.ExpirationDate <= DateTime.Now)
                     {
-                        Console.WriteLine("Group wil Expire in 15");
-                        EmailHelper.SendEmail(NotificationType.ExpirationDate, group, "", 15);
+                        Console.WriteLine("Group is Expired");
+                        EmailHelper.SendEmail(NotificationType.ExpirationDate, group, "", -1);
                     }
+
+                    //Send one email if the group expire will expire in the next 15 days
+                    if (group.ExpirationDate != null)
+                    {
+                        DateTime date = DateTime.Now.AddDays(15);
+                        DateTime dateExp = (DateTime)group.ExpirationDate;
+                        if (dateExp.Date.CompareTo(date.Date) == 0)
+                        {
+                            Console.WriteLine("Group wil Expire in 15");
+                            EmailHelper.SendEmail(NotificationType.ExpirationDate, group, "", 15);
+                        }
+                    }
+
                 }
-                
             }
+            catch (Exception e)
+            {
+                Log.Warning(e, "An unexepected error occured while doing an operation with the Expiration Date Service in function {Function}", "verifyExpirationForAllGroup()");
+
+            }
+
+
+         
         }
 
         public Task StopAsync(CancellationToken cancellationToken)

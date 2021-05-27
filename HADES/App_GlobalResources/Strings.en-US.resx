@@ -258,4 +258,7 @@
   <data name="doc_notexp012" xml:space="preserve">
     <value>For the new attribute to be available in your Active Directory, you must restart your server. To validate that your new attribute is available, you can go to the attribute editor of a group in your Active Directory.</value>
   </data>
+  <data name="link_generator" xml:space="preserve">
+    <value>Link to the Generator</value>
+  </data>
 </root>
