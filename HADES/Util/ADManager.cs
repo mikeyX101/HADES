@@ -515,19 +515,20 @@ namespace HADES.Util
         /*****************************************************
          GROUP
          ******************************************************/
-        public bool createGroup(string name, string ouName, string description, string email, DateTime dateExpiration, string notes, List<UserAD> members)
+        //public bool createGroup(string name, string ouName, string description, string email, DateTime dateExpiration, string notes, List<UserAD> members)
+        public bool createGroup(string ouName, GroupAD group, DateTime dateExpiration, List<UserAD> members)
         {
-            if (description == "")
+            if (group.Description == "")
             {
-                description = " ";
+                group.Description = " ";
             }
-            if (email == "")
+            if (group.Email == "")
             {
-                email = " ";
+                group.Email = " ";
             }
-            if (notes == "")
+            if (group.Notes == "")
             {
-                notes = " ";
+                group.Notes = " ";
             }
 
             LdapConnection connection = createConnection();
@@ -536,16 +537,16 @@ namespace HADES.Util
                 //Creates the List attributes of the entry and add them to attribute
                 LdapAttributeSet attributeSet = new LdapAttributeSet();
                 attributeSet.Add(new LdapAttribute("objectclass", "group"));
-                attributeSet.Add(new LdapAttribute("CN", name));
-                attributeSet.Add(new LdapAttribute("samaccountname", name));
-                attributeSet.Add(new LdapAttribute("name", name));
-                attributeSet.Add(new LdapAttribute("description", description));
-                attributeSet.Add(new LdapAttribute("mail", email));
-                attributeSet.Add(new LdapAttribute("info", notes));
+                attributeSet.Add(new LdapAttribute("CN", group.SamAccountName));
+                attributeSet.Add(new LdapAttribute("samaccountname", group.SamAccountName));
+                attributeSet.Add(new LdapAttribute("name", group.SamAccountName));
+                attributeSet.Add(new LdapAttribute("description", group.Description));
+                attributeSet.Add(new LdapAttribute("mail", group.Email));
+                attributeSet.Add(new LdapAttribute("info", group.Notes));
                 string format = "yyMMddHHmmss'Z'";
                 attributeSet.Add(new LdapAttribute("expirationDateHades", dateExpiration.ToString(format)));
                 // DN of the entry to be added
-                string dn = "CN=" + name + "," + "OU=" + ouName + "," + ADSettingsCache.Ad.RootOu;
+                string dn = "CN=" + group.SamAccountName + "," + "OU=" + ouName + "," + ADSettingsCache.Ad.RootOu;
                 LdapEntry newEntry = new LdapEntry(dn, attributeSet);
                 //Add the entry to the directory
                 connection.Add(newEntry);
