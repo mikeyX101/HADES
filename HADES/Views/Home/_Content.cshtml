@@ -37,8 +37,8 @@
                             {
                                 <span class="icon fa fa-folder"></span>
                             }
-                            else 
-                            { 
+                            else
+                            {
                                 <span class="icon fa fa-users"></span>
                             }
                             @Model.ADRoot[i].SamAccountName
@@ -47,7 +47,7 @@
                     <td>
 
                         <!-- Button trigger modal rename OU -->
-
+                        <!-- Modal Rename OU -->
                         @{
                             var navGroupInfo = "#nav-groupInfo" + i;
                             var navGroupInfoTab = "nav-groupInfo" + i;
@@ -160,7 +160,7 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- Modal Rename OU -->
+
                         @*<div class="modal fade" id="@id" role="dialog" aria-labelledby="@Model.ADRoot[i].SamAccountName" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content" role="document">

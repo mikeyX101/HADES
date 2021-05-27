@@ -51,30 +51,29 @@
                                     <input asp-for="GroupAD.Email" type="Email" class="form-control" id="Email" placeholder="Email">
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <div class="form-group row">
-                                    <label asp-for="GroupAD.Notes">Notes</label>
-                                    <textarea asp-for="GroupAD.Notes" class="form-control" id="Notes" rows="3"></textarea>
-                                </div>
-
+                            <div class="form-group row">
+                                <label asp-for="GroupAD.Notes">Notes</label>
+                                <textarea asp-for="GroupAD.Notes" class="form-control" id="Notes" rows="3"></textarea>
                             </div>
 
-                            <div class="tab-pane fade" id="nav-members" role="tabpanel" aria-labelledby="nav-members-tab">
-                                <!-- members form -->
-                                <div>
-                                    <div class="directorist-select directorist-select-multi" id="multiSelect" data-isSearch="true" data-multiSelect='@Model.UsersAD'>
-                                        <input type="hidden" asp-for="@Model.SelectedUsers">
-                                    </div>
+                        </div>
+                        
+                        <div class="tab-pane fade" id="nav-members" role="tabpanel" aria-labelledby="nav-members-tab">
+                            <!-- members form -->
+                            <div>
+                                <div class="directorist-select directorist-select-multi" id="multiSelect" data-isSearch="true" data-multiSelect='@Model.UsersAD'>
+                                    <input type="hidden" asp-for="@Model.SelectedUsers">
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="nav-owners" role="tabpanel" aria-labelledby="nav-owners-tab">
-                                <!-- Owners form -->
-                                ...
-                            </div>
-                            <div class="modal-footer">
-                                <button type="submit" class="btn btn-primary" id="btnSave">Ok</button>
-                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="nav-owners" role="tabpanel" aria-labelledby="nav-owners-tab">
+                            <!-- Owners form -->
+                            ...
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary" id="btnSave">Ok</button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -85,5 +84,5 @@
 <script type="text/javascript">
     pureScriptSelect('#multiSelect');
     pureScriptSelect('#selectImg');
-    pureScriptSelect('#selectIcon');
+    pureScriptSelect('#selectIcon');    
 </script>
