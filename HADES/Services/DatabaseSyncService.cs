@@ -64,7 +64,7 @@ namespace HADES.Services
         {
             if ((UpdateMe && !processing) || forced) // Only update if asked to
             {
-                Log.Information("Attempting Database Sync");
+                Log.Information("Running {Service}", "Database Sync Service");
                 processing = true;
                 if (ad == null) ad = new ADManager(); // Initialize ad on first use
 
@@ -77,9 +77,9 @@ namespace HADES.Services
                     UpdateMe = false;
                     processing = false;
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
-                    Log.Warning("An error occured while synchronizing the HADES database to the Active Directory");
+                    Log.Warning(e, "An unexepected error occured while doing an operation in the {Service}", "Database Sync Service");
                     processing = false;
                     return;
                 }
