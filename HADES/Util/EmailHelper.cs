@@ -232,7 +232,7 @@ namespace HADES.Util
                     EnableSsl = true,
                     MailServer = settings.SMTPServer,
                     Port = settings.SMTPPort,
-                    NetworkCredentials = new NetworkCredential(settings.SMTPUsername, settings.SMTPPassword),
+                    NetworkCredentials = new NetworkCredential(settings.SMTPUsername, EncryptionUtil.Decrypt(settings.SMTPPassword)),
                     EmailSubject = subject,
                     FromEmail = settings.SMTPFromEmail,
                     ToEmail = emails
