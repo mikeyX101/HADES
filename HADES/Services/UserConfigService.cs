@@ -9,7 +9,7 @@ namespace HADES.Services
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        public async Task<UserConfigViewModel> UserConfig(UserConfig userConfig)
+        public UserConfigViewModel UserConfig(UserConfig userConfig)
         {
             var emails = db.Email.Where(m => m.UserConfigId == userConfig.Id).ToList();
 

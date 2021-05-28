@@ -9,9 +9,7 @@ using Microsoft.Extensions.Localization;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Linq;
-using HADES.Models.API;
 
 namespace HADES.Controllers
 {
@@ -143,7 +141,7 @@ namespace HADES.Controllers
         [Authorize]
         public IActionResult Delete(MainViewViewModel viewModel)
         {
-            if (!ConnexionUtil.CurrentUser(this.User).GetRole().AdCrudAccess)
+            if (!ConnexionUtil.CurrentUser(this.User).GetRole().AdCrudAccess) // ACCESS CONTROL
             {
                 return RedirectToAction("MainView", "Home");
             }
@@ -170,7 +168,7 @@ namespace HADES.Controllers
         [Authorize]
         public IActionResult Rename(MainViewViewModel viewModel)
         {
-            if (!ConnexionUtil.CurrentUser(this.User).GetRole().AdCrudAccess)
+            if (!ConnexionUtil.CurrentUser(this.User).GetRole().AdCrudAccess) // ACCESS CONTROL
             {
                 return RedirectToAction("MainView", "Home");
             }
@@ -189,6 +187,11 @@ namespace HADES.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult CreateGroupModal([Bind("GroupAD, SelectedNodeName, SelectedContentName, SelectedPath, SelectedUsers")] MainViewViewModel viewModel)
         {
+            if (!ConnexionUtil.CurrentUser(this.User).GetRole().AdCrudAccess) // ACCESS CONTROL
+            {
+                return RedirectToAction("MainView", "Home");
+            }
+
             string[] split = viewModel.SelectedPath.Split('/');
             string selectedNodeName = split.Length == 2 ? split[1] : split[2];
             GroupAD group = viewModel.GroupAD;
@@ -213,6 +216,11 @@ namespace HADES.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult EditGroupModal([Bind("GroupAD, SelectedNodeName, SelectedPath, BeforeEditMembers, SelectedMembers, OuGroup")] MainViewViewModel viewModel)
         {
+            if (!ConnexionUtil.CurrentUser(this.User).GetRole().AdCrudAccess) // ACCESS CONTROL
+            {
+                return RedirectToAction("MainView", "Home");
+            }
+
             GroupAD group = viewModel.GroupAD;
             string DN = FindDN(viewModel.SelectedPath, viewModel.OuGroup);
 
@@ -235,7 +243,7 @@ namespace HADES.Controllers
         [Authorize]
         public IActionResult CreateOU(MainViewViewModel viewModel)
         {
-            if (!ConnexionUtil.CurrentUser(this.User).GetRole().AdCrudAccess)
+            if (!ConnexionUtil.CurrentUser(this.User).GetRole().AdCrudAccess) // ACCESS CONTROL
             {
                 return RedirectToAction("MainView", "Home");
             }
