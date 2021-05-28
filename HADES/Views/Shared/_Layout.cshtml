@@ -32,7 +32,7 @@
                     <li class="nav-item">
                         @* TODO: Logo *@
                         <a class="navbar-brand" asp-action="MainView" asp-controller="Home" asp-area="">
-                            <img src=@tempdb.AppConfig.FirstOrDefault().CompanyLogoFile alt="*LOGO*" height="60" onerror="this.onerror = null; this.src = '../img/HADESICO.png';" />
+                            <img src="@tempdb.AppConfig.FirstOrDefault().CompanyLogoFile" alt="*LOGO*" height="60" onerror="this.onerror = null; this.src = '../img/HADESICO.png';" />
                         </a>
                     </li>
                 </ul>
