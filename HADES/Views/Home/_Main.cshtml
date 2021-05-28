@@ -1,5 +1,4 @@
 ﻿@model MainViewViewModel
-
 @* Left Side *@
 <div class="col-sm-4">
     <h3 class="mt-1 mb-4">@Localizer["DossierGroupe"]</h3>
@@ -29,4 +28,7 @@
     }
 </div>
 
-<script type="text/javascript">showTreeView(@Html.Raw(Model.ADRootTreeNodeJson), '@Model.SelectedNodeName');</script>
+@if (Model.ADRootTreeNodeJson != null)
+{
+    <script type="text/javascript">showTreeView(@Html.Raw(Model.ADRootTreeNodeJson), '@Model.SelectedNodeName');</script>
+}
