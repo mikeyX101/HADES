@@ -186,7 +186,7 @@ namespace HADES.Controllers
 						{
 							Directory.CreateDirectory("Temp");
 						}
-						
+
 						IEnumerable<string> logFileEnumerable = ReadEvents(logPath, out int totalRecords)
 							.FilterEvents(request.Search, out int filteredRecords);
 
