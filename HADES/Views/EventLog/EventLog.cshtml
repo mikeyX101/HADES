@@ -71,6 +71,11 @@
                         $("#errorMessage").text("");
                         csvButton.removeAttr("disabled");
                     }
+
+                    if (json.exceptionCount != 0) {
+                        let exceptionCount = json.exceptionCount;
+                        $("#errorMessage").text(`@Localizer["CorruptedEntries"]`.replace("$exceptionCount", exceptionCount));
+                    }
                     json.data = JSON.parse(json.data);
                     return json.data;
                 },
@@ -80,6 +85,7 @@
             stateSave: false,
             ordering: false,
             responsive: true,
+            autoWidth: false,
             headerCallback: (thead) => {
                 $(thead).addClass("dt-header");
             },
@@ -99,14 +105,14 @@
             },
             columns: [
                 {
-                    width: "20%",
-                    className: "",
+                    responsivePriority: 1,
+                    className: "all",
                     data: "t",
                     title: "@Localizer["Timestamp"]"
                 },
                 {
-                    width: "10%",
-                    className: "",
+                    responsivePriority: 2,
+                    className: "all",
                     data: "l",
                     title: "@Localizer["Level"]",
                     defaultContent: "Information",
@@ -134,27 +140,27 @@
                     }
                 },
                 {
-                    width: "10%",
-                    className: "",
+                    responsivePriority: 3,
+                    className: "all",
                     data: "User",
                     title: "@Localizer["User"]",
                     defaultContent: "unknown"
                 },
                 {
-                    width: "50%",
+                    responsivePriority: 4,
                     className: "",
                     data: "m",
                     title: "@Localizer["Message"]"
                 },
                 {
-                    width: "10%",
+                    responsivePriority: 5,
                     className: "",
                     data: "x",
                     title: "@Localizer["Exception"]",
                     defaultContent: "-",
                     render: (data, type, row) => {
                         if (data && type == "display") {
-                            return `<button class="btn btn-primary" onclick="showExceptionModal(this);" data-exception='${data.replaceAll("'", "\'")}'>@Localizer["ShowException"]</button>`
+                            return `<button class="btn btn-primary" onclick="showExceptionModal(this);" data-exception="${encodeURIComponent(data).replaceAll("'", "\\'").replaceAll('"', '\\"')}">@Localizer["ShowException"]</button>`
                         }
                         return data;
                     }
@@ -182,7 +188,7 @@
 
         cacheRefreshButton.click(() => {
             $("[data-toggle='tooltip']").tooltip("hide");
-            document.activeElement.blur()
+            document.activeElement.blur();
             $.ajax({
                 url: "@Url.Action("Refresh", "EventLog")",
                 type: "POST",
@@ -195,7 +201,7 @@
         csvButton.click(() => {
             $("[data-toggle='tooltip']").tooltip("hide");
             csvButton.attr("disabled", "disabled");
-            document.activeElement.blur()
+            document.activeElement.blur();
             let progress = $("#csvProgressDiv");
             $.ajax({
                 url: "@Url.Action("CSV", "EventLog")",
@@ -203,6 +209,12 @@
                 data: tableApi.ajax.params(),
                 success: (response) => {
                     response = JSON.parse(response);
+
+                    if (response.exceptionCount != 0) {
+                        let exceptionCount = response.exceptionCount;
+                        $("#errorMessage").text(`@Localizer["CorruptedEntries"]`.replace("$exceptionCount", exceptionCount));
+                    }
+
                     progress.addClass("hidden");
                     csvButton.removeAttr("disabled");
                     window.location.assign(`/File/File?id=${response.id}`);
@@ -223,7 +235,7 @@
     });
 
     function showExceptionModal(identifier) {
-        $("#exceptionModalContent").text($(identifier).data("exception"));
+        $("#exceptionModalContent").text(decodeURIComponent($(identifier).data("exception")).replaceAll("\\'", "'").replaceAll('\\"', '"'));
         $("#exceptionModal").modal("show");
     }
 </script>
@@ -266,7 +278,7 @@
 
 <div class="form-group row">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-        <table id="@tableId" class="table table-bordered cell-border hover" style="width: 100%;"></table>
+        <table id="@tableId" class="table table-bordered cell-border hover wrap" style="width: 100%;"></table>
     </div>
 </div>
 

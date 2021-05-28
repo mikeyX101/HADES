@@ -77,11 +77,24 @@ namespace HADES.Extensions
 		}
 
 		/// <summary>
-		/// This is a final operation.
+		/// This is a final operation and will read data from the data source.
 		/// </summary>
-		public static IEnumerable<LogEvent> ToLogEvents(this IEnumerable<string> events)
+		public static IEnumerable<LogEvent> ToLogEvents(this IEnumerable<string> events, out List<Exception> exceptions)
 		{
-			return events.Select(e => Serilog.Formatting.Compact.Reader.LogEventReader.ReadFromString(e));
+			List<Exception> exps = new();
+			IEnumerable<LogEvent> transformedEvents = events.Select(e => {
+				try
+				{
+					return Serilog.Formatting.Compact.Reader.LogEventReader.ReadFromString(e);
+				}
+				catch (Exception ex)
+				{
+					exps.Add(ex);
+					return null;
+				}
+			});
+			exceptions = exps;
+			return transformedEvents.Where(e => e != null);
 		}
 
 		public static IEnumerable<Models.EventLogCSV> ToEventLogCSVs(this IEnumerable<LogEvent> events)

@@ -130,4 +130,7 @@
   <data name="CsvError" xml:space="preserve">
     <value>Une erreur est survenue pendant la conversion vers le fichier CSV.</value>
   </data>
+  <data name="CorruptedEntries" xml:space="preserve">
+    <value>Une ou des entrées dans le journal sont corrompues. Elles ont été ignorées. ($exceptionCount total)</value>
+  </data>
 </root>

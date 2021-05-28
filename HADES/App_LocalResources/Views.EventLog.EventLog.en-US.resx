@@ -147,4 +147,10 @@
   <data name="Converting" xml:space="preserve">
     <value>Converting...</value>
   </data>
+  <data name="CsvError" xml:space="preserve">
+    <value>An error occured while converting to the CSV file.</value>
+  </data>
+  <data name="CorruptedEntries" xml:space="preserve">
+    <value>One or multiple entries in the log are corrupted. These have been ignored. ($exceptionCount in total)</value>
+  </data>
 </root>
