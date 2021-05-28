@@ -186,19 +186,26 @@ namespace HADES.Controllers
             {
                 return RedirectToAction("MainView", "Home");
             }
-
-            AppConfigService service = new();
-            string GroupGUID = new ADManager().getGroupGUIDByDn(DN);
-            if (GroupGUID != "")
+            try
             {
-                try
+                AppConfigService service = new();
+                string GroupGUID = new ADManager().getGroupGUIDByDn(DN);
+                if (GroupGUID != "")
                 {
-                    await service.AddAdminGroup(new AdminGroup() { GUID = GroupGUID, AppConfigId = appconfig });
-                }
-                catch (Exception) { }
+                    try
+                    {
+                        await service.AddAdminGroup(new AdminGroup() { GUID = GroupGUID, AppConfigId = appconfig });
+                    }
+                    catch (Exception) { }
 
+                    return RedirectToAction("AppConfig");
+                }
+            }
+            catch (Exception)
+            {
                 return RedirectToAction("AppConfig");
             }
+           
             return View();
         }
 
@@ -244,18 +251,27 @@ namespace HADES.Controllers
                 return RedirectToAction("MainView", "Home");
             }
 
-            AppConfigService service = new();
-            string GroupGUID = new ADManager().getGroupGUIDByDn(DN);
-            if (GroupGUID != "")
+            try
             {
-                try
-                {
-                    await service.AddSuperAdminGroup(new SuperAdminGroup() { GUID = GroupGUID, AppConfigId = appconfig });
-                }
-                catch (Exception) { }
+                AppConfigService service = new();
+                string GroupGUID = new ADManager().getGroupGUIDByDn(DN);
 
+                if (GroupGUID != "")
+                {
+                    try
+                    {
+                        await service.AddSuperAdminGroup(new SuperAdminGroup() { GUID = GroupGUID, AppConfigId = appconfig });
+                    }
+                    catch (Exception) { }
+
+                    return RedirectToAction("AppConfig");
+                }
+            }
+            catch (Exception)
+            {
                 return RedirectToAction("AppConfig");
             }
+
             return View();
         }
 

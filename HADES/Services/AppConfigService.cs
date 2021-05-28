@@ -44,6 +44,11 @@ namespace HADES.Services
             return db.AppConfig.FirstOrDefault();
         }
 
+        public int GetLogDeleteFrequency()
+		{
+            return db.AppConfig.Select(config => config.LogDeleteFrequency).FirstOrDefault();
+		}
+
         public async Task<ActiveDirectory> getADInfo()
         {
             var activeDirectory = await db.ActiveDirectory.FirstOrDefaultAsync();

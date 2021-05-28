@@ -264,4 +264,13 @@
   <data name="Doc_intro" xml:space="preserve">
     <value>HADES was developed as part of a college course. The application therefore does not offer support. It is a tool that allows the management of Active Directory (AD) groups. The principle is to make the management of these groups user-friendly so that people outside the IT technicians department can manage permissions. In addition, the platform contains an event manager (logs) and a configurable email notification system.</value>
   </data>
+  <data name="roleTitle" xml:space="preserve">
+    <value>Role</value>
+    </data>
+  <data name="NoLog" xml:space="preserve">
+    <value>No log file has been found for that day.</value>
+  </data>
+  <data name="doc_roleText" xml:space="preserve">
+    <value>There are three roles: Super-Administrator, Administrator and Owner. In HADES, roles allow us to manage the permissions of logged in users. There is no concept of owner in the DA, we are the ones who will implement it. The Super-Administrator has all the rights. The Administrator has all the rights except that he cannot access the application control panel. The owner has much less rights. He can only see, add and remove members of groups he owns.</value>
+  </data>
 </root>

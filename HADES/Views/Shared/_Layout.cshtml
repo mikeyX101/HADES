@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="~/lib/pureScriptSelect-master/style.css" />
 
     <script src="~/lib/jquery/jquery.min.js"></script>
-    @RenderSection("scriptPreBootStrap", false);
+    @RenderSection("scriptsPreBootStrap", false)
     <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
     @RenderSection("scripts", false)
 </head>
@@ -63,7 +63,7 @@
                             }
                             @if (u.GetRole().EventLogAccess)
                             {
-                                <a class="dropdown-item" asp-action="MainView" asp-controller="Home" asp-area="">
+                                <a class="dropdown-item" asp-action="EventLog" asp-controller="EventLog" asp-area="">
                                     <i class="fa fa-book fa-fw mr-2"></i>
                                     @Localizer["JournalEvenements"]
                                 </a>

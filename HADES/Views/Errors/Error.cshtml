@@ -5,12 +5,12 @@
     Layout = null;
 
     int messageLength = 6 + Model.StatusNumber.Length + 1 + Model.StatusName.Length + 2 + Model.StatusDescription.Length;
-    string speachBubbleTop = "";
-    string speachBubbleBottom = "";
+    string speechBubbleTop = "";
+    string speechBubbleBottom = "";
     for (int i = 0; i < messageLength; i++)
     {
-        speachBubbleTop += "_";
-        speachBubbleBottom += "-";
+        speechBubbleTop += "_";
+        speechBubbleBottom += "-";
     }
 }
 
@@ -24,9 +24,9 @@
 <body>
     <div>
         <pre>
-                                   ___          @speachBubbleTop
+                                   ___          @speechBubbleTop
                                ,-""   `.      < HONK, @Model.StatusNumber @Model.StatusName, @Model.StatusDescription >
-                             ,'  _   e )`-._ /  @speachBubbleBottom
+                             ,'  _   e )`-._ /  @speechBubbleBottom
                             /  ,' `-._<.===-'
                            /  /
                           /  ;
