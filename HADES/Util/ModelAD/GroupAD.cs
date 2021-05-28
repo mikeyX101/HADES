@@ -10,7 +10,7 @@ namespace HADES.Util.ModelAD
         private string description;
         private string email;
         private string notes;
-        private DateTime? expirationDate;
+        private DateTime expirationDate;
         private string samAccountName;
         private string objectGUID;
 
@@ -22,7 +22,7 @@ namespace HADES.Util.ModelAD
             this.Email = null;
             this.Notes = null;
             this.ObjectGUID = null;
-            this.expirationDate = null;
+            this.ExpirationDate = DateTime.Now;
         }
 
         public GroupAD(string samAccountName, List<UserAD> members, string description, string email, string notes, string objectGUID, DateTime expirationDate)
@@ -33,7 +33,7 @@ namespace HADES.Util.ModelAD
             this.Email = email;
             this.Notes = notes;
             this.ObjectGUID = objectGUID;
-            this.expirationDate = expirationDate;
+            this.ExpirationDate = expirationDate;
         }
 
         public List<UserAD> Members { get => members; set => members = value; }
@@ -42,7 +42,7 @@ namespace HADES.Util.ModelAD
         public string Notes { get => notes; set => notes = value; }
         public string SamAccountName { get => samAccountName; set => samAccountName = value; }
         public string ObjectGUID { get => objectGUID; set => objectGUID = value; }
-        public DateTime? ExpirationDate { get => expirationDate; set => expirationDate = value; }
+        public DateTime ExpirationDate { get => expirationDate; set => expirationDate = value; }
 
         public override string ToString()
         {

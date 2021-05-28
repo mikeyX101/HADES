@@ -59,7 +59,7 @@ namespace HADES.Util
         /*****************************************************
          GETATTRIBUTE in AD
          ******************************************************/
-        private DateTime? getDateExp(LdapEntry entry)
+        private DateTime getDateExp(LdapEntry entry)
         {
            
             try
@@ -72,12 +72,12 @@ namespace HADES.Util
             catch (KeyNotFoundException)
             {
                 // The key is not set 
-                return null;
+                return DateTime.Now;
             }
             catch (Exception e)
             {
                 Log.Warning(e, GenericErrorLogTemplate, "getAttributeValue()");
-                return null;
+                return DateTime.Now;
             }
         }
 
