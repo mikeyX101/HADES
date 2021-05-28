@@ -8,6 +8,33 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Logs\**" />
+    <Compile Remove="Temp\**" />
+    <Content Remove="Logs\**" />
+    <Content Remove="Temp\**" />
+    <EmbeddedResource Remove="Logs\**" />
+    <EmbeddedResource Remove="Temp\**" />
+    <None Remove="Logs\**" />
+    <None Remove="Temp\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\css\white\images\ui-bg_glass_20_555555_1x400.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\white\images\ui-bg_glass_40_0078a3_1x400.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\white\images\ui-bg_glass_40_ffc73d_1x400.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\white\images\ui-bg_gloss-wave_25_333333_500x100.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\white\images\ui-bg_highlight-soft_80_eeeeee_1x100.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\white\images\ui-bg_inset-soft_25_000000_1x100.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\white\images\ui-bg_inset-soft_30_f58400_1x100.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\white\images\ui-icons_222222_256x240.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\white\images\ui-icons_4b8e0b_256x240.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\white\images\ui-icons_a83300_256x240.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\white\images\ui-icons_cccccc_256x240.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\white\images\ui-icons_ffffff_256x240.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CsvHelper" Version="27.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.5" />
@@ -22,6 +49,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\" />
+    <Folder Include="wwwroot\lib\datatables\i18n\" />
     <Folder Include="wwwroot\lib\jquery\" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.4" />
@@ -46,6 +74,21 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="wwwroot\css\white\jquery-ui.css">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="wwwroot\css\white\jquery-ui.min.css">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="wwwroot\css\white\theme.css">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
