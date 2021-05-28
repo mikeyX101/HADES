@@ -66,10 +66,7 @@
                     if (!json.error) {
                         $("#errorMessage").text("");
                     }
-
                     json.data = JSON.parse(json.data);
-
-                    console.log(json);
                     return json.data;
                 },
             },

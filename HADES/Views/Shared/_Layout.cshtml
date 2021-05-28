@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="~/lib/fontawesome/css/all.min.css">
     <link rel="stylesheet" href="~/css/@u.GetUserConfig().ThemeFile/@themeFileCss">
     <link rel="stylesheet" href="~/lib/bootstrap-icons/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="~/lib/pureScriptSelect-master/style.css" />
 
     <script src="~/lib/jquery/jquery.min.js"></script>
     @RenderSection("scriptsPreBootStrap", false)
@@ -31,7 +32,7 @@
                     <li class="nav-item">
                         @* TODO: Logo *@
                         <a class="navbar-brand" asp-action="MainView" asp-controller="Home" asp-area="">
-                            <img src=@tempdb.AppConfig.FirstOrDefault().CompanyLogoFile alt="*LOGO*" height="60" onerror="this.onerror = null; this.src = '../img/HADESICO.png';" />
+                            <img src="@tempdb.AppConfig.FirstOrDefault().CompanyLogoFile" alt="*LOGO*" height="60" onerror="this.onerror = null; this.src = '../img/HADESICO.png';" />
                         </a>
                     </li>
                 </ul>
