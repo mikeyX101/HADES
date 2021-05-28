@@ -54,7 +54,6 @@ namespace HADES.Util
 
 		public static void CleanUpExpired()
 		{
-			Serilog.Log.Information("Running temporary file cleanup");
 			foreach (Guid fileId in Files.Keys)
 			{
 				AvailableFile file = Files[fileId];
