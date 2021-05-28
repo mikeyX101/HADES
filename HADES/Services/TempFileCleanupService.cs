@@ -14,6 +14,11 @@ namespace HADES.Services
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
+            if (!Directory.Exists("Temp"))
+            {
+                Directory.CreateDirectory("Temp");
+            }
+
             // Clean Temp folder on start up
             string[] filePaths = Directory.GetFiles("Temp/", "*", SearchOption.AllDirectories);
             foreach(string path in filePaths)
