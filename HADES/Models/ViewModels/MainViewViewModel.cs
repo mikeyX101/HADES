@@ -2,6 +2,7 @@
 using HADES.Util.ModelAD;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using HADES.Attributes;
 
 namespace HADES.Models
 {

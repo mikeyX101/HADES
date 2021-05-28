@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace HADES.Models
+namespace HADES.Attributes
 {
     public class OuNameAttribute : ValidationAttribute
     {
