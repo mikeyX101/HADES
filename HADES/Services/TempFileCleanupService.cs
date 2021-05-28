@@ -50,7 +50,17 @@ namespace HADES.Services
             }
 
             _timer = new Timer(
-                _ => Util.FileManager.CleanUpExpired(),
+                _ => {
+                    try
+					{
+                        Serilog.Log.Information("Running {Service}", "Temporary File Cleanup Service");
+                        Util.FileManager.CleanUpExpired();
+                    }
+                    catch (Exception e)
+					{
+                        Serilog.Log.Warning(e, "An unexepected error occured while doing an operation in the {Service}", "Temporary File Cleanup Service");
+                    }
+                },
                 null,
                 TimeSpan.Zero,
                 TimeSpan.FromMinutes(Settings.AppSettings.TempCleanupIntervalMins)

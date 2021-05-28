@@ -41,7 +41,7 @@ namespace HADES.Services
             
             try
             {
-                Log.Information("The system verify the expiration date of the group in the active directory {Function}", "verifyExpirationForAllGroup()");
+                Log.Information("Running {Service}", "Expiration Date Service");
 
                 // Get all the groups in the AD Root
                 ADManager ad = new ADManager();
@@ -70,8 +70,7 @@ namespace HADES.Services
             }
             catch (Exception e)
             {
-                Log.Warning(e, "An unexepected error occured while doing an operation with the Expiration Date Service in function {Function}", "verifyExpirationForAllGroup()");
-
+                Log.Warning(e, "An unexepected error occured while doing an operation in the {Service}", "Expiration Date Service");
             }
          
         }
