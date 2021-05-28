@@ -1,18 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Serilog.Formatting;
-using Serilog.Formatting.Compact;
-using Serilog.Formatting.Compact.Reader;
-using Serilog.Events;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Localization;
 using HADES.Extensions;
 using Microsoft.AspNetCore.Http;
 using CsvHelper;
+using HADES.Util;
 
 namespace HADES.Controllers
 {
@@ -23,10 +19,10 @@ namespace HADES.Controllers
 
 		public IActionResult EventLog()
 		{
-			if (!Util.ConnexionUtil.CurrentUser(User)?.GetRole().EventLogAccess ?? true)
-			{
-				return RedirectToAction("MainView", "Home");
-			}
+            if (!ConnexionUtil.CurrentUser(this.User).GetRole().EventLogAccess) // ACCESS CONTROL
+            {
+                return RedirectToAction("MainView", "Home");
+            }
 
 			string jQueryUILanguage = System.Threading.Thread.CurrentThread.CurrentUICulture.Name.ToLower() switch
 			{
@@ -54,7 +50,7 @@ namespace HADES.Controllers
 		[Consumes("application/x-www-form-urlencoded; charset=UTF-8")]
 		public IActionResult Data([FromForm] Models.EventLogDataRequest request)
 		{
-			if (!Util.ConnexionUtil.CurrentUser(User)?.GetRole().EventLogAccess ?? true)
+			if (!ConnexionUtil.CurrentUser(this.User).GetRole().EventLogAccess) // ACCESS CONTROL
 			{
 				return RedirectToAction("MainView", "Home");
 			}
@@ -147,7 +143,7 @@ namespace HADES.Controllers
 		[HttpPost]
 		public IActionResult Refresh()
 		{
-			if (!Util.ConnexionUtil.CurrentUser(User)?.GetRole().EventLogAccess ?? true)
+			if (!ConnexionUtil.CurrentUser(this.User).GetRole().EventLogAccess) // ACCESS CONTROL
 			{
 				return RedirectToAction("MainView", "Home");
 			}
@@ -159,8 +155,7 @@ namespace HADES.Controllers
 		[HttpPost]
 		public IActionResult CSV([FromForm] Models.EventLogDataRequest request)
 		{
-			Models.IUser user = Util.ConnexionUtil.CurrentUser(User);
-			if (!user?.GetRole().EventLogAccess ?? true)
+			if (!ConnexionUtil.CurrentUser(this.User).GetRole().EventLogAccess) // ACCESS CONTROL
 			{
 				return RedirectToAction("MainView", "Home");
 			}
