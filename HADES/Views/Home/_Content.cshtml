@@ -10,6 +10,8 @@
     </button>
 </h3>
 
+<link rel="stylesheet" href="~/css/GroupModalGeneral.css" />
+
 <!-- Modal Create Group -->
 @await Html.PartialAsync("_CreateGroupModal", Model)
 
@@ -157,7 +159,7 @@
                                                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
                                                     <div class="form-group row">
-                                                        <label asp-for="@Model.GroupAD.SamAccountName" class="col-sm-2 col-form-label">Group Name</label>
+                                                        <label asp-for="@Model.GroupAD.SamAccountName" class="col-sm-2 col-form-label">Name</label>
                                                         <div class="col-sm-10">
                                                             <input asp-for="@Model.GroupAD.SamAccountName" class="form-control">
                                                         </div>
@@ -182,7 +184,7 @@
 
                                                 </div>
                                                 <!-- members form -->
-                                                <div class="tab-pane fade" id="@navMembersTab" role="tabpanel" aria-labelledby="nav-members-tab">
+                                                <div class="tab-pane fade tab-absolute" id="@navMembersTab" role="tabpanel" aria-labelledby="nav-members-tab">
                                                     <div>
                                                         <div class="directorist-select directorist-select-multi" id="multiSelect" data-isSearch="true" data-multiSelect='@Model.UsersAD'>
                                                             <input type="hidden" asp-for="@Model.SelectedMembers">
@@ -191,7 +193,7 @@
                                                     </div>
                                                 </div>
                                                 <!-- Owners form -->
-                                                <div class="tab-pane fade" id="@navOwnersTab" role="tabpanel" aria-labelledby="nav-owners-tab">
+                                                <div class="tab-pane fade tab-absolute" id="@navOwnersTab" role="tabpanel" aria-labelledby="nav-owners-tab">
 
                                                     ...
                                                 </div>

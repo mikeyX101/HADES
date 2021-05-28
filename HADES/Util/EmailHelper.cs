@@ -33,7 +33,6 @@ namespace HADES.Util
         public static void SendEmail(NotificationType type,  GroupAD group, string usersAddedorDeleted, int nbExpirationDate)
         {
             string groupGUID = group.ObjectGUID;
-            Console.WriteLine("yo " + groupGUID);
 
             ApplicationDbContext db = new ApplicationDbContext();
             List<Email> emails = null;
