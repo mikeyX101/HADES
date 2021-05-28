@@ -22,10 +22,10 @@ namespace HADES.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> UserConfig()
+        public IActionResult UserConfig()
         {
             UserConfigService service = new();
-            var viewModel = await service.UserConfig(ConnexionUtil.CurrentUser(this.User).GetUserConfig());
+            var viewModel = service.UserConfig(ConnexionUtil.CurrentUser(this.User).GetUserConfig());
             viewModel.Languages = new List<SelectListItem>() 
             {
                 new SelectListItem {Text = HADES.Strings.French, Value = "fr-CA"},
