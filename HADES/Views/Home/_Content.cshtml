@@ -38,20 +38,23 @@
             {
                 <tr>
                     <td>
-                        <a data-ajax="true" data-ajax-method="GET" data-ajax-mode="replace" data-ajax-update="#main"
-                           href='@Url.Action("UpdateContent","Home", new { selectedPathForContent = Model.SelectedPath + (selectedPathLength == 2 ? "/" + Model.ADRoot[i].SamAccountName : "")})'>
-                            @if (selectedPathLength == 2)
-                            {
+                        @if (selectedPathLength == 2)
+                        {
+                            <a data-ajax="true" data-ajax-method="GET" data-ajax-mode="replace" data-ajax-update="#main"
+                               href='@Url.Action("UpdateContent","Home", new { selectedPathForContent = Model.SelectedPath + (selectedPathLength == 2 ? "/" + Model.ADRoot[i].SamAccountName : "")})'>
                                 <i class="icon fa fa-folder mr-2"></i>
-                                dataTarget = "#a" + i.ToString();
-                            }
-                            else
-                            {
+                                @Model.ADRoot[i].SamAccountName
+                            </a>
+                            dataTarget = "#a" + i.ToString();
+                        }
+                        else
+                        {
+                            <a href='#' style="pointer-events: none">
                                 <i class="icon fa fa-users mr-2"></i>
-                                dataTarget = "#b" + i.ToString();
-                            }
-                            @Model.ADRoot[i].SamAccountName
-                        </a>
+                                @Model.ADRoot[i].SamAccountName
+                            </a>
+                            dataTarget = "#b" + i.ToString();
+                        }
                     </td>
                     <td style="text-align: right">
 
