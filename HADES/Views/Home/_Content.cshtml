@@ -25,10 +25,14 @@
 
         @for (int i = 0; i < Model.ADRoot.Count; i++)
         {
-
-            var dataTarget = "#a" + i.ToString();
-            var id = "a" + i.ToString();
             var selectedPathLength = Model.SelectedPath.Split('/').Length;
+
+            var dataTarget = "";
+            var id = "a" + i.ToString();
+            var groupId = "b" + i.ToString();
+
+
+
 
             if (Model.ADRoot[i].Path == Model.SelectedPath)
             {
@@ -39,10 +43,12 @@
                             @if (selectedPathLength == 2)
                             {
                                 <i class="icon fa fa-folder mr-2"></i>
+                                dataTarget = "#a" + i.ToString();
                             }
                             else
                             {
                                 <i class="icon fa fa-users mr-2"></i>
+                                dataTarget = "#b" + i.ToString();
                             }
                             @Model.ADRoot[i].SamAccountName
                         </a>
@@ -50,20 +56,13 @@
                     <td style="text-align: right">
 
                         <!-- Button trigger modal rename OU -->
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="@dataTarget" data-backdrop="false">
-                            <span data-toggle="tooltip" data-html="true" data-placement="right" title="@Model.EditLinkLabel">
-                                <i class="fa fa-edit fa-fw"></i>
-                            </span>
-                        </button>
-
                         <!-- Modal Rename OU -->
+
                         <div class="modal fade" id="@id" role="dialog" aria-labelledby="@Model.ADRoot[i].SamAccountName" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content" role="document">
                                     <div class="modal-header text-center">
-                                        <h4 class="modal-title w-100 font-weight-bold" id="@Model.ADRoot[i].SamAccountName">
-                                            <i class="fa fa-edit fa-fw mr-2"></i>@Model.EditLinkLabel
-                                        </h4>
+                                        <h4 class="modal-title w-100 font-weight-bold" id="@Model.ADRoot[i].SamAccountName">@Model.EditLinkLabel</h4>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
@@ -81,6 +80,121 @@
                                                         </div>
                                                     </div>
                                                     <button type="submit" class="btn btn-primary col-2">@HADES.Strings.OK</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @{
+                            var navGroupInfo = "#nav-groupInfo" + i;
+                            var navGroupInfoTab = "nav-groupInfo" + i;
+
+                            var navMembers = "#nav-members" + i;
+                            var navMembersTab = "nav-members" + i;
+
+                            var navOwners = "#nav-owners" + i;
+                            var navOwnersTab = "nav-owners" + i;
+
+                        }
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="@dataTarget" data-backdrop="false">
+                            <span data-toggle="tooltip" data-html="true" data-placement="right" title="@Model.EditLinkLabel">
+                                <i class="fa fa-edit fa-fw"></i>
+                            </span>
+                        </button>
+                        <div class="modal fade" id="@groupId" tabindex="-1" role="dialog" aria-labelledby="GroupCreateLbl"
+                             aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="GroupCreateLbl">Edit group</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <nav>
+                                            <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                                                <a class="nav-item nav-link active" id="nav-groupName-tab" data-toggle="tab" href="@navGroupInfo"
+                                                   role="tab" aria-controls="nav-home" aria-selected="true">General</a>
+                                                <a class="nav-item nav-link" id="nav-members-tab" data-toggle="tab" href="@navMembers"
+                                                   role="tab" aria-controls="nav-members" aria-selected="false">Members</a>
+                                                <a class="nav-item nav-link" id="nav-owners-tab" data-toggle="tab" href="@navOwners"
+                                                   role="tab" aria-controls="nav-owners" aria-selected="false">Owners</a>
+                                            </div>
+                                        </nav>
+                                        <div class="tab-content" id="nav-tabContent">
+                                            <form asp-action="EditGroupModal">
+                                                <!-- General info form -->
+                                                @{
+                                                    Model.GroupAD = Model.ADManager.getGroupInformation(Model.ADRoot[i].Dn);
+                                                    var users = Model.GroupAD.Members.Select(x => x.SamAccountName);
+
+                                                    Model.OuGroup = Model.GroupAD.SamAccountName;
+
+
+                                                    if (users.Count() > 0)
+                                                    {
+                                                        Model.SelectedMembers = Newtonsoft.Json.JsonConvert.SerializeObject(users);
+                                                        Model.BeforeEditMembers = Newtonsoft.Json.JsonConvert.SerializeObject(users);
+                                                    }
+                                                    else
+                                                    {
+                                                        Model.SelectedMembers = "";
+                                                        Model.BeforeEditMembers = "";
+                                                    }
+                                                }
+                                                <div class="tab-pane fade show active" id="@navGroupInfoTab" role="tabpanel" aria-labelledby="nav-groupName-tab">
+                                                    <input type="hidden" name="SelectedPath" value="@Model.SelectedPath" />
+                                                    <input type="hidden" name="SelectedNodeName" value="@Model.SelectedNodeName" />
+                                                    <input type="hidden" name="SelectedContentName" value="@Model.SelectedContentName" />
+                                                    <input type="hidden" name="Group" value="@Model.GroupAD" />
+                                                    <input type="hidden" name="OuGroup" value="@Model.OuGroup" />
+                                                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                                                    <div class="form-group row">
+                                                        <label asp-for="@Model.GroupAD.SamAccountName" class="col-sm-2 col-form-label">Group Name</label>
+                                                        <div class="col-sm-10">
+                                                            <input asp-for="@Model.GroupAD.SamAccountName" class="form-control">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group row">
+                                                        <label asp-for="@Model.GroupAD.Description" class="col-sm-2 col-form-label">Description</label>
+                                                        <div class="col-sm-10">
+                                                            <input asp-for="@Model.GroupAD.Description" class="form-control" placeholder="">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label asp-for="@Model.GroupAD.Email" class="col-sm-2 col-form-label">Email</label>
+                                                        <div class="col-sm-10">
+                                                            <input asp-for="@Model.GroupAD.Email" type="Email" class="form-control" id="Email" placeholder="Email">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label asp-for="@Model.GroupAD.Notes">Notes</label>
+                                                        <textarea asp-for="@Model.GroupAD.Notes" class="form-control" id="Notes" rows="3"></textarea>
+                                                    </div>
+
+                                                </div>
+                                                <!-- members form -->
+                                                <div class="tab-pane fade" id="@navMembersTab" role="tabpanel" aria-labelledby="nav-members-tab">
+                                                    <div>
+                                                        <div class="directorist-select directorist-select-multi" id="multiSelect" data-isSearch="true" data-multiSelect='@Model.UsersAD'>
+                                                            <input type="hidden" asp-for="@Model.SelectedMembers">
+                                                            <input type="hidden" asp-for="@Model.BeforeEditMembers" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Owners form -->
+                                                <div class="tab-pane fade" id="@navOwnersTab" role="tabpanel" aria-labelledby="nav-owners-tab">
+
+                                                    ...
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="submit" class="btn btn-primary" id="btnSave">Ok</button>
+                                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
                                                 </div>
                                             </form>
                                         </div>
