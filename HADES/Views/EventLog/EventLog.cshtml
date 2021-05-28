@@ -92,7 +92,7 @@
                         tableApi.search(this.value).draw();
                     }
                 });
-                $("#@(tableId)_filter").append("<button id='searchButton' class='btn btn-primary' style='margin-bottom: 1px;'><i class='fas fa-arrow-right'></i></button>");
+                $("#@(tableId)_filter").append("<button id='searchButton' class='btn btn-primary' style='margin-bottom: 3px; height: 35px;'><i class='fas fa-arrow-right'></i></button>");
                 $("#searchButton").click(() => {
                     tableApi.search($('#@(tableId)_filter input').val()).draw();
                 });
