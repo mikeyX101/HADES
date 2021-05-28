@@ -29,6 +29,10 @@
     .hidden {
         display: none;
     }
+
+    .table td, .table th {
+        padding: .75rem;
+    }
 </style>
 
 <script type="text/javascript">
@@ -101,6 +105,7 @@
                     title: "@Localizer["Timestamp"]"
                 },
                 {
+                    width: "10%",
                     className: "",
                     data: "l",
                     title: "@Localizer["Level"]",
@@ -129,12 +134,14 @@
                     }
                 },
                 {
+                    width: "10%",
                     className: "",
                     data: "User",
                     title: "@Localizer["User"]",
                     defaultContent: "unknown"
                 },
                 {
+                    width: "50%",
                     className: "",
                     data: "m",
                     title: "@Localizer["Message"]"
