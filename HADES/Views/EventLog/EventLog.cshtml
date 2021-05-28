@@ -60,11 +60,12 @@
                 type: "POST",
                 dataType: "json",
                 data: (d) => {
-                    d.date = $("#datepicker").datepicker("getDate").toLocaleDateString();
+                    d.date = $("#datepicker").datepicker("getDate").toISOString();
                 },
                 dataSrc: (json) => {
                     if (!json.error) {
                         $("#errorMessage").text("");
+                        csvButton.removeAttr("disabled");
                     }
                     json.data = JSON.parse(json.data);
                     return json.data;
@@ -155,6 +156,7 @@
         }).on("error.dt", (event, settings, techNote, message) => {
             let serverMessage = message.replaceAll("DataTables warning: table id=@tableId - ", "");
             $("#errorMessage").text(serverMessage);
+            csvButton.attr("disabled", "disabled");
         });
 
         function onDateChange(date) {

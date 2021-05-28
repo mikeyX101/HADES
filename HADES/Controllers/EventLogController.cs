@@ -8,7 +8,6 @@ using Microsoft.Extensions.Localization;
 using HADES.Extensions;
 using Microsoft.AspNetCore.Http;
 using CsvHelper;
-using HADES.Util;
 
 namespace HADES.Controllers
 {
@@ -19,7 +18,7 @@ namespace HADES.Controllers
 
         public IActionResult EventLog()
         {
-            if (!ConnexionUtil.CurrentUser(this.User).GetRole().EventLogAccess) // ACCESS CONTROL
+            if (!Util.ConnexionUtil.CurrentUser(User).GetRole().EventLogAccess) // ACCESS CONTROL
             {
                 return RedirectToAction("MainView", "Home");
             }
@@ -50,19 +49,19 @@ namespace HADES.Controllers
         [Consumes("application/x-www-form-urlencoded; charset=UTF-8")]
         public IActionResult Data([FromForm] Models.EventLogDataRequest request)
         {
-            if (!ConnexionUtil.CurrentUser(this.User).GetRole().EventLogAccess) // ACCESS CONTROL
+            if (!Util.ConnexionUtil.CurrentUser(User).GetRole().EventLogAccess) // ACCESS CONTROL
             {
                 return RedirectToAction("MainView", "Home");
             }
 
             Models.DataTables.DataTablesProcessingResponse response = new(request.DrawCall);
-            if (request.RecordsCount != -1 && request.Date > DateTime.MinValue) // Valid data
+            if (request.RecordsCount != -1 && DateTime.TryParse(request.Date, out DateTime requestDate) && requestDate > DateTime.MinValue) // Valid data
             {
-                string logPath = $"Logs/log{request.Date:yyyyMMdd}.json";
+                string logPath = $"Logs/log{requestDate:yyyyMMdd}.json";
                 if (System.IO.File.Exists(logPath))
                 {
                     // Check with local date, Serilog uses local time to roll logs. :|
-                    bool isTodaysLog = DateTime.Now.Date == request.Date.Date;
+                    bool isTodaysLog = DateTime.Now.Date == requestDate.Date;
                     Exception ex = null;
                     try
                     {
@@ -71,7 +70,7 @@ namespace HADES.Controllers
                             Serilog.Log.CloseAndFlush();
                         }
 
-                        if (EventLogCountCache.CacheDate != request.Date.Date)
+                        if (EventLogCountCache.CacheDate != requestDate.Date)
                         {
                             EventLogCountCache.Reset();
                         }
@@ -107,7 +106,7 @@ namespace HADES.Controllers
                         response.RecordsTotal = totalRecords;
                         response.RecordsFiltered = filteredRecords;
 
-                        EventLogCountCache.CacheData(request.Date.Date, request.Search, filteredRecords, totalRecords);
+                        EventLogCountCache.CacheData(requestDate.Date, request.Search, filteredRecords, totalRecords);
                     }
                     catch (Exception e)
                     {
@@ -143,7 +142,7 @@ namespace HADES.Controllers
         [HttpPost]
         public IActionResult Refresh()
         {
-            if (!ConnexionUtil.CurrentUser(this.User).GetRole().EventLogAccess) // ACCESS CONTROL
+            if (!Util.ConnexionUtil.CurrentUser(User).GetRole().EventLogAccess) // ACCESS CONTROL
             {
                 return RedirectToAction("MainView", "Home");
             }
@@ -155,22 +154,22 @@ namespace HADES.Controllers
         [HttpPost]
         public IActionResult CSV([FromForm] Models.EventLogDataRequest request)
         {
-            var user = ConnexionUtil.CurrentUser(this.User);
+            Models.IUser user = Util.ConnexionUtil.CurrentUser(User);
             if (user.GetRole().EventLogAccess) // ACCESS CONTROL
             {
                 return RedirectToAction("MainView", "Home");
             }
 
             IActionResult result = null;
-            if (request != null && request.RecordsCount != -1 && request.Date > DateTime.MinValue) // Valid data
+            if (request != null && request.RecordsCount != -1 && DateTime.TryParse(request.Date, out DateTime requestDate) && requestDate > DateTime.MinValue) // Valid data
             {
-                string logPath = $"Logs/log{request.Date:yyyyMMdd}.json";
+                string logPath = $"Logs/log{requestDate:yyyyMMdd}.json";
                 if (System.IO.File.Exists(logPath))
                 {
-                    Serilog.Log.Information("Data from log{Date}.json is being exported to a CSV file", request.Date.ToString("yyyyMMdd"));
+                    Serilog.Log.Information("Data from log{Date}.json is being exported to a CSV file", requestDate.ToString("yyyyMMdd"));
 
                     // Check with local date, Serilog uses local time to roll logs. :|
-                    bool isTodaysLog = DateTime.Now.Date == request.Date.Date;
+                    bool isTodaysLog = DateTime.Now.Date == requestDate.Date;
                     Exception ex = null;
                     try
                     {
@@ -211,7 +210,7 @@ namespace HADES.Controllers
                             ts.Milliseconds / 10);
                         Console.WriteLine("CSV Creation took " + elapsedTime);
 #endif
-                        Guid fileId = Util.FileManager.Add(new Models.AvailableFile(csvPath, $"Log{request.Date:yyyy-MM-dd}.csv", "text/csv", user.GetId()));
+                        Guid fileId = Util.FileManager.Add(new Models.AvailableFile(csvPath, $"Log{requestDate:yyyy-MM-dd}.csv", "text/csv", user.GetId()));
                         result = Json($"{{\"id\":\"{Uri.EscapeDataString(Convert.ToBase64String(fileId.ToByteArray()))}\"}}");
                     }
                     catch (Exception e)

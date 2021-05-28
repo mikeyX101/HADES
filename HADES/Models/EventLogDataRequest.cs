@@ -15,6 +15,6 @@ namespace HADES.Models
 		/// Log Date.
 		/// </summary>
 		[FromForm(Name = "date")]
-		public DateTime Date { get; set; }
+		public string Date { get; set; }
 	}
 }
