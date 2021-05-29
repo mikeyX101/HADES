@@ -18,8 +18,9 @@
     background: linear-gradient(white,red,darkred,red,white);
 }
 
-a{
+a {
     color: white;
+    text-shadow: 2px 2px  5px black;
 }
 
 .bg-danger {
