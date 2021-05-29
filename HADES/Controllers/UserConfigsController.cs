@@ -31,7 +31,7 @@ namespace HADES.Controllers
                 new SelectListItem {Text = HADES.Strings.Spanish, Value = "es-US"},
                 new SelectListItem {Text = HADES.Strings.Portuguese, Value = "pt-BR"}
             };
-            viewModel.Themes = new List<SelectListItem>()
+            viewModel.Themes = new List<SelectListItem>() //TODO Translate text with readable and not "technical" names
             {
                 new SelectListItem {Text = "site", Value = "site"},
                 new SelectListItem {Text = "deeppink", Value = "deeppink"},
