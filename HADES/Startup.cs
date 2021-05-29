@@ -223,7 +223,6 @@ namespace HADES
 				{
                     string queryStringLanguage = context.Request.Query["l"].ToString();
                     locale =
-                        !string.IsNullOrWhiteSpace(queryStringLanguage) ? queryStringLanguage : null ??     //TODO TEMP, CHECK l IN QUERY STRING. TO BE REMOVED, THIS IS AN UNFILTERED USER INPUT ENTRY POINT
                         connectedUser?.GetUserConfig().Language ??                                          // Get from connected user.
                         db.AppConfig.FirstOrDefault()?.DefaultLanguage ??                                   // Get from app config.
                         Settings.AppSettings.DefaultCulture;                                                // Get default in appsettings.json (Always defined)
