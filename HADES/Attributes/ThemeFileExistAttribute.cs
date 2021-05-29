@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace HADES.Models
+namespace HADES.Attributes
 {
     public class ThemeFileExistAttribute : ValidationAttribute
     {
