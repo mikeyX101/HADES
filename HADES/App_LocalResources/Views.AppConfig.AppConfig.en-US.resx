@@ -220,7 +220,7 @@
     <value>Indicates the Active Directory field that user will use in order to authenticate&lt;br&gt;&lt;i&gt;samaccountname&lt;i&gt;</value>
   </data>
   <data name="DefaultUserToolTip" xml:space="preserve">
-    <value>Credentials for Hades Default User. Leave password field empty if you don't want to change password</value>
+    <value>Credentials for Hades Default User. Leave password field empty if you don't want to change password&lt;br&gt;Password must be at least 6 characters long and have one number, symbol as well as Uppercase and Lowercase letters</value>
   </data>
   <data name="CompanyNameToolTip" xml:space="preserve">
     <value>Your organization name that will display in the navigation bar on top</value>
