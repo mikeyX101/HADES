@@ -54,30 +54,25 @@
                             </div>
 
                             <script type="text/javascript">
+                             
                                 var today = new Date();
                                 var nextYear = new Date(today.getFullYear() + 1, today.getMonth(), today.getDate());
-                                var dateExpiration = today;
-                                //TODO plud Data
 
-                                $("#datepicker")
-                                    .val(dateExpiration.toISOString().substring(0, 10))
+                                $("#dateExp")
+                                    .val(today.toISOString().substring(0, 10))
                                     .datepicker({
                                         maxDate: nextYear,
                                         minDate: today,
                                         defaultDate: today,
                                         dateFormat: "yy-mm-dd",
-                                        onSelect: onDateChange
                                     });
 
-                                function onDateChange(date) {
-                                    //TODO
-                                }
                             </script>
 
                             <div class="form-group row">
                                 <label asp-for="GroupAD.ExpirationDate" class="col-sm-2 col-form-label">Expiration Date</label>
                                 <div class="col-sm-10">
-                                    <input id="datepicker" class=" form-control" type="text" value="" readonly />
+                                    <input asp-for="GroupAD.ExpirationDate" id="dateExp" class="form-control" type="text" value="" readonly />
                                 </div>
                             </div>
 

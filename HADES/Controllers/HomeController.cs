@@ -196,6 +196,8 @@ namespace HADES.Controllers
             string selectedNodeName = split.Length == 2 ? split[1] : split[2];
             GroupAD group = viewModel.GroupAD;
             List<UserAD> members = GetSelectedUsersSamAccount(viewModel);
+          
+           
 
             ModelState.Remove("NewName");
 
@@ -203,8 +205,8 @@ namespace HADES.Controllers
             {
                 //datepicker sam
                 //ajouter owner
-                DateTime dateExp = DateTime.Now;
-                ad.createGroup(selectedNodeName, group, dateExp, members);
+               
+                ad.createGroup(selectedNodeName, group, members);
 
                 return RedirectToAction("MainView", "Home");
             }
@@ -231,8 +233,8 @@ namespace HADES.Controllers
             {
                 //datepicker sam
                 //edit owner
-                DateTime dateExp = DateTime.Now;
-                ad.modifyGroup(DN, group, viewModel.SelectedNodeName, dateExp, updatedGroupMembers);
+                DateTime dateExp = viewModel.GroupAD.ExpirationDate;
+                ad.modifyGroup(DN, group, viewModel.SelectedNodeName,  updatedGroupMembers);
 
                 return RedirectToAction("MainView");
             }

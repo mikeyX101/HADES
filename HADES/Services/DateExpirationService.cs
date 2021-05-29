@@ -17,7 +17,7 @@ namespace HADES.Services
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            // timer repeats call to Send email notification
+            //timer repeats call to Send email notification
  
                 _timer = new Timer(
               (object state) => verifyExpirationForAllGroup(),
@@ -50,22 +50,19 @@ namespace HADES.Services
                 foreach (var group in groups)
                 {
                     //If the group is expire an email is send every 24h
-                    if (group.ExpirationDate != null && group.ExpirationDate <= DateTime.Now)
+                    if (group.ExpirationDate <= DateTime.Now)
                     {
-                        EmailHelper.SendEmail(NotificationType.ExpirationDate, group, "", -1);
+                        EmailHelper.SendEmail(NotificationType.ExpirationDate, group);
                     }
 
                     //Send one email if the group expire will expire in the next 15 days
-                    if (group.ExpirationDate != null)
-                    {
+                   
                         DateTime date = DateTime.Now.AddDays(15);
-                        DateTime dateExp = (DateTime)group.ExpirationDate;
-                        if (dateExp.Date.CompareTo(date.Date) == 0)
+                        if (group.ExpirationDate.Date.CompareTo(date.Date) == 0)
                         {
-                            EmailHelper.SendEmail(NotificationType.ExpirationDate, group, "", 15);
+                            EmailHelper.SendEmail(NotificationType.ExpirationDate, group, nbExpirationDate: 15);
                         }
-                    }
-
+                   
                 }
             }
             catch (Exception e)
