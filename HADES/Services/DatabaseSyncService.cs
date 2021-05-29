@@ -62,12 +62,12 @@ namespace HADES.Services
 
         private static void UpdateDatabase(object? state, bool forced = false)
         {
-            Log.Information("Running {Service}", "Database Sync Service");
             ApplicationDbContext db = new();
             if (db.Database.GetAppliedMigrations().Any())
 			{
                 if ((UpdateMe && !processing) || forced) // Only update if asked to
                 {
+                    Log.Information("Running {Service}", "Database Sync Service");
                     processing = true;
                     if (ad == null) ad = new ADManager(); // Initialize ad on first use
 

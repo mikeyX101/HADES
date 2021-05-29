@@ -19,7 +19,7 @@ namespace HADES
             // Logger used for ASP.NET Core initialization, is replaced when building host
             Log.Logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(config)
-#if Release
+#if RELEASE
                 .WriteTo.Console(
                     outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level}] [{User}] {Message:lj}{NewLine}{Exception}"
                 )
