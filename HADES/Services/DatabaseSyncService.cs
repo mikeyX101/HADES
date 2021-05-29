@@ -81,6 +81,7 @@ namespace HADES.Services
                 {
                     Log.Warning(e, "An unexepected error occured while doing an operation in the {Service}", "Database Sync Service");
                     processing = false;
+                    UpdateMe = false;
                     return;
                 }
 
