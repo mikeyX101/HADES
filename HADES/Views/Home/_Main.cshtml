@@ -5,11 +5,10 @@
     <div id="leftnav">
         @if (Model.ADConnectionError != null)
         {
-            <h6 class="text-center bg-warning mt-lg-5">@Model.ADConnectionError</h6> }
-        else
-        {
-            @await Html.PartialAsync("_LeftNav", Model)
-        }
+<h6 class="text-center bg-warning mt-lg-5">@Model.ADConnectionError</h6> }
+else
+{
+@await Html.PartialAsync("_LeftNav", Model)}
     </div>
 </div>
 
@@ -17,18 +16,15 @@
 <div class="col-sm-8">
     @if (Model.ADConnectionError != null)
     {
-        <h3 class="mt-1 mb-2 pr-2">@Localizer["Dossier"]</h3>
-        <div></div>
-    }
-    else
-    {
-        <div id="content">
-            @await Html.PartialAsync("_Content", Model)
-        </div>
-    }
+<h3 class="mt-1 mb-2 pr-2">@Localizer["Dossier"]</h3>
+                <div></div> }
+                            else
+                            {
+                <div id="content">
+                    @await Html.PartialAsync("_Content", Model)
+                </div>}
 </div>
 
 @if (Model.ADRootTreeNodeJson != null)
 {
-    <script type="text/javascript">showTreeView(@Html.Raw(Model.ADRootTreeNodeJson), '@Model.SelectedNodeName');</script>
-}
+<script type="text/javascript">showTreeView(@Html.Raw(Model.ADRootTreeNodeJson), '@Model.SelectedNodeName');</script>}
