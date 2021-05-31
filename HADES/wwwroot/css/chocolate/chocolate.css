@@ -1,6 +1,6 @@
 ﻿body {
     background-color: chocolate;
-    margin-bottom: 60px;
+    margin-bottom: 60px !important;
 }
 
 .table td, .table th {

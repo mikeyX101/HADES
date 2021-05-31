@@ -1,6 +1,6 @@
 ﻿body {
     background: repeating-linear-gradient(lightgreen,green,lightgreen);
-    margin-bottom: 60px;
+    margin-bottom: 60px !important;
 }
 
 .btn-primary {

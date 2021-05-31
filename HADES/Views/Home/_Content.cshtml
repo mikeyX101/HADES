@@ -40,8 +40,12 @@
                     <td>
                         @if (selectedPathLength == 2)
                         {
-                            <a data-ajax="true" data-ajax-method="GET" data-ajax-mode="replace" data-ajax-update="#main"
-                               href='@Url.Action("UpdateContent","Home", new { selectedPathForContent = Model.SelectedPath + (selectedPathLength == 2 ? "/" + Model.ADRoot[i].SamAccountName : "")})'>
+                            <a data-ajax="true" data-ajax-method="POST" data-ajax-mode="replace" data-ajax-update="#main"
+                               href='@Url.Action("UpdateContent","Home", 
+                                    new { 
+                                        selectedPathForContent = Model.SelectedPath + (selectedPathLength == 2 ? "/" + Model.ADRoot[i].SamAccountName : ""),
+                                        expandedNodeIds = Model.ExpandedNodesId
+                                    })'>
                                 <i class="icon fa fa-folder mr-2"></i>
                                 @Model.ADRoot[i].SamAccountName
                             </a>
