@@ -41,10 +41,10 @@
                         @if (selectedPathLength == 2)
                         {
                             <a data-ajax="true" data-ajax-method="POST" data-ajax-mode="replace" data-ajax-update="#main"
-                               href='@Url.Action("UpdateContent","Home", 
-                                    new { 
+                               href='@Url.Action("UpdateContent","Home",
+                                    new {
                                         selectedPathForContent = Model.SelectedPath + (selectedPathLength == 2 ? "/" + Model.ADRoot[i].SamAccountName : ""),
-                                        expandedNodeIds = Model.ExpandedNodesId
+                                        expandedNodeNames = Model.ExpandedNodesName
                                     })'>
                                 <i class="icon fa fa-folder mr-2"></i>
                                 @Model.ADRoot[i].SamAccountName
@@ -82,7 +82,7 @@
                                                         <input type="text" name="NewName" value="@Model.ADRoot[i].SamAccountName" class="form-control validate" pattern='^[^/[\]:;|=+*?<>,"\\]*$' required />
                                                         <input type="hidden" name="SelectedPath" value="@Model.SelectedPath" />
                                                         <input type="hidden" name="SelectedContentName" value="@Model.ADRoot[i].SamAccountName" />
-                                                        <input type="hidden" name="ExpandedNodesId" value="@Model.ExpandedNodesId" />
+                                                        <input type="hidden" name="ExpandedNodesName" value="@Model.ExpandedNodesName" />
                                                         <div class="invalid-tooltip">
                                                             @Localizer["InvalidCharacters"]
                                                         </div>
@@ -218,6 +218,7 @@
                             </button>
                             <input type="hidden" name="SelectedPath" value="@Model.SelectedPath" />
                             <input type="hidden" name="SelectedContentName" value="@Model.ADRoot[i].SamAccountName" />
+                            <input type="hidden" name="ExpandedNodesName" value="@Model.ExpandedNodesName" />
                         </form>
 
                     </td>

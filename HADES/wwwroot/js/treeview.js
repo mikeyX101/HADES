@@ -7,13 +7,14 @@ var isValid = false;
 var dialogConfirmationContent;
 var expandedNodes;
 var expandedNodesId = [];
+var expandedNodesName = [];
 
 /**
  * Show treeview
  * @param {any} userObj
  * @param {any} nodeName
  */
-function showTreeView(userObj, nodeName, expandNodesId) {
+function showTreeView(userObj, nodeName, expandNodesName) {
     $(function () {
         // conversion Json en array Json
         var rootData = JSON.parse('[' + JSON.stringify(userObj) + ']');
@@ -49,13 +50,19 @@ function showTreeView(userObj, nodeName, expandNodesId) {
         setIcons();
 
         // expand previous expanded nodes
-        if (typeof expandedNodesId == 'undefined') {
-            expandedNodesId = [];
+        if (typeof expandedNodesName == 'undefined') {
+            expandedNodesName = [];
         }
         else {
-            expandedNodesId = expandNodesId;
+            expandedNodesName = expandNodesName;
         }
-        for (var i = 0; i < expandedNodesId.length; i++) {
+        for (var i = 0; i < expandedNodesName.length; i++) {
+            var foundNodeName = $('#mytreeview').treeview('search', [expandedNodesName[i], {
+                ignoreCase: false,     // case insensitive
+                exactMatch: true,    // like or equals
+                revealResults: true,  // reveal matching nodes
+            }]);
+            expandedNodesId[i] = foundNodeName[0].nodeId;
             $('#mytreeview').treeview('expandNode', [expandedNodesId[i], { silent: true }]);
         }
 
@@ -79,9 +86,9 @@ function showTreeView(userObj, nodeName, expandNodesId) {
             selectedNode = data;
             selectedPathForContent = selectedPath;
             expandedNodes = $('#mytreeview').treeview('getExpanded', 0);
-            expandedNodesId = [];
+            expandedNodesName = [];
             for (var i = 0; i < expandedNodes.length; i++) {
-                expandedNodesId.push(expandedNodes[i].nodeId);
+                expandedNodesName.push(expandedNodes[i].text);
             }
 
             // If Group is selected set selectedPathForContent to his parent ou
@@ -100,7 +107,7 @@ function showTreeView(userObj, nodeName, expandNodesId) {
                 method: 'POST',
                 data: {
                     selectedPathForContent: selectedPathForContent,
-                    expandedNodeIds: expandedNodesId
+                    expandedNodeNames: JSON.stringify(expandedNodesName)
                 },
                 success: function (msg) {
                     $('#main').html(msg);
@@ -168,7 +175,8 @@ $(function () {
                     type: "POST",
                     data: {
                         SelectedPath: $(this).data('form')[1].value,
-                        SelectedContentName: $(this).data('form')[2].value
+                        SelectedContentName: $(this).data('form')[2].value,
+                        ExpandedNodesName: $(this).data('form')[3].value
                     },
                     success: function (msg) {
                         $('#main').html(msg);

@@ -39,7 +39,7 @@ namespace HADES.Controllers
                 viewModel.ADRootTreeNodeJson = TreeNodeToJson(viewModel.ADRootTreeNode); // conversion TreeNode<string> en Json
                 viewModel.SelectedPath = "/" + viewModel.ADRoot[0].SamAccountName; // select root OU par défaut
                 viewModel.SelectedNodeName = viewModel.ADRoot[0].SamAccountName;
-                viewModel.ExpandedNodesId = JsonConvert.SerializeObject(new int[] { 0 }, Formatting.Indented);
+                viewModel.ExpandedNodesName = JsonConvert.SerializeObject(new string[] { viewModel.ADRoot[0].SamAccountName }, Formatting.Indented);
 
                 viewModel.CreateButtonLabel = Localizer["CreateNewOU"];
                 viewModel.EditLinkLabel = Localizer["Rename"];
@@ -57,14 +57,14 @@ namespace HADES.Controllers
         [HttpPost]
         [HttpGet]
         [Authorize]
-        public IActionResult UpdateContent(string selectedPathForContent, int[] expandedNodeIds)
+        public IActionResult UpdateContent(string selectedPathForContent, string expandedNodeNames)
         {
             string users = JsonConvert.SerializeObject(ad.getAllUsers().Select(x => x.SamAccountName));
             viewModel.UsersAD = users;
             viewModel.ADManager = ad;
 
             viewModel.SelectedPath = selectedPathForContent;
-            viewModel.ExpandedNodesId = JsonConvert.SerializeObject(expandedNodeIds, Formatting.Indented);
+            viewModel.ExpandedNodesName = expandedNodeNames;
             viewModel.ADRoot = ad.getRoot();
             viewModel.ADRoot = SortADRoot(viewModel.ADRoot);
             BuildRootTreeNode(viewModel.ADRoot); // conversion List<RootDataInformation> en TreeNode<string>
@@ -165,7 +165,10 @@ namespace HADES.Controllers
                 ad.deleteGroup(DN);
                 Serilog.Log.Information("Le groupe " + DN + " a été supprimé");
             }
-            return RedirectToAction("UpdateContent", "Home", new { selectedPathForContent = viewModel.SelectedPath, expandedNodeIds = viewModel.ExpandedNodesId });
+            return RedirectToAction("UpdateContent", "Home", new { 
+                selectedPathForContent = viewModel.SelectedPath, 
+                expandedNodeNames = viewModel.ExpandedNodesName
+            });
         }
 
         [HttpPost]
@@ -185,7 +188,7 @@ namespace HADES.Controllers
 
             return RedirectToAction("UpdateContent", "Home", new { 
                 selectedPathForContent = viewModel.SelectedPath, 
-                expandedNodeIds = JsonConvert.DeserializeObject<int[]>(viewModel.ExpandedNodesId)
+                expandedNodeNames = viewModel.ExpandedNodesName
             });
         }
 
@@ -261,7 +264,7 @@ namespace HADES.Controllers
             }
             return RedirectToAction("UpdateContent", "Home", new {
                 selectedPathForContent = viewModel.SelectedPath,
-                expandedNodeIds = JsonConvert.DeserializeObject <int[]>(viewModel.ExpandedNodesId) });
+                expandedNodeNames = viewModel.ExpandedNodesName });
         }
 
         private string FindDN(string selectedPath, string selectedContentName)
