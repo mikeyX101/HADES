@@ -34,8 +34,12 @@ namespace HADES.Models
 
         public string SelectedMembers { get; set; }
 
+        public string SelectedOwners { get; set; }
+
         public string OuGroup { get; set; }
+
         public ADManager ADManager { get; set; }
+
         public string UsersAD { get; set; }
 
 

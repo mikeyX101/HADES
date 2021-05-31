@@ -103,10 +103,41 @@
                             var navOwners = "#nav-owners" + i;
                             var navOwnersTab = "nav-owners" + i;
 
+
+                            Model.GroupAD = Model.ADManager.getGroupInformation(Model.ADRoot[i].Dn);
+                            var members = Model.GroupAD.Members.Select(x => x.SamAccountName);
+                            var owners = "";
+
+
+                            Model.OuGroup = Model.GroupAD.SamAccountName;
+
+
+                            if (members.Any())
+                            {
+                                Model.SelectedMembers = Newtonsoft.Json.JsonConvert.SerializeObject(members);
+                                Model.BeforeEditMembers = Newtonsoft.Json.JsonConvert.SerializeObject(members);
+                            }
+                            else
+                            {
+                                Model.SelectedMembers = "";
+                                Model.BeforeEditMembers = "";
+                            }
+
+                            if (owners.Any())
+                                Model.SelectedOwners = Newtonsoft.Json.JsonConvert.SerializeObject(owners);
+                            else
+                                Model.SelectedOwners = "";
+
+                            var selectedOwnersId = "#selectedOwners" + i;
+                            var selectedOwnersTarget = "selectedOwners" + i;
+
                         }
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="@dataTarget" data-backdrop="false">
                             <span data-toggle="tooltip" data-html="true" data-placement="right" title="@Model.EditLinkLabel">
-                                <i class="fa fa-edit fa-fw"></i>
+                                <a data-ajax="true" data-ajax-method="GET" data-ajax-mode="replace" data-ajax-update="@selectedOwnersId"
+                                   href='@Url.Action("GetOwners","Home",new { guid = Model.GroupAD.ObjectGUID})'>
+                                    <i class="fa fa-edit fa-fw"></i>
+                                </a>
                             </span>
                         </button>
                         <div class="modal fade" id="@groupId" tabindex="-1" role="dialog" aria-labelledby="GroupCreateLbl"
@@ -133,24 +164,7 @@
                                         <div class="tab-content" id="nav-tabContent">
                                             <form asp-action="EditGroupModal">
                                                 <!-- General info form -->
-                                                @{
-                                                    Model.GroupAD = Model.ADManager.getGroupInformation(Model.ADRoot[i].Dn);
-                                                    var users = Model.GroupAD.Members.Select(x => x.SamAccountName);
 
-                                                    Model.OuGroup = Model.GroupAD.SamAccountName;
-
-
-                                                    if (users.Count() > 0)
-                                                    {
-                                                        Model.SelectedMembers = Newtonsoft.Json.JsonConvert.SerializeObject(users);
-                                                        Model.BeforeEditMembers = Newtonsoft.Json.JsonConvert.SerializeObject(users);
-                                                    }
-                                                    else
-                                                    {
-                                                        Model.SelectedMembers = "";
-                                                        Model.BeforeEditMembers = "";
-                                                    }
-                                                }
                                                 <div class="tab-pane fade show active" id="@navGroupInfoTab" role="tabpanel" aria-labelledby="nav-groupName-tab">
                                                     <input type="hidden" name="SelectedPath" value="@Model.SelectedPath" />
                                                     <input type="hidden" name="SelectedNodeName" value="@Model.SelectedNodeName" />
@@ -213,7 +227,7 @@
                                                 <!-- members form -->
                                                 <div class="tab-pane fade tab-absolute" id="@navMembersTab" role="tabpanel" aria-labelledby="nav-members-tab">
                                                     <div>
-                                                        <div class="directorist-select directorist-select-multi" id="multiSelect" data-isSearch="true" data-multiSelect='@Model.UsersAD'>
+                                                        <div class="directorist-select directorist-select-multi" id="EditMembersMultiSelect" data-isSearch="true" data-multiSelect='@Model.UsersAD'>
                                                             <input type="hidden" asp-for="@Model.SelectedMembers">
                                                             <input type="hidden" asp-for="@Model.BeforeEditMembers" />
                                                         </div>
@@ -222,7 +236,11 @@
                                                 <!-- Owners form -->
                                                 <div class="tab-pane fade tab-absolute" id="@navOwnersTab" role="tabpanel" aria-labelledby="nav-owners-tab">
 
-                                                    ...
+                                                    <div id="@selectedOwnersTarget">
+                                                        @*<div class="directorist-select directorist-select-multi" id="EditOwnersMultiSelect" data-isSearch="true" data-multiSelect='@Model.UsersAD'>
+                                                                <input type="hidden" asp-for="@Model.SelectedOwners">
+                                                            </div>*@
+                                                    </div>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="submit" class="btn btn-primary" id="btnSave">Ok</button>
@@ -243,7 +261,6 @@
                             <input type="hidden" name="SelectedPath" value="@Model.SelectedPath" />
                             <input type="hidden" name="SelectedContentName" value="@Model.ADRoot[i].SamAccountName" />
                         </form>
-
                     </td>
                 </tr>
             }
@@ -253,3 +270,9 @@
 
 <script type="text/javascript" src="~/js/formValidation.js"></script>
 <script type="text/javascript" src="~/js/formFocus.js"></script>
+<script src="~/lib/pureScriptSelect-master/script.js"></script>
+<script type="text/javascript">
+    //pureScriptSelect('#selectImg');
+    //pureScriptSelect('#selectIcon');
+</script>
+

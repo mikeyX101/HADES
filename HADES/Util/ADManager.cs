@@ -524,7 +524,6 @@ namespace HADES.Util
         /*****************************************************
          GROUP
          ******************************************************/
-        //public bool createGroup(string name, string ouName, string description, string email, DateTime dateExpiration, string notes, List<UserAD> members)
         public bool createGroup(string ouName, GroupAD group, List<UserAD> members)
         {
             if (group.Description == "")
