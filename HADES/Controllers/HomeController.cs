@@ -55,6 +55,7 @@ namespace HADES.Controllers
         }
 
         [HttpPost]
+        [HttpGet]
         [Authorize]
         public IActionResult UpdateContent(string selectedPathForContent, int[] expandedNodeIds)
         {
@@ -164,7 +165,7 @@ namespace HADES.Controllers
                 ad.deleteGroup(DN);
                 Serilog.Log.Information("Le groupe " + DN + " a été supprimé");
             }
-            return RedirectToAction("UpdateContent", "Home", new { selectedPathForContent = viewModel.SelectedPath });
+            return RedirectToAction("UpdateContent", "Home", new { selectedPathForContent = viewModel.SelectedPath, expandedNodeIds = viewModel.ExpandedNodesId });
         }
 
         [HttpPost]
@@ -182,7 +183,10 @@ namespace HADES.Controllers
                 Serilog.Log.Information("Le dossier(OU) " + DN + " a été renommé");
             }
 
-            return RedirectToAction("UpdateContent", "Home", new { selectedPathForContent = viewModel.SelectedPath });
+            return RedirectToAction("UpdateContent", "Home", new { 
+                selectedPathForContent = viewModel.SelectedPath, 
+                expandedNodeIds = JsonConvert.DeserializeObject<int[]>(viewModel.ExpandedNodesId)
+            });
         }
 
 
@@ -255,7 +259,9 @@ namespace HADES.Controllers
                 ad.createOU(viewModel.NewName);
                 Serilog.Log.Information("Le dossier(OU) " + viewModel.NewName + " a été créé");
             }
-            return RedirectToAction("UpdateContent", "Home", new { selectedPathForContent = viewModel.SelectedPath });
+            return RedirectToAction("UpdateContent", "Home", new {
+                selectedPathForContent = viewModel.SelectedPath,
+                expandedNodeIds = JsonConvert.DeserializeObject <int[]>(viewModel.ExpandedNodesId) });
         }
 
         private string FindDN(string selectedPath, string selectedContentName)
