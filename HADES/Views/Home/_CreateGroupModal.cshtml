@@ -57,18 +57,22 @@
                             </div>
 
                         </div>
-                        
+
                         <div class="tab-pane fade" id="nav-members" role="tabpanel" aria-labelledby="nav-members-tab">
                             <!-- members form -->
                             <div>
-                                <div class="directorist-select directorist-select-multi" id="multiSelect" data-isSearch="true" data-multiSelect='@Model.UsersAD'>
+                                <div class="directorist-select directorist-select-multi" id="CreateMembersMultiSelect" data-isSearch="true" data-multiSelect='@Model.UsersAD'>
                                     <input type="hidden" asp-for="@Model.SelectedMembers">
                                 </div>
                             </div>
                         </div>
                         <div class="tab-pane fade" id="nav-owners" role="tabpanel" aria-labelledby="nav-owners-tab">
                             <!-- Owners form -->
-                            ...
+                            <div>
+                                <div class="directorist-select directorist-select-multi" id="CreateOwnersMultiSelect" data-isSearch="true" data-multiSelect='@Model.UsersAD'>
+                                    <input type="hidden" asp-for="@Model.SelectedOwners">
+                                </div>
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-primary" id="btnSave">Ok</button>
@@ -80,9 +84,9 @@
         </div>
     </div>
 </div>
-<script src="~/lib/pureScriptSelect-master/script.js"></script>
 <script type="text/javascript">
-    pureScriptSelect('#multiSelect');
+    pureScriptSelect('#CreateMembersMultiSelect');
+    pureScriptSelect('#CreateOwnersMultiSelect');
     pureScriptSelect('#selectImg');
-    pureScriptSelect('#selectIcon');    
+    pureScriptSelect('#selectIcon');
 </script>
