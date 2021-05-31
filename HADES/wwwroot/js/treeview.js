@@ -5,13 +5,15 @@ var selectedDepth;
 var selectedContentName;
 var isValid = false;
 var dialogConfirmationContent;
+var expandedNodes;
+var expandedNodesId = [];
 
 /**
  * Show treeview
  * @param {any} userObj
  * @param {any} nodeName
  */
-function showTreeView(userObj, nodeName) {
+function showTreeView(userObj, nodeName, expandNodesId) {
     $(function () {
         // conversion Json en array Json
         var rootData = JSON.parse('[' + JSON.stringify(userObj) + ']');
@@ -46,7 +48,18 @@ function showTreeView(userObj, nodeName) {
         // set icons
         setIcons();
 
-        // select node
+        // expand previous expanded nodes
+        if (typeof expandedNodesId == 'undefined') {
+            expandedNodesId = [];
+        }
+        else {
+            expandedNodesId = expandNodesId;
+        }
+        for (var i = 0; i < expandedNodesId.length; i++) {
+            $('#mytreeview').treeview('expandNode', [expandedNodesId[i], { silent: true }]);
+        }
+
+        // select selected node
         $('#mytreeview').treeview('selectNode', [foundNodes[0].nodeId, { silent: true }]);
 
         // Action when node is selected
@@ -62,9 +75,14 @@ function showTreeView(userObj, nodeName) {
                 selectedDepth++;
             } 
 
-            // backup selectedNode
+            // backup selectedNode and expandedNodes
             selectedNode = data;
             selectedPathForContent = selectedPath;
+            expandedNodes = $('#mytreeview').treeview('getExpanded', 0);
+            expandedNodesId = [];
+            for (var i = 0; i < expandedNodes.length; i++) {
+                expandedNodesId.push(expandedNodes[i].nodeId);
+            }
 
             // If Group is selected set selectedPathForContent to his parent ou
             if (selectedDepth > 2) {
@@ -79,8 +97,11 @@ function showTreeView(userObj, nodeName) {
             // update selected node content to display
             $.ajax({
                 url: '/Home/UpdateContent',
-                type: "GET",
-                data: { selectedPathForContent: selectedPathForContent },
+                method: 'POST',
+                data: {
+                    selectedPathForContent: selectedPathForContent,
+                    expandedNodeIds: expandedNodesId
+                },
                 success: function (msg) {
                     $('#main').html(msg);
                 }
@@ -237,10 +258,8 @@ function formSubmit(form) {
     if (isOU(form[1].value)) {
         deleteOU(form)
     } 
-    /* TODO : implémenter la fonctionnalité deleteGroup */
     if (isGroup(form[1].value)) {
         deleteGroup(form)
-        //alert("Implémenter la fonctionalité de suppression d'un groupe")
     }
     return false; // pour ne pas faire de submit avant d'avoir eu la réponse de la boite de dialog
 }

@@ -30,5 +30,5 @@
 
 @if (Model.ADRootTreeNodeJson != null)
 {
-    <script type="text/javascript">showTreeView(@Html.Raw(Model.ADRootTreeNodeJson), '@Model.SelectedNodeName');</script>
+<script type="text/javascript">showTreeView(@Html.Raw(Model.ADRootTreeNodeJson), '@Model.SelectedNodeName', @Html.Raw(Model.ExpandedNodesId));</script>
 }

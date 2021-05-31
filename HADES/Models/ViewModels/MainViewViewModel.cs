@@ -29,6 +29,8 @@ namespace HADES.Models
 
         public string SelectedContentName { get; set; }
 
+        public string ExpandedNodesId { get; set; }
+
         public string BeforeEditMembers { get; set; }
 
         public string SelectedMembers { get; set; }

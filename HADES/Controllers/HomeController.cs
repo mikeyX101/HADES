@@ -39,6 +39,7 @@ namespace HADES.Controllers
                 viewModel.ADRootTreeNodeJson = TreeNodeToJson(viewModel.ADRootTreeNode); // conversion TreeNode<string> en Json
                 viewModel.SelectedPath = "/" + viewModel.ADRoot[0].SamAccountName; // select root OU par défaut
                 viewModel.SelectedNodeName = viewModel.ADRoot[0].SamAccountName;
+                viewModel.ExpandedNodesId = JsonConvert.SerializeObject(new int[] { 0 }, Formatting.Indented);
 
                 viewModel.CreateButtonLabel = Localizer["CreateNewOU"];
                 viewModel.EditLinkLabel = Localizer["Rename"];
@@ -53,14 +54,16 @@ namespace HADES.Controllers
             }
         }
 
+        [HttpPost]
         [Authorize]
-        public IActionResult UpdateContent(string selectedPathForContent)
+        public IActionResult UpdateContent(string selectedPathForContent, int[] expandedNodeIds)
         {
             string users = JsonConvert.SerializeObject(ad.getAllUsers().Select(x => x.SamAccountName));
             viewModel.UsersAD = users;
             viewModel.ADManager = ad;
 
             viewModel.SelectedPath = selectedPathForContent;
+            viewModel.ExpandedNodesId = JsonConvert.SerializeObject(expandedNodeIds, Formatting.Indented);
             viewModel.ADRoot = ad.getRoot();
             viewModel.ADRoot = SortADRoot(viewModel.ADRoot);
             BuildRootTreeNode(viewModel.ADRoot); // conversion List<RootDataInformation> en TreeNode<string>
