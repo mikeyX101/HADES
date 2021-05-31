@@ -132,14 +132,12 @@
                             var selectedOwnersTarget = "selectedOwners" + i;
 
                         }
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="@dataTarget" data-backdrop="false">
                             <span data-toggle="tooltip" data-html="true" data-placement="right" title="@Model.EditLinkLabel">
                                 <a data-ajax="true" data-ajax-method="GET" data-ajax-mode="replace" data-ajax-update="@selectedOwnersId"
-                                   href='@Url.Action("GetOwners","Home",new { guid = Model.GroupAD.ObjectGUID})'>
+                                   href='@Url.Action("GetOwners","Home",new { guid = Model.GroupAD.ObjectGUID})' class="btn btn-primary" data-toggle="modal" data-target="@dataTarget" data-backdrop="false">
                                     <i class="fa fa-edit fa-fw"></i>
                                 </a>
                             </span>
-                        </button>
                         <div class="modal fade" id="@groupId" tabindex="-1" role="dialog" aria-labelledby="GroupCreateLbl"
                              aria-hidden="true">
                             <div class="modal-dialog" role="document">
