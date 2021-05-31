@@ -526,7 +526,7 @@ namespace HADES.Util
          ******************************************************/
         public bool createGroup(string ouName, GroupAD group, List<UserAD> members)
         {
-            if (group.Description == "")
+            if (string.IsNullOrWhiteSpace(group.Description))
             {
                 group.Description = " ";
             }
@@ -534,7 +534,7 @@ namespace HADES.Util
             {
                 group.Email = " ";
             }
-            if (group.Notes == "")
+            if (string.IsNullOrWhiteSpace(group.Notes))
             {
                 group.Notes = " ";
             }
