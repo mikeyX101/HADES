@@ -35,7 +35,7 @@ namespace HADES.Util
         }
 
         /*****************************************************
-         GETATTRIBUTE in AD
+         GETATTRIBUTE  AD
          ******************************************************/
         private string getAttributeValue(LdapEntry entry, string attribute)
         {
@@ -57,7 +57,7 @@ namespace HADES.Util
 
 
         /*****************************************************
-         GETATTRIBUTE in AD
+         GETATTRIBUTE  AD
          ******************************************************/
         private DateTime getDateExp(LdapEntry entry)
         {
@@ -414,7 +414,7 @@ namespace HADES.Util
 
             LdapSearchResults lsc = (LdapSearchResults)connection.Search(ADSettingsCache.Ad.RootOu, LdapConnection.ScopeSub, "(&(objectClass=group)(distinguishedName=" + groupDN + "))", null, false);
             GroupAD group = new GroupAD();
-            while (lsc.HasMore())
+            if (lsc.HasMore())
             {
 
                 LdapEntry nextEntry = null;
@@ -434,7 +434,7 @@ namespace HADES.Util
                     connection.Disconnect();
                     Log.Warning(e, DataFetchErrorLogTemplate, "getGroupInformation()");
                     //Exception is thrown, go for next entry
-                    continue;
+             
                 }
                 catch (Exception e)
                 {
