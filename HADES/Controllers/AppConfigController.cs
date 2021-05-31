@@ -8,8 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.IO;
-using System.Security.Cryptography;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -27,7 +25,7 @@ namespace HADES.Controllers
         [Authorize]
         public async Task<IActionResult> AppConfig()
         {
-            if (!ConnexionUtil.CurrentUser(this.User).GetRole().AppConfigAccess)
+            if (!ConnexionUtil.CurrentUser(this.User).GetRole().AppConfigAccess) // ACCESS CONTROL
             {
                 return RedirectToAction("MainView", "Home");
             }
@@ -44,7 +42,7 @@ namespace HADES.Controllers
         {
             ViewBag.AppConfigError = "";
 
-            if (!ConnexionUtil.CurrentUser(this.User).GetRole().AppConfigAccess)
+            if (!ConnexionUtil.CurrentUser(this.User).GetRole().AppConfigAccess) // ACCESS CONTROL
             {
                 return RedirectToAction("MainView", "Home");
             }
@@ -167,13 +165,13 @@ namespace HADES.Controllers
         }
 
         [Authorize]
-        public IActionResult CreateAdminGroup(int? id)
+        public IActionResult CreateAdminGroup()
         {
-            if (!ConnexionUtil.CurrentUser(this.User).GetRole().AppConfigAccess)
+            if (!ConnexionUtil.CurrentUser(this.User).GetRole().AppConfigAccess) // ACCESS CONTROL
             {
                 return RedirectToAction("MainView", "Home");
             }
-            ViewBag.AppConfigId = id ??= db.AppConfig.FirstOrDefaultAsync().Result.Id; ;
+            ViewBag.AppConfigId = db.AppConfig.FirstOrDefaultAsync().Result.Id; ;
             return View(new AdminGroup());
         }
 
@@ -182,7 +180,7 @@ namespace HADES.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateAdminGroup(string DN, int appconfig)
         {
-            if (!ConnexionUtil.CurrentUser(this.User).GetRole().AppConfigAccess)
+            if (!ConnexionUtil.CurrentUser(this.User).GetRole().AppConfigAccess) // ACCESS CONTROL
             {
                 return RedirectToAction("MainView", "Home");
             }
@@ -212,7 +210,7 @@ namespace HADES.Controllers
         [Authorize]
         public async Task<IActionResult> AdminGroupDelete(int? id)
         {
-            if (!ConnexionUtil.CurrentUser(this.User).GetRole().AppConfigAccess)
+            if (!ConnexionUtil.CurrentUser(this.User).GetRole().AppConfigAccess) // ACCESS CONTROL
             {
                 return RedirectToAction("MainView", "Home");
             }
@@ -222,21 +220,20 @@ namespace HADES.Controllers
             {
                 return NotFound();
             }
-            var appConfigId = service.AdminGroupRedirectId(id);
             await service.DeleteAdminGroup(id);
 
-            return RedirectToAction("AppConfig", new { id = appConfigId });
+            return RedirectToAction("AppConfig");
         }
 
         [Authorize]
-        public IActionResult CreateSuperAdminGroup(int? id)
+        public IActionResult CreateSuperAdminGroup()
         {
-            if (!ConnexionUtil.CurrentUser(this.User).GetRole().AppConfigAccess)
+            if (!ConnexionUtil.CurrentUser(this.User).GetRole().AppConfigAccess) // ACCESS CONTROL
             {
                 return RedirectToAction("MainView", "Home");
             }
 
-            ViewBag.AppConfigId = id ??= db.AppConfig.FirstOrDefaultAsync().Result.Id;
+            ViewBag.AppConfigId = db.AppConfig.FirstOrDefaultAsync().Result.Id;
             return View(new SuperAdminGroup());
         }
 
@@ -246,7 +243,7 @@ namespace HADES.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateSuperAdminGroup(string DN, int appconfig)
         {
-            if (!ConnexionUtil.CurrentUser(this.User).GetRole().AppConfigAccess)
+            if (!ConnexionUtil.CurrentUser(this.User).GetRole().AppConfigAccess) // ACCESS CONTROL
             {
                 return RedirectToAction("MainView", "Home");
             }
@@ -278,7 +275,7 @@ namespace HADES.Controllers
         [Authorize]
         public async Task<IActionResult> SuperAdminGroupDelete(int? id)
         {
-            if (!ConnexionUtil.CurrentUser(this.User).GetRole().AppConfigAccess)
+            if (!ConnexionUtil.CurrentUser(this.User).GetRole().AppConfigAccess) // ACCESS CONTROL
             {
                 return RedirectToAction("MainView", "Home");
             }

@@ -138,11 +138,11 @@ namespace HADES
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 		{
-            app.UseHttpsRedirection();
             if (env.IsDevelopment())
 			{
 				app.UseDeveloperExceptionPage();
-			}
+                app.UseHttpsRedirection();
+            }
 			else if (env.IsProduction())
 			{
 				// UseForwardedHeaders() must be executed before UseHtst().
@@ -151,6 +151,7 @@ namespace HADES
                 app.UseExceptionHandler("/Errors");
                 app.UseHadesErrorHandling();
 
+                app.UseHttpsRedirection();
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
 
@@ -223,7 +224,6 @@ namespace HADES
 				{
                     string queryStringLanguage = context.Request.Query["l"].ToString();
                     locale =
-                        !string.IsNullOrWhiteSpace(queryStringLanguage) ? queryStringLanguage : null ??     //TODO TEMP, CHECK l IN QUERY STRING. TO BE REMOVED, THIS IS AN UNFILTERED USER INPUT ENTRY POINT
                         connectedUser?.GetUserConfig().Language ??                                          // Get from connected user.
                         db.AppConfig.FirstOrDefault()?.DefaultLanguage ??                                   // Get from app config.
                         Settings.AppSettings.DefaultCulture;                                                // Get default in appsettings.json (Always defined)

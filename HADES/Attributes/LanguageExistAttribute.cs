@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace HADES.Models
+namespace HADES.Attributes
 {
     public class LanguageExistAttribute : ValidationAttribute
     {

@@ -117,9 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="GlobalString" xml:space="preserve">
-    <value>GlobalEN</value>
-  </data>
   <data name="Delete" xml:space="preserve">
     <value>Delete</value>
   </data>
@@ -272,5 +269,8 @@
   </data>
   <data name="doc_roleText" xml:space="preserve">
     <value>There are three roles: Super-Administrator, Administrator and Owner. In HADES, roles allow us to manage the permissions of logged in users. There is no concept of owner in the DA, we are the ones who will implement it. The Super-Administrator has all the rights. The Administrator has all the rights except that he cannot access the application control panel. The owner has much less rights. He can only see, add and remove members of groups he owns.</value>
+  </data>
+  <data name="CssFileDoesNotExist" xml:space="preserve">
+    <value>The file {0}.css doesn't exist.</value>
   </data>
 </root>

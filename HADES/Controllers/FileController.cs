@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using HADES.Attributes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,10 +15,25 @@ namespace HADES.Controllers
         {
             IActionResult result;
 
-            byte[] idBytes = Convert.FromBase64String(id);
-            if (idBytes.Length == 16)
+            string guidString;
+            try
+			{
+                // Unescape -> Decode base64 string -> Get string from resulting bytes -> Decrypt
+                guidString = Util.EncryptionUtil.Decrypt(
+                    System.Text.Encoding.UTF8.GetString(
+                        Convert.FromBase64String(
+                            Uri.UnescapeDataString(id)    
+                        )
+                    )
+                );
+            }
+			catch
+			{
+                guidString = null;
+            }
+
+            if (Guid.TryParse(guidString, out Guid fileId))
             {
-                Guid fileId = new(idBytes);
                 Models.AvailableFile file = Util.FileManager.GetFile(fileId);
                 Models.IUser user = Util.ConnexionUtil.CurrentUser(User);
                 if (user != null && user.GetId() == file.OwnerID)

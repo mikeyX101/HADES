@@ -69,7 +69,7 @@ namespace HADES.Util
 							rollOnFileSizeLimit: false,
 							fileSizeLimitBytes: appConfig.LogMaxFileSize,
 							retainedFileCountLimit: appConfig.LogDeleteFrequency,
-							buffered: true,
+							shared: true,
 							flushToDiskInterval: TimeSpan.FromMinutes(1)))
 					.Enrich.FromLogContext()
 					.ReadFrom.Services(Services)

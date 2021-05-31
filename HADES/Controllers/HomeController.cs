@@ -9,7 +9,6 @@ using Microsoft.Extensions.Localization;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Linq;
 using HADES.Models.API;
 using Microsoft.EntityFrameworkCore;
@@ -145,7 +144,7 @@ namespace HADES.Controllers
         [Authorize]
         public IActionResult Delete(MainViewViewModel viewModel)
         {
-            if (!ConnexionUtil.CurrentUser(this.User).GetRole().AdCrudAccess)
+            if (!ConnexionUtil.CurrentUser(this.User).GetRole().AdCrudAccess) // ACCESS CONTROL
             {
                 return RedirectToAction("MainView", "Home");
             }
@@ -172,7 +171,7 @@ namespace HADES.Controllers
         [Authorize]
         public IActionResult Rename(MainViewViewModel viewModel)
         {
-            if (!ConnexionUtil.CurrentUser(this.User).GetRole().AdCrudAccess)
+            if (!ConnexionUtil.CurrentUser(this.User).GetRole().AdCrudAccess) // ACCESS CONTROL
             {
                 return RedirectToAction("MainView", "Home");
             }
@@ -191,6 +190,11 @@ namespace HADES.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult CreateGroupModal([Bind("GroupAD, SelectedNodeName, SelectedContentName, SelectedPath, SelectedMembers, SelectedOwners")] MainViewViewModel viewModel)
         {
+            if (!ConnexionUtil.CurrentUser(this.User).GetRole().AdCrudAccess) // ACCESS CONTROL
+            {
+                return RedirectToAction("MainView", "Home");
+            }
+
             ApplicationDbContext db = new ApplicationDbContext();
 
 
@@ -245,6 +249,11 @@ namespace HADES.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult EditGroupModal([Bind("GroupAD, SelectedNodeName, SelectedPath, BeforeEditMembers, SelectedMembers, OuGroup, SelectedOwners")] MainViewViewModel viewModel)
         {
+            if (!ConnexionUtil.CurrentUser(this.User).GetRole().AdCrudAccess) // ACCESS CONTROL
+            {
+                return RedirectToAction("MainView", "Home");
+            }
+
             ApplicationDbContext db = new ApplicationDbContext();
 
             GroupAD group = viewModel.GroupAD;
@@ -279,7 +288,7 @@ namespace HADES.Controllers
         [Authorize]
         public IActionResult CreateOU(MainViewViewModel viewModel)
         {
-            if (!ConnexionUtil.CurrentUser(this.User).GetRole().AdCrudAccess)
+            if (!ConnexionUtil.CurrentUser(this.User).GetRole().AdCrudAccess) // ACCESS CONTROL
             {
                 return RedirectToAction("MainView", "Home");
             }

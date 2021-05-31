@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace HADES.Models
+namespace HADES.Attributes
 {
     public class ThemeFileExistAttribute : ValidationAttribute
     {
@@ -16,13 +16,13 @@ namespace HADES.Models
             if (value is string)
             {
                 themeFileName = (string) value;
-                themeFilePath = System.IO.Directory.GetCurrentDirectory() + "\\wwwroot\\css\\" + themeFileName + "\\" + themeFileName + ".css";
+                themeFilePath = "wwwroot/css/" + themeFileName + "/" + themeFileName + ".css";
                 if (File.Exists(themeFilePath))
                 {
                     return ValidationResult.Success;
                 }
             }
-            string defaultErrorMessage = "Le fichier " + themeFileName + ".css n'existe pas";
+            string defaultErrorMessage = string.Format(Strings.CssFileDoesNotExist, themeFileName);
             return new ValidationResult(defaultErrorMessage);
         }
     }

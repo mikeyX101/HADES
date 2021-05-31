@@ -10,7 +10,17 @@ namespace HADES.Services
 {
 	public class AppConfigService
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private ApplicationDbContext db;
+
+        public AppConfigService()
+		{
+            db = new();
+		}
+
+        public AppConfigService(ApplicationDbContext db)
+        {
+            this.db = db;
+        }
 
         public async Task<AppConfigViewModel> AppConfigViewModelGET()
         {

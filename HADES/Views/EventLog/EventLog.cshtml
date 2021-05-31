@@ -29,6 +29,10 @@
     .hidden {
         display: none;
     }
+
+    .table td, .table th {
+        padding: .75rem;
+    }
 </style>
 
 <script type="text/javascript">
@@ -60,16 +64,19 @@
                 type: "POST",
                 dataType: "json",
                 data: (d) => {
-                    d.date = $("#datepicker").datepicker("getDate").toLocaleDateString();
+                    d.date = $("#datepicker").datepicker("getDate").toISOString();
                 },
                 dataSrc: (json) => {
                     if (!json.error) {
                         $("#errorMessage").text("");
+                        csvButton.removeAttr("disabled");
                     }
 
+                    if (json.exceptionCount != 0) {
+                        let exceptionCount = json.exceptionCount;
+                        $("#errorMessage").text(`@Localizer["CorruptedEntries"]`.replace("$exceptionCount", exceptionCount));
+                    }
                     json.data = JSON.parse(json.data);
-
-                    console.log(json);
                     return json.data;
                 },
             },
@@ -78,6 +85,7 @@
             stateSave: false,
             ordering: false,
             responsive: true,
+            autoWidth: false,
             headerCallback: (thead) => {
                 $(thead).addClass("dt-header");
             },
@@ -90,20 +98,21 @@
                         tableApi.search(this.value).draw();
                     }
                 });
-                $("#@(tableId)_filter").append("<button id='searchButton' class='btn btn-primary' style='margin-bottom: 1px;'><i class='fas fa-arrow-right'></i></button>");
+                $("#@(tableId)_filter").append("<button id='searchButton' class='btn btn-primary' style='margin-bottom: 3px; height: 35px;'><i class='fas fa-arrow-right'></i></button>");
                 $("#searchButton").click(() => {
                     tableApi.search($('#@(tableId)_filter input').val()).draw();
                 });
             },
             columns: [
                 {
-                    width: "20%",
-                    className: "",
+                    responsivePriority: 1,
+                    className: "all",
                     data: "t",
                     title: "@Localizer["Timestamp"]"
                 },
                 {
-                    className: "",
+                    responsivePriority: 2,
+                    className: "all",
                     data: "l",
                     title: "@Localizer["Level"]",
                     defaultContent: "Information",
@@ -131,25 +140,27 @@
                     }
                 },
                 {
-                    className: "",
+                    responsivePriority: 3,
+                    className: "all",
                     data: "User",
                     title: "@Localizer["User"]",
                     defaultContent: "unknown"
                 },
                 {
+                    responsivePriority: 4,
                     className: "",
                     data: "m",
                     title: "@Localizer["Message"]"
                 },
                 {
-                    width: "10%",
+                    responsivePriority: 5,
                     className: "",
                     data: "x",
                     title: "@Localizer["Exception"]",
                     defaultContent: "-",
                     render: (data, type, row) => {
                         if (data && type == "display") {
-                            return `<button class="btn btn-primary" onclick="showExceptionModal(this);" data-exception='${data.replaceAll("'", "\'")}'>@Localizer["ShowException"]</button>`
+                            return `<button class="btn btn-primary" onclick="showExceptionModal(this);" data-exception="${encodeURIComponent(data).replaceAll("'", "\\'").replaceAll('"', '\\"')}">@Localizer["ShowException"]</button>`
                         }
                         return data;
                     }
@@ -158,6 +169,7 @@
         }).on("error.dt", (event, settings, techNote, message) => {
             let serverMessage = message.replaceAll("DataTables warning: table id=@tableId - ", "");
             $("#errorMessage").text(serverMessage);
+            csvButton.attr("disabled", "disabled");
         });
 
         function onDateChange(date) {
@@ -176,7 +188,7 @@
 
         cacheRefreshButton.click(() => {
             $("[data-toggle='tooltip']").tooltip("hide");
-            document.activeElement.blur()
+            document.activeElement.blur();
             $.ajax({
                 url: "@Url.Action("Refresh", "EventLog")",
                 type: "POST",
@@ -189,7 +201,7 @@
         csvButton.click(() => {
             $("[data-toggle='tooltip']").tooltip("hide");
             csvButton.attr("disabled", "disabled");
-            document.activeElement.blur()
+            document.activeElement.blur();
             let progress = $("#csvProgressDiv");
             $.ajax({
                 url: "@Url.Action("CSV", "EventLog")",
@@ -197,6 +209,12 @@
                 data: tableApi.ajax.params(),
                 success: (response) => {
                     response = JSON.parse(response);
+
+                    if (response.exceptionCount != 0) {
+                        let exceptionCount = response.exceptionCount;
+                        $("#errorMessage").text(`@Localizer["CorruptedEntries"]`.replace("$exceptionCount", exceptionCount));
+                    }
+
                     progress.addClass("hidden");
                     csvButton.removeAttr("disabled");
                     window.location.assign(`/File/File?id=${response.id}`);
@@ -217,7 +235,7 @@
     });
 
     function showExceptionModal(identifier) {
-        $("#exceptionModalContent").text($(identifier).data("exception"));
+        $("#exceptionModalContent").text(decodeURIComponent($(identifier).data("exception")).replaceAll("\\'", "'").replaceAll('\\"', '"'));
         $("#exceptionModal").modal("show");
     }
 </script>
@@ -260,7 +278,7 @@
 
 <div class="form-group row">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-        <table id="@tableId" class="table table-bordered cell-border hover" style="width: 100%;"></table>
+        <table id="@tableId" class="table table-bordered cell-border hover wrap" style="width: 100%;"></table>
     </div>
 </div>
 

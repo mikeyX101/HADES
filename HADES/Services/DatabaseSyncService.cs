@@ -62,31 +62,39 @@ namespace HADES.Services
 
         private static void UpdateDatabase(object? state, bool forced = false)
         {
-            if ((UpdateMe && !processing) || forced) // Only update if asked to
-            {
-                Log.Information("Attempting Database Sync");
-                processing = true;
-                if (ad == null) ad = new ADManager(); // Initialize ad on first use
-
-                try
+            ApplicationDbContext db = new();
+            if (db.Database.GetAppliedMigrations().Any())
+			{
+                if ((UpdateMe && !processing) || forced) // Only update if asked to
                 {
-                    ApplicationDbContext db = new ApplicationDbContext();
-                    UpdateOwnerGroups(db);
-                    UpdateAdminSuperAdmin(db);
-                    UpdateUsers(db);
-                    UpdateMe = false;
-                    processing = false;
-                }
-                catch (Exception)
-                {
-                    Log.Warning("An error occured while synchronizing the HADES database to the Active Directory");
-                    processing = false;
-                    return;
-                }
+                    Log.Information("Running {Service}", "Database Sync Service");
+                    processing = true;
+                    if (ad == null) ad = new ADManager(); // Initialize ad on first use
 
-                processing = false; // Just to be sure
+                    try
+                    {
+
+                        UpdateOwnerGroups(db);
+                        UpdateAdminSuperAdmin(db);
+                        UpdateUsers(db);
+                        UpdateMe = false;
+                        processing = false;
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Warning(e, "An unexepected error occured while doing an operation in the {Service}", "Database Sync Service");
+                        UpdateMe = false;
+                        processing = false;
+                        return;
+                    }
+
+                    processing = false; // Just to be sure
+                }
             }
-         
+            else
+			{
+                Log.Information("Tried to run {Service}, but migrations have not ran yet. Waiting for next interval.", "Database Sync Service");
+			}
         }
 
         private static void UpdateAdminSuperAdmin(ApplicationDbContext db)

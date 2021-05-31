@@ -117,9 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="GlobalString" xml:space="preserve">
-    <value>GlobalFR</value>
-  </data>
   <data name="Delete" xml:space="preserve">
     <value>Supprimer</value>
   </data>
@@ -223,7 +220,7 @@
     <value>La date d'expiration des groupes</value>
   </data>
   <data name="doc_notexp01" xml:space="preserve">
-    <value>L’utilisation du champ de la date d’expiration pour les groupes nécessite une configuration spéciale. Pour que le champ de la date d’expiration des groupes soit fonctionnel, il faut ajouter un attribut personnalisé et l’ajouter à la classe groupe de votre Active Directory. Ainsi, cette information ne sera pas conservée dans la base de données d’Hades, mais bien directement, dans votre Active Directory. </value>
+    <value>L’utilisation du champ de la date d’expiration pour les groupes nécessite une configuration spéciale. Pour que le champ de la date d’expiration des groupes soit fonctionnel, il faut ajouter un attribut personnalisé et l’ajouter à la classe groupe de votre Active Directory. Ainsi, cette information ne sera pas conservée dans la base de données d’Hades, mais bien directement, dans votre Active Directory.</value>
   </data>
   <data name="doc_notexp02" xml:space="preserve">
     <value>Voici un petit guide étape par étape pour vous aider à réaliser cette configuration.</value>
@@ -241,7 +238,7 @@
     <value>Sélectionnez Active Directory Schéma et sélectionnez ajouter. Cliquer sur Ok.</value>
   </data>
   <data name="doc_notexp07" xml:space="preserve">
-    <value>Dans l'outil d'administration du schéma Active Directory, faites un clic droit sur Attributs, puis sélectionnez Créer un attribut… </value>
+    <value>Dans l'outil d'administration du schéma Active Directory, faites un clic droit sur Attributs, puis sélectionnez Créer un attribut...</value>
   </data>
   <data name="doc_notexp08" xml:space="preserve">
     <value>Cliquez sur Continuer (l'avertissement qui s'affiche est pour informer que la création d'un nouvel attribut Active Directory n'est pas une opération réversible et qu'il ne peut pas être supprimé une fois terminé)</value>
@@ -262,7 +259,7 @@
     <value>Lien vers le Genérateur</value>
   </data>
   <data name="Doc_intro" xml:space="preserve">
-    <value>HADES  a été développé dans le cadre d'un cours collégial. L'application n'offre donc pas de support. C’est un outil qui permet la gestion des groupes de l’Active Directory (AD). Le principe est de rendre conviviale la gestion de ces groupes afin que des personnes externes au département des techniciens informatiques puissent gérer des permissions. En plus, la plateforme contient un gestionnaire d’événements (les logs) et un système de notification par courriel configurable. </value>
+    <value>HADES  a été développé dans le cadre d'un cours collégial. L'application n'offre donc pas de support. C’est un outil qui permet la gestion des groupes de l’Active Directory (AD). Le principe est de rendre conviviale la gestion de ces groupes afin que des personnes externes au département des techniciens informatiques puissent gérer des permissions. En plus, la plateforme contient un gestionnaire d’événements (les logs) et un système de notification par courriel configurable.</value>
   </data>
   <data name="roleTitle" xml:space="preserve">
     <value>Role</value>
@@ -271,6 +268,9 @@
     <value>Aucun journal n'a été trouvé pour cette journée.</value>
   </data>
   <data name="doc_roleText" xml:space="preserve">
-    <value>Il y a trois rôles: Super-Administrateur, Administrateur et propriétaire. Dans HADES, les rôles nous permettent de gérer les permissions des utilisateurs connectés.  Il n’y a pas de concept de propriétaire  dans l’AD, c’est nous qui allons l'implanter. Le Super-Administrateur a tout les droits. l'Administrateur a tout les droits sauf qu'il ne peux pas accéder au panneau de configuration de l'application. Le propriétaire a beaucoup moins de droit. Il peut seulement voir, ajouter et supprimer des membres des groupes dont il est propriétaire. </value>
+    <value>Il y a trois rôles: Super-Administrateur, Administrateur et propriétaire. Dans HADES, les rôles nous permettent de gérer les permissions des utilisateurs connectés.  Il n’y a pas de concept de propriétaire  dans l’AD, c’est nous qui allons l'implanter. Le Super-Administrateur a tout les droits. l'Administrateur a tout les droits sauf qu'il ne peux pas accéder au panneau de configuration de l'application. Le propriétaire a beaucoup moins de droit. Il peut seulement voir, ajouter et supprimer des membres des groupes dont il est propriétaire.</value>
+  </data>
+  <data name="CssFileDoesNotExist" xml:space="preserve">
+    <value>Le fichier {0}.css n'existe pas.</value>
   </data>
 </root>

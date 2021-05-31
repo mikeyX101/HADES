@@ -6,36 +6,32 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
-using System.Collections;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Localization;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace HADES.Controllers
 {
-	public class UserConfigsController : LocalizedController<HomeController>
+    public class UserConfigsController : LocalizedController<HomeController>
     {
-        private readonly ApplicationDbContext db;
 
         public UserConfigsController(IStringLocalizer<HomeController> localizer, ApplicationDbContext context) : base(localizer)
         {
-            db = context;
         }
 
         [Authorize]
-        public async Task<IActionResult> UserConfig()
+        public IActionResult UserConfig()
         {
             UserConfigService service = new();
-            var viewModel = await service.UserConfig(ConnexionUtil.CurrentUser(this.User).GetUserConfig());
-            viewModel.Languages = new List<SelectListItem>() 
+            var viewModel = service.UserConfig(ConnexionUtil.CurrentUser(this.User).GetUserConfig());
+            viewModel.Languages = new List<SelectListItem>()
             {
                 new SelectListItem {Text = HADES.Strings.French, Value = "fr-CA"},
                 new SelectListItem {Text = HADES.Strings.English, Value = "en-US"},
                 new SelectListItem {Text = HADES.Strings.Spanish, Value = "es-US"},
                 new SelectListItem {Text = HADES.Strings.Portuguese, Value = "pt-BR"}
             };
-            viewModel.Themes = new List<SelectListItem>()
+            viewModel.Themes = new List<SelectListItem>() //TODO Translate text with readable and not "technical" names
             {
                 new SelectListItem {Text = "site", Value = "site"},
                 new SelectListItem {Text = "deeppink", Value = "deeppink"},
@@ -71,7 +67,7 @@ namespace HADES.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction("UserConfig", new { id = viewModel.UserConfig.Id });
+                return RedirectToAction("UserConfig");
             }
             else
             {
@@ -80,9 +76,8 @@ namespace HADES.Controllers
         }
 
         [Authorize]
-        public IActionResult CreateEmail(int? id)
+        public IActionResult CreateEmail()
         {
-            ViewBag.UserConfigId = id;
             return View();
         }
 
@@ -90,30 +85,27 @@ namespace HADES.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateEmail([Bind("Id,Address,ExpirationDate,GroupCreate,GroupDelete,MemberAdd,MemberRemoval,UserConfigId")] Email email)
+        public async Task<IActionResult> CreateEmail([Bind("Id,Address,ExpirationDate,GroupCreate,GroupDelete,MemberAdd,MemberRemoval")] Email email)
         {
             UserConfigService service = new();
             if (ModelState.IsValid)
             {
+                email.UserConfigId = ConnexionUtil.CurrentUser(this.User).GetUserConfig().Id;
                 await service.AddEmail(email);
-                return RedirectToAction("UserConfig", new { id = email.UserConfigId });
+                return RedirectToAction("UserConfig");
             }
             return View(email);
         }
 
 
         [Authorize]
-        public async Task<IActionResult> EmailDelete(int? id)
+        public async Task<IActionResult> EmailDelete()
         {
             UserConfigService service = new();
-            if (id == null)
-            {
-                return NotFound();
-            }
-            var userConfigId = await service.RedirectId(id);
+            int id = ConnexionUtil.CurrentUser(this.User).GetUserConfig().Id;
             await service.DeleteEmail(id);
 
-            return RedirectToAction("UserConfig", new { id = userConfigId });
+            return RedirectToAction("UserConfig");
         }
     }
 }
