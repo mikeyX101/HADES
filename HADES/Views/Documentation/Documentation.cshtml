@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewData["Title"] = "Documentation";
+    ViewData["Title"] = Localizer["Documentation"];
 }
 
 @{
@@ -15,38 +15,84 @@
     <script src="~/lib/popper.js/umd/popper.min.js"></script>
 }
 
+<style>
+    .important {
+        background-color: red;
+    }
 
+    table, table th, table td {
+        border: 1px solid black;
+        padding: 5px;
+    }
+</style>
 
 <div class="bg-primary text-white text-center">
-    <h1 class="m-3 p-3"><i class="fa fa-info-circle fa-fw mr-3"></i>@HADES.Strings.Documentation</h1>
+    <h1 class="m-3 p-3"><i class="fa fa-info-circle fa-fw mr-3"></i>@Localizer["Documentation"]</h1>
 </div>
 <h1>HADES(Helpful Active Directory External System)</h1>
 
 <div id="introSection">
-    <p>@HADES.Strings.Doc_intro</p>
+    <p>@Localizer["Doc_intro"]</p>
 </div>
 
 <div id="roleSection">
-    <h3>@HADES.Strings.roleTitle</h3>
-    <p>@HADES.Strings.doc_roleText</p>
+    <h3>@Localizer["roleTitle"]</h3>
+    <p>@Localizer["doc_roleText"]</p>
 </div>
 
 <div id="ExpirationDateSection">
-    <h3>@HADES.Strings.doc_notexpdateTitle</h3>
-    <p>@HADES.Strings.doc_notexp01</p>
-    <p>@HADES.Strings.doc_notexp02</p>
+    <h3>@Localizer["doc_notexpdateTitle"]</h3>
+    <p>@Localizer["doc_notexp01"]</p>
+    <p>@Localizer["doc_notexp02"]</p>
     <ol>
-        <li>@HADES.Strings.doc_notexp03 <i class="fa fa-info-circle fa-fw mr-3" data-toggle="tooltip" data-html="true" data-placement="bottom" title="<img src='\img\image1.png' alt='image1'>"></i></li>
-        <li>@HADES.Strings.doc_notexp04 <i class="fa fa-info-circle fa-fw mr-3" data-toggle="tooltip" data-html="true" data-placement="bottom" title="<img src='\img\image11.png' alt='image2'>"></i></li>
-        <li>@HADES.Strings.doc_notexp05 <i class="fa fa-info-circle fa-fw mr-3" data-toggle="tooltip" data-html="true" data-placement="bottom" title="<img src='\img\image3.png' alt='image3'>"></i></li>
-        <li>@HADES.Strings.doc_notexp06 <i class="fa fa-info-circle fa-fw mr-3" data-toggle="tooltip" data-html="true" data-placement="bottom" title="<img src='\img\image2.png' alt='image4'>"></i></li>
-        <li>@HADES.Strings.doc_notexp07 <i class="fa fa-info-circle fa-fw mr-3" data-toggle="tooltip" data-html="true" data-placement="bottom" title="<img src='\img\image8.png' alt='image5'>"></i></li>
-        <li>@HADES.Strings.doc_notexp08 <i class="fa fa-info-circle fa-fw mr-3" data-toggle="tooltip" data-html="true" data-placement="bottom" title="<img src='\img\image5.png' alt='image6'>"></i></li>
-        <li>@HADES.Strings.doc_notexp09 <a href="https://www.vishnivetsky.ru/notices%20articles%20reviews/on-line%20oid%20generator%20for%20active%20directory%20schema.html">@HADES.Strings.link_generator</a> <i class="fa fa-info-circle fa-fw mr-3" data-toggle="tooltip" data-html="true" data-placement="bottom" title="<img src='\img\image10.png' alt='image7'>"></i></li>
-        <li>@HADES.Strings.doc_notexp010 <i class="fa fa-info-circle fa-fw mr-3" data-toggle="tooltip" data-html="true" data-placement="bottom" title="<img src='\img\image7.png' alt='image8'>"></i></li>
-        <li>@HADES.Strings.doc_notexp011 <i class="fa fa-info-circle fa-fw mr-3" data-toggle="tooltip" data-html="true" data-placement="bottom" title="<img src='\img\image6.png' alt='image9'>"></i></li>
-        <li>@HADES.Strings.doc_notexp012 <i class="fa fa-info-circle fa-fw mr-3" data-toggle="tooltip" data-html="true" data-placement="bottom" title="<img src='\img\image4.png' alt='image10'>"></i></li>
+        <li>@Localizer["doc_notexp03"] <i class="fa fa-info-circle fa-fw mr-3" data-toggle="tooltip" data-html="true" data-placement="bottom" title="<img src='/img/doc/noteexp/image1.png' alt='image1'>"></i></li>
+        <li>@Localizer["doc_notexp04"] <i class="fa fa-info-circle fa-fw mr-3" data-toggle="tooltip" data-html="true" data-placement="bottom" title="<img src='/img/doc/noteexp/image11.png' alt='image2'>"></i></li>
+        <li>@Localizer["doc_notexp05"] <i class="fa fa-info-circle fa-fw mr-3" data-toggle="tooltip" data-html="true" data-placement="bottom" title="<img src='/img/doc/noteexp/image3.png' alt='image3'>"></i></li>
+        <li>@Localizer["doc_notexp06"] <i class="fa fa-info-circle fa-fw mr-3" data-toggle="tooltip" data-html="true" data-placement="bottom" title="<img src='/img/doc/noteexp/image2.png' alt='image4'>"></i></li>
+        <li>@Localizer["doc_notexp07"] <i class="fa fa-info-circle fa-fw mr-3" data-toggle="tooltip" data-html="true" data-placement="bottom" title="<img src='/img/doc/noteexp/image8.png' alt='image5'>"></i></li>
+        <li>@Localizer["doc_notexp08"] <i class="fa fa-info-circle fa-fw mr-3" data-toggle="tooltip" data-html="true" data-placement="bottom" title="<img src='/img/doc/noteexp/image5.png' alt='image6'>"></i></li>
+        <li>@Localizer["doc_notexp09"] <a href="https://www.vishnivetsky.ru/notices%20articles%20reviews/on-line%20oid%20generator%20for%20active%20directory%20schema.html">@Localizer["link_generator"]</a> <i class="fa fa-info-circle fa-fw mr-3" data-toggle="tooltip" data-html="true" data-placement="bottom" title="<img src='/img/doc/noteexp/image10.png' alt='image7'>"></i></li>
+        <li>@Localizer["doc_notexp010"] <i class="fa fa-info-circle fa-fw mr-3" data-toggle="tooltip" data-html="true" data-placement="bottom" title="<img src='/img/doc/noteexp/image7.png' alt='image8'>"></i></li>
+        <li>@Localizer["doc_notexp011"] <i class="fa fa-info-circle fa-fw mr-3" data-toggle="tooltip" data-html="true" data-placement="bottom" title="<img src='/img/doc/noteexp/image6.png' alt='image9'>"></i></li>
+        <li>@Localizer["doc_notexp012"] <i class="fa fa-info-circle fa-fw mr-3" data-toggle="tooltip" data-html="true" data-placement="bottom" title="<img src='/img/doc/noteexp/image4.png' alt='image10'>"></i></li>
     </ol>
+</div>
+
+<div id="LogsSection">
+    <h3>@Localizer["doc_logsTitle"]</h3>
+    <p>@Localizer["doc_logs01"] <i class="fa fa-info-circle fa-fw mr-3" data-toggle="tooltip" data-html="true" data-placement="bottom" title="<img src='/img/doc/logs/image1.png' alt='image1'>"></i></p>
+    <p>@Localizer["doc_logs02"]</p>
+    <p>@Localizer["doc_logs03"]</p>
+    <p>@Localizer["doc_logs04"]</p>
+    <p>@Localizer["doc_logs05"]</p>
+    <table>
+        <tr>
+            <th>@Localizer["doc_logsTableFileSize"] (.json)</th>
+            <th>@Localizer["doc_logsTableProcessTime"] (HH:MM:SS.MS)</th>
+            <th>@Localizer["doc_logsTableFileSize"] (.csv)</th>
+        </tr>
+        <tr>
+            <td>308 @Localizer["doc_logsTableKilobit"]</td>
+            <td>00:00:00.07</td>
+            <td>127 @Localizer["doc_logsTableKilobit"]</td>
+        </tr>
+        <tr>
+            <td>121 863 @Localizer["doc_logsTableKilobit"]</td>
+            <td>00:00:07.01	</td>
+            <td>45 442 @Localizer["doc_logsTableKilobit"]</td>
+        </tr>
+        <tr>
+            <td>488 378 @Localizer["doc_logsTableKilobit"]</td>
+            <td>00:00:27.43</td>
+            <td>182 231 @Localizer["doc_logsTableKilobit"]</td>
+        </tr>
+        <tr>
+            <td>2 016 521 @Localizer["doc_logsTableKilobit"]</td>
+            <td>00:01:52.37</td>
+            <td>753 168 @Localizer["doc_logsTableKilobit"]</td>
+        </tr>
+    </table>
+    <br />
 </div>
 
 

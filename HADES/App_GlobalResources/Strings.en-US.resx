@@ -213,62 +213,11 @@
   <data name="errorFileSize" xml:space="preserve">
     <value>A file is too big</value>
   </data>
-  <data name="Documentation" xml:space="preserve">
-    <value>Documentation</value>
-  </data>
-  <data name="doc_notexpdateTitle" xml:space="preserve">
-    <value>The expiration date of the groups</value>
-  </data>
-  <data name="doc_notexp01" xml:space="preserve">
-    <value>Using the expiration date field for groups requires special configuration. For the group expiration date field to be functional, you must add a custom attribute and add it to the group class of your Active Directory. Thus, this information will not be stored in the Hades database, but directly, in your Active Directory.</value>
-  </data>
-  <data name="doc_notexp02" xml:space="preserve">
-    <value>Here is a little step-by-step guide to help you complete this setup.</value>
-  </data>
-  <data name="doc_notexp03" xml:space="preserve">
-    <value>To start, you have to install the Active Directory schema software component. You must run the regsvr32 schmmgmt.dll command using an elevated command prompt (using the Run as administrator option).</value>
-  </data>
-  <data name="doc_notexp04" xml:space="preserve">
-    <value>Once the Active Directory Schema Administration Tool is installed, it will be available on MMC.</value>
-  </data>
-  <data name="doc_notexp05" xml:space="preserve">
-    <value>Then you need to add the Active Directory Schema as a Snap-in. Click on File and on Add / Remove Snap-ins ...</value>
-  </data>
-  <data name="doc_notexp06" xml:space="preserve">
-    <value>Select Active Directory Schema and select Add. Click on Ok.</value>
-  </data>
-  <data name="doc_notexp07" xml:space="preserve">
-    <value>In the Active Directory schema administration tool, right-click on Attributes, then select Create attribute...</value>
-  </data>
-  <data name="doc_notexp08" xml:space="preserve">
-    <value>Click Continue (the warning that appears is to inform that creating a new Active Directory attribute is not a reversible operation and cannot be deleted when completed)</value>
-  </data>
-  <data name="doc_notexp09" xml:space="preserve">
-    <value>Fill in the following information. It is very important that the information is written exactly this way. The common name is ExpirationDateHades. The LDAP name is expirationDateHades. For the Object ID, you need to generate one. Below is a link to a generator, but any generator can do the job. The syntax is UTC Coded Time. The rest of the fields are optional.</value>
-  </data>
-  <data name="doc_notexp010" xml:space="preserve">
-    <value>On the Active Directory Schema Administration Tool, navigate to Classes, select group, and then navigate to its properties.</value>
-  </data>
-  <data name="doc_notexp011" xml:space="preserve">
-    <value>Go to the Attributes tab, click Add, then add dateDexpirationHades When done, select the attribute to add and click OK. Click on Apply.</value>
-  </data>
-  <data name="doc_notexp012" xml:space="preserve">
-    <value>For the new attribute to be available in your Active Directory, you must restart your server. To validate that your new attribute is available, you can go to the attribute editor of a group in your Active Directory.</value>
-  </data>
-  <data name="link_generator" xml:space="preserve">
-    <value>Link to the Generator</value>
-  </data>
-  <data name="Doc_intro" xml:space="preserve">
-    <value>HADES was developed as part of a college course. The application therefore does not offer support. It is a tool that allows the management of Active Directory (AD) groups. The principle is to make the management of these groups user-friendly so that people outside the IT technicians department can manage permissions. In addition, the platform contains an event manager (logs) and a configurable email notification system.</value>
-  </data>
   <data name="roleTitle" xml:space="preserve">
     <value>Role</value>
     </data>
   <data name="NoLog" xml:space="preserve">
     <value>No log file has been found for that day.</value>
-  </data>
-  <data name="doc_roleText" xml:space="preserve">
-    <value>There are three roles: Super-Administrator, Administrator and Owner. In HADES, roles allow us to manage the permissions of logged in users. There is no concept of owner in the DA, we are the ones who will implement it. The Super-Administrator has all the rights. The Administrator has all the rights except that he cannot access the application control panel. The owner has much less rights. He can only see, add and remove members of groups he owns.</value>
   </data>
   <data name="CssFileDoesNotExist" xml:space="preserve">
     <value>The file {0}.css doesn't exist.</value>

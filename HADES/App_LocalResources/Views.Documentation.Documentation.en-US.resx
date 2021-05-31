@@ -1,0 +1,198 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Doc_intro" xml:space="preserve">
+    <value>HADES was developed as part of a college course. The application therefore does not offer support. It is a tool that allows the management of Active Directory (AD) groups. The principle is to make the management of these groups user-friendly so that people outside the IT technicians department can manage permissions. In addition, the platform contains an event manager (logs) and a configurable email notification system.</value>
+  </data>
+  <data name="doc_logs01" xml:space="preserve">
+    <value>The event logs are visible from the view "Event Logs". These files are stored in compacted JSON files (CLEF). These files are also readable in other external readers like &lt;a href="https://github.com/warrenbuckley/Compact-Log-Format-Viewer"&gt;Compact-Log-Format-Viewer&lt;/a&gt;.</value>
+  </data>
+  <data name="doc_logs02" xml:space="preserve">
+    <value>The files are read through by the server and only the entries that need to be shown are sent to the view. This means that each change in the table (like changing the day, search or page) is sent to the server and then shown in the table. This ensures that even if a file has an enormous size, the file will still be entirely readable.</value>
+  </data>
+  <data name="doc_logs03" xml:space="preserve">
+    <value>For big log files, the first operation might take some time while the number of lines in the file are being cached. Testing with a 2GB log file showed a 10 seconds delay for the first loading and then delays of ~1 second for other operations. This cache is only for the current file and resets when another file is loaded.</value>
+  </data>
+  <data name="doc_logs04" xml:space="preserve">
+    <value>&lt;span class="important"&gt;IMPORTANT:&lt;/span&gt; When an operation is done on today's log file, that log file must be momentarily closed to read it. When the file is closed, every event that occurs while the file is being read will not be saved. (To improve) It is important to limit operations on that file to avoid missing important events.</value>
+  </data>
+  <data name="doc_logs05" xml:space="preserve">
+    <value>It's possible to export the current filtered logs (from the search field) to a CSV file. Depending on the size of the log file, it's possible that converting will take some time. Here's a table of benchmarks done for reference:</value>
+  </data>
+  <data name="doc_logsTitle" xml:space="preserve">
+    <value>Server logs</value>
+  </data>
+  <data name="doc_notexp01" xml:space="preserve">
+    <value>Using the expiration date field for groups requires special configuration. For the group expiration date field to be functional, you must add a custom attribute and add it to the group class of your Active Directory. Thus, this information will not be stored in the Hades database, but directly, in your Active Directory.</value>
+  </data>
+  <data name="doc_notexp010" xml:space="preserve">
+    <value>On the Active Directory Schema Administration Tool, navigate to Classes, select group, and then navigate to its properties.</value>
+  </data>
+  <data name="doc_notexp011" xml:space="preserve">
+    <value>Go to the Attributes tab, click Add, then add dateDexpirationHades When done, select the attribute to add and click OK. Click on Apply.</value>
+  </data>
+  <data name="doc_notexp012" xml:space="preserve">
+    <value>For the new attribute to be available in your Active Directory, you must restart your server. To validate that your new attribute is available, you can go to the attribute editor of a group in your Active Directory.</value>
+  </data>
+  <data name="doc_notexp02" xml:space="preserve">
+    <value>Here is a little step-by-step guide to help you complete this setup.</value>
+  </data>
+  <data name="doc_notexp03" xml:space="preserve">
+    <value>To start, you have to install the Active Directory schema software component. You must run the regsvr32 schmmgmt.dll command using an elevated command prompt (using the Run as administrator option).</value>
+  </data>
+  <data name="doc_notexp04" xml:space="preserve">
+    <value>Once the Active Directory Schema Administration Tool is installed, it will be available on MMC.</value>
+  </data>
+  <data name="doc_notexp05" xml:space="preserve">
+    <value>Then you need to add the Active Directory Schema as a Snap-in. Click on File and on Add / Remove Snap-ins ...</value>
+  </data>
+  <data name="doc_notexp06" xml:space="preserve">
+    <value>Select Active Directory Schema and select Add. Click on Ok.</value>
+  </data>
+  <data name="doc_notexp07" xml:space="preserve">
+    <value>In the Active Directory schema administration tool, right-click on Attributes, then select Create attribute...</value>
+  </data>
+  <data name="doc_notexp08" xml:space="preserve">
+    <value>Click Continue (the warning that appears is to inform that creating a new Active Directory attribute is not a reversible operation and cannot be deleted when completed)</value>
+  </data>
+  <data name="doc_notexp09" xml:space="preserve">
+    <value>Fill in the following information. It is very important that the information is written exactly this way. The common name is ExpirationDateHades. The LDAP name is expirationDateHades. For the Object ID, you need to generate one. Below is a link to a generator, but any generator can do the job. The syntax is UTC Coded Time. The rest of the fields are optional.</value>
+  </data>
+  <data name="doc_notexpdateTitle" xml:space="preserve">
+    <value>The expiration date of the groups</value>
+  </data>
+  <data name="doc_roleText" xml:space="preserve">
+    <value>There are three roles: Super-Administrator, Administrator and Owner. In HADES, roles allow us to manage the permissions of logged in users. There is no concept of owner in the DA, we are the ones who will implement it. The Super-Administrator has all the rights. The Administrator has all the rights except that he cannot access the application control panel. The owner has much less rights. He can only see, add and remove members of groups he owns.</value>
+  </data>
+  <data name="Documentation" xml:space="preserve">
+    <value>Documentation</value>
+  </data>
+  <data name="doc_logsTableFileSize" xml:space="preserve">
+    <value>File Size</value>
+  </data>
+  <data name="doc_logsTableProcessTime" xml:space="preserve">
+    <value>Process time</value>
+  </data>
+  <data name="doc_logsTableKilobit" xml:space="preserve">
+    <value>Kb</value>
+  </data>
+  <data name="link_generator" xml:space="preserve">
+    <value>Link to the Generator</value>
+  </data>
+</root>
