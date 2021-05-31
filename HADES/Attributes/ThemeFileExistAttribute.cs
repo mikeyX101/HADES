@@ -16,13 +16,13 @@ namespace HADES.Attributes
             if (value is string)
             {
                 themeFileName = (string) value;
-                themeFilePath = System.IO.Directory.GetCurrentDirectory() + "\\wwwroot\\css\\" + themeFileName + "\\" + themeFileName + ".css";
+                themeFilePath = "wwwroot/css/" + themeFileName + "/" + themeFileName + ".css";
                 if (File.Exists(themeFilePath))
                 {
                     return ValidationResult.Success;
                 }
             }
-            string defaultErrorMessage = "Le fichier " + themeFileName + ".css n'existe pas";
+            string defaultErrorMessage = string.Format(Strings.CssFileDoesNotExist, themeFileName);
             return new ValidationResult(defaultErrorMessage);
         }
     }

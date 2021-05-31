@@ -34,6 +34,14 @@ namespace HADES.Util
             } 
         }
 
+        public ADManager(Data.ApplicationDbContext db)
+        {
+            if (ADSettingsCache.Ad == null)
+            {
+                ADSettingsCache.Refresh(db);
+            }
+        }
+
         /*****************************************************
          GETATTRIBUTE  AD
          ******************************************************/
