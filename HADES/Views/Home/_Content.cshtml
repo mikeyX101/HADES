@@ -36,6 +36,7 @@
 
 
 
+
             if (Model.ADRoot[i].Path == Model.SelectedPath)
             {
                 <tr>
@@ -184,7 +185,8 @@
                                                         var nextYear = new Date(today.getFullYear() + 1, today.getMonth(), today.getDate());
                                                         var dateExp = new Date(@Model.GroupAD.ExpirationDate.Year,@Model.GroupAD.ExpirationDate.Month, @Model.GroupAD.ExpirationDate.Day);
 
-                                                        $("#datepickerExp")
+
+                                                        $("#datepickerExpId@(groupId)")
                                                                 .val(dateExp.toISOString().substring(0, 10))
                                                             .datepicker({
                                                                 maxDate: nextYear,
@@ -193,13 +195,12 @@
                                                                 dateFormat: "yy-mm-dd",
                                                             });
 
-                                                      
                                                     </script>
 
                                                     <div class="form-group row">
                                                         <label asp-for="@Model.GroupAD.ExpirationDate" class="col-sm-2 col-form-label">Expiration Date</label>
                                                         <div class="col-sm-10">
-                                                            <input asp-for="@Model.GroupAD.ExpirationDate" id="datepickerExp" class="form-control" type="text" value="" readonly />
+                                                            <input asp-for="@Model.GroupAD.ExpirationDate" id="datepickerExpId@(groupId)" class="form-control" type="text" value="" readonly />
                                                         </div>
                                                     </div>
 
