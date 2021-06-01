@@ -18,17 +18,15 @@ namespace HADES.Controllers
     {
         private ADManager ad;
         private MainViewViewModel viewModel;
-        private ApplicationDbContext context;
 
         public HomeController(IStringLocalizer<HomeController> localizer, ApplicationDbContext ctx) : base(localizer)
         {
             ad = new ADManager();
             viewModel = new MainViewViewModel();
-            context = ctx;
         }
 
         [Authorize]
-        // Returns the Main Application View parameter is the selected Folder
+        // Returns the Main Application View parameter is the selected Folder (Clean up to remove unauthorized)
         public IActionResult MainView()
         {
             try
@@ -196,6 +194,7 @@ namespace HADES.Controllers
 
 
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public IActionResult CreateGroupModal([Bind("GroupAD, SelectedNodeName, SelectedContentName, SelectedPath, SelectedMembers, SelectedOwners")] MainViewViewModel viewModel)
         {
@@ -257,6 +256,7 @@ namespace HADES.Controllers
 
 
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public IActionResult EditGroupModal([Bind("GroupAD, SelectedNodeName, SelectedPath, BeforeEditMembers, SelectedMembers, OuGroup, SelectedOwners")] MainViewViewModel viewModel)
         {
@@ -361,9 +361,13 @@ namespace HADES.Controllers
             return members;
         }
 
-
+        [Authorize]
         public IActionResult GetOwners(string guid)
         {
+            if (!ConnexionUtil.CurrentUser(this.User).GetRole().AdCrudAccess) // ACCESS CONTROL
+            {
+                return RedirectToAction("MainView", "Home");
+            }
             ApplicationDbContext db = new ApplicationDbContext();
 
             var user = db.User.Where(x => x.OwnerGroupUsers.Select(x => x.OwnerGroup.GUID).Contains(guid)).ToList().Select(x => x.GetName());

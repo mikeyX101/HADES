@@ -11,22 +11,24 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <nav>
-                    <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
-                        <a class="nav-item nav-link active" id="nav-groupName-tab" data-toggle="tab" href="#nav-groupName"
-                           role="tab" aria-controls="nav-home" aria-selected="true">General</a>
-                        @{
-                            var tabClass = Model != null ? "nav-item nav-link" : "nav-item nav-link disabled";
-                        }
-                        <a class="@tabClass" id="nav-members-tab" data-toggle="tab" href="#nav-members"
-                           role="tab" aria-controls="nav-members" aria-selected="false">Members</a>
-                        <a class="@tabClass" id="nav-owners-tab" data-toggle="tab" href="#nav-owners"
-                           role="tab" aria-controls="nav-owners" aria-selected="false">Owners</a>
-                    </div>
-                </nav>
-                <div class="tab-content" id="nav-tabContent">
-                    <form asp-action="CreateGroupModal">
+            <form asp-action="CreateGroupModal">
+                <div class="modal-body GroupModalBody">
+                    <nav>
+                        <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                            <a class="nav-item nav-link active" id="nav-groupName-tab" data-toggle="tab" href="#nav-groupName"
+                               role="tab" aria-controls="nav-home" aria-selected="true">General</a>
+                            @{
+                                var tabClass = Model != null ? "nav-item nav-link" : "nav-item nav-link disabled";
+                            }
+                            <a class="@tabClass" id="nav-members-tab" data-toggle="tab" href="#nav-members"
+                               role="tab" aria-controls="nav-members" aria-selected="false">Members</a>
+                            <a class="@tabClass" id="nav-owners-tab" data-toggle="tab" href="#nav-owners"
+                               role="tab" aria-controls="nav-owners" aria-selected="false">Owners</a>
+                        </div>
+                    </nav>
+
+                    <div class="tab-content" id="nav-tabContent">
+
                         <div class="tab-pane fade show active" id="nav-groupName" role="tabpanel" aria-labelledby="nav-groupName-tab">
                             <!-- general form -->
                             <input type="hidden" name="SelectedPath" value="@Model.SelectedPath" />
@@ -54,7 +56,7 @@
                             </div>
 
                             <script type="text/javascript">
-                             
+
                                 var today = new Date();
                                 var nextYear = new Date(today.getFullYear() + 1, today.getMonth(), today.getDate());
 
@@ -100,13 +102,14 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary" id="btnSave">Ok</button>
-                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                        </div>
-                    </form>
+                    </div>
                 </div>
-            </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" id="btnSave">Ok</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+
         </div>
     </div>
 </div>

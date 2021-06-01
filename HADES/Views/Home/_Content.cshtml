@@ -1,5 +1,10 @@
 ﻿@model MainViewViewModel
 
+@{ HADES.Data.ApplicationDbContext tempdb = new(); }
+@{
+    IUser u = HADES.Util.ConnexionUtil.CurrentUser(Context.User);
+}
+
 <h3 class="mt-1 mb-2 pr-2">
     @Localizer["Folder"] @Model.SelectedNodeName
     <!-- Button trigger modal create OU -->
@@ -32,10 +37,6 @@
             var dataTarget = "";
             var id = "a" + i.ToString();
             var groupId = "b" + i.ToString();
-
-
-
-
 
             if (Model.ADRoot[i].Path == Model.SelectedPath)
             {
@@ -137,12 +138,12 @@
                             var selectedOwnersTarget = "selectedOwners" + i;
 
                         }
-                            <span data-toggle="tooltip" data-html="true" data-placement="right" title="@Model.EditLinkLabel">
-                                <a data-ajax="true" data-ajax-method="GET" data-ajax-mode="replace" data-ajax-update="@selectedOwnersId"
-                                   href='@Url.Action("GetOwners","Home",new { guid = Model.GroupAD.ObjectGUID})' class="btn btn-primary" data-toggle="modal" data-target="@dataTarget" data-backdrop="false">
-                                    <i class="fa fa-edit fa-fw"></i>
-                                </a>
-                            </span>
+                        <span data-toggle="tooltip" data-html="true" data-placement="right" title="@Model.EditLinkLabel">
+                            <a data-ajax="true" data-ajax-method="GET" data-ajax-mode="replace" data-ajax-update="@selectedOwnersId"
+                               href='@Url.Action("GetOwners","Home",new { guid = Model.GroupAD.ObjectGUID})' class="btn btn-primary" data-toggle="modal" data-target="@dataTarget" data-backdrop="false">
+                                <i class="fa fa-edit fa-fw"></i>
+                            </a>
+                        </span>
                         <div class="modal fade" id="@groupId" tabindex="-1" role="dialog" aria-labelledby="GroupCreateLbl"
                              aria-hidden="true">
                             <div class="modal-dialog" role="document">
@@ -153,19 +154,21 @@
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
-                                    <div class="modal-body">
-                                        <nav>
-                                            <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
-                                                <a class="nav-item nav-link active" id="nav-groupName-tab" data-toggle="tab" href="@navGroupInfo"
-                                                   role="tab" aria-controls="nav-home" aria-selected="true">General</a>
-                                                <a class="nav-item nav-link" id="nav-members-tab" data-toggle="tab" href="@navMembers"
-                                                   role="tab" aria-controls="nav-members" aria-selected="false">Members</a>
-                                                <a class="nav-item nav-link" id="nav-owners-tab" data-toggle="tab" href="@navOwners"
-                                                   role="tab" aria-controls="nav-owners" aria-selected="false">Owners</a>
-                                            </div>
-                                        </nav>
-                                        <div class="tab-content" id="nav-tabContent">
-                                            <form asp-action="EditGroupModal">
+                                    <form asp-action="EditGroupModal">
+                                        <div class="modal-body GroupModalBody">
+                                            <nav>
+                                                <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                                                    <a class="nav-item nav-link active" id="nav-groupName-tab" data-toggle="tab" href="@navGroupInfo"
+                                                       role="tab" aria-controls="nav-home" aria-selected="true">General</a>
+                                                    <a class="nav-item nav-link" id="nav-members-tab" data-toggle="tab" href="@navMembers"
+                                                       role="tab" aria-controls="nav-members" aria-selected="false">Members</a>
+                                                    <a class="nav-item nav-link" id="nav-owners-tab" data-toggle="tab" href="@navOwners"
+                                                       role="tab" aria-controls="nav-owners" aria-selected="false">Owners</a>
+                                                </div>
+                                            </nav>
+
+                                            <div class="tab-content" id="nav-tabContent">
+
                                                 <!-- General info form -->
 
                                                 <div class="tab-pane fade show active" id="@navGroupInfoTab" role="tabpanel" aria-labelledby="nav-groupName-tab">
@@ -231,6 +234,7 @@
                                                 <div class="tab-pane fade tab-absolute" id="@navMembersTab" role="tabpanel" aria-labelledby="nav-members-tab">
                                                     <div>
                                                         <div class="directorist-select directorist-select-multi" id="EditMembersMultiSelect" data-isSearch="true" data-multiSelect='@Model.UsersAD'>
+                                                          
                                                             <input type="hidden" asp-for="@Model.SelectedMembers">
                                                             <input type="hidden" asp-for="@Model.BeforeEditMembers" />
                                                         </div>
@@ -238,33 +242,33 @@
                                                 </div>
                                                 <!-- Owners form -->
                                                 <div class="tab-pane fade tab-absolute" id="@navOwnersTab" role="tabpanel" aria-labelledby="nav-owners-tab">
-
                                                     <div id="@selectedOwnersTarget">
-                                                        @*<div class="directorist-select directorist-select-multi" id="EditOwnersMultiSelect" data-isSearch="true" data-multiSelect='@Model.UsersAD'>
-                                                                <input type="hidden" asp-for="@Model.SelectedOwners">
-                                                            </div>*@
                                                     </div>
                                                 </div>
-                                                <div class="modal-footer">
-                                                    <button type="submit" class="btn btn-primary" id="btnSave">Ok</button>
-                                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                                                </div>
-                                            </form>
+                                            </div>
                                         </div>
-                                    </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-primary" id="btnSave">Ok</button>
+                                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Button to delete -->
-                        <form onsubmit="return formSubmit(this)" style="display: inline-block">
-                            <button class="btn btn-primary" data-toggle="tooltip" data-html="true" data-placement="right" title="@HADES.Strings.Delete">
-                                <i class="fa fa-trash-alt fa-fw"></i>
-                            </button>
-                            <input type="hidden" name="SelectedPath" value="@Model.SelectedPath" />
-                            <input type="hidden" name="SelectedContentName" value="@Model.ADRoot[i].SamAccountName" />
-                            <input type="hidden" name="ExpandedNodesName" value="@Model.ExpandedNodesName" />
-                        </form>
+                        @if (u.GetRole().AdCrudAccess)
+                        {
+                            <form onsubmit="return formSubmit(this)" style="display: inline-block">
+                                <button class="btn btn-primary" data-toggle="tooltip" data-html="true" data-placement="right" title="@HADES.Strings.Delete">
+                                    <i class="fa fa-trash-alt fa-fw"></i>
+                                </button>
+                                <input type="hidden" name="SelectedPath" value="@Model.SelectedPath" />
+                                <input type="hidden" name="SelectedContentName" value="@Model.ADRoot[i].SamAccountName" 
+                                <input type="hidden" name="ExpandedNodesName" value="@Model.ExpandedNodesName" />
+                            </form>
+                        }
+
                     </td>
                 </tr>
             }
@@ -274,9 +278,8 @@
 
 <script type="text/javascript" src="~/js/formValidation.js"></script>
 <script type="text/javascript" src="~/js/formFocus.js"></script>
-<script src="~/lib/pureScriptSelect-master/script.js"></script>
 <script type="text/javascript">
     //pureScriptSelect('#selectImg');
-    //pureScriptSelect('#selectIcon');
+   //pureScriptSelect('#selectIcon');
 </script>
 
