@@ -16,6 +16,7 @@ namespace HADES.Controllers
     {
         public EventLogController(IStringLocalizer<EventLogController> localizer) : base(localizer) { }
 
+
         public IActionResult EventLog()
         {
             if (!Util.ConnexionUtil.CurrentUser(User).GetRole().EventLogAccess) // ACCESS CONTROL

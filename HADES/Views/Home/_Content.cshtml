@@ -1,5 +1,10 @@
 ﻿@model MainViewViewModel
 
+@{ HADES.Data.ApplicationDbContext tempdb = new(); }
+@{
+    IUser u = HADES.Util.ConnexionUtil.CurrentUser(Context.User);
+}
+
 <h3 class="mt-1 mb-2 pr-2">
     @Localizer["Folder"] @Model.SelectedNodeName
     <!-- Button trigger modal create OU -->
@@ -224,6 +229,7 @@
                                                 <div class="tab-pane fade tab-absolute" id="@navMembersTab" role="tabpanel" aria-labelledby="nav-members-tab">
                                                     <div>
                                                         <div class="directorist-select directorist-select-multi" id="EditMembersMultiSelect" data-isSearch="true" data-multiSelect='@Model.UsersAD'>
+                                                          
                                                             <input type="hidden" asp-for="@Model.SelectedMembers">
                                                             <input type="hidden" asp-for="@Model.BeforeEditMembers" />
                                                         </div>
@@ -246,13 +252,17 @@
                         </div>
 
                         <!-- Button to delete -->
-                        <form onsubmit="return formSubmit(this)" style="display: inline-block">
-                            <button class="btn btn-primary" data-toggle="tooltip" data-html="true" data-placement="right" title="@HADES.Strings.Delete">
-                                <i class="fa fa-trash-alt fa-fw"></i>
-                            </button>
-                            <input type="hidden" name="SelectedPath" value="@Model.SelectedPath" />
-                            <input type="hidden" name="SelectedContentName" value="@Model.ADRoot[i].SamAccountName" />
-                        </form>
+                        @if (u.GetRole().AdCrudAccess)
+                        {
+                            <form onsubmit="return formSubmit(this)" style="display: inline-block">
+                                <button class="btn btn-primary" data-toggle="tooltip" data-html="true" data-placement="right" title="@HADES.Strings.Delete">
+                                    <i class="fa fa-trash-alt fa-fw"></i>
+                                </button>
+                                <input type="hidden" name="SelectedPath" value="@Model.SelectedPath" />
+                                <input type="hidden" name="SelectedContentName" value="@Model.ADRoot[i].SamAccountName" />
+                            </form>
+                        }
+
                     </td>
                 </tr>
             }
@@ -262,9 +272,8 @@
 
 <script type="text/javascript" src="~/js/formValidation.js"></script>
 <script type="text/javascript" src="~/js/formFocus.js"></script>
-<script src="~/lib/pureScriptSelect-master/script.js"></script>
 <script type="text/javascript">
     //pureScriptSelect('#selectImg');
-    //pureScriptSelect('#selectIcon');
+   //pureScriptSelect('#selectIcon');
 </script>
 
