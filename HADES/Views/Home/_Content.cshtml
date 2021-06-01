@@ -34,9 +34,6 @@
             var groupId = "b" + i.ToString();
 
 
-
-
-
             if (Model.ADRoot[i].Path == Model.SelectedPath)
             {
                 <tr>
@@ -226,6 +223,7 @@
                                                 <div class="tab-pane fade tab-absolute" id="@navMembersTab" role="tabpanel" aria-labelledby="nav-members-tab">
                                                     <div>
                                                         <div class="directorist-select directorist-select-multi" id="EditMembersMultiSelect" data-isSearch="true" data-multiSelect='@Model.UsersAD'>
+                                                          
                                                             <input type="hidden" asp-for="@Model.SelectedMembers">
                                                             <input type="hidden" asp-for="@Model.BeforeEditMembers" />
                                                         </div>
@@ -268,9 +266,8 @@
 
 <script type="text/javascript" src="~/js/formValidation.js"></script>
 <script type="text/javascript" src="~/js/formFocus.js"></script>
-<script src="~/lib/pureScriptSelect-master/script.js"></script>
 <script type="text/javascript">
     //pureScriptSelect('#selectImg');
-    //pureScriptSelect('#selectIcon');
+   //pureScriptSelect('#selectIcon');
 </script>
 
