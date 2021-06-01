@@ -2,7 +2,7 @@
 
 namespace HADES.Migrations
 {
-    public partial class AddFromEmail : Migration
+	public partial class AddFromEmail : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

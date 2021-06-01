@@ -2,9 +2,9 @@
 using HADES.Util.Exceptions;
 using HADES.Util.ModelAD;
 using Novell.Directory.Ldap;
+using Serilog;
 using System;
 using System.Collections.Generic;
-using Serilog;
 using System.Globalization;
 
 namespace HADES.Util

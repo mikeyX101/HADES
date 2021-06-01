@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace HADES.Services
 {
-    public class DatabaseSyncService : IHostedService
+	public class DatabaseSyncService : IHostedService
     {
         private static Timer _timer;
 

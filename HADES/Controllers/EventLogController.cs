@@ -1,17 +1,17 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using CsvHelper;
+using HADES.Extensions;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Microsoft.Extensions.Localization;
-using HADES.Extensions;
-using Microsoft.AspNetCore.Http;
-using CsvHelper;
 
 namespace HADES.Controllers
 {
-    [Authorize]
+	[Authorize]
     public class EventLogController : LocalizedController<EventLogController>
     {
         public EventLogController(IStringLocalizer<EventLogController> localizer) : base(localizer) { }

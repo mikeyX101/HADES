@@ -1,14 +1,12 @@
 ﻿using Microsoft.Extensions.Hosting;
 using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using System.IO;
 
 namespace HADES.Services
 {
-    public class TempFileCleanupService : IHostedService
+	public class TempFileCleanupService : IHostedService
     {
         private static Timer _timer;
 

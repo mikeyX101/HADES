@@ -2,7 +2,7 @@
 
 namespace HADES.Migrations
 {
-    public partial class passwordencrypt : Migration
+	public partial class passwordencrypt : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

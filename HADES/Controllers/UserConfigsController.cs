@@ -4,15 +4,15 @@ using HADES.Services;
 using HADES.Util;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace HADES.Controllers
 {
-    public class UserConfigsController : LocalizedController<HomeController>
+	public class UserConfigsController : LocalizedController<HomeController>
     {
 
         public UserConfigsController(IStringLocalizer<HomeController> localizer, ApplicationDbContext context) : base(localizer)

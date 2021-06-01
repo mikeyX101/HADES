@@ -2,7 +2,7 @@
 
 namespace HADES.Migrations
 {
-    public partial class ProperThemeName : Migration
+	public partial class ProperThemeName : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

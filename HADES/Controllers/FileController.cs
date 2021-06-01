@@ -1,12 +1,12 @@
-﻿using System;
-using System.IO;
-using HADES.Attributes;
+﻿using HADES.Attributes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.IO;
 
 namespace HADES.Controllers
 {
-    [Authorize]
+	[Authorize]
     public class FileController : Controller
     {
         [HttpGet]

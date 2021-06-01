@@ -1,19 +1,19 @@
 ﻿using HADES.Data;
 using HADES.Models;
+using HADES.Util.ModelAD;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using Microsoft.EntityFrameworkCore.Query;
 using Serilog;
 using Serilog.Events;
-using System.Net;
+using System;
+using System.Collections.Generic;
 using System.Globalization;
-using HADES.Util.ModelAD;
-using Microsoft.EntityFrameworkCore.Query;
+using System.Linq;
+using System.Net;
 
 namespace HADES.Util
 {
-    public enum NotificationType
+	public enum NotificationType
     {
         ExpirationDate,
         GroupCreate,

@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace HADES.Controllers
 {
-    public class UserListController : Controller
+	public class UserListController : Controller
     {
         private readonly ApplicationDbContext db;
         private ADManager ad;

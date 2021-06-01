@@ -5,17 +5,16 @@ using HADES.Util.Exceptions;
 using HADES.Util.ModelAD;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using HADES.Models.API;
-using Microsoft.EntityFrameworkCore;
 
 namespace HADES.Controllers
 {
-    public class HomeController : LocalizedController<HomeController>
+	public class HomeController : LocalizedController<HomeController>
     {
         private ADManager ad;
         private MainViewViewModel viewModel;
