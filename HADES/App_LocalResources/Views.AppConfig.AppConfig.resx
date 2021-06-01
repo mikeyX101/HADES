@@ -223,7 +223,7 @@
     <value>Indique le champs dans l'Active Directory que les utilisateur d'Hades utiliseront pour s'identifier&lt;br&gt;&lt;i&gt;samaccountname&lt;i&gt;</value>
   </data>
   <data name="DefaultUserToolTip" xml:space="preserve">
-    <value>Les informations de connexion de l'utilisateur par défaut d'Hades. Laisser le champs mot de passe vide si vous ne souhaiter pas le modifier</value>
+    <value>Les informations de connexion de l'utilisateur par défaut d'Hades. Laisser le champs mot de passe vide si vous ne souhaiter pas le modifier&lt;br&gt;Mot de passe doit avoir au moins 6 charactères dont un nombre et un charactère spécial ainsi que des majuscules/minuscules</value>
   </data>
   <data name="CompanyNameToolTip" xml:space="preserve">
     <value>Le nom de votre Organisation qui s'affichera dans la barre de navigation supérieure</value>

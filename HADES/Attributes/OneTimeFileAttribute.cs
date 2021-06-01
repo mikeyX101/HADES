@@ -1,14 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace HADES.Attributes
 {
-    public class OneTimeFileAttribute : ActionFilterAttribute
+	public class OneTimeFileAttribute : ActionFilterAttribute
     {
         public override void OnResultExecuted(ResultExecutedContext context)
         {

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HADES.Controllers
 {
-    public class DocumentationController : Controller
+	public class DocumentationController : Controller
     {
 
         public IActionResult Documentation()

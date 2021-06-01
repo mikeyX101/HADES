@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace HADES.Util
 {
-    public class EncryptionUtil
+	public class EncryptionUtil
     {
 
         private static byte[] key = new byte[] { 64, 5, 221, 17, 116, 101, 241, 129 };

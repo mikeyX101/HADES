@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace HADES.Controllers
 {
-    public class AppConfigController : Controller
+	public class AppConfigController : Controller
     {
         private readonly ApplicationDbContext db;
 

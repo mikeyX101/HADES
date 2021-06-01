@@ -1,0 +1,178 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+		Microsoft ResX Schema
+
+		Version 1.3
+
+		The primary goals of this format is to allow a simple XML format 
+		that is mostly human readable. The generation and parsing of the 
+		various data types are done through the TypeConverter classes 
+		associated with the data types.
+
+		Example:
+
+		... ado.net/XML headers & schema ...
+		<resheader name="resmimetype">text/microsoft-resx</resheader>
+		<resheader name="version">1.3</resheader>
+		<resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+		<resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+		<data name="Name1">this is my long string</data>
+		<data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+		<data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+			[base64 mime encoded serialized .NET Framework object]
+		</data>
+		<data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+			[base64 mime encoded string representing a byte array form of the .NET Framework object]
+		</data>
+
+		There are any number of "resheader" rows that contain simple 
+		name/value pairs.
+
+		Each data row contains a name, and value. The row also contains a 
+		type or mimetype. Type corresponds to a .NET class that support 
+		text/value conversion through the TypeConverter architecture. 
+		Classes that don't support this are serialized and stored with the 
+		mimetype set.
+
+		The mimetype is used for serialized objects, and tells the 
+		ResXResourceReader how to depersist the object. This is currently not 
+		extensible. For a given mimetype the value must be set accordingly:
+
+		Note - application/x-microsoft.net.object.binary.base64 is the format 
+		that the ResXResourceWriter will generate, however the reader can 
+		read any of the formats listed below.
+
+		mimetype: application/x-microsoft.net.object.binary.base64
+		value   : The object must be serialized with 
+			: System.Serialization.Formatters.Binary.BinaryFormatter
+			: and then encoded with base64 encoding.
+
+		mimetype: application/x-microsoft.net.object.soap.base64
+		value   : The object must be serialized with 
+			: System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+			: and then encoded with base64 encoding.
+
+		mimetype: application/x-microsoft.net.object.bytearray.base64
+		value   : The object must be serialized into a byte array 
+			: using a System.ComponentModel.TypeConverter
+			: and then encoded with base64 encoding.
+	-->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Doc_intro" xml:space="preserve">
+    <value>HADES a été développé dans le cadre d'un cours collégial. L'application n'offre donc pas de support. C’est un outil qui permet la gestion des groupes de l’Active Directory (AD). Le principe est de rendre conviviale la gestion de ces groupes afin que des personnes externes au département des techniciens informatiques puissent gérer des permissions. En plus, la plateforme contient un gestionnaire d’événements (les logs) et un système de notification par courriel configurable.</value>
+  </data>
+  <data name="doc_logs01" xml:space="preserve">
+    <value>Les évènements du serveur sont visible à partir de la vue "Journal des évènements". Ceux-ci sont stocké dans des fichiers JSON compactés (CLEF). Ces fichiers sont aussi lisibles avec d'autres lecteurs externes comme &lt;a href="https://github.com/warrenbuckley/Compact-Log-Format-Viewer"&gt;Compact-Log-Format-Viewer&lt;/a&gt;.</value>
+  </data>
+  <data name="doc_logs02" xml:space="preserve">
+    <value>Les fichiers sont parcouru par le serveur et seulement la partie qui doit être affichée est envoyée à la vue. Cela veut dire que chaque changement dans la table (changement de journée, recherche et changement de page) est envoyé au serveur et ensuite affiché dans la table. Cela assure que même si un fichier d'évènement fait une taille énorme, le fichier reste lisible dans son entièreté.</value>
+  </data>
+  <data name="doc_logs03" xml:space="preserve">
+    <value>Pour les fichiers d'évènements volumineux, la première opération pourait prendre plus de temps le temps que le nombre de ligne du fichier soit mit en "cache". Un test avec un fichier de 2GO a démontré un délais de 10 secondes pour la première opération et ensuite des délais d'environ 1 seconde pour d'autres opérations. Cette "cache" est uniquement pour le fichier courant et est remise à zéro quand un autre fichier est chargé.</value>
+  </data>
+  <data name="doc_logs04" xml:space="preserve">
+    <value>&lt;span class="important"&gt;IMPORTANT:&lt;/span&gt; Quand on fait une opération sur le fichier de la journée courante, le fichier d'évènements doit être fermé momentanément pour pouvoir le lire. Quand le fichier est fermé, tout les évènements qui se passent pendant la lecture ne sont pas enregistrés. (À améliorer) Il est alors important limiter le nombre d'opérations sur ce fichier pour éviter de perdre des évènements.</value>
+  </data>
+  <data name="doc_logs05" xml:space="preserve">
+    <value>Il est possible d'exporter les données courantes filtrées (par la recherche) vers un fichier CSV. Dépendant de la taille du fichier d'évènements, il est possible que la conversion prenne un certain temps. Voici une table des tests effectués comme référence:</value>
+  </data>
+  <data name="doc_logsTitle" xml:space="preserve">
+    <value>Journal du serveur</value>
+  </data>
+  <data name="doc_notexp01" xml:space="preserve">
+    <value>L’utilisation du champ de la date d’expiration pour les groupes nécessite une configuration spéciale. Pour que le champ de la date d’expiration des groupes soit fonctionnel, il faut ajouter un attribut personnalisé et l’ajouter à la classe groupe de votre Active Directory. Ainsi, cette information ne sera pas conservée dans la base de données d’Hades, mais bien directement, dans votre Active Directory.</value>
+  </data>
+  <data name="doc_notexp010" xml:space="preserve">
+    <value>Sur l'outil d'administration du schéma Active Directory, accédez à Classes, sélectionnez group puis accédez à ses propriétés.</value>
+  </data>
+  <data name="doc_notexp011" xml:space="preserve">
+    <value>Allez dans l'onglet Attributs, cliquez sur Ajouter, puis ajoutez dateDexpirationHades Une fois terminé, sélectionnez l'attribut à ajouter et cliquez sur OK. Cliquer sur Appliquer.</value>
+  </data>
+  <data name="doc_notexp012" xml:space="preserve">
+    <value>Pour que la nouvelle attribut soit disponible dans votre Active Directory, vous devez redémarrez votre serveur. Pour valider que votre nouvelle attribut est disponible, vous pouvez aller voir dans l'éditeur d'attributes d'un groupe dans votre Active Directory.</value>
+  </data>
+  <data name="doc_notexp02" xml:space="preserve">
+    <value>Voici un petit guide étape par étape pour vous aider à réaliser cette configuration.</value>
+  </data>
+  <data name="doc_notexp03" xml:space="preserve">
+    <value>Pour commencer il faut installer le composant logiciel de schéma Active Directory. Vous devez exécuter la commande regsvr32 schmmgmt.dll à l'aide d'une invite de commande élevée (en utilisant l'option Exécuter en tant qu'administrateur).</value>
+  </data>
+  <data name="doc_notexp04" xml:space="preserve">
+    <value>Une fois l'outil d'administration du schéma Active Directory installé, il sera disponible sur MMC.</value>
+  </data>
+  <data name="doc_notexp05" xml:space="preserve">
+    <value>Ensuite, vous devez ajouter le Schéma Active Directory comme Snap-in. Cliquer sur Fichier et sur Ajouter/Supprimer des Snap-in...</value>
+  </data>
+  <data name="doc_notexp06" xml:space="preserve">
+    <value>Sélectionnez Active Directory Schéma et sélectionnez ajouter. Cliquer sur Ok.</value>
+  </data>
+  <data name="doc_notexp07" xml:space="preserve">
+    <value>Dans l'outil d'administration du schéma Active Directory, faites un clic droit sur Attributs, puis sélectionnez Créer un attribut...</value>
+  </data>
+  <data name="doc_notexp08" xml:space="preserve">
+    <value>Cliquez sur Continuer (l'avertissement qui s'affiche est pour informer que la création d'un nouvel attribut Active Directory n'est pas une opération réversible et qu'il ne peut pas être supprimé une fois terminé)</value>
+  </data>
+  <data name="doc_notexp09" xml:space="preserve">
+    <value>Renseignez les informations suivantes. Il est très important que les informations soient écrites exactement de cette façon. Le nom commun est ExpirationDateHades. Le nom de LDAP est expirationDateHades. Pour le Object ID, vous devez en générer un. Vous trouverez un lien ci-dessous vers un générateur, mais n'importe quel générateur peux faire l'affaire. La syntaxe est UTC Coded Time. Le restant des champs sont optionnels.</value>
+  </data>
+  <data name="doc_notexpdateTitle" xml:space="preserve">
+    <value>La date d'expiration des groupes</value>
+  </data>
+  <data name="doc_roleText" xml:space="preserve">
+    <value>Il y a trois rôles: Super-Administrateur, Administrateur et propriétaire. Dans HADES, les rôles nous permettent de gérer les permissions des utilisateurs connectés.  Il n’y a pas de concept de propriétaire  dans l’AD, c’est nous qui allons l'implanter. Le Super-Administrateur a tout les droits. l'Administrateur a tout les droits sauf qu'il ne peux pas accéder au panneau de configuration de l'application. Le propriétaire a beaucoup moins de droit. Il peut seulement voir, ajouter et supprimer des membres des groupes dont il est propriétaire.</value>
+  </data>
+  <data name="Documentation" xml:space="preserve">
+    <value>Documentation</value>
+  </data>
+  <data name="doc_logsTableFileSize" xml:space="preserve">
+    <value>Taille du fichier</value>
+  </data>
+  <data name="doc_logsTableProcessTime" xml:space="preserve">
+    <value>Temps de traitement</value>
+  </data>
+  <data name="doc_logsTableKilobit" xml:space="preserve">
+    <value>Ko</value>
+  </data>
+  <data name="link_generator" xml:space="preserve">
+    <value>Lien vers le Genérateur</value>
+  </data>
+</root>

@@ -2,7 +2,7 @@
 
 namespace HADES.Migrations
 {
-    public partial class SMTPConfig : Migration
+	public partial class SMTPConfig : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

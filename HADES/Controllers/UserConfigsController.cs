@@ -4,15 +4,15 @@ using HADES.Services;
 using HADES.Util;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace HADES.Controllers
 {
-    public class UserConfigsController : LocalizedController<HomeController>
+	public class UserConfigsController : LocalizedController<HomeController>
     {
 
         public UserConfigsController(IStringLocalizer<HomeController> localizer, ApplicationDbContext context) : base(localizer)
@@ -31,7 +31,7 @@ namespace HADES.Controllers
                 new SelectListItem {Text = HADES.Strings.Spanish, Value = "es-US"},
                 new SelectListItem {Text = HADES.Strings.Portuguese, Value = "pt-BR"}
             };
-            viewModel.Themes = new List<SelectListItem>()
+            viewModel.Themes = new List<SelectListItem>() //TODO Translate text with readable and not "technical" names
             {
                 new SelectListItem {Text = "site", Value = "site"},
                 new SelectListItem {Text = "deeppink", Value = "deeppink"},

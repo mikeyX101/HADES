@@ -61,7 +61,7 @@ namespace HADES {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Paramètres de l&apos;application.
+        ///   Looks up a localized string similar to Paramètres de l&apos;application.
         /// </summary>
         public static string AppConfig {
             get {
@@ -70,7 +70,7 @@ namespace HADES {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Retour.
+        ///   Looks up a localized string similar to Retour.
         /// </summary>
         public static string Back {
             get {
@@ -79,7 +79,7 @@ namespace HADES {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Abandonner.
+        ///   Looks up a localized string similar to Abandonner.
         /// </summary>
         public static string Cancel {
             get {
@@ -88,7 +88,16 @@ namespace HADES {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Supprimer.
+        ///   Looks up a localized string similar to Le fichier {0}.css n&apos;existe pas..
+        /// </summary>
+        public static string CssFileDoesNotExist {
+            get {
+                return ResourceManager.GetString("CssFileDoesNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Supprimer.
         /// </summary>
         public static string Delete {
             get {
@@ -97,151 +106,7 @@ namespace HADES {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à HADES  a été développé dans le cadre d&apos;un cours collégial. L&apos;application n&apos;offre donc pas de support. C’est un outil qui permet la gestion des groupes de l’Active Directory (AD). Le principe est de rendre conviviale la gestion de ces groupes afin que des personnes externes au département des techniciens informatiques puissent gérer des permissions. En plus, la plateforme contient un gestionnaire d’événements (les logs) et un système de notification par courriel configurable. .
-        /// </summary>
-        public static string Doc_intro {
-            get {
-                return ResourceManager.GetString("Doc_intro", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une chaîne localisée semblable à L’utilisation du champ de la date d’expiration pour les groupes nécessite une configuration spéciale. Pour que le champ de la date d’expiration des groupes soit fonctionnel, il faut ajouter un attribut personnalisé et l’ajouter à la classe groupe de votre Active Directory. Ainsi, cette information ne sera pas conservée dans la base de données d’Hades, mais bien directement, dans votre Active Directory. .
-        /// </summary>
-        public static string doc_notexp01 {
-            get {
-                return ResourceManager.GetString("doc_notexp01", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une chaîne localisée semblable à Sur l&apos;outil d&apos;administration du schéma Active Directory, accédez à Classes, sélectionnez group puis accédez à ses propriétés..
-        /// </summary>
-        public static string doc_notexp010 {
-            get {
-                return ResourceManager.GetString("doc_notexp010", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une chaîne localisée semblable à Allez dans l&apos;onglet Attributs, cliquez sur Ajouter, puis ajoutez dateDexpirationHades Une fois terminé, sélectionnez l&apos;attribut à ajouter et cliquez sur OK. Cliquer sur Appliquer..
-        /// </summary>
-        public static string doc_notexp011 {
-            get {
-                return ResourceManager.GetString("doc_notexp011", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une chaîne localisée semblable à Pour que la nouvelle attribut soit disponible dans votre Active Directory, vous devez redémarrez votre serveur. Pour valider que votre nouvelle attribut est disponible, vous pouvez aller voir dans l&apos;éditeur d&apos;attributes d&apos;un groupe dans votre Active Directory..
-        /// </summary>
-        public static string doc_notexp012 {
-            get {
-                return ResourceManager.GetString("doc_notexp012", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une chaîne localisée semblable à Voici un petit guide étape par étape pour vous aider à réaliser cette configuration..
-        /// </summary>
-        public static string doc_notexp02 {
-            get {
-                return ResourceManager.GetString("doc_notexp02", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une chaîne localisée semblable à Pour commencer il faut installer le composant logiciel de schéma Active Directory. Vous devez exécuter la commande regsvr32 schmmgmt.dll à l&apos;aide d&apos;une invite de commande élevée (en utilisant l&apos;option Exécuter en tant qu&apos;administrateur)..
-        /// </summary>
-        public static string doc_notexp03 {
-            get {
-                return ResourceManager.GetString("doc_notexp03", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une chaîne localisée semblable à Une fois l&apos;outil d&apos;administration du schéma Active Directory installé, il sera disponible sur MMC..
-        /// </summary>
-        public static string doc_notexp04 {
-            get {
-                return ResourceManager.GetString("doc_notexp04", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une chaîne localisée semblable à Ensuite, vous devez ajouter le Schéma Active Directory comme Snap-in. Cliquer sur Fichier et sur Ajouter/Supprimer des Snap-in....
-        /// </summary>
-        public static string doc_notexp05 {
-            get {
-                return ResourceManager.GetString("doc_notexp05", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une chaîne localisée semblable à Sélectionnez Active Directory Schéma et sélectionnez ajouter. Cliquer sur Ok..
-        /// </summary>
-        public static string doc_notexp06 {
-            get {
-                return ResourceManager.GetString("doc_notexp06", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une chaîne localisée semblable à Dans l&apos;outil d&apos;administration du schéma Active Directory, faites un clic droit sur Attributs, puis sélectionnez Créer un attribut… .
-        /// </summary>
-        public static string doc_notexp07 {
-            get {
-                return ResourceManager.GetString("doc_notexp07", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une chaîne localisée semblable à Cliquez sur Continuer (l&apos;avertissement qui s&apos;affiche est pour informer que la création d&apos;un nouvel attribut Active Directory n&apos;est pas une opération réversible et qu&apos;il ne peut pas être supprimé une fois terminé).
-        /// </summary>
-        public static string doc_notexp08 {
-            get {
-                return ResourceManager.GetString("doc_notexp08", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une chaîne localisée semblable à Renseignez les informations suivantes. Il est très important que les informations soient écrites exactement de cette façon. Le nom commun est ExpirationDateHades. Le nom de LDAP est expirationDateHades. Pour le Object ID, vous devez en générer un. Vous trouverez un lien ci-dessous vers un générateur, mais n&apos;importe quel générateur peux faire l&apos;affaire. La syntaxe est UTC Coded Time. Le restant des champs sont optionnels..
-        /// </summary>
-        public static string doc_notexp09 {
-            get {
-                return ResourceManager.GetString("doc_notexp09", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une chaîne localisée semblable à La date d&apos;expiration des groupes.
-        /// </summary>
-        public static string doc_notexpdateTitle {
-            get {
-                return ResourceManager.GetString("doc_notexpdateTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une chaîne localisée semblable à Il y a trois rôles: Super-Administrateur, Administrateur et propriétaire. Dans HADES, les rôles nous permettent de gérer les permissions des utilisateurs connectés.  Il n’y a pas de concept de propriétaire  dans l’AD, c’est nous qui allons l&apos;implanter. Le Super-Administrateur a tout les droits. l&apos;Administrateur a tout les droits sauf qu&apos;il ne peux pas accéder au panneau de configuration de l&apos;application. Le propriétaire a beaucoup moins de droit. Il peut seulement voir, ajouter et supprimer des membres des  [le reste de la chaîne a été tronqué]&quot;;.
-        /// </summary>
-        public static string doc_roleText {
-            get {
-                return ResourceManager.GetString("doc_roleText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une chaîne localisée semblable à Documentation.
-        /// </summary>
-        public static string Documentation {
-            get {
-                return ResourceManager.GetString("Documentation", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une chaîne localisée semblable à La date d&apos;expiration est arrivée a échéance pour un groupe..
+        ///   Looks up a localized string similar to La date d&apos;expiration est arrivée a échéance pour un groupe..
         /// </summary>
         public static string email_ExpirationDateMessage {
             get {
@@ -250,7 +115,7 @@ namespace HADES {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Le groupe expirera dans.
+        ///   Looks up a localized string similar to Le groupe expirera dans.
         /// </summary>
         public static string email_ExpirationDateSoonMsg {
             get {
@@ -259,7 +124,7 @@ namespace HADES {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à jour(s)..
+        ///   Looks up a localized string similar to jour(s)..
         /// </summary>
         public static string email_ExpirationDateSoonMsg02 {
             get {
@@ -268,7 +133,7 @@ namespace HADES {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à La date d&apos;expiration.
+        ///   Looks up a localized string similar to La date d&apos;expiration.
         /// </summary>
         public static string email_ExpirationDateSubject {
             get {
@@ -277,7 +142,7 @@ namespace HADES {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Un groupe a été créé..
+        ///   Looks up a localized string similar to Un groupe a été créé..
         /// </summary>
         public static string email_GroupCreateMessage {
             get {
@@ -286,7 +151,7 @@ namespace HADES {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à La création d&apos;un groupe.
+        ///   Looks up a localized string similar to La création d&apos;un groupe.
         /// </summary>
         public static string email_GroupCreateSubject {
             get {
@@ -295,7 +160,7 @@ namespace HADES {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Un groupe a été supprimé..
+        ///   Looks up a localized string similar to Un groupe a été supprimé..
         /// </summary>
         public static string email_GroupDeleteMessage {
             get {
@@ -304,7 +169,7 @@ namespace HADES {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à La suppression d&apos;un groupe.
+        ///   Looks up a localized string similar to La suppression d&apos;un groupe.
         /// </summary>
         public static string email_GroupDeleteSubject {
             get {
@@ -313,7 +178,7 @@ namespace HADES {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Des membres ont été ajouté à un groupe..
+        ///   Looks up a localized string similar to Des membres ont été ajouté à un groupe..
         /// </summary>
         public static string email_MemberAddMessage {
             get {
@@ -322,7 +187,7 @@ namespace HADES {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Ajout de Membres.
+        ///   Looks up a localized string similar to Ajout de Membres.
         /// </summary>
         public static string email_MemberAddSubject {
             get {
@@ -331,7 +196,7 @@ namespace HADES {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Des membres ont été supprimé d&apos;un groupe..
+        ///   Looks up a localized string similar to Des membres ont été supprimé d&apos;un groupe..
         /// </summary>
         public static string email_MemberRemovalMessage {
             get {
@@ -340,7 +205,7 @@ namespace HADES {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Suppression de membres.
+        ///   Looks up a localized string similar to Suppression de membres.
         /// </summary>
         public static string email_MemberRemovalSubject {
             get {
@@ -349,7 +214,7 @@ namespace HADES {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Membres:.
+        ///   Looks up a localized string similar to Membres:.
         /// </summary>
         public static string email_Members {
             get {
@@ -358,7 +223,7 @@ namespace HADES {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Membres ajoutés: .
+        ///   Looks up a localized string similar to Membres ajoutés: .
         /// </summary>
         public static string email_membersaddes {
             get {
@@ -367,7 +232,7 @@ namespace HADES {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Membres supprimés: .
+        ///   Looks up a localized string similar to Membres supprimés: .
         /// </summary>
         public static string email_membersSup {
             get {
@@ -376,7 +241,7 @@ namespace HADES {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Nom:.
+        ///   Looks up a localized string similar to Nom:.
         /// </summary>
         public static string email_name {
             get {
@@ -385,7 +250,7 @@ namespace HADES {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Anglais.
+        ///   Looks up a localized string similar to Anglais.
         /// </summary>
         public static string English {
             get {
@@ -394,7 +259,7 @@ namespace HADES {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Un fichier est trop grand.
+        ///   Looks up a localized string similar to Un fichier est trop grand.
         /// </summary>
         public static string errorFileSize {
             get {
@@ -403,7 +268,7 @@ namespace HADES {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à La configuration n&apos;a pas pu être sauvegardée vérifier que les champs sont bien remplis.
+        ///   Looks up a localized string similar to La configuration n&apos;a pas pu être sauvegardée vérifier que les champs sont bien remplis.
         /// </summary>
         public static string ErrorSavingConfiguration {
             get {
@@ -421,25 +286,7 @@ namespace HADES {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to GlobalFR.
-        /// </summary>
-        public static string GlobalString {
-            get {
-                return ResourceManager.GetString("GlobalString", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une chaîne localisée semblable à Lien vers le Genérateur.
-        /// </summary>
-        public static string link_generator {
-            get {
-                return ResourceManager.GetString("link_generator", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une chaîne localisée semblable à Dossiers et groupes.
+        ///   Looks up a localized string similar to Dossiers et groupes.
         /// </summary>
         public static string MainView {
             get {
@@ -448,20 +295,11 @@ namespace HADES {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Une valeur négative à été entrée alors que l&apos;application attendaient une valeur positive.
+        ///   Looks up a localized string similar to Une valeur négative à été entrée alors que l&apos;application attendaient une valeur positive.
         /// </summary>
         public static string NegativeValueError {
             get {
                 return ResourceManager.GetString("NegativeValueError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une chaîne localisée semblable à OK.
-        /// </summary>
-        public static string OK {
-            get {
-                return ResourceManager.GetString("OK", resourceCulture);
             }
         }
         
@@ -471,6 +309,15 @@ namespace HADES {
         public static string NoLog {
             get {
                 return ResourceManager.GetString("NoLog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OK.
+        /// </summary>
+        public static string OK {
+            get {
+                return ResourceManager.GetString("OK", resourceCulture);
             }
         }
         
@@ -493,7 +340,7 @@ namespace HADES {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Role.
+        ///   Looks up a localized string similar to Role.
         /// </summary>
         public static string roleTitle {
             get {
@@ -502,7 +349,7 @@ namespace HADES {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Sauvegarder.
+        ///   Looks up a localized string similar to Sauvegarder.
         /// </summary>
         public static string Save {
             get {
@@ -511,7 +358,7 @@ namespace HADES {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Espagnol.
+        ///   Looks up a localized string similar to Espagnol.
         /// </summary>
         public static string Spanish {
             get {
@@ -520,7 +367,7 @@ namespace HADES {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Paramètres de l&apos;utilisateur.
+        ///   Looks up a localized string similar to Paramètres de l&apos;utilisateur.
         /// </summary>
         public static string UserConfig {
             get {

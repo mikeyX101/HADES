@@ -1,6 +1,6 @@
 ﻿namespace HADES.Util
 {
-    public static class SMTPSettingsCache
+	public static class SMTPSettingsCache
     {
         public static Models.SMTPSettings SMTP { get; set; }
 

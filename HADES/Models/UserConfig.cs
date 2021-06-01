@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using HADES.Attributes;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 

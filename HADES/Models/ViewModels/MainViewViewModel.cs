@@ -1,11 +1,12 @@
-﻿using HADES.Util;
+﻿using HADES.Attributes;
+using HADES.Util;
 using HADES.Util.ModelAD;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace HADES.Models
 {
-    public class MainViewViewModel
+	public class MainViewViewModel
     {
         public List<RootDataInformation> ADRoot { get; set; }
 
@@ -35,8 +36,12 @@ namespace HADES.Models
 
         public string SelectedMembers { get; set; }
 
+        public string SelectedOwners { get; set; }
+
         public string OuGroup { get; set; }
+
         public ADManager ADManager { get; set; }
+
         public string UsersAD { get; set; }
 
 

@@ -2,26 +2,26 @@
 
 namespace HADES.Migrations
 {
-	public partial class passwordencrypt : Migration
+	public partial class ProperThemeName : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.UpdateData(
-                table: "ActiveDirectory_ADR",
-                keyColumn: "ADR_id",
+                table: "UserConfig_UCF",
+                keyColumn: "UCF_id",
                 keyValue: 1,
-                column: "ADR_password_dn",
-                value: "Ncr4Ix+48wVfeAC30A5agpX7PlcS18Zy");
+                column: "UCF_theme_file",
+                value: "site");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.UpdateData(
-                table: "ActiveDirectory_ADR",
-                keyColumn: "ADR_id",
+                table: "UserConfig_UCF",
+                keyColumn: "UCF_id",
                 keyValue: 1,
-                column: "ADR_password_dn",
-                value: "Toto123!");
+                column: "UCF_theme_file",
+                value: "site.css");
         }
     }
 }

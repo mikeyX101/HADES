@@ -1,5 +1,6 @@
 ﻿@model MainViewViewModel
 
+<link rel="stylesheet" href="~/css/GroupModalGeneral.css" />
 <div class="modal fade" id="GroupCreate" tabindex="-1" role="dialog" aria-labelledby="GroupCreateLbl"
      aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -34,9 +35,9 @@
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
                             <div class="form-group row">
-                                <label asp-for="GroupAD.SamAccountName" class="col-sm-2 col-form-label">Group Name</label>
+                                <label asp-for="GroupAD.SamAccountName" class="col-sm-2 col-form-label">Name</label>
                                 <div class="col-sm-10">
-                                    <input asp-for="GroupAD.SamAccountName" class="form-control" placeholder="Group name">
+                                    <input asp-for="GroupAD.SamAccountName" class="form-control" placeholder="Name">
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -51,24 +52,53 @@
                                     <input asp-for="GroupAD.Email" type="Email" class="form-control" id="Email" placeholder="Email">
                                 </div>
                             </div>
+
+                            <script type="text/javascript">
+                             
+                                var today = new Date();
+                                var nextYear = new Date(today.getFullYear() + 1, today.getMonth(), today.getDate());
+
+                                $("#dateExp")
+                                    .val(today.toISOString().substring(0, 10))
+                                    .datepicker({
+                                        maxDate: nextYear,
+                                        minDate: today,
+                                        defaultDate: today,
+                                        dateFormat: "yy-mm-dd",
+                                    });
+
+                            </script>
+
+                            <div class="form-group row">
+                                <label asp-for="GroupAD.ExpirationDate" class="col-sm-2 col-form-label">Expiration Date</label>
+                                <div class="col-sm-10">
+                                    <input asp-for="GroupAD.ExpirationDate" id="dateExp" class="form-control" type="text" value="" readonly />
+                                </div>
+                            </div>
+
+
                             <div class="form-group row">
                                 <label asp-for="GroupAD.Notes">Notes</label>
                                 <textarea asp-for="GroupAD.Notes" class="form-control" id="Notes" rows="3"></textarea>
                             </div>
 
                         </div>
-                        
-                        <div class="tab-pane fade" id="nav-members" role="tabpanel" aria-labelledby="nav-members-tab">
+
+                        <div class="tab-pane fade tab-absolute" id="nav-members" role="tabpanel" aria-labelledby="nav-members-tab">
                             <!-- members form -->
                             <div>
-                                <div class="directorist-select directorist-select-multi" id="multiSelect" data-isSearch="true" data-multiSelect='@Model.UsersAD'>
+                                <div class="directorist-select directorist-select-multi" id="CreateMembersMultiSelect" data-isSearch="true" data-multiSelect='@Model.UsersAD'>
                                     <input type="hidden" asp-for="@Model.SelectedMembers">
                                 </div>
                             </div>
                         </div>
-                        <div class="tab-pane fade" id="nav-owners" role="tabpanel" aria-labelledby="nav-owners-tab">
+                        <div class="tab-pane fade tab-absolute" id="nav-owners" role="tabpanel" aria-labelledby="nav-owners-tab">
                             <!-- Owners form -->
-                            ...
+                            <div>
+                                <div class="directorist-select directorist-select-multi" id="CreateOwnersMultiSelect" data-isSearch="true" data-multiSelect='@Model.UsersAD'>
+                                    <input type="hidden" asp-for="@Model.SelectedOwners">
+                                </div>
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-primary" id="btnSave">Ok</button>
@@ -80,9 +110,9 @@
         </div>
     </div>
 </div>
-<script src="~/lib/pureScriptSelect-master/script.js"></script>
 <script type="text/javascript">
-    pureScriptSelect('#multiSelect');
+    pureScriptSelect('#CreateMembersMultiSelect');
+    pureScriptSelect('#CreateOwnersMultiSelect');
     pureScriptSelect('#selectImg');
-    pureScriptSelect('#selectIcon');    
+    pureScriptSelect('#selectIcon');
 </script>

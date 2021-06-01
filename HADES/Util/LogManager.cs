@@ -1,8 +1,5 @@
 ﻿using Serilog;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace HADES.Util
 {
@@ -69,7 +66,7 @@ namespace HADES.Util
 							rollOnFileSizeLimit: false,
 							fileSizeLimitBytes: appConfig.LogMaxFileSize,
 							retainedFileCountLimit: appConfig.LogDeleteFrequency,
-							buffered: true,
+							shared: true,
 							flushToDiskInterval: TimeSpan.FromMinutes(1)))
 					.Enrich.FromLogContext()
 					.ReadFrom.Services(Services)

@@ -3,9 +3,9 @@ using HADES.Models;
 using HADES.Util.Exceptions;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 using System;
 using System.Linq;
-using Serilog;
 
 namespace HADES.Util
 {

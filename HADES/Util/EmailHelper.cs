@@ -1,18 +1,19 @@
 ﻿using HADES.Data;
 using HADES.Models;
+using HADES.Util.ModelAD;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using Microsoft.EntityFrameworkCore.Query;
 using Serilog;
 using Serilog.Events;
-using System.Net;
+using System;
+using System.Collections.Generic;
 using System.Globalization;
-using HADES.Util.ModelAD;
+using System.Linq;
+using System.Net;
 
 namespace HADES.Util
 {
-    public enum NotificationType
+	public enum NotificationType
     {
         ExpirationDate,
         GroupCreate,
@@ -30,29 +31,29 @@ namespace HADES.Util
         private static string subject = "";
         private static string message = "";
 
-        public static void SendEmail(NotificationType type,  GroupAD group, string usersAddedorDeleted, int nbExpirationDate)
+        public static void SendEmail(NotificationType type,  GroupAD group, string usersAddedorDeleted = "", int nbExpirationDate = -1)
         {
             string groupGUID = group.ObjectGUID;
-            Console.WriteLine("yo " + groupGUID);
 
             ApplicationDbContext db = new ApplicationDbContext();
             List<Email> emails = null;
+            IIncludableQueryable<Email, Role> query = db.Email.Include(c => c.UserConfig).ThenInclude(c => c.DefaultUser).Include(c => c.UserConfig).ThenInclude(c => c.User).ThenInclude(c => c.OwnerGroupUsers).ThenInclude(c => c.OwnerGroup).Include(c => c.UserConfig).ThenInclude(c => c.User).ThenInclude(c => c.Role);
             switch (type)
             {
                 case NotificationType.ExpirationDate:
-                    emails = db.Email.Include(c => c.UserConfig).ThenInclude(c => c.DefaultUser).Include(c => c.UserConfig).ThenInclude(c => c.User).ThenInclude(c => c.OwnerGroupUsers).ThenInclude(c => c.OwnerGroup).Include(c => c.UserConfig).ThenInclude(c => c.User).ThenInclude(c => c.Role).Where(c => c.ExpirationDate == true && c.UserConfig.Notification == true).ToList();
+                    emails = query.Where(c => c.ExpirationDate == true && c.UserConfig.Notification == true).ToList();
                     break;
                 case NotificationType.GroupCreate:
-                    emails = db.Email.Include(c => c.UserConfig).ThenInclude(c => c.DefaultUser).Include(c => c.UserConfig).ThenInclude(c => c.User).ThenInclude(c => c.OwnerGroupUsers).ThenInclude(c => c.OwnerGroup).Include(c => c.UserConfig).ThenInclude(c => c.User).ThenInclude(c => c.Role).Where(c => c.GroupCreate == true && c.UserConfig.Notification == true).ToList();
+                    emails = query.Where(c => c.GroupCreate == true && c.UserConfig.Notification == true).ToList();
                     break;
                 case NotificationType.GroupDelete:
-                    emails = db.Email.Include(c => c.UserConfig).ThenInclude(c => c.DefaultUser).Include(c => c.UserConfig).ThenInclude(c => c.User).ThenInclude(c => c.OwnerGroupUsers).ThenInclude(c => c.OwnerGroup).Include(c => c.UserConfig).ThenInclude(c => c.User).ThenInclude(c => c.Role).Where(c => c.GroupDelete == true && c.UserConfig.Notification == true).ToList();
+                    emails = query.Where(c => c.GroupDelete == true && c.UserConfig.Notification == true).ToList();
                     break;
                 case NotificationType.MemberAdd:
-                    emails = db.Email.Include(c => c.UserConfig).ThenInclude(c => c.DefaultUser).Include(c => c.UserConfig).ThenInclude(c => c.User).ThenInclude(c => c.OwnerGroupUsers).ThenInclude(c => c.OwnerGroup).Include(c => c.UserConfig).ThenInclude(c => c.User).ThenInclude(c => c.Role).Where(c => c.MemberAdd == true && c.UserConfig.Notification == true).ToList();
+                    emails = query.Where(c => c.MemberAdd == true && c.UserConfig.Notification == true).ToList();
                     break;
                 case NotificationType.MemberRemoval:
-                    emails = db.Email.Include(c => c.UserConfig).ThenInclude(c => c.DefaultUser).Include(c => c.UserConfig).ThenInclude(c => c.User).ThenInclude(c => c.OwnerGroupUsers).ThenInclude(c => c.OwnerGroup).Include(c => c.UserConfig).ThenInclude(c => c.User).ThenInclude(c => c.Role).Where(c => c.MemberRemoval == true && c.UserConfig.Notification == true).ToList();
+                    emails = query.Where(c => c.MemberRemoval == true && c.UserConfig.Notification == true).ToList();
                     break;
             }
 
@@ -62,7 +63,6 @@ namespace HADES.Util
                 //Is a DefautUser
                 if (e.UserConfig.DefaultUser != null)
                 {
-                    Console.WriteLine("Send Email to " + e.Address + " " + e.UserConfig.Language);
                     EmailHelper.addToList(e.Address, e.UserConfig.Language);
                     //Is a AD user
                 }
@@ -71,7 +71,6 @@ namespace HADES.Util
                     //Is a SuperAdmin or an Admin
                     if (e.UserConfig.User.Role.Id == (int)RolesID.SuperAdmin || e.UserConfig.User.Role.Id == (int)RolesID.Admin)
                     {
-                        Console.WriteLine("Send Email to " + e.Address + " " + e.UserConfig.Language);
                         EmailHelper.addToList(e.Address, e.UserConfig.Language);
                     }
                     //Is owner og the group
@@ -79,10 +78,8 @@ namespace HADES.Util
                     {
                         foreach (var g in e.UserConfig.User.OwnerGroupUsers)
                         {
-                            Console.WriteLine(g.OwnerGroup.GUID);
                             if (g.OwnerGroup.GUID == groupGUID)
                             {
-                                Console.WriteLine("Send Email to (Owner)" + e.Address + " " + e.UserConfig.Language);
                                 EmailHelper.addToList(e.Address, e.UserConfig.Language);
                             }
                         }

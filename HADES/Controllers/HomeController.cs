@@ -5,6 +5,7 @@ using HADES.Util.Exceptions;
 using HADES.Util.ModelAD;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Newtonsoft.Json;
 using System;
@@ -13,7 +14,7 @@ using System.Linq;
 
 namespace HADES.Controllers
 {
-    public class HomeController : LocalizedController<HomeController>
+	public class HomeController : LocalizedController<HomeController>
     {
         private ADManager ad;
         private MainViewViewModel viewModel;
@@ -62,6 +63,7 @@ namespace HADES.Controllers
             string users = JsonConvert.SerializeObject(ad.getAllUsers().Select(x => x.SamAccountName));
             viewModel.UsersAD = users;
             viewModel.ADManager = ad;
+
 
             viewModel.SelectedPath = selectedPathForContent;
             viewModel.ExpandedNodesName = expandedNodeNames;
@@ -195,26 +197,58 @@ namespace HADES.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult CreateGroupModal([Bind("GroupAD, SelectedNodeName, SelectedContentName, SelectedPath, SelectedUsers")] MainViewViewModel viewModel)
+        public IActionResult CreateGroupModal([Bind("GroupAD, SelectedNodeName, SelectedContentName, SelectedPath, SelectedMembers, SelectedOwners")] MainViewViewModel viewModel)
         {
             if (!ConnexionUtil.CurrentUser(this.User).GetRole().AdCrudAccess) // ACCESS CONTROL
             {
                 return RedirectToAction("MainView", "Home");
             }
 
+            ApplicationDbContext db = new ApplicationDbContext();
+
+
             string[] split = viewModel.SelectedPath.Split('/');
             string selectedNodeName = split.Length == 2 ? split[1] : split[2];
             GroupAD group = viewModel.GroupAD;
             List<UserAD> members = GetSelectedUsersSamAccount(viewModel);
+          
+           
 
             ModelState.Remove("NewName");
 
             if (ModelState.IsValid)
             {
-                //datepicker sam
-                //ajouter owner
-                DateTime dateExp = DateTime.Now;
-                ad.createGroup(selectedNodeName, group, dateExp, members);
+
+               
+                ad.createGroup(selectedNodeName, group, members);
+
+                string DN = FindDN(viewModel.SelectedPath, group.SamAccountName);
+                string guid = ad.getGroupGUIDByDn(DN);
+
+                List<string> selectedOwnersNames = DeserializeUsers(viewModel.SelectedOwners);
+
+                List<UserAD> ownersAD = ad.getAllUsers().Where(x => selectedOwnersNames.Contains(x.SamAccountName)).ToList();
+                List<User> ownersDB = new();
+                Role role = db.Role.Where(x => x.Name == "Owner").FirstOrDefault();
+
+
+                foreach (var owner in ownersAD)
+                {
+                    if (db.User.Where(x => x.GUID == owner.ObjectGUID).Any())
+                    {
+                        ownersDB.Add(db.User.Where(x => x.GUID == owner.ObjectGUID).FirstOrDefault());
+                    }
+                    else
+                        ownersDB.Add(new User { Attempts = 0, Date = DateTime.Now, GUID = owner.ObjectGUID, Role = role, UserConfig = new() });
+                }
+
+                OwnerGroup ownerGroup = new() { GUID = guid, OwnerGroupUsers = new List<OwnerGroupUser>() };
+
+                ownersDB.ForEach(user => ownerGroup.OwnerGroupUsers.Add(new OwnerGroupUser { User = user, OwnerGroup = ownerGroup }));
+
+
+                db.OwnerGroup.Add(ownerGroup);
+                db.SaveChanges();
 
                 return RedirectToAction("MainView", "Home");
             }
@@ -224,26 +258,38 @@ namespace HADES.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult EditGroupModal([Bind("GroupAD, SelectedNodeName, SelectedPath, BeforeEditMembers, SelectedMembers, OuGroup")] MainViewViewModel viewModel)
+        public IActionResult EditGroupModal([Bind("GroupAD, SelectedNodeName, SelectedPath, BeforeEditMembers, SelectedMembers, OuGroup, SelectedOwners")] MainViewViewModel viewModel)
         {
             if (!ConnexionUtil.CurrentUser(this.User).GetRole().AdCrudAccess) // ACCESS CONTROL
             {
                 return RedirectToAction("MainView", "Home");
             }
 
+            ApplicationDbContext db = new ApplicationDbContext();
+
             GroupAD group = viewModel.GroupAD;
             string DN = FindDN(viewModel.SelectedPath, viewModel.OuGroup);
-
+            string guid = ad.getGroupGUIDByDn(DN);
             Dictionary<UserAD, Util.Action> updatedGroupMembers = UpdatedGroupMembersKeyValueActions(viewModel);
+
+
+            List<string> selectedOwnersNames = DeserializeUsers(viewModel.SelectedOwners);
+            List<User> selectedOwners = db.User.ToList().Where(x => selectedOwnersNames.Contains(x.GetName())).ToList();
+            OwnerGroup ownerGroup = db.OwnerGroup.Where(x => x.GUID == guid).Include(x => x.OwnerGroupUsers).FirstOrDefault();
+
+            ownerGroup.OwnerGroupUsers.Clear();
+            selectedOwners.ForEach(user => ownerGroup.OwnerGroupUsers.Add(new OwnerGroupUser { User = user, OwnerGroup = ownerGroup }));
 
             ModelState.Remove("NewName");
             if (ModelState.IsValid)
             {
-                //datepicker sam
-                //edit owner
-                DateTime dateExp = DateTime.Now;
-                ad.modifyGroup(DN, group, viewModel.SelectedNodeName, dateExp, updatedGroupMembers);
+                DateTime dateExp = viewModel.GroupAD.ExpirationDate;
+                ad.modifyGroup(DN, group, viewModel.SelectedNodeName,  updatedGroupMembers);
 
+                selectedOwners.ForEach(x => db.Entry(x).State = EntityState.Modified);
+                db.Entry(ownerGroup).State = EntityState.Modified;
+
+                db.SaveChanges();
                 return RedirectToAction("MainView");
             }
             return View(viewModel.GroupAD);
@@ -313,6 +359,19 @@ namespace HADES.Controllers
                 members = ad.getAllUsers().Where(x => selectedUsers.Contains(x.SamAccountName)).ToList();
             }
             return members;
+        }
+
+
+        public IActionResult GetOwners(string guid)
+        {
+            ApplicationDbContext db = new ApplicationDbContext();
+
+            var user = db.User.Where(x => x.OwnerGroupUsers.Select(x => x.OwnerGroup.GUID).Contains(guid)).ToList().Select(x => x.GetName());
+
+            viewModel.UsersAD = JsonConvert.SerializeObject(ad.getAllUsers().Select(x => x.SamAccountName));
+            viewModel.SelectedOwners = JsonConvert.SerializeObject(user);
+
+            return PartialView("EditOwners", viewModel);
         }
     }
 

@@ -40,12 +40,16 @@ namespace HADES.Middlewares
 
 			public async Task Invoke(HttpContext context)
 			{
-				if (reportUri != null)
+				if (reportUri != null && !context.Response.Headers.ContainsKey("Reporting-Endpoints"))
 				{
 					context.Response.Headers.Add("Reporting-Endpoints", $"csp-endpoint=\"{reportUri}\"");
 				}
 
-				context.Response.Headers.Add("Content-Security-Policy", policy);
+				if (!context.Response.Headers.ContainsKey("Content-Security-Policy"))
+				{
+					context.Response.Headers.Add("Content-Security-Policy", policy);
+				}
+
 
 				await next(context);
 			}

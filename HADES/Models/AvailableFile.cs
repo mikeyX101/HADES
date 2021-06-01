@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace HADES.Models
 {
-    public class AvailableFile
+	public class AvailableFile
     {
         public AvailableFile(string path, string publicName, string mimeType, int ownerID)
 		{

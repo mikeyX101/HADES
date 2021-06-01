@@ -1,17 +1,17 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using CsvHelper;
+using HADES.Extensions;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Microsoft.Extensions.Localization;
-using HADES.Extensions;
-using Microsoft.AspNetCore.Http;
-using CsvHelper;
 
 namespace HADES.Controllers
 {
-    [Authorize]
+	[Authorize]
     public class EventLogController : LocalizedController<EventLogController>
     {
         public EventLogController(IStringLocalizer<EventLogController> localizer) : base(localizer) { }
@@ -54,7 +54,7 @@ namespace HADES.Controllers
                 return RedirectToAction("MainView", "Home");
             }
 
-            Models.DataTables.DataTablesProcessingResponse response = new(request.DrawCall);
+            Models.EventLogDataResponse response = new(request.DrawCall);
             if (request.RecordsCount != -1 && DateTime.TryParse(request.Date, out DateTime requestDate) && requestDate > DateTime.MinValue) // Valid data
             {
                 string logPath = $"Logs/log{requestDate:yyyyMMdd}.json";
@@ -63,6 +63,7 @@ namespace HADES.Controllers
                     // Check with local date, Serilog uses local time to roll logs. :|
                     bool isTodaysLog = DateTime.Now.Date == requestDate.Date;
                     Exception ex = null;
+                    List<Exception> readingExceptions = null;
                     try
                     {
                         if (isTodaysLog)
@@ -101,10 +102,11 @@ namespace HADES.Controllers
 
                         response.Data = file
                             .PageEvents(request.StartAtRecord, request.RecordsCount)
-                            .ToLogEvents()
+                            .ToLogEvents(out readingExceptions)
                             .RenderEvents();
                         response.RecordsTotal = totalRecords;
                         response.RecordsFiltered = filteredRecords;
+                        response.NumberOfExceptions = readingExceptions.Count;
 
                         EventLogCountCache.CacheData(requestDate.Date, request.Search, filteredRecords, totalRecords);
                     }
@@ -124,6 +126,14 @@ namespace HADES.Controllers
                         {
                             Serilog.Log.Error(ex, "An exception occured while {Action}", "processing the event log's data for DataTables");
                         }
+
+                        if (readingExceptions != null)
+						{
+                            foreach (Exception e in readingExceptions)
+							{
+                                Serilog.Log.Error(e, "An exception occured while {Action}", "processing one JSON line from a log file for DataTables");
+                            }
+						}
                     }
                 }
                 else
@@ -155,7 +165,7 @@ namespace HADES.Controllers
         public IActionResult CSV([FromForm] Models.EventLogDataRequest request)
         {
             Models.IUser user = Util.ConnexionUtil.CurrentUser(User);
-            if (user.GetRole().EventLogAccess) // ACCESS CONTROL
+            if (!user?.GetRole().EventLogAccess ?? true) // ACCESS CONTROL
             {
                 return RedirectToAction("MainView", "Home");
             }
@@ -171,6 +181,7 @@ namespace HADES.Controllers
                     // Check with local date, Serilog uses local time to roll logs. :|
                     bool isTodaysLog = DateTime.Now.Date == requestDate.Date;
                     Exception ex = null;
+                    List<Exception> readingExceptions = null;
                     try
                     {
                         if (isTodaysLog)
@@ -198,7 +209,7 @@ namespace HADES.Controllers
                         {
                             csv.WriteRecords(
                                 logFileEnumerable
-                                    .ToLogEvents()
+                                    .ToLogEvents(out readingExceptions)
                                     .ToEventLogCSVs()
                             );
                         }
@@ -211,7 +222,15 @@ namespace HADES.Controllers
                         Console.WriteLine("CSV Creation took " + elapsedTime);
 #endif
                         Guid fileId = Util.FileManager.Add(new Models.AvailableFile(csvPath, $"Log{requestDate:yyyy-MM-dd}.csv", "text/csv", user.GetId()));
-                        result = Json($"{{\"id\":\"{Uri.EscapeDataString(Convert.ToBase64String(fileId.ToByteArray()))}\"}}");
+                        // Encrypt -> Turn to bytes -> Encode into base64 string -> Escape for uri
+                        string encryptedGuid = Uri.EscapeDataString(
+                            Convert.ToBase64String(
+								System.Text.Encoding.UTF8.GetBytes(
+                                    Util.EncryptionUtil.Encrypt(fileId.ToString()).ToCharArray()
+                                )
+                            )
+                        );
+                        result = Json($"{{\"id\":\"{encryptedGuid}\", \"exceptionCount\":\"{readingExceptions.Count}\"}}");
                     }
                     catch (Exception e)
                     {
@@ -228,6 +247,14 @@ namespace HADES.Controllers
                         if (ex != null)
                         {
                             Serilog.Log.Error(ex, "An exception occured while {Action}", "converting the log to CSV");
+                        }
+
+                        if (readingExceptions != null)
+                        {
+                            foreach (Exception e in readingExceptions)
+                            {
+                                Serilog.Log.Error(e, "An exception occured while {Action}", "processing one JSON line from a log file for DataTables");
+                            }
                         }
                     }
                 }
