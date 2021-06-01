@@ -1,0 +1,22 @@
+﻿body {
+    background-color: deeppink;
+    margin-bottom: 60px;
+}
+
+.table td, .table th {
+    vertical-align: middle;
+    padding: 1px;
+}
+
+.btn
+{
+    border-radius: 1rem;
+}
+
+.dropmenu {
+    margin: 0px 20px 0px 0px;
+}
+
+span.icon {
+    padding-right: .5em;
+}

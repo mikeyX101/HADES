@@ -1,46 +1,27 @@
 ﻿@model MainViewViewModel
 
+@{
+    IUser u = HADES.Util.ConnexionUtil.CurrentUser(Context.User);
+}
+
 @section scripts
 {
     <link rel="stylesheet" href="~/lib/bootstrap-treeview/css/bootstrap-treeview.css">
-    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="~/css/@u.GetUserConfig().ThemeFile/jquery-ui.min.css">
     <script type="text/javascript" src="~/lib/bootstrap-treeview/js/bootstrap-treeview.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="~/lib/jquery-ui/jquery-ui.min.js"></script>
     <script type="text/javascript" src="~/js/treeview.js"></script>
-    <script type="text/javascript">showTreeView(@Html.Raw(Model.ADRootTreeNodeJson), '@Model.SelectedNodeName');</script>
+    <script src="~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.min.js"></script>
 }
 
-<div class="row">
+@* Main *@
 
-    @* Left Nav *@
-    <div class="col-sm-4">
-        <h3 class="mt-3">@Localizer["DossierGroupe"]</h3>
-        <div id="leftnav">
-            @if (Model.ADConnectionError != null)
-            {
-    <h6 class="text-center bg-warning mt-lg-5">@Model.ADConnectionError</h6> }
-            else
-            {
-                @await Html.PartialAsync("_LeftNav", Model)
-            }
+<div class="bg-primary text-white text-center">
+    <h1 class="m-3 p-3"><i class="fa fa-folder fa-fw mr-3"></i>@HADES.Strings.MainView</h1>
+</div>
 
-        </div>
-    </div>
-
-    @* Right Nav *@
-    <div class="col-sm-8">
-        @if (Model.ADConnectionError != null)
-        {
-            <h3 class="mt-3">@Localizer["ContenuDossier"]</h3>
-            <div></div>
-        }
-        else
-        {
-            <div id="content">
-                @await Html.PartialAsync("_Content", Model)
-            </div>
-        }
-    </div>
+<div class="row" id="main">
+    @await Html.PartialAsync("_Main", Model)
 </div>
 
 <!-- dialogs -->

@@ -3,41 +3,118 @@
     ViewBag.Title = "Login";
     Layout = "_LayoutLogin";
 }
-<link rel="stylesheet" href="~/css/login.css" />
+@{ HADES.Data.ApplicationDbContext tempdb = new(); }
+@*<link rel="stylesheet" href="~/css/login.css" />*@
+@*<link rel="stylesheet" href="~/css/loginAnimated.css" />*@
+<link rel="stylesheet" href="~/css/loginLight.css" />
 
-<div class="container center-screen-absolute">
-    <div class="col text-center align-items-center">
-        <h2>@Localizer["Login"]</h2>
-        <hr />
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <form method="post" asp-action="LogIn">
-            <div class="form-group row">
-                <div class="col-md-2"><label>@Localizer["Username"]</label></div>
-                <div class="col-md-6">
-                    <input type="text" asp-for="Username"
-                           class="form-control" />
+@*Avec login.css*@
+
+@*<div class="container center-screen-absolute">
+        <div class="col text-center align-items-center">
+            <h2>@Localizer["Login"]</h2>
+            <hr />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <form method="post" asp-action="LogIn">
+                <div class="form-group row">
+                    <div class="col-md-2"><label>@Localizer["Username"]</label></div>
+                    <div class="col-md-6">
+                        <input type="text" asp-for="Username"
+                                class="form-control" />
+                    </div>
+                    <div class="col">
+                        <span asp-validation-for="Username"
+                                class="text-danger"></span>
+                    </div>
                 </div>
-                <div class="col">
-                    <span asp-validation-for="Username"
-                          class="text-danger"></span>
+                <div class="form-group row">
+                    <div class="col-md-2"><label>@Localizer["Password"]</label></div>
+                    <div class="col-md-6">
+                        <input type="password" asp-for="Password"
+                                class="form-control" />
+                    </div>
+                    <div class="col">
+                        <span asp-validation-for="Password"
+                                class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <button type="submit" class="btn btn-primary">@Localizer["Login"]</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>*@
+
+@*Avec loginAnimated.css*@
+
+@*<div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <form method="post" asp-action="LogIn" class="box">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <h1>@Localizer["Login"]</h1>
+                        <p class="text-muted">@Localizer["LoginInvitation"]</p>
+                        <input type="text" asp-for="Username" placeholder=@Localizer["Username"]>
+                        <div class="col">
+                            <span asp-validation-for="Username"
+                                  class="text-danger"></span>
+                        </div>
+                        <input type="password" asp-for="Password" placeholder=@Localizer["Password"]>
+                        <div class="col">
+                            <span asp-validation-for="Password"
+                                  class="text-danger"></span>
+                        </div>
+                        <input type="submit" name="" value=@Localizer["Login"] href="#">
+                    </form>
                 </div>
             </div>
-            <div class="form-group row">
-                <div class="col-md-2"><label>@Localizer["Password"]</label></div>
-                <div class="col-md-6">
-                    <input type="password" asp-for="Password"
-                           class="form-control" />
+        </div>
+    </div>*@
+
+@* Avec loginLight.css *@
+
+<!-- Main Content -->
+<div class="container-fluid">
+    <div class="row main-content bg-success text-center">
+        <div class="col-md-4 text-center company__info">
+            <h4 class="company_title"><img src="@tempdb.AppConfig.FirstOrDefault().CompanyLogoFile" alt="*LOGO*" height="90" onerror="this.onerror = null; this.src = '/img/HADESICO.png';" /></h4>
+        </div>
+        <div class="col-md-8 col-xs-12 col-sm-12 login_form ">
+            <div class="container-fluid">
+                <div class="row title">
+                    <h1><B>H</B>elpful <B>A</B>ctive <B>D</B>irectory <B>E</B>xternal <B>S</B>ystem</h1>
                 </div>
-                <div class="col">
-                    <span asp-validation-for="Password"
-                          class="text-danger"></span>
+                <div class="row">
+                    <h4>@Localizer["Login"]</h4>
+                </div>
+                <div class="row">
+                    <form method="post" asp-action="LogIn" class="form-group">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="row">
+                            <input type="text" asp-for="Username" class="form__input" placeholder=@Localizer["Username"]>
+                        </div>
+                        <div class="col">
+                            <span asp-validation-for="Username"
+                                  class="text-danger"></span>
+                        </div>
+                        <div class="row">
+                            <!-- <span class="fa fa-lock"></span> -->
+                            <input type="password" asp-for="Password" class="form__input" placeholder=@Localizer["Password"]>
+                        </div>
+                        <div class="col">
+                            <span asp-validation-for="Password"
+                                  class="text-danger"></span>
+                        </div>
+                        <div class="row">
+                            <input type="submit" name="" value=@Localizer["Login"] class="btn">
+                        </div>
+                    </form>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <button type="submit" class="btn btn-primary">@Localizer["Login"]</button>
-                </div>
-            </div>
-        </form>
+        </div>
     </div>
 </div>
+

@@ -2,8 +2,10 @@
 using HADES.Util.Exceptions;
 using HADES.Util.ModelAD;
 using Novell.Directory.Ldap;
+using Serilog;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace HADES.Util
 {
@@ -22,15 +24,26 @@ namespace HADES.Util
     //https://www.novell.com/documentation/developer/ldapcsharp/?page=/documentation/developer/ldapcsharp/cnet/data/bovumfi.html
     public class ADManager
     {
+        private static readonly string GenericErrorLogTemplate = "An unexepected error occured while doing an operation with the Active Directory in function {Function}";
+        private static readonly string DataFetchErrorLogTemplate = "An unexpected error occured while fetching data in the Active Directory in function {Function}";
+
         public ADManager()
         {
             if (ADSettingsCache.Ad == null) {
                 ADSettingsCache.Refresh();
+            } 
+        }
+
+        public ADManager(Data.ApplicationDbContext db)
+        {
+            if (ADSettingsCache.Ad == null)
+            {
+                ADSettingsCache.Refresh(db);
             }
         }
-       
+
         /*****************************************************
-         GETATTRIBUTE in AD
+         GETATTRIBUTE  AD
          ******************************************************/
         private string getAttributeValue(LdapEntry entry, string attribute)
         {
@@ -45,8 +58,34 @@ namespace HADES.Util
             }
             catch (Exception e)
             {
-                Console.WriteLine("LOG: " + e.Message);
+                Log.Warning(e, GenericErrorLogTemplate, "getAttributeValue()");
                 return null;
+            }
+        }
+
+
+        /*****************************************************
+         GETATTRIBUTE  AD
+         ******************************************************/
+        private DateTime getDateExp(LdapEntry entry)
+        {
+           
+            try
+            {
+                string dateExp = entry.GetAttribute("expirationDateHades").StringValue;
+                string format = "yyMMddHHmmss'Z'";
+                DateTime d = DateTime.ParseExact(dateExp, format, CultureInfo.InvariantCulture);
+                return d;
+            }
+            catch (KeyNotFoundException)
+            {
+                // The key is not set 
+                return DateTime.Now;
+            }
+            catch (Exception e)
+            {
+                Log.Warning(e, GenericErrorLogTemplate, "getAttributeValue()");
+                return DateTime.Now;
             }
         }
 
@@ -69,7 +108,7 @@ namespace HADES.Util
             }
             catch (Exception e)
             {
-                Console.WriteLine("LOG: " + e.Message);
+                Log.Warning(e, GenericErrorLogTemplate, "getObjectGUID()");
                 return null;
             }
         }
@@ -85,31 +124,32 @@ namespace HADES.Util
             try
             {
                 //Put a timeout (instead of using the default one) on the connection to reduce the time waiting AND avoiding Nginx to timeout with 504 Gateway Timeout
-                connection.ConnectionTimeout = 1000 * 15;
+                connection.ConnectionTimeout = 1000 * 5;
                 //Connect function will create a socket connection to the server
                 connection.Connect(ADSettingsCache.Ad.ServerAddress, ADSettingsCache.Ad.PortNumber);
-                Console.WriteLine("isConnected : " + connection.Connected);
+                Log.Verbose("isConnected : {Connected}", connection.Connected);
 
                 //Bind function will Bind the user object Credentials to the Server
                 if (userDN != null && password != null)
                 {
-                    Console.WriteLine("userCredential");
+                    Log.Verbose("userCredential");
                     connection.Bind(userDN, password);
                 }
                 else
                 {
-                    Console.WriteLine("serverCredential");
-                    connection.Bind(ADSettingsCache.Ad.AccountDN, ADSettingsCache.Ad.PasswordDN);
+                    Log.Verbose("serverCredential");
+                    string p = EncryptionUtil.Decrypt(ADSettingsCache.Ad.PasswordDN);
+                    connection.Bind(ADSettingsCache.Ad.AccountDN, p);
                 }
 
-                Console.WriteLine("isAuthenticated : " + connection.Bound);
+                Log.Verbose("isAuthenticated : {Bound}", connection.Bound);
 
                 return connection;
 
             }
             catch (Exception ex)
             {
-                Console.WriteLine("LOG: " + ex.Message);
+                Log.Warning(ex, GenericErrorLogTemplate, "createConnection()");
                 throw new ADException();
             }
         }
@@ -133,11 +173,10 @@ namespace HADES.Util
                     try
                     {
                         nextEntry = lsc.Next();
-                        Console.WriteLine(nextEntry.Dn);
                     }
                     catch (Exception e)
                     {
-                        Console.WriteLine("Error: " + e.Message);
+                        Log.Warning(e, DataFetchErrorLogTemplate, "authenticate()");
                         continue;
                     }
 
@@ -164,7 +203,7 @@ namespace HADES.Util
             }
             catch (Exception ex)
             {
-                Console.WriteLine("LOG " + ex.Message);
+                Log.Warning(ex, GenericErrorLogTemplate, "authenticate()");
                 return false;
             }
         }
@@ -194,13 +233,12 @@ namespace HADES.Util
                     u.Dn = nextEntry.Dn;
                     u.ObjectGUID = getObjectGUID(nextEntry);
 
-                    Console.WriteLine(u);
                     users.Add(u);
                 }
                 catch (Exception e)
                 {
 
-                    Console.WriteLine("Error: " + e.Message);
+                    Log.Warning(e, DataFetchErrorLogTemplate, "getAllUsers()");
                     //Exception is thrown, go for next entry
                     continue;
                 }
@@ -224,35 +262,36 @@ namespace HADES.Util
             }
 
 
-            while (lsc.HasMore())
+
+            LdapEntry nextEntry = null;
+            try
             {
-                LdapEntry nextEntry = null;
-                try
-                {
-                    nextEntry = lsc.Next();
+                nextEntry = lsc.Next();
 
-                    u = new UserAD();
-                    u.SamAccountName = getAttributeValue(nextEntry, "samaccountName");
-                    u.FirstName = getAttributeValue(nextEntry, "givenName");
-                    u.LastName = getAttributeValue(nextEntry, "sn");
-                    u.Dn = nextEntry.Dn;
-                    u.ObjectGUID = getObjectGUID(nextEntry);
-                    Console.WriteLine(u);
-
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("Error: " + e.Message);
-                    //Exception is thrown, go for next entry
-                    continue;
-                }
-
+                u = new UserAD();
+                u.SamAccountName = getAttributeValue(nextEntry, "samaccountName");
+                u.FirstName = getAttributeValue(nextEntry, "givenName");
+                u.LastName = getAttributeValue(nextEntry, "sn");
+                u.Dn = nextEntry.Dn;
+                u.ObjectGUID = getObjectGUID(nextEntry);
             }
+            catch (LdapReferralException)
+            {
+                LoginException exception = new();
+                Log.Warning(exception, "AD User not found in {Function}", "getUserAD()");
+                throw exception;
+            }
+            catch (Exception e)
+			{
+                Log.Warning(e, DataFetchErrorLogTemplate, "getUserAD()");
+				throw;
+			}
 
             if (u == null)
             {
-                Console.WriteLine("LOG : USER WAS NOT FOUND ");
-                throw new LoginException();
+                LoginException exception = new();
+                Log.Warning(exception, "AD User not found in {Function}", "getUserAD()");
+                throw exception;
             }
 
             return u;
@@ -278,73 +317,96 @@ namespace HADES.Util
                 {
                     nextEntry = lsc.Next();
 
-
                     // TYPE
                     string att = "";
-                    try
-                    {
-                        att = nextEntry.GetAttribute("objectClass").ToString();
-                        if (att.Contains("group"))
-                        {
-                            data.Type = "group";
-                            data.SamAccountName = getAttributeValue(nextEntry, "sAMAccountName");
 
-                        }
-                        else if (att.Contains("organizationalUnit"))
-                        {
-                            data.Type = "ou";
-                            data.SamAccountName = getAttributeValue(nextEntry, "Name");
-                        }
-                    }
-                    catch (KeyNotFoundException)
+                    att = nextEntry.GetAttribute("objectClass").ToString();
+                    if (att.Contains("group"))
                     {
-                        Console.WriteLine("LOG: KeyNotFoundExcption");
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine("LOG: " + e.Message);
-                    }
+                        data.Type = "group";
+                        data.SamAccountName = getAttributeValue(nextEntry, "sAMAccountName");
 
+                    }
+                    else if (att.Contains("organizationalUnit"))
+                    {
+                        data.Type = "ou";
+                        data.SamAccountName = getAttributeValue(nextEntry, "Name");
+                    }
 
                     // PATH OF THE OBJECT
-                    /*  string[] rootOuName = ADSettingsCache.Ad.RootOu.Split(',');
-                      string[] splitRoutOU = nextEntry.Dn.Split(rootOuName[0]);
-                      Console.WriteLine("splitResult " + splitRoutOU[0] + " /////" + splitRoutOU[1]);*/
-                
-                    if (nextEntry.Dn != ADSettingsCache.Ad.RootOu) {
+                    if (nextEntry.Dn != ADSettingsCache.Ad.RootOu)
+                    {
                         string[] rootOuName = ADSettingsCache.Ad.RootOu.Split(',');
-                        
+
                         data.Path += "/" + rootOuName[0].Split("=")[1];
                     }
                     string[] path = nextEntry.Dn.Split(',');
 
                     for (int i = path.Length - 1; i >= 0; i--)
-                       {
-                           if (path[i].Contains("DC=") || path[i].Contains("OU=" + data.SamAccountName) || path[i].Contains("CN=" + data.SamAccountName) || ADSettingsCache.Ad.RootOu.Contains(path[i]))
-                           {
-                               path[i] = null;
-                           }
+                    {
+                        if (path[i].Contains("DC=") || path[i].Contains("OU=" + data.SamAccountName) || path[i].Contains("CN=" + data.SamAccountName) || ADSettingsCache.Ad.RootOu.Contains(path[i]))
+                        {
+                            path[i] = null;
+                        }
 
-                           if (path[i] != null)
-                           {
-                               data.Path += "/" + path[i].Split("=")[1];
-                           }
-                       }
+                        if (path[i] != null)
+                        {
+                            data.Path += "/" + path[i].Split("=")[1];
+                        }
+                    }
 
-                    //   Console.WriteLine("path: " + data.Path);
 
-                  
                     //DN 
                     data.Dn = nextEntry.Dn;
 
                     root.Add(data);
-
-                    Console.WriteLine(data);
-
+                }
+                catch (KeyNotFoundException e)
+                {
+                    Log.Error(e, "Fetched objectClass in LDAP Entry when it should exist");
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("Error: " + e.Message);
+                    Log.Warning(e, GenericErrorLogTemplate, "getRoot()");
+                    continue;
+                }
+            }
+
+            connection.Disconnect();
+
+           
+            return root;
+        }
+
+        public List<GroupAD> getGroupsInRoot()
+        {
+            List<GroupAD> root = new List<GroupAD>();
+
+            //Creating an LdapConnection instance
+            LdapConnection connection = createConnection();
+            LdapSearchResults lsc = (LdapSearchResults)connection.Search(ADSettingsCache.Ad.RootOu, LdapConnection.ScopeSub, "(|(objectClass=group))", null, false);
+
+            while (lsc.HasMore())
+            {
+                GroupAD group = new GroupAD();
+                LdapEntry nextEntry = null;
+                try
+                {
+                    nextEntry = lsc.Next();
+                    group.SamAccountName = getAttributeValue(nextEntry, "sAMAccountName");
+                    group.Email = getAttributeValue(nextEntry, "mail");
+                    group.Notes = getAttributeValue(nextEntry, "info");
+                    group.Description = getAttributeValue(nextEntry, "description");
+                    group.Members = GetMembersOfGroup(nextEntry.Dn, connection);
+                    group.ObjectGUID = getObjectGUID(nextEntry);
+                    group.ExpirationDate = getDateExp(nextEntry);
+
+                    root.Add(group);
+                    
+                }
+                catch (Exception e)
+                {
+                    Log.Warning(e, DataFetchErrorLogTemplate, "getGroupsInRoot()");
                     continue;
                 }
             }
@@ -360,7 +422,7 @@ namespace HADES.Util
 
             LdapSearchResults lsc = (LdapSearchResults)connection.Search(ADSettingsCache.Ad.RootOu, LdapConnection.ScopeSub, "(&(objectClass=group)(distinguishedName=" + groupDN + "))", null, false);
             GroupAD group = new GroupAD();
-            while (lsc.HasMore())
+            if (lsc.HasMore())
             {
 
                 LdapEntry nextEntry = null;
@@ -371,20 +433,21 @@ namespace HADES.Util
                     group.Email = getAttributeValue(nextEntry, "mail");
                     group.Notes = getAttributeValue(nextEntry, "info");
                     group.Description = getAttributeValue(nextEntry, "description");
-                    group.Members = GetMembersOfGroup(groupDN);
+                    group.Members = GetMembersOfGroup(groupDN,connection);
                     group.ObjectGUID = getObjectGUID(nextEntry);
+                    group.ExpirationDate = getDateExp(nextEntry);
                 }
                 catch (LdapException e)
                 {
                     connection.Disconnect();
-                    Console.WriteLine("Error: " + e.LdapErrorMessage);
+                    Log.Warning(e, DataFetchErrorLogTemplate, "getGroupInformation()");
                     //Exception is thrown, go for next entry
-                    continue;
+             
                 }
                 catch (Exception e)
                 {
                     connection.Disconnect();
-                    Console.WriteLine("LOG: " + e.Message);
+                    Log.Warning(e, GenericErrorLogTemplate, "getGroupInformation()");
                 }
             }
 
@@ -416,7 +479,7 @@ namespace HADES.Util
             }
             catch (Exception e)
             {
-                Console.WriteLine("Cannot create the folder: " + e.Message);
+                Log.Warning(e, GenericErrorLogTemplate, "createOU()");
                 connection.Disconnect();
                 return false;
             }
@@ -436,7 +499,7 @@ namespace HADES.Util
             catch (Exception e)
             {
                 connection.Disconnect();
-                Console.WriteLine("LOG : Cannot rename the folder: " + e.Message);
+                Log.Warning(e, GenericErrorLogTemplate, "renameOU()");
                 return false;
             }
         }
@@ -453,7 +516,7 @@ namespace HADES.Util
             catch (Exception e)
             {
                 connection.Disconnect();
-                Console.WriteLine("Cannot delete the folder: " + e.Message);
+                Log.Warning(e, GenericErrorLogTemplate, "deleteOU()");
                 return false;
             }
         }
@@ -461,8 +524,20 @@ namespace HADES.Util
         /*****************************************************
          GROUP
          ******************************************************/
-        public bool createGroup(string name, string ouName, string description, string email, string notes, List<UserAD> members)
+        public bool createGroup(string ouName, GroupAD group, List<UserAD> members)
         {
+            if (string.IsNullOrWhiteSpace(group.Description))
+            {
+                group.Description = " ";
+            }
+            if (group.Email == "")
+            {
+                group.Email = " ";
+            }
+            if (string.IsNullOrWhiteSpace(group.Notes))
+            {
+                group.Notes = " ";
+            }
 
             LdapConnection connection = createConnection();
             try
@@ -470,46 +545,57 @@ namespace HADES.Util
                 //Creates the List attributes of the entry and add them to attribute
                 LdapAttributeSet attributeSet = new LdapAttributeSet();
                 attributeSet.Add(new LdapAttribute("objectclass", "group"));
-                attributeSet.Add(new LdapAttribute("CN", name));
-                attributeSet.Add(new LdapAttribute("samaccountname", name));
-                attributeSet.Add(new LdapAttribute("name", name));
-                attributeSet.Add(new LdapAttribute("description", description));
-                attributeSet.Add(new LdapAttribute("mail", email));
-                attributeSet.Add(new LdapAttribute("info", notes));
+                attributeSet.Add(new LdapAttribute("CN", group.SamAccountName));
+                attributeSet.Add(new LdapAttribute("samaccountname", group.SamAccountName));
+                attributeSet.Add(new LdapAttribute("name", group.SamAccountName));
+                attributeSet.Add(new LdapAttribute("description", group.Description));
+                attributeSet.Add(new LdapAttribute("mail", group.Email));
+                attributeSet.Add(new LdapAttribute("info", group.Notes));
+                string format = "yyMMddHHmmss'Z'";
+                attributeSet.Add(new LdapAttribute("expirationDateHades", group.ExpirationDate.ToString(format)));
                 // DN of the entry to be added
-                string dn = "CN=" + name + "," + "OU=" + ouName + "," + ADSettingsCache.Ad.RootOu;
+                string dn = "CN=" + group.SamAccountName + "," + "OU=" + ouName + "," + ADSettingsCache.Ad.RootOu;
                 LdapEntry newEntry = new LdapEntry(dn, attributeSet);
                 //Add the entry to the directory
                 connection.Add(newEntry);
                 connection.Disconnect();
 
+                EmailHelper.SendEmail(NotificationType.GroupCreate, this.getGroupInformation(dn));
+
                 //Add members
-                List<string> add = new List<string>();
-                foreach (UserAD m in members) {
-                    add.Add(m.Dn);
-                }
-                addMemberToGroup(dn, add);
+                addMemberToGroup(dn, members);
 
                 return true;
             }
             catch (Exception e)
             {
-                Console.WriteLine("Cannot create the group:" + e.Message);
+                Log.Warning(e, GenericErrorLogTemplate, "createGroup()");
                 connection.Disconnect();
                 return false;
             }
         }
 
 
-        public bool modifyGroup(string dnGroupToModify, string name, string ouGroup, string description, string email, string notes, Dictionary<UserAD, Action> members)
-
+        //public bool modifyGroup(string dnGroupToModify, string name, string ouGroup, string description, string email, DateTime dateExpiration, string notes, Dictionary<UserAD, Action> members)
+        public bool modifyGroup(string dnGroupToModify, GroupAD group, string ouGroup,  Dictionary<UserAD, Action> members)
         {
-            LdapConnection connection = createConnection();
-            //try
-            //{
+            if (group.Description == "") {
+                group.Description = " ";
+            }
+            if (group.Email == "")
+            {
+                group.Email = " ";
+            }
+            if (group.Notes == "")
+            {
+                group.Notes = " ";
+            }
+            try
+			{
+                LdapConnection connection = createConnection();
 
                 //Rename 
-                string newRdn = "CN=" + name;
+                string newRdn = "CN=" + group.SamAccountName;
                 connection.Rename(dnGroupToModify, newRdn, true);
 
                 dnGroupToModify = newRdn + ",OU=" + ouGroup + "," + ADSettingsCache.Ad.RootOu;
@@ -518,19 +604,25 @@ namespace HADES.Util
                 List<LdapModification> modList = new List<LdapModification>();
 
                 //Description
-                LdapAttribute attribute = new LdapAttribute("description", description);
+                LdapAttribute attribute = new LdapAttribute("description", group.Description);
                 modList.Add(new LdapModification(LdapModification.Replace, attribute));
 
                 //Email
-                attribute = new LdapAttribute("mail", email);
-                modList.Add(new LdapModification(LdapModification.Replace, attribute));
-
+                
+                 attribute = new LdapAttribute("mail", group.Email);
+                 modList.Add(new LdapModification(LdapModification.Replace, attribute));
+               
                 //Notes
-                attribute = new LdapAttribute("info", notes);
+                attribute = new LdapAttribute("info", group.Notes);
                 modList.Add(new LdapModification(LdapModification.Replace, attribute));
 
                 //SamAccountName 
-                attribute = new LdapAttribute("samaccountname", name);
+                attribute = new LdapAttribute("samaccountname", group.SamAccountName);
+                modList.Add(new LdapModification(LdapModification.Replace, attribute));
+
+                //DateExp 
+                string format = "yyMMddHHmmss'Z'";
+                attribute = new LdapAttribute("expirationDateHades", group.ExpirationDate.ToString(format));
                 modList.Add(new LdapModification(LdapModification.Replace, attribute));
 
                 LdapModification[] mods = new LdapModification[modList.Count];
@@ -539,19 +631,19 @@ namespace HADES.Util
 
                 connection.Disconnect();
 
-                List<string> add = new List<string>();
-                List<string> delete = new List<string>();
+                List<UserAD> add = new List<UserAD>();
+                List<UserAD> delete = new List<UserAD>();
                 //Modify members
                 foreach (KeyValuePair<UserAD, Action> entry in members)
                 {
                     if (entry.Value == Action.ADD)
                     {
-                        add.Add(entry.Key.Dn);
+                        add.Add(entry.Key);
 
                     }
                     else if (entry.Value == Action.DELETE)
                     {
-                        delete.Add(entry.Key.Dn);
+                        delete.Add(entry.Key);
                     }
                 }
 
@@ -564,7 +656,12 @@ namespace HADES.Util
                     deleteMemberToGroup(dnGroupToModify, delete);
                 }
                 return true;
-            
+            }
+            catch (Exception e)
+			{
+                Log.Warning(e, GenericErrorLogTemplate, "modifyGroup()");
+                return false;
+			}
         }
 
         public bool deleteGroup(string dnGroupToDelete)
@@ -572,6 +669,7 @@ namespace HADES.Util
             LdapConnection connection = createConnection();
             try
             {
+                EmailHelper.SendEmail(NotificationType.GroupDelete, this.getGroupInformation(dnGroupToDelete));
                 connection.Delete(dnGroupToDelete);
                 connection.Disconnect();
                 return true;
@@ -579,17 +677,234 @@ namespace HADES.Util
             catch (Exception e)
             {
                 connection.Disconnect();
-                Console.WriteLine("Cannot delete the group: " + e.Message);
+                Log.Warning(e, GenericErrorLogTemplate, "deleteGroup()");
                 return false;
             }
+        }
+
+        public bool doesGroupExist(string GUID)
+        {
+            LdapConnection connection = createConnection();
+            bool wasFound = false;
+
+            try
+            {
+                LdapSearchResults lsc = (LdapSearchResults)connection.Search(getBaseAd(), LdapConnection.ScopeSub, "(objectGUID =" + GUID + ")", null, false);
+
+                if (lsc.HasMore())
+                {
+                    wasFound = true;
+                }
+            }
+            catch (Exception e) 
+            {
+                connection.Disconnect();
+                Log.Warning(e, GenericErrorLogTemplate, "doesGroupExist()");
+                throw new ADException();
+            }
+
+            connection.Disconnect();
+            return wasFound;
+        }
+
+        public string getBaseAd() {
+            string[] rootTab = ADSettingsCache.Ad.RootOu.Split(",");
+            string b = "";
+            for (int i = 0; i < rootTab.Length; i++)
+            {
+                if (rootTab[i].Contains("DC="))
+                {
+                    b += rootTab[i] + ",";
+                }
+            }
+            if (b.Length > 0)
+            {
+                b = b.Remove(b.Length - 1);
+            }
+            return b;
+        }
+
+        public string getGroupDnByGUID(string GUID)
+        {
+            LdapConnection connection = createConnection();
+            string dn = "";
+
+            try
+            {
+                LdapSearchResults lsc = (LdapSearchResults)connection.Search(getBaseAd(), LdapConnection.ScopeSub, "(objectGUID =" + GUID + ")", null, false);
+
+                LdapEntry nextEntry = lsc.Next();
+                    dn = nextEntry.Dn;
+                
+            }
+            catch (Exception e)
+            {
+                connection.Disconnect();
+                Log.Warning(e, DataFetchErrorLogTemplate, "getGroupDnByGUID()");
+                return dn;
+            }
+
+            connection.Disconnect();
+            return dn;
+
+        }
+
+        public string getGroupSamAccountNameByGUID(string GUID)
+        {
+            LdapConnection connection = createConnection();
+            string samAccountName = "";
+
+            try
+            {
+                LdapSearchResults lsc = (LdapSearchResults)connection.Search(getBaseAd(), LdapConnection.ScopeSub, "(objectGUID =" + GUID + ")", null, false);
+                LdapEntry nextEntry = null;
+                while (lsc.HasMore())
+                {
+
+                    nextEntry = lsc.Next();
+                    samAccountName = getAttributeValue(nextEntry, "sAMAccountName"); ;
+                }
+            }
+            catch (Exception e)
+            {
+                connection.Disconnect();
+                Log.Warning(e, DataFetchErrorLogTemplate, "getGroupSamAccountNameByGUID()");
+                return samAccountName;
+            }
+
+            connection.Disconnect();
+            return samAccountName;
+
+        }
+
+        public string getGroupGUIDByDn(string Dn)
+        {
+            LdapConnection connection = createConnection();
+            string GUID = "";
+
+            try
+            {
+                LdapSearchResults lsc = (LdapSearchResults)connection.Search(getBaseAd(), LdapConnection.ScopeSub, "(&(objectClass=group)(distinguishedName=" + Dn + "))", null, false);
+                LdapEntry nextEntry = lsc.Next();
+                GUID = getObjectGUID(nextEntry);
+                
+            }
+            catch (Exception e)
+            {
+
+                connection.Disconnect();
+                Log.Warning(e, DataFetchErrorLogTemplate, "getGroupGUIDByDn()");
+                return GUID;
+            }
+
+            connection.Disconnect();
+            return GUID;
+
+        }
+
+        public List<string> GetGroupsNameforUser(string userDn, LdapConnection connectionAlreadyOpen)
+        {
+            LdapConnection connection;
+            if (connectionAlreadyOpen == null)
+            {
+                connection = createConnection();
+            }
+            else
+            {
+                connection = connectionAlreadyOpen;
+            }
+
+            LdapSearchResults lsc = (LdapSearchResults)connection.Search(ADSettingsCache.Ad.RootOu, LdapConnection.ScopeSub, "(&(objectClass=group)(member=" + userDn + "))", null, false);
+            List<string> groupsname = new List<string>();
+
+            while (lsc.HasMore())
+            {
+                LdapEntry nextEntry = null;
+                try
+                {
+                    nextEntry = lsc.Next();
+                    groupsname.Add(getAttributeValue(nextEntry, "sAMAccountName"));
+
+                }
+                catch (LdapException e)
+                {
+                    connection.Disconnect();
+                    Log.Warning(e, DataFetchErrorLogTemplate, "GetGroupsNameforUser()");
+                    continue;
+                }
+                catch (Exception e)
+                {
+                    Log.Warning(e, GenericErrorLogTemplate, "GetGroupsNameforUser()");
+                    connection.Disconnect();
+                }
+            }
+
+            if (connectionAlreadyOpen == null)
+            {
+                connection.Disconnect();
+            }
+
+            return groupsname;
+        }
+
+        public List<String> GetGroupsDNforUser(string userDn, LdapConnection connectionAlreadyOpen)
+        {
+            LdapConnection connection;
+            if (connectionAlreadyOpen == null)
+            {
+                connection = createConnection();
+            }
+            else
+            {
+                connection = connectionAlreadyOpen;
+            }
+
+            LdapSearchResults lsc = (LdapSearchResults)connection.Search(ADSettingsCache.Ad.RootOu, LdapConnection.ScopeSub, "(&(objectClass=group)(member=" + userDn + "))", null, false);
+            List<string> groupsname = new List<string>();
+
+            while (lsc.HasMore())
+            {
+                LdapEntry nextEntry = null;
+                try
+                {
+                    nextEntry = lsc.Next();
+                    groupsname.Add(nextEntry.Dn);
+
+                }
+                catch (LdapException e)
+                {
+                    connection.Disconnect();
+                    Console.WriteLine("LOG: " + e.Message);
+                    continue;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("LOG: " + e.Message);
+                    connection.Disconnect();
+                }
+            }
+
+            if (connectionAlreadyOpen == null)
+            {
+                connection.Disconnect();
+            }
+
+            return groupsname;
         }
 
         /*****************************************************
          MEMBER
          ******************************************************/
-        public List<UserAD> GetMembersOfGroup(string groupDN)
+        public List<UserAD> GetMembersOfGroup(string groupDN, LdapConnection connectionAlreadyOpen)
         {
-            LdapConnection connection = createConnection();
+            LdapConnection connection;
+            if (connectionAlreadyOpen == null)
+            {
+                connection = createConnection();
+            }
+            else {
+                connection = connectionAlreadyOpen;
+            }
 
             LdapSearchResults lsc = (LdapSearchResults)connection.Search(ADSettingsCache.Ad.BaseDN, LdapConnection.ScopeSub, "(&(objectClass=user)(memberOf=" + groupDN + "))", null, false);
             List<UserAD> users = new List<UserAD>();
@@ -605,39 +920,48 @@ namespace HADES.Util
                     u.FirstName = getAttributeValue(nextEntry, "givenName");
                     u.LastName = getAttributeValue(nextEntry, "sn");
                     u.Dn = nextEntry.Dn;
+                    u.ObjectGUID = getObjectGUID(nextEntry);
                     users.Add(u);
 
                 }
                 catch (LdapException e)
                 {
                     connection.Disconnect();
-                    Console.WriteLine("LOG: " + e.Message);
+                    Log.Warning(e, DataFetchErrorLogTemplate, "GetMembersOfGroup()");
                     continue;
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("LOG: " + e.Message);
+                    Log.Warning(e, GenericErrorLogTemplate, "GetMembersOfGroup()");
                     connection.Disconnect();
                 }
             }
-            connection.Disconnect();
+            
+            if (connectionAlreadyOpen == null) {  
+                connection.Disconnect();
+            }
+           
             return users;
         }
 
-        public bool addMemberToGroup(string groupDn, List<string> usersDn)
+        public bool addMemberToGroup(string groupDn, List<UserAD> users)
         {
             LdapConnection connection = createConnection();
             try
             {
+                string usersAdded = "";
+
                 List<LdapModification> modList = new List<LdapModification>();
 
-
-                foreach (string dn in usersDn)
+                foreach (UserAD u in users)
                 {
-                    LdapAttribute attribute = new LdapAttribute("member", dn);
+                   
+                    if (u != null) {
+                        usersAdded += u.FirstName + " " + u.LastName + ", ";
+                    }
+                    LdapAttribute attribute = new LdapAttribute("member", u.Dn);
                     modList.Add(new LdapModification(LdapModification.Add, attribute));
                 }
-
 
                 LdapModification[] mods = new LdapModification[modList.Count];
                 mods = modList.ToArray();
@@ -646,26 +970,34 @@ namespace HADES.Util
                 connection.Modify(groupDn, mods);
 
                 connection.Disconnect();
+
+                EmailHelper.SendEmail(NotificationType.MemberAdd, this.getGroupInformation(groupDn), usersAdded);
                 return true;
             }
             catch (Exception e)
             {
-                Console.WriteLine("Cannot add user in " + groupDn + " : " + e.Message);
+                Log.Warning(e, GenericErrorLogTemplate, "addMemberToGroup()");
                 connection.Disconnect();
                 return false;
             }
         }
 
-        public bool deleteMemberToGroup(string groupDn, List<string> usersDn)
+        public bool deleteMemberToGroup(string groupDn, List<UserAD> users)
         {
             LdapConnection connection = createConnection();
             try
             {
                 List<LdapModification> modList = new List<LdapModification>();
-
-                foreach (string dn in usersDn)
+                string usersDeleted = "";
+                foreach (UserAD u in users)
                 {
-                    LdapAttribute attribute = new LdapAttribute("member", dn);
+
+                    if (u != null)
+                    {
+                        usersDeleted += u.FirstName + " " + u.LastName + ", ";
+                    }
+
+                    LdapAttribute attribute = new LdapAttribute("member", u.Dn);
                     modList.Add(new LdapModification(LdapModification.Delete, attribute));
                 }
 
@@ -676,15 +1008,17 @@ namespace HADES.Util
                 connection.Modify(groupDn, mods);
 
                 connection.Disconnect();
+                EmailHelper.SendEmail(NotificationType.MemberRemoval, this.getGroupInformation(groupDn),usersDeleted);
                 return true;
             }
             catch (Exception e)
             {
-                Console.WriteLine("LOG : Cannot delete user in "+ groupDn+" : " + e.Message);
+                Log.Warning(e, GenericErrorLogTemplate, "deleteMemberToGroup()");
                 connection.Disconnect();
                 return false;
             }
         }
 
+       
     }
 }

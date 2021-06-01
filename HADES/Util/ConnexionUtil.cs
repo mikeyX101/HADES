@@ -3,6 +3,7 @@ using HADES.Models;
 using HADES.Util.Exceptions;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 using System;
 using System.Linq;
 
@@ -39,11 +40,11 @@ namespace HADES.Util
                 {
                     // Check Active Directory
 
-                    // Update Admin/SuperAdmin User in DB
+                    // TODO Update Admin/SuperAdmin User in DB
 
                     if (db.User.Include(u => u.Role).SingleOrDefault((u) => u.GUID.ToLower().Equals(aDManager.getUserAD(user, false).ObjectGUID) && u.Role.HadesAccess) != null)
                     {
-                        //Check Allowed in HADES (is in DB as User)
+                        //Check Allowed in HADES (is in DB as User && Role.HadesAccess)
                         User u = db.User.SingleOrDefault((u) => u.GUID.ToLower().Equals(aDManager.getUserAD(user,false).ObjectGUID));
                         db.Update(u);
                         u.Attempts = 0;
@@ -81,18 +82,19 @@ namespace HADES.Util
                 if (u.Attempts > 5)
                 {
                     u.Attempts = 0;
-                    u.Date = DateTime.Now.AddMinutes(10);
-                    Console.WriteLine(u.GetName() + " LOCKED UNTIL " + u.Date.ToString());
+                    u.Date = DateTime.UtcNow.AddMinutes(10);
+                    Log.Information("{User} has been locked from login attempts. The user will unlock at {Date}", u.GetName(), u.Date.ToString());
                 }
                 db.SaveChanges();
-                return u.Date < DateTime.Now;
+                return u.Date < DateTime.UtcNow;
             }
             catch (Exception)
             {
                 // If anything Wrong happens then try User
                 try
                 {
-                    User u = db.User.SingleOrDefault((a) => a.GUID.ToLower().Equals(aDManager.getUserAD(user,false).ObjectGUID));
+                    string guid = aDManager.getUserAD(user, false).ObjectGUID;
+                    User u = db.User.SingleOrDefault((a) => a.GUID.ToLower().Equals(guid));
                     if (u == null)
                     {
                         throw new ForbiddenException();
@@ -101,22 +103,23 @@ namespace HADES.Util
                     u.Attempts++;
                     if (u.Attempts > 5)
                     {
-                        u.Date = DateTime.Now.AddMinutes(10);
-                        Console.WriteLine(u.GetName() + " LOCKED UNTIL " + u.Date.ToString());
+                        u.Date = DateTime.UtcNow.AddMinutes(10);
+                        Log.Information("{User} has been locked from login attempts. The user will unlock at {Date}", u.GetName(), u.Date.ToString());
                     }
                     db.SaveChanges();
-                    return u.Date < DateTime.Now;
+                    return u.Date < DateTime.UtcNow;
                 }
                 catch (ADException)
                 {
-                    throw;
+                    throw; // Logged in login
                 }
                 catch (ForbiddenException)
                 {
-                    return true; // Pass handling to next funtion
+                    return true; // Pass handling to next function
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
+                    Log.Warning(e, "An unexepected error occured while validating login attempts");
                     // If anything Wrong happens then this User must not exist
                     return false;
                 }
@@ -126,9 +129,6 @@ namespace HADES.Util
         // Returns the Hashed password for Default User (Other login is handled by Active Directory)
         public static string HashPassword(string password)
         {
-            // Generate Salt
-            char[] passArray = password.ToCharArray();
-
             // Calculate Hash
             string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
             password: password,

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using HADES.Attributes;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -10,7 +11,7 @@ namespace HADES.Models
         public UserConfig()
         {
             Language = "fr-CA";
-            ThemeFile = "site.css";
+            ThemeFile = "site";
             Notification = false;
         }
 
@@ -20,10 +21,12 @@ namespace HADES.Models
         public int Id { get; set; }
 
         [Required]
+        [LanguageExist]
         [Column("UCF_language")]
         public string Language { get; set; }
 
         [Required]
+        [ThemeFileExist]
         [Column("UCF_theme_file")]
         public string ThemeFile { get; set; }
 

@@ -1,0 +1,42 @@
+﻿body {
+    background: repeating-linear-gradient(lightgreen,green,lightgreen);
+    margin-bottom: 60px;
+}
+
+.btn-primary {
+    border-color: darkgreen;
+    background: linear-gradient(white,green,darkgreen,green,white);
+}
+
+.bg-primary {
+    border-color: darkgreen;
+    background: linear-gradient(white,green,darkgreen,green,white);
+}
+
+.btn-danger {
+    border-color: darkgreen;
+    background: linear-gradient(white,red,darkred,red,white);
+}
+
+a {
+    color: white;
+    text-shadow: 2px 2px  5px black;
+}
+
+.bg-danger {
+    border-color: darkgreen;
+    background: linear-gradient(white,red,darkred,red,white);
+}
+
+.table td, .table th {
+    vertical-align: middle;
+    padding: 1px;
+}
+
+.dropmenu {
+    margin: 0px 20px 0px 0px;
+}
+
+span.icon {
+    padding-right: .5em;
+}

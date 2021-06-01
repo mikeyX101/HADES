@@ -45,4 +45,10 @@ namespace HADES.Models
         public virtual ICollection<DefaultUser> DefaultUsers { get; set; }
     }
 
+    // List of roles to be cast in int for the right ID
+    public enum RolesID
+    {
+        SuperAdmin = 1, Admin=2, Owner=3, Inactive = 4
+    }
+
 }

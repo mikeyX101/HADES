@@ -1,42 +1,46 @@
 ﻿@model UserConfigViewModel
 @{
-    ViewBag.Title = "Paramètres utilisateur";
+    ViewBag.Title = @HADES.Strings.UserConfig;
 }
 
 @section scripts {
-    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validate/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
-    <script src="~/js/minimum-age.js"></script>
-
 }
 
 <div class="bg-primary text-white text-center">
-    <h1 class="m-3 p-3">Paramètres utilisateur</h1>
+    <h1 class="m-3 p-3"><i class="fa fa-users-cog fa-fw mr-3"></i>@HADES.Strings.UserConfig</h1>
 </div>
 
 <form asp-action="UserConfig">
     <div class="form-group row">
         <input type="hidden" asp-for="@Model.UserConfig.Id" />
-        <div class="col-sm-2"><label>Langue:</label></div>
-        <div class="col-sm-4">
-            <input type="text" asp-for="@Model.UserConfig.Language" class="form-control" />
+        <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["Language"]</label></div>
+        <div class="col-sm-9 col-lg-5">
+            <select asp-for="@Model.UserConfig.Language" class="form-control" asp-items="@Model.Languages">
+            </select>
         </div>
-        <div class="col">
-            <span asp-validation-for="@Model.UserConfig.Language" class="text-danger"></span>
-        </div>
-    </div>
-    <div class="form-group row">
-        <div class="col-sm-2"><label>Thème:</label></div>
-        <div class="col-sm-4">
-            <input type="text" asp-for="@Model.UserConfig.ThemeFile" class="form-control" />
-        </div>
-        <div class="col">
-            <span asp-validation-for="@Model.UserConfig.ThemeFile" class="text-danger"></span>
+        <div class="col-sm-9 col-lg-5 offset-lg-5">
+            <span asp-validation-for="@Model.UserConfig.Language"
+                  class="text-danger"></span>
         </div>
     </div>
+
     <div class="form-group row">
-        <div class="col-sm-2"><label>Notification par courriel:</label></div>
-        <div class="col-sm-4">
+        <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["Theme"]</label></div>
+        <div class="col-sm-9 col-lg-5">
+            <select asp-for="@Model.UserConfig.ThemeFile" class="form-control" asp-items="@Model.Themes">
+            </select>
+        </div>
+        <div class="col-sm-9 col-lg-5 offset-lg-5">
+            <span asp-validation-for="@Model.UserConfig.ThemeFile"
+                  class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-sm-3 col-lg-3 offset-lg-2"><label>@Localizer["EmailNotification"]</label></div>
+        <div class="col-sm-9 col-lg-5">
             <div class="checkbox">
                 <input asp-for="@Model.UserConfig.Notification" class="form-control" />
             </div>
@@ -75,7 +79,11 @@
                         <td>
                             <input type="hidden" asp-for="@Model.Emails[i].Id" />
                             <input type="hidden" asp-for="@Model.Emails[i].UserConfigId" />
-                            <input type="text" asp-for="@Model.Emails[i].Address" class="form-control" />
+                            <input type="email" asp-for="@Model.Emails[i].Address" class="form-control" />
+                            <div class="col">
+                                <span asp-validation-for="@Model.Emails[i].Address"
+                                      class="text-danger"></span>
+                            </div>
                         </td>
                         <td>
                             <input class="form-control" asp-for="@Model.Emails[i].ExpirationDate" />
@@ -92,18 +100,18 @@
                         <td>
                             <input class="form-control" asp-for="@Model.Emails[i].MemberRemoval" />
                         </td>
-                        <td><a asp-action="EmailDelete" asp-route-id="@Model.Emails[i].Id"><h2><i class="bi bi-trash"></i></h2></a></td>
+                        <td><a asp-action="EmailDelete" asp-route-id="@Model.Emails[i].Id" style="text-align: center;"><h2><i class="fa fa-trash-alt"></i></h2></a></td>
                     </tr>
                 }
             }
             <tr>
-                <td><a asp-action="CreateEmail" asp-route-id="@Model.UserConfig.Id"><h2><i class="bi bi-person-plus-fill"></i></h2></a></td>
+                <td><a asp-action="CreateEmail"><h2><i class="fa fa-user-plus"></i></h2></a></td>
             </tr>
         </table>
     </div>
     <div class="row">
-        <div class="offset-2 col-sm-4">
-            <button type="submit" value="Save" class="btn btn-primary">Sauvegarder</button>
+        <div class="col-sm-12 col-lg-12">
+            <button type="submit" value="Save" class="btn btn-primary btn-lg btn-block"><i class="fa fa-save fa-fw mr-3"></i>@Localizer["Save"]</button>
         </div>
     </div>
 </form>

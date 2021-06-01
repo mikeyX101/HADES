@@ -1,34 +1,112 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+@{ HADES.Data.ApplicationDbContext tempdb = new(); }
+@{
+    IUser u = HADES.Util.ConnexionUtil.CurrentUser(Context.User);
+    string themeFileCss = u.GetUserConfig().ThemeFile.ToString() + ".css";
+}
+<html>
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width" />
     <title>HADES</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" type="text/css" href="~/lib/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/lib/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="~/css/@u.GetUserConfig().ThemeFile/@themeFileCss">
+    <link rel="stylesheet" href="~/lib/bootstrap-icons/bootstrap-icons.min.css">
     <link rel="stylesheet" href="~/lib/pureScriptSelect-master/style.css" />
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
 
+    <script src="~/lib/jquery/jquery.min.js"></script>
+    @RenderSection("scriptsPreBootStrap", false)
+    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    @RenderSection("scripts", false)
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-controller="Account" asp-action="LogIn"><img src="~/img/Logo.png" alt="*LOGO*" /> - HADES</a>
-                *TODO display if() Nom, role | Admin Config | User Config*
+    <div class="container">
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menu"
+                    aria-controls="menu" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="menu">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        @* TODO: Logo *@
+                        <a class="navbar-brand" asp-action="MainView" asp-controller="Home" asp-area="">
+                            <img src="@tempdb.AppConfig.FirstOrDefault().CompanyLogoFile" alt="*LOGO*" height="60" onerror="this.onerror = null; this.src = '/img/HADESICO.png';" />
+                        </a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav mr-auto text-light">
+                    <li class="nav-item">
+                        HADES - @tempdb.AppConfig.FirstOrDefault().CompanyName
+                    </li>
+                </ul>
+                <ul class="navbar-nav mr-auto text-light">
+                    <li class="nav-item">
+                        @u?.GetName() (@u?.GetRole().Name)
+
+                    </li>
+                </ul>
+                @if (u.GetRole().AppConfigAccess || u.GetRole().EventLogAccess || u.GetRole().UserListAccess)
+                {
+                    <div class="dropdown dropmenu">
+                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-cog mr-2"></i>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            @if (u.GetRole().AppConfigAccess)
+                            {
+                                <a class="dropdown-item" asp-action="AppConfig" asp-controller="AppConfig" asp-area="">
+                                    <i class="fa fa-cog fa-fw mr-2"></i>
+                                    @Localizer["ParametreApplication"]
+                                </a>
+                            }
+                            @if (u.GetRole().EventLogAccess)
+                            {
+                                <a class="dropdown-item" asp-action="EventLog" asp-controller="EventLog" asp-area="">
+                                    <i class="fa fa-book fa-fw mr-2"></i>
+                                    @Localizer["JournalEvenements"]
+                                </a>
+                            }
+                            @if (u.GetRole().UserListAccess)
+                            {
+                                <a class="dropdown-item" asp-action="UserList" asp-controller="UserList" asp-area="">
+                                    <i class="fa fa-users fa-fw mr-2"></i>
+                                    @Localizer["ListeUtilisateurs"]
+                                </a>
+                            }
+                            @if (u.GetRole().AppConfigAccess)
+                            {
+                        <a class="dropdown-item" asp-action="Documentation" asp-controller="Documentation" asp-area="">
+                            <i class="fa fa-info-circle fa-fw mr-2"></i>
+                            @Localizer["Documentation"]
+                        </a>
+                            }
+                        </div>
+                    </div>
+                }
+
+                <div class="dropdown dropmenu">
+                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-bars mr-2"></i>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <a class="dropdown-item" asp-action="UserConfig" asp-controller="UserConfigs">
+                            <i class="fa fa-users-cog fa-fw mr-2"></i>
+                            @Localizer["ParametreUtilisateur"]
+                        </a>
+                        <a class="dropdown-item" asp-action="LogOut" asp-controller="Account">
+                            <i class="fa fa-sign-out-alt fa-fw mr-2"></i>
+                            @Localizer["Deconnexion"]
+                        </a>
+                    </div>
+                </div>
             </div>
         </nav>
-    </header>
-    <main role="main" class="pb-3">
-        @RenderBody()
-    </main>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+        <main>
+            @RenderBody()
+        </main>
+    </div>
 
-    @await RenderSectionAsync("Scripts", required: false)
 </body>
-<script src="~/lib/pureScriptSelect-master/script.js"></script>
-<script>pureScriptSelect('#multiSelect');</script>
-
 </html>

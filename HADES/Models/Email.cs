@@ -12,6 +12,7 @@ namespace HADES.Models
         public int Id { get; set; }
 
         [Required]
+        [EmailAddress]
         [Column("EMA_email")]
         public string Address { get; set; }
 
