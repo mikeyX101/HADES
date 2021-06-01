@@ -8,3 +8,12 @@
 }
 
 
+.GroupModalBody{
+    min-height : 520px;
+}
+
+.modal-footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
