@@ -7,21 +7,28 @@
 
 <h3 class="mt-1 mb-2 pr-2">
     @Localizer["Folder"] @Model.SelectedNodeName
-    <!-- Button trigger modal create OU -->
-    <button type="button" class="btn btn-primary float-right" style="margin-right: 0.125rem;" data-toggle="modal" data-target="@Model.DataTarget" data-backdrop="false">
-        <span data-toggle="tooltip" data-html="true" data-placement="right" title="@Model.CreateButtonLabel">
-            <i class="fa fa-plus fa-fw mr-4 ml-4"></i>
-        </span>
-    </button>
+    @if (u.GetRole().AdCrudAccess)
+    {
+        <!-- Button trigger modal create OU -->
+        <button type="button" class="btn btn-primary float-right" style="margin-right: 0.125rem;" data-toggle="modal" data-target="@Model.DataTarget" data-backdrop="false">
+            <span data-toggle="tooltip" data-html="true" data-placement="right" title="@Model.CreateButtonLabel">
+                <i class="fa fa-plus fa-fw mr-4 ml-4"></i>
+            </span>
+        </button>
+    }
 </h3>
 
 <link rel="stylesheet" href="~/css/GroupModalGeneral.css" />
 
-<!-- Modal Create Group -->
-@await Html.PartialAsync("_CreateGroupModal", Model)
+@if (u.GetRole().AdCrudAccess)
+{
+    <!-- Modal Create Group -->
+    @await Html.PartialAsync("_CreateGroupModal", Model)
 
-<!-- Modal Create OU -->
-@await Html.PartialAsync("_CreateOuModal", Model)
+    <!-- Modal Create OU -->
+    @await Html.PartialAsync("_CreateOuModal", Model)
+}
+
 
 <!-- Liste des dossiers ou des groupes à partir de la sélection du treeview -->
 <table class="table">
@@ -136,6 +143,8 @@
                             var selectedOwnersId = "#selectedOwners" + i;
                             var selectedOwnersTarget = "selectedOwners" + i;
 
+
+
                         }
                         <span data-toggle="tooltip" data-html="true" data-placement="right" title="@Model.EditLinkLabel">
                             <a data-ajax="true" data-ajax-method="GET" data-ajax-mode="replace" data-ajax-update="@selectedOwnersId"
@@ -143,6 +152,8 @@
                                 <i class="fa fa-edit fa-fw"></i>
                             </a>
                         </span>
+
+
                         <div class="modal fade" id="@groupId" tabindex="-1" role="dialog" aria-labelledby="GroupCreateLbl"
                              aria-hidden="true">
                             <div class="modal-dialog" role="document">
@@ -156,47 +167,57 @@
                                     <div class="modal-body">
                                         <nav>
                                             <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
-                                                <a class="nav-item nav-link active" id="nav-groupName-tab" data-toggle="tab" href="@navGroupInfo"
-                                                   role="tab" aria-controls="nav-home" aria-selected="true">General</a>
-                                                <a class="nav-item nav-link" id="nav-members-tab" data-toggle="tab" href="@navMembers"
+                                                @if (u.GetRole().AdCrudAccess)
+                                                {
+                                                    <a class="nav-item nav-link active" id="nav-groupName-tab" data-toggle="tab" href="@navGroupInfo"
+                                                       role="tab" aria-controls="nav-home" aria-selected="true">General</a>
+                                                }
+
+                                                <a class="nav-item nav-link @if (!u.GetRole().AdCrudAccess) { @Html.Raw("active"); } " id="nav-members-tab" data-toggle="tab" href="@navMembers"
                                                    role="tab" aria-controls="nav-members" aria-selected="false">Members</a>
-                                                <a class="nav-item nav-link" id="nav-owners-tab" data-toggle="tab" href="@navOwners"
-                                                   role="tab" aria-controls="nav-owners" aria-selected="false">Owners</a>
+                                                @if (u.GetRole().AdCrudAccess)
+                                                {
+                                                    <a class="nav-item nav-link" id="nav-owners-tab" data-toggle="tab" href="@navOwners"
+                                                       role="tab" aria-controls="nav-owners" aria-selected="false">Owners</a>
+                                                }
+
                                             </div>
                                         </nav>
                                         <div class="tab-content" id="nav-tabContent">
                                             <form asp-action="EditGroupModal">
-                                                <!-- General info form -->
+                                                @if (u.GetRole().AdCrudAccess)
+                                                {
+                                                    <!-- General info form -->
 
-                                                <div class="tab-pane fade show active" id="@navGroupInfoTab" role="tabpanel" aria-labelledby="nav-groupName-tab">
-                                                    <input type="hidden" name="SelectedPath" value="@Model.SelectedPath" />
-                                                    <input type="hidden" name="SelectedNodeName" value="@Model.SelectedNodeName" />
-                                                    <input type="hidden" name="SelectedContentName" value="@Model.SelectedContentName" />
-                                                    <input type="hidden" name="Group" value="@Model.GroupAD" />
-                                                    <input type="hidden" name="OuGroup" value="@Model.OuGroup" />
-                                                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                                    <div class="tab-pane fade show active" id="@navGroupInfoTab" role="tabpanel" aria-labelledby="nav-groupName-tab">
+                                                        <input type="hidden" name="SelectedPath" value="@Model.SelectedPath" />
+                                                        <input type="hidden" name="SelectedNodeName" value="@Model.SelectedNodeName" />
+                                                        <input type="hidden" name="SelectedContentName" value="@Model.SelectedContentName" />
+                                                        <input type="hidden" name="Group" value="@Model.GroupAD" />
+                                                        <input type="hidden" name="OuGroup" value="@Model.OuGroup" />
+                                                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-                                                    <div class="form-group row">
-                                                        <label asp-for="@Model.GroupAD.SamAccountName" class="col-sm-2 col-form-label">Name</label>
-                                                        <div class="col-sm-10">
-                                                            <input asp-for="@Model.GroupAD.SamAccountName" class="form-control">
+                                                        <div class="form-group row">
+                                                            <label asp-for="@Model.GroupAD.SamAccountName" class="col-sm-2 col-form-label">Name</label>
+                                                            <div class="col-sm-10">
+                                                                <input asp-for="@Model.GroupAD.SamAccountName" class="form-control">
+                                                            </div>
                                                         </div>
-                                                    </div>
 
-                                                    <div class="form-group row">
-                                                        <label asp-for="@Model.GroupAD.Description" class="col-sm-2 col-form-label">Description</label>
-                                                        <div class="col-sm-10">
-                                                            <input asp-for="@Model.GroupAD.Description" class="form-control" placeholder="">
+                                                        <div class="form-group row">
+                                                            <label asp-for="@Model.GroupAD.Description" class="col-sm-2 col-form-label">Description</label>
+                                                            <div class="col-sm-10">
+                                                                <input asp-for="@Model.GroupAD.Description" class="form-control" placeholder="">
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <label asp-for="@Model.GroupAD.Email" class="col-sm-2 col-form-label">Email</label>
-                                                        <div class="col-sm-10">
-                                                            <input asp-for="@Model.GroupAD.Email" type="Email" class="form-control" id="Email" placeholder="Email">
+                                                        <div class="form-group row">
+                                                            <label asp-for="@Model.GroupAD.Email" class="col-sm-2 col-form-label">Email</label>
+                                                            <div class="col-sm-10">
+                                                                <input asp-for="@Model.GroupAD.Email" type="Email" class="form-control" id="Email" placeholder="Email">
+                                                            </div>
                                                         </div>
-                                                    </div>
 
-                                                    <script type="text/javascript">
+                                                        <script type="text/javascript">
 
                                                         var today = new Date();
                                                         var nextYear = new Date(today.getFullYear() + 1, today.getMonth(), today.getDate());
@@ -212,21 +233,23 @@
                                                                 dateFormat: "yy-mm-dd",
                                                             });
 
-                                                    </script>
+                                                        </script>
 
-                                                    <div class="form-group row">
-                                                        <label asp-for="@Model.GroupAD.ExpirationDate" class="col-sm-2 col-form-label">Expiration Date</label>
-                                                        <div class="col-sm-10">
-                                                            <input asp-for="@Model.GroupAD.ExpirationDate" id="datepickerExpId@(groupId)" class="form-control" type="text" value="" readonly />
+                                                        <div class="form-group row">
+                                                            <label asp-for="@Model.GroupAD.ExpirationDate" class="col-sm-2 col-form-label">Expiration Date</label>
+                                                            <div class="col-sm-10">
+                                                                <input asp-for="@Model.GroupAD.ExpirationDate" id="datepickerExpId@(groupId)" class="form-control" type="text" value="" readonly />
+                                                            </div>
                                                         </div>
-                                                    </div>
 
-                                                    <div class="form-group row">
-                                                        <label asp-for="@Model.GroupAD.Notes">Notes</label>
-                                                        <textarea asp-for="@Model.GroupAD.Notes" class="form-control" id="Notes" rows="3"></textarea>
-                                                    </div>
+                                                        <div class="form-group row">
+                                                            <label asp-for="@Model.GroupAD.Notes">Notes</label>
+                                                            <textarea asp-for="@Model.GroupAD.Notes" class="form-control" id="Notes" rows="3"></textarea>
+                                                        </div>
 
-                                                </div>
+                                                    </div>
+                                                }
+
                                                 <!-- members form -->
                                                 <div class="tab-pane fade tab-absolute" id="@navMembersTab" role="tabpanel" aria-labelledby="nav-members-tab">
                                                     <div>
@@ -236,15 +259,18 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <!-- Owners form -->
-                                                <div class="tab-pane fade tab-absolute" id="@navOwnersTab" role="tabpanel" aria-labelledby="nav-owners-tab">
+                                                @if (u.GetRole().AdCrudAccess)
+                                                {
+                                                    <!-- Owners form -->
+                                                    <div class="tab-pane fade tab-absolute" id="@navOwnersTab" role="tabpanel" aria-labelledby="nav-owners-tab">
 
-                                                    <div id="@selectedOwnersTarget">
-                                                        @*<div class="directorist-select directorist-select-multi" id="EditOwnersMultiSelect" data-isSearch="true" data-multiSelect='@Model.UsersAD'>
-                                                                <input type="hidden" asp-for="@Model.SelectedOwners">
-                                                            </div>*@
+                                                        <div id="@selectedOwnersTarget">
+                                                            @*<div class="directorist-select directorist-select-multi" id="EditOwnersMultiSelect" data-isSearch="true" data-multiSelect='@Model.UsersAD'>
+                                                                    <input type="hidden" asp-for="@Model.SelectedOwners">
+                                                                </div>*@
+                                                        </div>
                                                     </div>
-                                                </div>
+                                                }
                                                 <div class="modal-footer">
                                                     <button type="submit" class="btn btn-primary" id="btnSave">Ok</button>
                                                     <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
