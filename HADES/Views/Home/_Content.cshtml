@@ -1,5 +1,10 @@
 ﻿@model MainViewViewModel
 
+@{ HADES.Data.ApplicationDbContext tempdb = new(); }
+@{
+    IUser u = HADES.Util.ConnexionUtil.CurrentUser(Context.User);
+}
+
 <h3 class="mt-1 mb-2 pr-2">
     @Localizer["Folder"] @Model.SelectedNodeName
     <!-- Button trigger modal create OU -->
@@ -132,12 +137,12 @@
                             var selectedOwnersTarget = "selectedOwners" + i;
 
                         }
-                            <span data-toggle="tooltip" data-html="true" data-placement="right" title="@Model.EditLinkLabel">
-                                <a data-ajax="true" data-ajax-method="GET" data-ajax-mode="replace" data-ajax-update="@selectedOwnersId"
-                                   href='@Url.Action("GetOwners","Home",new { guid = Model.GroupAD.ObjectGUID})' class="btn btn-primary" data-toggle="modal" data-target="@dataTarget" data-backdrop="false">
-                                    <i class="fa fa-edit fa-fw"></i>
-                                </a>
-                            </span>
+                        <span data-toggle="tooltip" data-html="true" data-placement="right" title="@Model.EditLinkLabel">
+                            <a data-ajax="true" data-ajax-method="GET" data-ajax-mode="replace" data-ajax-update="@selectedOwnersId"
+                               href='@Url.Action("GetOwners","Home",new { guid = Model.GroupAD.ObjectGUID})' class="btn btn-primary" data-toggle="modal" data-target="@dataTarget" data-backdrop="false">
+                                <i class="fa fa-edit fa-fw"></i>
+                            </a>
+                        </span>
                         <div class="modal fade" id="@groupId" tabindex="-1" role="dialog" aria-labelledby="GroupCreateLbl"
                              aria-hidden="true">
                             <div class="modal-dialog" role="document">
@@ -252,13 +257,17 @@
                         </div>
 
                         <!-- Button to delete -->
-                        <form onsubmit="return formSubmit(this)" style="display: inline-block">
-                            <button class="btn btn-primary" data-toggle="tooltip" data-html="true" data-placement="right" title="@HADES.Strings.Delete">
-                                <i class="fa fa-trash-alt fa-fw"></i>
-                            </button>
-                            <input type="hidden" name="SelectedPath" value="@Model.SelectedPath" />
-                            <input type="hidden" name="SelectedContentName" value="@Model.ADRoot[i].SamAccountName" />
-                        </form>
+                        @if (u.GetRole().AdCrudAccess)
+                        {
+                            <form onsubmit="return formSubmit(this)" style="display: inline-block">
+                                <button class="btn btn-primary" data-toggle="tooltip" data-html="true" data-placement="right" title="@HADES.Strings.Delete">
+                                    <i class="fa fa-trash-alt fa-fw"></i>
+                                </button>
+                                <input type="hidden" name="SelectedPath" value="@Model.SelectedPath" />
+                                <input type="hidden" name="SelectedContentName" value="@Model.ADRoot[i].SamAccountName" />
+                            </form>
+                        }
+
                     </td>
                 </tr>
             }
