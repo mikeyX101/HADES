@@ -195,4 +195,7 @@
   <data name="link_generator" xml:space="preserve">
     <value>Link to the Generator</value>
   </data>
+  <data name="roleTitle" xml:space="preserve">
+    <value>Role</value>
+  </data>
 </root>
