@@ -196,7 +196,7 @@ namespace HADES.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public IActionResult CreateGroupModal([Bind("GroupAD, SelectedNodeName, SelectedContentName, SelectedPath, SelectedMembers, SelectedOwners")] MainViewViewModel viewModel)
+        public IActionResult CreateGroupModal([Bind("GroupAD, SelectedNodeName, SelectedContentName, SelectedPath, SelectedMembers, SelectedOwners, ExpandedNodesName")] MainViewViewModel viewModel)
         {
             if (!ConnexionUtil.CurrentUser(this.User).GetRole().AdCrudAccess) // ACCESS CONTROL
             {
@@ -249,7 +249,11 @@ namespace HADES.Controllers
                 db.OwnerGroup.Add(ownerGroup);
                 db.SaveChanges();
 
-                return RedirectToAction("MainView", "Home");
+                return RedirectToAction("UpdateContent", "Home", new
+                    {
+                        selectedPathForContent = viewModel.SelectedPath,
+                        expandedNodeNames = viewModel.ExpandedNodesName
+                    });
             }
             return View(viewModel);
         }
@@ -258,7 +262,7 @@ namespace HADES.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public IActionResult EditGroupModal([Bind("GroupAD, SelectedNodeName, SelectedPath, BeforeEditMembers, SelectedMembers, OuGroup, SelectedOwners")] MainViewViewModel viewModel)
+        public IActionResult EditGroupModal([Bind("GroupAD, SelectedNodeName, SelectedPath, BeforeEditMembers, SelectedMembers, OuGroup, SelectedOwners, ExpandedNodesName")] MainViewViewModel viewModel)
         {
             if (!ConnexionUtil.CurrentUser(this.User).GetRole().AdCrudAccess) // ACCESS CONTROL
             {
@@ -290,7 +294,11 @@ namespace HADES.Controllers
                 db.Entry(ownerGroup).State = EntityState.Modified;
 
                 db.SaveChanges();
-                return RedirectToAction("MainView");
+                return RedirectToAction("UpdateContent", "Home", new
+                {
+                    selectedPathForContent = viewModel.SelectedPath,
+                    expandedNodeNames = viewModel.ExpandedNodesName
+                });
             }
             return View(viewModel.GroupAD);
         }
