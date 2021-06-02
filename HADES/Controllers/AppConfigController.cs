@@ -203,7 +203,7 @@ namespace HADES.Controllers
             {
                 return RedirectToAction("AppConfig");
             }
-           
+            ViewBag.Error = HADES.Strings.GenericError;
             return View();
         }
 
@@ -268,7 +268,7 @@ namespace HADES.Controllers
             {
                 return RedirectToAction("AppConfig");
             }
-
+            ViewBag.Error = HADES.Strings.GenericError;
             return View();
         }
 

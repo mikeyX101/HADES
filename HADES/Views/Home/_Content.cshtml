@@ -6,23 +6,23 @@
 <h3 class="mt-1 mb-2 pr-2">
     @Localizer["Folder"] @Model.SelectedNodeName
     @if (u.GetRole().AdCrudAccess)
-    {   
+    {
         <!-- Button trigger modal create OU -->
         <button type="button" class="btn btn-primary float-right" style="margin-right: 0.125rem;" data-toggle="modal" data-target="@Model.DataTarget" data-backdrop="false">
             <span data-toggle="tooltip" data-html="true" data-placement="right" title="@Model.CreateButtonLabel">
                 <i class="fa fa-plus fa-fw mr-4 ml-4"></i>
             </span>
         </button>
-     }
+    }
 </h3>
 
 @if (u.GetRole().AdCrudAccess)
-{   
+{
     <!-- Modal Create Group -->
-     @await Html.PartialAsync("_CreateGroupModal", Model) 
+    @await Html.PartialAsync("_CreateGroupModal", Model)
 
     <!-- Modal Create OU -->
-     @await Html.PartialAsync("_CreateOuModal", Model)
+    @await Html.PartialAsync("_CreateOuModal", Model)
 }
 
 <!-- Liste des dossiers ou des groupes à partir de la sélection du treeview -->
@@ -67,9 +67,11 @@
                         }
                     </td>
                     <td style="text-align: right">
-
-                        <!-- Modal Rename OU -->
-                        @await Html.PartialAsync("_RenameOUModal", Model)
+                        @if (u.GetRole().AdCrudAccess)
+                        {
+                            <!-- Modal Rename OU -->
+                            @await Html.PartialAsync("_RenameOUModal", Model)
+                        }
 
 
                         @{
@@ -108,15 +110,19 @@
                                 Model.SelectedOwners = "";
 
                             var selectedOwnersId = "#selectedOwners" + i;
-                            var selectedOwnersTarget = "selectedOwners" + i; }
+                            var selectedOwnersTarget = "selectedOwners" + i;
+                        }
+                        @if (u.GetRole().AdCrudAccess || selectedPathLength > 2)
+                        {
+                            <!-- Button trigger modal rename OU -->
+                            <span data-toggle="tooltip" data-html="true" data-placement="right" title="@Model.EditLinkLabel">
+                                <a data-ajax="true" data-ajax-method="GET" data-ajax-mode="replace" data-ajax-update="@selectedOwnersId"
+                                   href='@Url.Action("GetOwners","Home",new { guid = Model.GroupAD.ObjectGUID})' class="btn btn-primary" data-toggle="modal" data-target="@dataTarget" data-backdrop="false">
+                                    <i class="fa fa-edit fa-fw"></i>
+                                </a>
+                            </span>
+                        }
 
-                        <!-- Button trigger modal rename OU -->
-                        <span data-toggle="tooltip" data-html="true" data-placement="right" title="@Model.EditLinkLabel">
-                            <a data-ajax="true" data-ajax-method="GET" data-ajax-mode="replace" data-ajax-update="@selectedOwnersId"
-                               href='@Url.Action("GetOwners","Home",new { guid = Model.GroupAD.ObjectGUID})' class="btn btn-primary" data-toggle="modal" data-target="@dataTarget" data-backdrop="false">
-                                <i class="fa fa-edit fa-fw"></i>
-                            </a>
-                        </span>
 
                         <!-- Modal Edit Group -->
                         <div class="modal fade" id="@groupId" tabindex="-1" role="dialog" aria-labelledby="GroupCreateLbl"
@@ -230,8 +236,8 @@
 
                                                         <div id="@selectedOwnersTarget">
                                                             @*<div class="directorist-select directorist-select-multi" id="EditOwnersMultiSelect" data-isSearch="true" data-multiSelect='@Model.UsersAD'>
-                                                                <input type="hidden" asp-for="@Model.SelectedOwners">
-                                                            </div>*@
+                                                                    <input type="hidden" asp-for="@Model.SelectedOwners">
+                                                                </div>*@
                                                         </div>
                                                     </div>
                                                 }
@@ -260,8 +266,9 @@
                         }
 
                     </td>
-                </tr>}
+                </tr>
             }
+        }
     </tbody>
 </table>
 
