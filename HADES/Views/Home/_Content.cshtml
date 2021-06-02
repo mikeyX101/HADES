@@ -3,12 +3,13 @@
 @{ HADES.Data.ApplicationDbContext tempdb = new(); }
 @{ IUser u = HADES.Util.ConnexionUtil.CurrentUser(Context.User); }
 
-<h3 class="mt-1 mb-2 pr-2">
+<h3 class="mt-1 mb-2
+    ">
     @Localizer["Folder"] @Model.SelectedNodeName
     @if (u.GetRole().AdCrudAccess)
     {
         <!-- Button trigger modal create OU -->
-        <button type="button" class="btn btn-primary float-right" style="margin-right: 0.125rem;" data-toggle="modal" data-target="@Model.DataTarget" data-backdrop="false">
+        <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="@Model.DataTarget" data-backdrop="false">
             <span data-toggle="tooltip" data-html="true" data-placement="right" title="@Model.CreateButtonLabel">
                 <i class="fa fa-plus fa-fw mr-4 ml-4"></i>
             </span>
