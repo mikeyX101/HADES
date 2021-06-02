@@ -33,11 +33,9 @@ namespace HADES.Controllers
             };
             viewModel.Themes = new List<SelectListItem>() //TODO Translate text with readable and not "technical" names
             {
-                new SelectListItem {Text = "site", Value = "site"},
-                new SelectListItem {Text = "deeppink", Value = "deeppink"},
-                new SelectListItem {Text = "chocolate", Value = "chocolate"},
-                new SelectListItem {Text = "greenmint", Value = "greenmint"},
-                new SelectListItem {Text = "white", Value = "white"}
+                new SelectListItem {Text = "Dark", Value = "site"},
+                new SelectListItem {Text = "Greenmint", Value = "greenmint"},
+                new SelectListItem {Text = "Light", Value = "white"}
             };
 
             return View(viewModel);

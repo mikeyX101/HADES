@@ -1,7 +1,4 @@
 ﻿
-@{
-    ViewData["Title"] = Localizer["Documentation"];
-}
 
 @{
     IUser currentUser = HADES.Util.ConnexionUtil.CurrentUser(Context.User);
@@ -10,7 +7,6 @@
 @section scriptsPreBootStrap
 {
     <link rel="stylesheet" href="~/css/@currentUser.GetUserConfig().ThemeFile/jquery-ui.min.css">
-    <link rel="stylesheet" href="~/css/Documentation.css">
     <script src="~/lib/jquery-ui/jquery-ui.min.js"></script>
     <script src="~/lib/popper.js/umd/popper.min.js"></script>
 }
@@ -24,9 +20,14 @@
         border: 1px solid black;
         padding: 5px;
     }
+
+    /**Make ToolTip bigger for IMG to fit in the Documentation**/
+    .tooltip-inner {
+        max-width: 1000px !important;
+    }
 </style>
 
-<div class="bg-primary text-white text-center">
+<div class="bg-primary text-white text-center documentation">
     <h1 class="m-3 p-3"><i class="fa fa-info-circle fa-fw mr-3"></i>@Localizer["Documentation"]</h1>
 </div>
 <h1>HADES(Helpful Active Directory External System)</h1>

@@ -1,21 +1,4 @@
 ﻿body {
     background-color: white;
-    margin-bottom: 60px !important;
 }
 
-.table td, .table th {
-    vertical-align: middle;
-    padding: 8px;
-}
-
-.dropmenu {
-    margin: 0px 20px 0px 0px;
-}
-
-span.icon {
-    padding-right: .5em;
-}
-
-.treeview .list-group-item {
-    padding: .15rem 1.25rem .15rem .5rem !important;
-}
