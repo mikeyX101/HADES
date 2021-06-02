@@ -131,8 +131,10 @@
             <select data-toggle="tooltip" data-html="true" data-placement="right" title="@Localizer["LanguageToolTip"]" id="language" asp-for="@Model.AppConfig.DefaultLanguage" class="form-control">
                 <option value="fr-CA">@HADES.Strings.French</option>
                 <option value="en-US">@HADES.Strings.English</option>
-                <option value="es-US">@HADES.Strings.Spanish</option>
-                <option value="pt-BR">@HADES.Strings.Portuguese</option>
+                @{
+                   // <option value="es-US">@HADES.Strings.Spanish</option> 
+                   // <option value="pt-BR">@HADES.Strings.Portuguese</option>
+                }
             </select>
         </div>
     </div>

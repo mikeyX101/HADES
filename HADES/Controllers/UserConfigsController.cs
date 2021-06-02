@@ -28,8 +28,8 @@ namespace HADES.Controllers
             {
                 new SelectListItem {Text = HADES.Strings.French, Value = "fr-CA"},
                 new SelectListItem {Text = HADES.Strings.English, Value = "en-US"},
-                new SelectListItem {Text = HADES.Strings.Spanish, Value = "es-US"},
-                new SelectListItem {Text = HADES.Strings.Portuguese, Value = "pt-BR"}
+               // new SelectListItem {Text = HADES.Strings.Spanish, Value = "es-US"}, // SUPPORT es-US
+               // new SelectListItem {Text = HADES.Strings.Portuguese, Value = "pt-BR"} // SUPPORT pt-BR
             };
             viewModel.Themes = new List<SelectListItem>() //TODO Translate text with readable and not "technical" names
             {
