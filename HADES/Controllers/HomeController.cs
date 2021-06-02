@@ -14,7 +14,7 @@ using System.Linq;
 
 namespace HADES.Controllers
 {
-	public class HomeController : LocalizedController<HomeController>
+    public class HomeController : LocalizedController<HomeController>
     {
         private ADManager ad;
         private MainViewViewModel viewModel;
@@ -55,6 +55,7 @@ namespace HADES.Controllers
         [Authorize]
         public IActionResult UpdateContent(string selectedPathForContent)
         {
+            //à deplacer dans editowners // rename à getTabsContent
             string users = JsonConvert.SerializeObject(ad.getAllUsers().Select(x => x.SamAccountName));
             viewModel.UsersAD = users;
             viewModel.ADManager = ad;
@@ -200,15 +201,15 @@ namespace HADES.Controllers
             string selectedNodeName = split.Length == 2 ? split[1] : split[2];
             GroupAD group = viewModel.GroupAD;
             List<UserAD> members = GetSelectedUsersSamAccount(viewModel);
-          
-           
+
+
 
             ModelState.Remove("NewName");
 
             if (ModelState.IsValid)
             {
 
-               
+
                 ad.createGroup(selectedNodeName, group, members);
 
                 string DN = FindDN(viewModel.SelectedPath, group.SamAccountName);
@@ -274,7 +275,7 @@ namespace HADES.Controllers
             if (ModelState.IsValid)
             {
                 DateTime dateExp = viewModel.GroupAD.ExpirationDate;
-                ad.modifyGroup(DN, group, viewModel.SelectedNodeName,  updatedGroupMembers);
+                ad.modifyGroup(DN, group, viewModel.SelectedNodeName, updatedGroupMembers);
 
                 selectedOwners.ForEach(x => db.Entry(x).State = EntityState.Modified);
                 db.Entry(ownerGroup).State = EntityState.Modified;
@@ -350,19 +351,41 @@ namespace HADES.Controllers
         }
 
         [Authorize]
-        public IActionResult GetOwners(string guid)
+        public IActionResult GetOwners(string dn, string selectedPath, string selectedNodeName, int index)
         {
             if (!ConnexionUtil.CurrentUser(this.User).GetRole().AdCrudAccess) // ACCESS CONTROL
             {
                 return RedirectToAction("MainView", "Home");
             }
+
+            GroupAD group = ad.getGroupInformation(dn);
+            IEnumerable<string> members = group.Members.Select(x => x.SamAccountName);
+
+            viewModel.OuGroup = group.SamAccountName;
+            viewModel.GroupAD = group;
+            viewModel.SelectedPath = selectedPath;
+            viewModel.SelectedNodeName = selectedNodeName;
+            if (members.Any())
+            {
+                viewModel.SelectedMembers = Newtonsoft.Json.JsonConvert.SerializeObject(members);
+                viewModel.BeforeEditMembers = Newtonsoft.Json.JsonConvert.SerializeObject(members);
+            }
+            else
+            {
+                viewModel.SelectedMembers = "";
+                viewModel.BeforeEditMembers = "";
+            }
+
             ApplicationDbContext db = new ApplicationDbContext();
 
-            var user = db.User.Where(x => x.OwnerGroupUsers.Select(x => x.OwnerGroup.GUID).Contains(guid)).ToList().Select(x => x.GetName());
+            var user = db.User.Where(x => x.OwnerGroupUsers.Select(x => x.OwnerGroup.GUID).Contains(group.ObjectGUID)).ToList().Select(x => x.GetName());
+            ViewBag.Index = index;
 
             viewModel.UsersAD = JsonConvert.SerializeObject(ad.getAllUsers().Select(x => x.SamAccountName));
-            viewModel.SelectedOwners = JsonConvert.SerializeObject(user);
-
+            if (user.Any())
+                viewModel.SelectedOwners = JsonConvert.SerializeObject(user);
+            else
+                viewModel.SelectedOwners = "";
             return PartialView("EditOwners", viewModel);
         }
     }
