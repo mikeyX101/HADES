@@ -157,13 +157,13 @@ namespace HADES.Controllers
             {
                 // at this point, the OU does not contain groups since split.Length == 2
                 ad.deleteOU(DN);
-                Serilog.Log.Information("Le dossier(OU) " + DN + " a été supprimé");
+                Serilog.Log.Information("Folder(OU) " + DN + " has been deleted");
             }
             // Delete Group, a Group has split.Length == 3
             if (split.Length == 3)
             {
                 ad.deleteGroup(DN);
-                Serilog.Log.Information("Le groupe " + DN + " a été supprimé");
+                Serilog.Log.Information("Group " + DN + " has been deleted");
             }
             return RedirectToAction("UpdateContent", "Home", new { 
                 selectedPathForContent = viewModel.SelectedPath, 
@@ -183,7 +183,7 @@ namespace HADES.Controllers
             if (ModelState.IsValid)
             {
                 ad.renameOU(DN, viewModel.NewName);
-                Serilog.Log.Information("Le dossier(OU) " + DN + " a été renommé");
+                Serilog.Log.Information("Folder(OU) " + DN + " has been renamed");
             }
 
             return RedirectToAction("UpdateContent", "Home", new { 
@@ -317,7 +317,7 @@ namespace HADES.Controllers
             if (ModelState.IsValid)
             {
                 ad.createOU(viewModel.NewName);
-                Serilog.Log.Information("Le dossier(OU) " + viewModel.NewName + " a été créé");
+                Serilog.Log.Information("Folder(OU) " + viewModel.NewName + " has been created");
             }
             else
             {
