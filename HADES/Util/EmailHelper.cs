@@ -211,6 +211,9 @@ namespace HADES.Util
 
             private readonly Serilog.Core.Logger log;
 
+            private readonly string SendToEmails = "";
+            private string MessageContent { get; set; } = "";
+
             public EmailSink(IEnumerable<string> toEmails, string subject)
             {
                 if (SMTPSettingsCache.SMTP == null)
@@ -219,23 +222,23 @@ namespace HADES.Util
                 }
                 SMTPSettings settings = SMTPSettingsCache.SMTP;
 
-                string emails = "";
                 foreach (string email in toEmails)
                 {
-                    emails += $"{email};";
+                    SendToEmails += $"{email};";
                 }
                 Serilog.Sinks.Email.EmailConnectionInfo emailConfig = new Serilog.Sinks.Email.EmailConnectionInfo()
                 {
                     EnableSsl = true,
                     MailServer = settings.SMTPServer,
                     Port = settings.SMTPPort,
-                    NetworkCredentials = new NetworkCredential(settings.SMTPUsername, EncryptionUtil.Decrypt(settings.SMTPPassword)),
+                    NetworkCredentials = 
+                        string.IsNullOrWhiteSpace(settings.SMTPUsername) || string.IsNullOrWhiteSpace(settings.SMTPPassword) ? 
+                        null : 
+                        new NetworkCredential(settings.SMTPUsername, EncryptionUtil.Decrypt(settings.SMTPPassword)),
                     EmailSubject = subject,
                     FromEmail = settings.SMTPFromEmail,
-                    ToEmail = emails
+                    ToEmail = SendToEmails
                 };
-
-
 
                 log = new LoggerConfiguration()
                     .MinimumLevel.Debug()
@@ -247,31 +250,26 @@ namespace HADES.Util
 
             public void AddMessage(LogEventLevel logLevel, string message)
             {
+                MessageContent += $"{message}\n";
                 switch (logLevel)
                 {
                     // Shouldn't be used
                     case LogEventLevel.Verbose:
-                        Log.Verbose(message);
                         log.Verbose(message);
                         break;
                     case LogEventLevel.Debug:
-                        Log.Debug(message);
                         log.Debug(message);
                         break;
                     case LogEventLevel.Information:
-                        Log.Information(message);
                         log.Information(message);
                         break;
                     case LogEventLevel.Warning:
-                        Log.Warning(message);
                         log.Warning(message);
                         break;
                     case LogEventLevel.Error:
-                        Log.Error(message);
                         log.Error(message);
                         break;
                     case LogEventLevel.Fatal:
-                        Log.Fatal(message);
                         log.Fatal(message);
                         break;
                 }
@@ -279,6 +277,7 @@ namespace HADES.Util
 
             public void Dispose()
             {
+                Log.Information("Sending email to recipients ({SentTo}) with content: {EmailContent}", SendToEmails, MessageContent);
                 log.Dispose();
             }
         }

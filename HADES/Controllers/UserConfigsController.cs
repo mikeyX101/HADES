@@ -97,11 +97,14 @@ namespace HADES.Controllers
 
 
         [Authorize]
-        public async Task<IActionResult> EmailDelete()
+        public async Task<IActionResult> EmailDelete(string id)
         {
             UserConfigService service = new();
-            int id = ConnexionUtil.CurrentUser(this.User).GetUserConfig().Id;
-            await service.DeleteEmail(id);
+            if (int.TryParse(id, out int emailId))
+			{
+                await service.DeleteEmail(emailId);
+            }
+            
 
             return RedirectToAction("UserConfig");
         }
