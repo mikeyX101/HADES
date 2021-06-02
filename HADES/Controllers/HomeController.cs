@@ -96,6 +96,7 @@ namespace HADES.Controllers
         [Authorize]
         public IActionResult UpdateContent(string selectedPathForContent, string expandedNodeNames)
         {
+            //à deplacer dans editowners // rename à getTabsContent
             string users = JsonConvert.SerializeObject(ad.getAllUsers().Select(x => x.SamAccountName));
             viewModel.UsersAD = users;
             viewModel.ADManager = ad;
@@ -429,19 +430,44 @@ namespace HADES.Controllers
         }
 
         [Authorize]
-        public IActionResult GetOwners(string guid)
+        public IActionResult GetTabsContent(string dn, string selectedPath, string selectedNodeName, int index, string exp)
         {
             if (!ConnexionUtil.CurrentUser(this.User).GetRole().AdCrudAccess) // ACCESS CONTROL
             {
                 return RedirectToAction("MainView", "Home");
             }
+
+            GroupAD group = ad.getGroupInformation(dn);
+            IEnumerable<string> members = group.Members.Select(x => x.SamAccountName);
+
+            viewModel.OuGroup = group.SamAccountName;
+            viewModel.GroupAD = group;
+            viewModel.SelectedPath = selectedPath;
+            viewModel.SelectedNodeName = selectedNodeName;
+            viewModel.ExpandedNodesName = exp;
+
+
+            if (members.Any())
+            {
+                viewModel.SelectedMembers = Newtonsoft.Json.JsonConvert.SerializeObject(members);
+                viewModel.BeforeEditMembers = Newtonsoft.Json.JsonConvert.SerializeObject(members);
+            }
+            else
+            {
+                viewModel.SelectedMembers = "";
+                viewModel.BeforeEditMembers = "";
+            }
+
             ApplicationDbContext db = new ApplicationDbContext();
 
-            var user = db.User.Where(x => x.OwnerGroupUsers.Select(x => x.OwnerGroup.GUID).Contains(guid)).ToList().Select(x => x.GetName());
+            var user = db.User.Where(x => x.OwnerGroupUsers.Select(x => x.OwnerGroup.GUID).Contains(group.ObjectGUID)).ToList().Select(x => x.GetName());
+            ViewBag.Index = index;
 
             viewModel.UsersAD = JsonConvert.SerializeObject(ad.getAllUsers().Select(x => x.SamAccountName));
-            viewModel.SelectedOwners = JsonConvert.SerializeObject(user);
-
+            if (user.Any())
+                viewModel.SelectedOwners = JsonConvert.SerializeObject(user);
+            else
+                viewModel.SelectedOwners = "";
             return PartialView("EditOwners", viewModel);
         }
     }

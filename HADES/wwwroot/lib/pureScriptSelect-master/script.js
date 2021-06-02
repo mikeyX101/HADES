@@ -166,18 +166,13 @@ const pureScriptSelect = (selector) => {
             const arraySelector = item.getAttribute('id');
             const hiddenInput = item.querySelector('input[type="hidden"]');
 
-            //Retourne les items selectionnés
-            //nettoyer
-            //if hidden input est vide (enlever la case vide)
-            //hiddenInput.classList.add('SelectedItems');
-            let idd = hiddenInput.id;
-
-            let test = hiddenInput.value;
-            let testt = test.replace(/[\[\]']|\"+/g, '')
-            let test2 = testt.split(",");
-            let ct = test.length;
-            if (test.length > 0)
-                defaultValues[arraySelector] = test2;
+            //Modified for multiselect populate on editGroup tabs
+            let hiddenInputValues = hiddenInput.value;
+            let cleanedHiddenInputValues = hiddenInputValues.replace(/[\[\]']|\"+/g, '')
+            let selectedValues = cleanedHiddenInputValues.split(",");
+            if (hiddenInputValues.length > 0)
+                defaultValues[arraySelector] = selectedValues;
+            ////
 
             let virtualSelect = document.createElement('div');
             virtualSelect.classList.add('directorist-select__container');
@@ -259,7 +254,6 @@ const pureScriptSelect = (selector) => {
                                     defaultValues[arraySelector].push(event.target.value);
                                     optionValues[arraySelector].push(event.target.value);
                                     insertSearchItem();
-                                    idd = hiddenInput.id;
                                     hiddenInput.value = JSON.stringify(defaultValues[arraySelector]);
                                     value.value = '';
                                     document.querySelectorAll('.directorist-select__dropdown').forEach(el => el.classList.remove('directorist-select__dropdown-open'));
@@ -277,7 +271,6 @@ const pureScriptSelect = (selector) => {
                                 defaultValues[arraySelector].push(event.target.value);
                                 optionValues[arraySelector].push(event.target.value);
                                 insertSearchItem();
-                                idd = hiddenInput.id;
                                 hiddenInput.value = JSON.stringify(defaultValues[arraySelector]);
                                 value.value = '';
                                 document.querySelectorAll('.directorist-select__dropdown').forEach(el => el.classList.remove('directorist-select__dropdown-open'));
@@ -327,8 +320,6 @@ const pureScriptSelect = (selector) => {
 
                     if (isMax[closestId] === null && defaultValues[closestId]) {
                         defaultValues[closestId].filter(item => item == index).length === 0 && defaultValues[closestId].push(index);
-
-                        idd = hiddenInput.id;
                         hiddenInput.value = JSON.stringify(defaultValues[closestId]);
                         e.target.classList.remove('directorist-select-item-hide');
                         e.target.classList.add('directorist-select-item-show');
@@ -337,8 +328,6 @@ const pureScriptSelect = (selector) => {
                         if (defaultValues[closestId])
                             if (defaultValues[closestId].length < parseInt(isMax[closestId])) {
                                 defaultValues[closestId].filter(item => item == index).length === 0 && defaultValues[closestId].push(index);
-
-                                idd = hiddenInput.id;
                                 hiddenInput.value = JSON.stringify(defaultValues[closestId]);
                                 e.target.classList.remove('directorist-select-item-hide');
                                 e.target.classList.add('directorist-select-item-show');
@@ -372,12 +361,13 @@ const pureScriptSelect = (selector) => {
                 });
                 insertSearchItem();
 
-                idd = hiddenInput.id;
-                hiddenInput.value = JSON.stringify(defaultValues[closestId]);
+                //Filter which input to delete from
+                if (arraySelector == closestId)
+                    hiddenInput.value = JSON.stringify(defaultValues[closestId]);
             });
         }
 
-        multiSelect ? multiSelects() : singleSelect();
-
+        //multiSelect ? multiSelects() : singleSelect();
+        multiSelects();
     });
 }
