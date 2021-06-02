@@ -10,7 +10,7 @@
 .docPane {
     background-color: white !important;
     border: 2px solid darkgreen;
-    bor
+    color: black !important;
 }
 
 .btn-primary {
@@ -46,7 +46,7 @@ a{
     border: 1px solid white;
 }
 
- .nav-link.active {
+.nav-link.active {
     background-color: lightgreen !important;
 }
 
