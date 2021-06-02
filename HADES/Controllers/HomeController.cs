@@ -351,7 +351,7 @@ namespace HADES.Controllers
         }
 
         [Authorize]
-        public IActionResult GetOwners(string dn, string selectedPath, string selectedNodeName, int index)
+        public IActionResult GetTabsContent(string dn, string selectedPath, string selectedNodeName, int index)
         {
             if (!ConnexionUtil.CurrentUser(this.User).GetRole().AdCrudAccess) // ACCESS CONTROL
             {
