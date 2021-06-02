@@ -38,7 +38,7 @@
             var selectedPathLength = Model.SelectedPath.Split('/').Length;
             var dataTarget = "";
             Model.Index = i;
-            var groupId = "b" + i.ToString();
+            //var groupId = "b" + i.ToString();
 
 
             if (Model.ADRoot[i].Path == Model.SelectedPath)
@@ -74,7 +74,7 @@
                             @await Html.PartialAsync("_RenameOUModal", Model)
                         }
 
-                        <div class="modal fade" id="@id" role="dialog" aria-labelledby="@Model.ADRoot[i].SamAccountName" aria-hidden="true">
+                        <div class="modal fade" id="a@(i)" role="dialog" aria-labelledby="@Model.ADRoot[i].SamAccountName" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content" role="document">
                                     <div class="modal-header text-center">
@@ -106,11 +106,11 @@
                        
                         <span data-toggle="tooltip" data-html="true" data-placement="right" title="@Model.EditLinkLabel">
                             <a data-ajax="true" data-ajax-method="GET" data-ajax-mode="replace" data-ajax-update="#tabContent@(i)"
-                               href='@Url.Action("GetTabsContent","Home",new { dn = Model.ADRoot[i].Dn, selectedPath = Model.SelectedPath, selectedNodeName = Model.SelectedNodeName, index = i})' class="btn btn-primary" data-toggle="modal" data-target="@dataTarget" data-backdrop="false">
+                               href='@Url.Action("GetTabsContent","Home",new { dn = Model.ADRoot[i].Dn, selectedPath = Model.SelectedPath, selectedNodeName = Model.SelectedNodeName, index = i, exp = Model.ExpandedNodesName})' class="btn btn-primary" data-toggle="modal" data-target="@dataTarget" data-backdrop="false">
                                 <i class="fa fa-edit fa-fw"></i>
                             </a>
                         </span>
-                        <div class="modal fade" id="@groupId" tabindex="-1" role="dialog" aria-labelledby="GroupCreateLbl"
+                        <div class="modal fade" id="b@(i)" tabindex="-1" role="dialog" aria-labelledby="GroupCreateLbl"
                              aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">

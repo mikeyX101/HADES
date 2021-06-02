@@ -421,7 +421,7 @@ namespace HADES.Controllers
         }
 
         [Authorize]
-        public IActionResult GetTabsContent(string dn, string selectedPath, string selectedNodeName, int index)
+        public IActionResult GetTabsContent(string dn, string selectedPath, string selectedNodeName, int index, string exp)
         {
             if (!ConnexionUtil.CurrentUser(this.User).GetRole().AdCrudAccess) // ACCESS CONTROL
             {
@@ -435,6 +435,9 @@ namespace HADES.Controllers
             viewModel.GroupAD = group;
             viewModel.SelectedPath = selectedPath;
             viewModel.SelectedNodeName = selectedNodeName;
+            viewModel.ExpandedNodesName = exp;
+
+
             if (members.Any())
             {
                 viewModel.SelectedMembers = Newtonsoft.Json.JsonConvert.SerializeObject(members);
