@@ -153,7 +153,7 @@ namespace HADES.Util
                 }
                 else
                 {
-                    return db.User.Include(a => a.Role).Include(a => a.UserConfig).Where((a) => a.Id == id).FirstOrDefault();
+                    return db.User.Include(a => a.Role).Include(a => a.UserConfig).Include(a=>a.OwnerGroupUsers).ThenInclude(a=>a.OwnerGroup).Where((a) => a.Id == id).FirstOrDefault();
                 }
 
             }

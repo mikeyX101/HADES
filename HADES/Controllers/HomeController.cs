@@ -14,7 +14,7 @@ using System.Linq;
 
 namespace HADES.Controllers
 {
-	public class HomeController : LocalizedController<HomeController>
+    public class HomeController : LocalizedController<HomeController>
     {
         private ADManager ad;
         private MainViewViewModel viewModel;
@@ -33,6 +33,7 @@ namespace HADES.Controllers
             {
                 viewModel.ADManager = ad;
                 viewModel.ADRoot = ad.getRoot();
+                if (!ConnexionUtil.CurrentUser(User).GetRole().AdCrudAccess) viewModel.ADRoot = CleanUpADRootforOwner(viewModel.ADRoot);
                 viewModel.ADRoot = SortADRoot(viewModel.ADRoot);
                 BuildRootTreeNode(viewModel.ADRoot); // conversion List<RootDataInformation> en TreeNode<string>
                 viewModel.ADRootTreeNodeJson = TreeNodeToJson(viewModel.ADRootTreeNode); // conversion TreeNode<string> en Json
@@ -53,6 +54,43 @@ namespace HADES.Controllers
             }
         }
 
+        private List<RootDataInformation> CleanUpADRootforOwner(List<RootDataInformation> adroot)
+        {
+            IUser u = ConnexionUtil.CurrentUser(User);
+            List<OwnerGroupUser> groupusers = u.GetGroupsUser().ToList();
+            List<RootDataInformation> newRoot = new List<RootDataInformation>();
+            List<RootDataInformation> grpsonly = new List<RootDataInformation>();
+
+
+            foreach (RootDataInformation r in adroot)
+            {
+                if (r.Path == null || r.Path?.Split("/").Length <= 2 || groupusers.Where(g => g.OwnerGroup.GUID == r.ObjectGUID).FirstOrDefault() != null)
+                {
+                    newRoot.Add(r);
+                    if (r.Path?.Split("/").Length > 2)
+                    {
+                        grpsonly.Add(r);
+                    }
+                }
+            }
+
+            List<RootDataInformation> toremove = new List<RootDataInformation>();
+            foreach (RootDataInformation t in newRoot)
+            {
+                if (t.Path?.Split("/").Length <= 2 && grpsonly.Where(g => g.Path == t.Path + "/" + t.SamAccountName).FirstOrDefault() == null)
+                {
+                    toremove.Add(t);
+                }
+            }
+            foreach (RootDataInformation t in toremove)
+            {
+                newRoot.Remove(t);
+            }
+
+            return newRoot;
+
+        }
+
         [HttpPost]
         [HttpGet]
         [Authorize]
@@ -66,6 +104,7 @@ namespace HADES.Controllers
             viewModel.SelectedPath = selectedPathForContent;
             viewModel.ExpandedNodesName = expandedNodeNames;
             viewModel.ADRoot = ad.getRoot();
+            if (!ConnexionUtil.CurrentUser(User).GetRole().AdCrudAccess) viewModel.ADRoot = CleanUpADRootforOwner(viewModel.ADRoot);
             viewModel.ADRoot = SortADRoot(viewModel.ADRoot);
             BuildRootTreeNode(viewModel.ADRoot); // conversion List<RootDataInformation> en TreeNode<string>
             viewModel.ADRootTreeNodeJson = TreeNodeToJson(viewModel.ADRootTreeNode); // conversion TreeNode<string> en Json
@@ -165,8 +204,9 @@ namespace HADES.Controllers
                 ad.deleteGroup(DN);
                 Serilog.Log.Information("Le groupe " + DN + " a été supprimé");
             }
-            return RedirectToAction("UpdateContent", "Home", new { 
-                selectedPathForContent = viewModel.SelectedPath, 
+            return RedirectToAction("UpdateContent", "Home", new
+            {
+                selectedPathForContent = viewModel.SelectedPath,
                 expandedNodeNames = viewModel.ExpandedNodesName
             });
         }
@@ -186,8 +226,9 @@ namespace HADES.Controllers
                 Serilog.Log.Information("Le dossier(OU) " + DN + " a été renommé");
             }
 
-            return RedirectToAction("UpdateContent", "Home", new { 
-                selectedPathForContent = viewModel.SelectedPath, 
+            return RedirectToAction("UpdateContent", "Home", new
+            {
+                selectedPathForContent = viewModel.SelectedPath,
                 expandedNodeNames = viewModel.ExpandedNodesName
             });
         }
@@ -210,53 +251,53 @@ namespace HADES.Controllers
             string selectedNodeName = split.Length == 2 ? split[1] : split[2];
             GroupAD group = viewModel.GroupAD;
             List<UserAD> members = GetSelectedUsersSamAccount(viewModel);
-          
-           
+
+
 
             ModelState.Remove("NewName");
 
             if (ModelState.IsValid)
             {
 
-               
+
                 if (ad.createGroup(selectedNodeName, group, members))
                 {
 
-                string DN = FindDN(viewModel.SelectedPath, group.SamAccountName);
-                string guid = ad.getGroupGUIDByDn(DN);
+                    string DN = FindDN(viewModel.SelectedPath, group.SamAccountName);
+                    string guid = ad.getGroupGUIDByDn(DN);
 
-                List<string> selectedOwnersNames = DeserializeUsers(viewModel.SelectedOwners);
+                    List<string> selectedOwnersNames = DeserializeUsers(viewModel.SelectedOwners);
 
-                List<UserAD> ownersAD = ad.getAllUsers().Where(x => selectedOwnersNames.Contains(x.SamAccountName)).ToList();
-                List<User> ownersDB = new();
-                Role role = db.Role.Where(x => x.Name == "Owner").FirstOrDefault();
+                    List<UserAD> ownersAD = ad.getAllUsers().Where(x => selectedOwnersNames.Contains(x.SamAccountName)).ToList();
+                    List<User> ownersDB = new();
+                    Role role = db.Role.Where(x => x.Name == "Owner").FirstOrDefault();
 
 
-                foreach (var owner in ownersAD)
-                {
-                    if (db.User.Where(x => x.GUID == owner.ObjectGUID).Any())
+                    foreach (var owner in ownersAD)
                     {
-                        ownersDB.Add(db.User.Where(x => x.GUID == owner.ObjectGUID).FirstOrDefault());
+                        if (db.User.Where(x => x.GUID == owner.ObjectGUID).Any())
+                        {
+                            ownersDB.Add(db.User.Where(x => x.GUID == owner.ObjectGUID).FirstOrDefault());
+                        }
+                        else
+                            ownersDB.Add(new User { Attempts = 0, Date = DateTime.Now, GUID = owner.ObjectGUID, Role = role, UserConfig = new() });
                     }
-                    else
-                        ownersDB.Add(new User { Attempts = 0, Date = DateTime.Now, GUID = owner.ObjectGUID, Role = role, UserConfig = new() });
-                }
 
-                OwnerGroup ownerGroup = new() { GUID = guid, OwnerGroupUsers = new List<OwnerGroupUser>() };
+                    OwnerGroup ownerGroup = new() { GUID = guid, OwnerGroupUsers = new List<OwnerGroupUser>() };
 
-                ownersDB.ForEach(user => ownerGroup.OwnerGroupUsers.Add(new OwnerGroupUser { User = user, OwnerGroup = ownerGroup }));
+                    ownersDB.ForEach(user => ownerGroup.OwnerGroupUsers.Add(new OwnerGroupUser { User = user, OwnerGroup = ownerGroup }));
 
 
-                db.OwnerGroup.Add(ownerGroup);
-                db.SaveChanges();
+                    db.OwnerGroup.Add(ownerGroup);
+                    db.SaveChanges();
 
                 }
 
                 return RedirectToAction("UpdateContent", "Home", new
-                    {
-                        selectedPathForContent = viewModel.SelectedPath,
-                        expandedNodeNames = viewModel.ExpandedNodesName
-                    });
+                {
+                    selectedPathForContent = viewModel.SelectedPath,
+                    expandedNodeNames = viewModel.ExpandedNodesName
+                });
             }
             return View(viewModel);
         }
@@ -291,7 +332,7 @@ namespace HADES.Controllers
             if (ModelState.IsValid)
             {
                 DateTime dateExp = viewModel.GroupAD.ExpirationDate;
-                ad.modifyGroup(DN, group, viewModel.SelectedNodeName,  updatedGroupMembers);
+                ad.modifyGroup(DN, group, viewModel.SelectedNodeName, updatedGroupMembers);
 
                 selectedOwners.ForEach(x => db.Entry(x).State = EntityState.Modified);
                 db.Entry(ownerGroup).State = EntityState.Modified;
@@ -323,9 +364,11 @@ namespace HADES.Controllers
             {
                 // TODO message erreur
             }
-            return RedirectToAction("UpdateContent", "Home", new {
+            return RedirectToAction("UpdateContent", "Home", new
+            {
                 selectedPathForContent = viewModel.SelectedPath,
-                expandedNodeNames = viewModel.ExpandedNodesName });
+                expandedNodeNames = viewModel.ExpandedNodesName
+            });
         }
 
         private string FindDN(string selectedPath, string selectedContentName)
