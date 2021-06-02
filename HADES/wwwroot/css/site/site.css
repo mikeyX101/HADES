@@ -1,76 +1,34 @@
-﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-for details on configuring this project to bundle and minify static web assets. */
-
-.table td, .table th {
-    vertical-align: middle;
-    padding: 1px;
+﻿body, th, td, li, ul {
+    background-color: #212529 !important;
+    color: antiquewhite !important;
 }
 
-a.navbar-brand {
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
+
+.btn-primary {
+    border-color: darkgrey;
+    background: linear-gradient(dimgrey,#212529,dimgrey);
 }
 
-.dropmenu {
-    margin: 0px 20px 0px 0px;
+.bg-primary {
+    border-color: darkgrey;
+    background: linear-gradient(dimgrey,#212529,dimgrey);
 }
 
-span.icon {
-    padding-right: .5em;
+.btn-danger {
+    border-color: darkgrey;
+    background: linear-gradient(dimgrey,#212529,dimgrey);
 }
 
-/* Sticky footer styles
--------------------------------------------------- */
-html {
-  font-size: 14px;
-}
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+a {
+    color: antiquewhite !important;
 }
 
-.box-shadow {
-  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+.dropdown-item{
+    color: black !important;
 }
 
-button.accept-policy {
-  font-size: 1rem;
-  line-height: inherit;
+
+.node-selected {
+    background-color: dimgrey !important;
 }
 
-/* Sticky footer styles
--------------------------------------------------- */
-html {
-  position: relative;
-  min-height: 100%;
-}
-
-body {
-    /* Margin bottom by footer height */
-    margin-bottom: 60px;
-    background-color: grey;
-}
-.footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  white-space: nowrap;
-  line-height: 60px; /* Vertically center the text there */
-}
-
-/* The side navigation menu */
-.sidenav {
-    height: 100%; /* 100% Full-height */
-    width: 10%; /* 0 width - change this with JavaScript */
-    position: fixed; /* Stay in place */
-    z-index: -1; /* Stay on top */
-    top: 0; /* Stay at the top */
-    left: 0;
-    overflow-x: hidden; /* Disable horizontal scroll */
-    padding-top: 60px; /* Place content 60px from the top */
-    transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
-    background-color: lightgray;
-    border : 5px solid grey;
-}
