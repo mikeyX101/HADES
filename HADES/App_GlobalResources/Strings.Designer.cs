@@ -340,15 +340,6 @@ namespace HADES {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Role.
-        /// </summary>
-        public static string roleTitle {
-            get {
-                return ResourceManager.GetString("roleTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Sauvegarder.
         /// </summary>
         public static string Save {
