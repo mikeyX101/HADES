@@ -146,6 +146,7 @@
 
                                                     <a class="nav-item nav-link @if (!u.GetRole().AdCrudAccess) { @Html.Raw("active"); } " id="nav-members-tab" data-toggle="tab" href="@navMembers"
                                                        role="tab" aria-controls="nav-members" aria-selected="false">Members</a>
+
                                                     @if (u.GetRole().AdCrudAccess)
                                                     {
                                                         <a class="nav-item nav-link" id="nav-owners-tab" data-toggle="tab" href="@navOwners"

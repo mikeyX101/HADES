@@ -25,6 +25,9 @@
     @await Html.PartialAsync("_Main", Model)
 </div>
 
-<!-- dialogs -->
-<div id="dialog-error-delete" title=@Localizer["DeleteFailedTitle"].Value>@Localizer["DeleteFailedMessage"]</div>
-<div id="dialog-confirmation-delete" title=@Localizer["DeleteConfirmationTitle"].Value>@Localizer["DeleteConfirmationMessage"]</div>
+@if (u.GetRole().AdCrudAccess)
+{
+    <!-- dialogs -->
+    <div id="dialog-error-delete" title=@Localizer["DeleteFailedTitle"].Value>@Localizer["DeleteFailedMessage"]</div>
+    <div id="dialog-confirmation-delete" title=@Localizer["DeleteConfirmationTitle"].Value>@Localizer["DeleteConfirmationMessage"]</div>
+}
