@@ -286,6 +286,15 @@ namespace HADES {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ces caractères sont interdits:   &quot; [ ] : ; | = + * ? &lt; &gt; / \ ,.
+        /// </summary>
+        public static string InvalidCharacters {
+            get {
+                return ResourceManager.GetString("InvalidCharacters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Dossiers et groupes.
         /// </summary>
         public static string MainView {

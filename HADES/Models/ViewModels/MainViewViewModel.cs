@@ -44,10 +44,11 @@ namespace HADES.Models
 
         public string UsersAD { get; set; }
 
-
         [Required]
         [OuName]
         public string NewName { get; set; }
+
+        public int Index { get; set; }
 
     }
 }

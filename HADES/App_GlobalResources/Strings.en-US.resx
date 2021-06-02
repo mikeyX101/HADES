@@ -219,4 +219,7 @@
   <data name="CssFileDoesNotExist" xml:space="preserve">
     <value>The file {0}.css doesn't exist.</value>
   </data>
+  <data name="InvalidCharacters" xml:space="preserve">
+    <value>These characters are not allowed:   " [ ] : ; | = + * ? &lt; &gt; / \ ,</value>
+  </data>
 </root>

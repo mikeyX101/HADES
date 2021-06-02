@@ -1,0 +1,32 @@
+﻿@model MainViewViewModel
+
+<div class="modal fade" id="a@(Model.Index)" role="dialog" aria-labelledby="@Model.ADRoot[Model.Index].SamAccountName" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" role="document">
+            <div class="modal-header text-center">
+                <h4 class="modal-title w-100 font-weight-bold" id="@Model.ADRoot[Model.Index].SamAccountName">@Model.EditLinkLabel</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body mx-3">
+                <div class="md-form">
+                    <form class="needs-validation" asp-controller="Home" asp-action="Rename" data-ajax="true" data-ajax-method="POST" data-ajax-mode="replace" data-ajax-update="#main" novalidate>
+                        <div class="form-group row">
+                            <div class="col-10">
+                                <input type="text" name="NewName" value="@Model.ADRoot[Model.Index].SamAccountName" class="form-control validate" pattern='^[^/[\]:;|=+*?<>,"\\]*$' required />
+                                <input type="hidden" name="SelectedPath" value="@Model.SelectedPath" />
+                                <input type="hidden" name="SelectedContentName" value="@Model.ADRoot[Model.Index].SamAccountName" />
+                                <input type="hidden" name="ExpandedNodesName" value="@Model.ExpandedNodesName" />
+                                <div class="invalid-tooltip">
+                                    @HADES.Strings.InvalidCharacters
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary col-2">@HADES.Strings.OK</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
