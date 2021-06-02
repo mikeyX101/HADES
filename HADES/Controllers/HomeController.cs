@@ -219,7 +219,8 @@ namespace HADES.Controllers
             {
 
                
-                ad.createGroup(selectedNodeName, group, members);
+                if (ad.createGroup(selectedNodeName, group, members))
+                {
 
                 string DN = FindDN(viewModel.SelectedPath, group.SamAccountName);
                 string guid = ad.getGroupGUIDByDn(DN);
@@ -248,6 +249,8 @@ namespace HADES.Controllers
 
                 db.OwnerGroup.Add(ownerGroup);
                 db.SaveChanges();
+
+                }
 
                 return RedirectToAction("UpdateContent", "Home", new
                     {
@@ -315,6 +318,10 @@ namespace HADES.Controllers
             {
                 ad.createOU(viewModel.NewName);
                 Serilog.Log.Information("Le dossier(OU) " + viewModel.NewName + " a été créé");
+            }
+            else
+            {
+                // TODO message erreur
             }
             return RedirectToAction("UpdateContent", "Home", new {
                 selectedPathForContent = viewModel.SelectedPath,
