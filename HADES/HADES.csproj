@@ -15,6 +15,33 @@
   </ItemGroup>
 
   <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\css\greenmint\images\ui-bg_glass_55_fcf0ba_1x400.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\greenmint\images\ui-bg_gloss-wave_100_ece8da_500x100.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\greenmint\images\ui-bg_highlight-hard_100_f5f3e5_1x100.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\greenmint\images\ui-bg_highlight-hard_100_fafaf4_1x100.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\greenmint\images\ui-bg_highlight-hard_15_459e00_1x100.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\greenmint\images\ui-bg_highlight-hard_95_cccccc_1x100.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\greenmint\images\ui-bg_highlight-soft_25_67b021_1x100.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\greenmint\images\ui-bg_highlight-soft_95_ffedad_1x100.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\greenmint\images\ui-bg_inset-soft_15_2b2922_1x100.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\greenmint\images\ui-icons_808080_256x240.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\greenmint\images\ui-icons_847e71_256x240.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\greenmint\images\ui-icons_8DC262_256x240.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\greenmint\images\ui-icons_cd0a0a_256x240.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\greenmint\images\ui-icons_eeeeee_256x240.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\greenmint\images\ui-icons_ffffff_256x240.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\site\images\ui-bg_glass_20_555555_1x400.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\site\images\ui-bg_glass_40_0078a3_1x400.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\site\images\ui-bg_glass_40_ffc73d_1x400.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\site\images\ui-bg_gloss-wave_25_333333_500x100.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\site\images\ui-bg_highlight-soft_80_eeeeee_1x100.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\site\images\ui-bg_inset-soft_25_000000_1x100.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\site\images\ui-bg_inset-soft_30_f58400_1x100.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\site\images\ui-icons_222222_256x240.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\site\images\ui-icons_4b8e0b_256x240.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\site\images\ui-icons_a83300_256x240.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\site\images\ui-icons_cccccc_256x240.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\site\images\ui-icons_ffffff_256x240.png" />
     <_ContentIncludedByDefault Remove="wwwroot\css\white\images\ui-bg_glass_20_555555_1x400.png" />
     <_ContentIncludedByDefault Remove="wwwroot\css\white\images\ui-bg_glass_40_0078a3_1x400.png" />
     <_ContentIncludedByDefault Remove="wwwroot\css\white\images\ui-bg_glass_40_ffc73d_1x400.png" />
@@ -74,6 +101,30 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Update="wwwroot\css\greenmint\jquery-ui.css">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="wwwroot\css\greenmint\jquery-ui.min.css">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="wwwroot\css\greenmint\theme.css">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="wwwroot\css\site\jquery-ui.css">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="wwwroot\css\site\jquery-ui.min.css">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="wwwroot\css\site\theme.css">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
     <Content Update="wwwroot\css\white\images\ui-bg_glass_45_0078ae_1x400.png">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>

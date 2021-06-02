@@ -5,13 +5,16 @@ var selectedDepth;
 var selectedContentName;
 var isValid = false;
 var dialogConfirmationContent;
+var expandedNodes;
+var expandedNodesId = [];
+var expandedNodesName = [];
 
 /**
  * Show treeview
  * @param {any} userObj
  * @param {any} nodeName
  */
-function showTreeView(userObj, nodeName) {
+function showTreeView(userObj, nodeName, expandNodesName) {
     $(function () {
         // conversion Json en array Json
         var rootData = JSON.parse('[' + JSON.stringify(userObj) + ']');
@@ -46,7 +49,24 @@ function showTreeView(userObj, nodeName) {
         // set icons
         setIcons();
 
-        // select node
+        // expand previous expanded nodes
+        if (typeof expandedNodesName == 'undefined') {
+            expandedNodesName = [];
+        }
+        else {
+            expandedNodesName = expandNodesName;
+        }
+        for (var i = 0; i < expandedNodesName.length; i++) {
+            var foundNodeName = $('#mytreeview').treeview('search', [expandedNodesName[i], {
+                ignoreCase: false,     // case insensitive
+                exactMatch: true,    // like or equals
+                revealResults: true,  // reveal matching nodes
+            }]);
+            expandedNodesId[i] = foundNodeName[0].nodeId;
+            $('#mytreeview').treeview('expandNode', [expandedNodesId[i], { silent: true }]);
+        }
+
+        // select selected node
         $('#mytreeview').treeview('selectNode', [foundNodes[0].nodeId, { silent: true }]);
 
         // Action when node is selected
@@ -62,9 +82,14 @@ function showTreeView(userObj, nodeName) {
                 selectedDepth++;
             } 
 
-            // backup selectedNode
+            // backup selectedNode and expandedNodes
             selectedNode = data;
             selectedPathForContent = selectedPath;
+            expandedNodes = $('#mytreeview').treeview('getExpanded', 0);
+            expandedNodesName = [];
+            for (var i = 0; i < expandedNodes.length; i++) {
+                expandedNodesName.push(expandedNodes[i].text);
+            }
 
             // If Group is selected set selectedPathForContent to his parent ou
             if (selectedDepth > 2) {
@@ -79,8 +104,11 @@ function showTreeView(userObj, nodeName) {
             // update selected node content to display
             $.ajax({
                 url: '/Home/UpdateContent',
-                type: "GET",
-                data: { selectedPathForContent: selectedPathForContent },
+                method: 'POST',
+                data: {
+                    selectedPathForContent: selectedPathForContent,
+                    expandedNodeNames: JSON.stringify(expandedNodesName)
+                },
                 success: function (msg) {
                     $('#main').html(msg);
                 }
@@ -147,7 +175,8 @@ $(function () {
                     type: "POST",
                     data: {
                         SelectedPath: $(this).data('form')[1].value,
-                        SelectedContentName: $(this).data('form')[2].value
+                        SelectedContentName: $(this).data('form')[2].value,
+                        ExpandedNodesName: $(this).data('form')[3].value
                     },
                     success: function (msg) {
                         $('#main').html(msg);
@@ -237,10 +266,8 @@ function formSubmit(form) {
     if (isOU(form[1].value)) {
         deleteOU(form)
     } 
-    /* TODO : implémenter la fonctionnalité deleteGroup */
     if (isGroup(form[1].value)) {
         deleteGroup(form)
-        //alert("Implémenter la fonctionalité de suppression d'un groupe")
     }
     return false; // pour ne pas faire de submit avant d'avoir eu la réponse de la boite de dialog
 }

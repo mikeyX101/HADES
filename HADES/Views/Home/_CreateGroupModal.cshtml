@@ -1,6 +1,5 @@
 ﻿@model MainViewViewModel
 
-<link rel="stylesheet" href="~/css/GroupModalGeneral.css" />
 <div class="modal fade" id="GroupCreate" tabindex="-1" role="dialog" aria-labelledby="GroupCreateLbl"
      aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -11,7 +10,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form asp-action="CreateGroupModal">
+            <form class="needs-validation" asp-controller="Home" asp-action="CreateGroupModal" data-ajax="true" data-ajax-method="POST" data-ajax-mode="replace" data-ajax-update="#main" novalidate>
                 <div class="modal-body GroupModalBody">
                     <nav>
                         <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
@@ -34,6 +33,7 @@
                             <input type="hidden" name="SelectedPath" value="@Model.SelectedPath" />
                             <input type="hidden" name="SelectedPath" value="@Model.SelectedNodeName" />
                             <input type="hidden" name="SelectedPath" value="@Model.SelectedContentName" />
+                            <input type="hidden" name="ExpandedNodesName" value="@Model.ExpandedNodesName" />
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
                             <div class="form-group row">

@@ -213,13 +213,16 @@
   <data name="errorFileSize" xml:space="preserve">
     <value>Un fichier est trop grand</value>
   </data>
-  <data name="roleTitle" xml:space="preserve">
-    <value>Role</value>
-     </data>
   <data name="NoLog" xml:space="preserve">
     <value>Aucun journal n'a été trouvé pour cette journée.</value>
   </data>
   <data name="CssFileDoesNotExist" xml:space="preserve">
     <value>Le fichier {0}.css n'existe pas.</value>
+  </data>
+  <data name="InvalidCharacters" xml:space="preserve">
+    <value>Ces caractères sont interdits:   " [ ] : ; | = + * ? &lt; &gt; / \ ,</value>
+  </data>
+  <data name="GenericError" xml:space="preserve">
+    <value>Opération Invalide</value>
   </data>
 </root>

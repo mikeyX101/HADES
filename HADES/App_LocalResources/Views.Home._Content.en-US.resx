@@ -120,7 +120,4 @@
   <data name="Folder" xml:space="preserve">
     <value>Folder</value>
   </data>
-  <data name="InvalidCharacters" xml:space="preserve">
-    <value>These characters are not allowed:   " [ ] : ; | = + * ? &lt; &gt; / \ ,</value>
-  </data>
 </root>

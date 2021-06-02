@@ -1,27 +1,30 @@
 ﻿@model MainViewViewModel
 
 @{ HADES.Data.ApplicationDbContext tempdb = new(); }
-@{
-    IUser u = HADES.Util.ConnexionUtil.CurrentUser(Context.User);
-}
+@{ IUser u = HADES.Util.ConnexionUtil.CurrentUser(Context.User); }
 
-<h3 class="mt-1 mb-2 pr-2">
+<h3 class="mt-1 mb-2
+    ">
     @Localizer["Folder"] @Model.SelectedNodeName
-    <!-- Button trigger modal create OU -->
-    <button type="button" class="btn btn-primary float-right" style="margin-right: 0.125rem;" data-toggle="modal" data-target="@Model.DataTarget" data-backdrop="false">
-        <span data-toggle="tooltip" data-html="true" data-placement="right" title="@Model.CreateButtonLabel">
-            <i class="fa fa-plus fa-fw mr-4 ml-4"></i>
-        </span>
-    </button>
+    @if (u.GetRole().AdCrudAccess)
+    {
+        <!-- Button trigger modal create OU -->
+        <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="@Model.DataTarget" data-backdrop="false">
+            <span data-toggle="tooltip" data-html="true" data-placement="right" title="@Model.CreateButtonLabel">
+                <i class="fa fa-plus fa-fw mr-4 ml-4"></i>
+            </span>
+        </button>
+    }
 </h3>
 
-<link rel="stylesheet" href="~/css/GroupModalGeneral.css" />
+@if (u.GetRole().AdCrudAccess)
+{
+    <!-- Modal Create Group -->
+    @await Html.PartialAsync("_CreateGroupModal", Model)
 
-<!-- Modal Create Group -->
-@await Html.PartialAsync("_CreateGroupModal", Model)
-
-<!-- Modal Create OU -->
-@await Html.PartialAsync("_CreateOuModal", Model)
+    <!-- Modal Create OU -->
+    @await Html.PartialAsync("_CreateOuModal", Model)
+}
 
 <!-- Liste des dossiers ou des groupes à partir de la sélection du treeview -->
 <table class="table">
@@ -33,10 +36,10 @@
         @for (int i = 0; i < Model.ADRoot.Count; i++)
         {
             var selectedPathLength = Model.SelectedPath.Split('/').Length;
-
             var dataTarget = "";
-            var id = "a" + i.ToString();
+            Model.Index = i;
             var groupId = "b" + i.ToString();
+
 
             if (Model.ADRoot[i].Path == Model.SelectedPath)
             {
@@ -44,8 +47,12 @@
                     <td>
                         @if (selectedPathLength == 2)
                         {
-                            <a data-ajax="true" data-ajax-method="GET" data-ajax-mode="replace" data-ajax-update="#main"
-                               href='@Url.Action("UpdateContent","Home", new { selectedPathForContent = Model.SelectedPath + (selectedPathLength == 2 ? "/" + Model.ADRoot[i].SamAccountName : "")})'>
+                            <a data-ajax="true" data-ajax-method="POST" data-ajax-mode="replace" data-ajax-update="#main"
+                               href='@Url.Action("UpdateContent","Home",
+                                    new {
+                                        selectedPathForContent = Model.SelectedPath + (selectedPathLength == 2 ? "/" + Model.ADRoot[i].SamAccountName : ""),
+                                        expandedNodeNames = Model.ExpandedNodesName
+                                    })'>
                                 <i class="icon fa fa-folder mr-2"></i>
                                 @Model.ADRoot[i].SamAccountName
                             </a>
@@ -61,9 +68,11 @@
                         }
                     </td>
                     <td style="text-align: right">
-
-                        <!-- Button trigger modal rename OU -->
-                        <!-- Modal Rename OU -->
+                        @if (u.GetRole().AdCrudAccess)
+                        {
+                            <!-- Modal Rename OU -->
+                            @await Html.PartialAsync("_RenameOUModal", Model)
+                        }
 
                         <div class="modal fade" id="@id" role="dialog" aria-labelledby="@Model.ADRoot[i].SamAccountName" aria-hidden="true">
                             <div class="modal-dialog">
@@ -126,6 +135,7 @@
                                 </button>
                                 <input type="hidden" name="SelectedPath" value="@Model.SelectedPath" />
                                 <input type="hidden" name="SelectedContentName" value="@Model.ADRoot[i].SamAccountName" />
+                                <input type="hidden" name="ExpandedNodesName" value="@Model.ExpandedNodesName" />
                             </form>
                         }
 
@@ -135,6 +145,7 @@
         }
     </tbody>
 </table>
+
 
 <script type="text/javascript" src="~/js/formValidation.js"></script>
 <script type="text/javascript" src="~/js/formFocus.js"></script>

@@ -30,6 +30,8 @@ namespace HADES.Models
 
         public string SelectedContentName { get; set; }
 
+        public string ExpandedNodesName { get; set; }
+
         public string BeforeEditMembers { get; set; }
 
         public string SelectedMembers { get; set; }
@@ -42,10 +44,11 @@ namespace HADES.Models
 
         public string UsersAD { get; set; }
 
-
         [Required]
         [OuName]
         public string NewName { get; set; }
+
+        public int Index { get; set; }
 
     }
 }

@@ -8,7 +8,8 @@
 {
     <link rel="stylesheet" href="~/lib/bootstrap-treeview/css/bootstrap-treeview.css">
     <link rel="stylesheet" href="~/css/@u.GetUserConfig().ThemeFile/jquery-ui.min.css">
-    <script type="text/javascript" src="~/lib/bootstrap-treeview/js/bootstrap-treeview.js"></script>
+   
+ <script type="text/javascript" src="~/lib/bootstrap-treeview/js/bootstrap-treeview.js"></script>
     <script src="~/lib/jquery-ui/jquery-ui.min.js"></script>
     <script type="text/javascript" src="~/js/treeview.js"></script>
     <script src="~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.min.js"></script>
@@ -25,6 +26,9 @@
     @await Html.PartialAsync("_Main", Model)
 </div>
 
-<!-- dialogs -->
-<div id="dialog-error-delete" title=@Localizer["DeleteFailedTitle"].Value>@Localizer["DeleteFailedMessage"]</div>
-<div id="dialog-confirmation-delete" title=@Localizer["DeleteConfirmationTitle"].Value>@Localizer["DeleteConfirmationMessage"]</div>
+@if (u.GetRole().AdCrudAccess)
+{
+    <!-- dialogs -->
+    <div id="dialog-error-delete" title=@Localizer["DeleteFailedTitle"].Value>@Localizer["DeleteFailedMessage"]</div>
+    <div id="dialog-confirmation-delete" title=@Localizer["DeleteConfirmationTitle"].Value>@Localizer["DeleteConfirmationMessage"]</div>
+}

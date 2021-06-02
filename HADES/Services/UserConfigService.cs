@@ -50,8 +50,12 @@ namespace HADES.Services
         public async Task DeleteEmail(int? id)
         {
             var email = await db.Email.FindAsync(id);
-            db.Email.Remove(email);
-            await db.SaveChangesAsync();
+            if (email != null)
+			{
+                // We should check if the current user has the email we want to delete first
+                db.Email.Remove(email);
+                await db.SaveChangesAsync();
+            }
         }
 
         public async Task<int> RedirectId(int? id)

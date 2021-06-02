@@ -1,6 +1,6 @@
 ﻿@model MainViewViewModel
 @* Left Side *@
-<div class="col-sm-4">
+<div class="col-sm-6 col-xl-4">
     <h3 class="mt-1 mb-4">@Localizer["DossierGroupe"]</h3>
     <div id="leftnav">
         @if (Model.ADConnectionError != null)
@@ -13,7 +13,7 @@ else
 </div>
 
 @* Right Side *@
-<div class="col-sm-8">
+<div class="col-sm-6 col-xl-8">
     @if (Model.ADConnectionError != null)
     {
 <h3 class="mt-1 mb-2 pr-2">@Localizer["Dossier"]</h3>
@@ -27,5 +27,5 @@ else
 
 @if (Model.ADRootTreeNodeJson != null)
 {
-<script type="text/javascript">showTreeView(@Html.Raw(Model.ADRootTreeNodeJson), '@Model.SelectedNodeName');</script>}
-
+<script type="text/javascript">showTreeView(@Html.Raw(Model.ADRootTreeNodeJson), '@Model.SelectedNodeName', @Html.Raw(Model.ExpandedNodesName));</script>
+}
