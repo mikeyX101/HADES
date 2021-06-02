@@ -1,8 +1,11 @@
-﻿body, th, td, li, ul {
+﻿body, th, td, .modal-content, .close, .list-group-item {
     background-color: #212529 !important;
-    color: antiquewhite !important;
+    color: white !important;
 }
 
+.modal-content {
+    border: 1px solid white;
+}
 
 .btn-primary {
     border-color: darkgrey;
@@ -16,19 +19,23 @@
 
 .btn-danger {
     border-color: darkgrey;
-    background: linear-gradient(dimgrey,#212529,dimgrey);
+    background: linear-gradient(red,#212529,red);
 }
 
 a {
-    color: antiquewhite !important;
+    color: white !important;
 }
 
-.dropdown-item{
+.dropdown-item, .directorist-select-item-hide, .page-link {
     color: black !important;
 }
 
 
-.node-selected {
+.node-selected, .nav-link.active {
     background-color: dimgrey !important;
 }
+
+.ui-state-highlight {
+    background: none !important;
+} 
 

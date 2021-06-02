@@ -1,25 +1,4 @@
 ﻿
-/**Modal Windows Edit/CreateGroupe**/
-.tab-absolute {
-    position: absolute;
-    top: 64px;
-}
-
-.tab-content {
-    padding-top: 5px;
-}
-
-
-.GroupModalBody {
-    min-height: 520px;
-}
-
-.modal-footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-}
-
 body {
     margin-bottom: 60px !important;
 }
@@ -113,4 +92,40 @@ html {
 .table td, .table th {
     vertical-align: middle;
     padding: 1px;
+}
+
+
+/**Modal Windows Edit/CreateGroupe**/
+.tab-absolute {
+    position: absolute;
+    top: 64px;
+}
+
+.tab-content {
+    padding-top: 5px;
+}
+
+
+.GroupModalBody {
+    min-height: 520px;
+}
+
+.modal-footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+.GroupModalBody {
+    min-height: 520px;
+}
+
+.modal-footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+.docPane {
+    padding: 5px;
 }
