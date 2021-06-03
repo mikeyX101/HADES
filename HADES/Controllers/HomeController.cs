@@ -95,6 +95,11 @@ namespace HADES.Controllers
         [Authorize]
         public IActionResult UpdateContent(string selectedPathForContent, string expandedNodeNames)
         {
+            if (TempData["Error"] != null)
+            {
+                viewModel.Error = (string)TempData["Error"];
+            }
+            
 
             viewModel.SelectedPath = selectedPathForContent;
             viewModel.ExpandedNodesName = expandedNodeNames;
@@ -190,14 +195,18 @@ namespace HADES.Controllers
             if (split.Length == 2)
             {
                 // at this point, the OU does not contain groups since split.Length == 2
-                ad.deleteOU(DN);
-                Serilog.Log.Information("Le dossier(OU) " + DN + " a été supprimé");
+                if (ad.deleteOU(DN))
+                {
+                    Serilog.Log.Information("Le dossier(OU) " + DN + " a été supprimé");
+                }
             }
             // Delete Group, a Group has split.Length == 3
             if (split.Length == 3)
             {
-                ad.deleteGroup(DN);
-                Serilog.Log.Information("Le groupe " + DN + " a été supprimé");
+                if (ad.deleteGroup(DN))
+                {
+                    Serilog.Log.Information("Le groupe " + DN + " a été supprimé");
+                }
             }
             return RedirectToAction("UpdateContent", "Home", new
             {
@@ -217,8 +226,10 @@ namespace HADES.Controllers
             var DN = FindDN(viewModel.SelectedPath, viewModel.SelectedContentName);
             if (ModelState.IsValid)
             {
-                ad.renameOU(DN, viewModel.NewName);
-                Serilog.Log.Information("Le dossier(OU) " + DN + " a été renommé");
+                if (ad.renameOU(DN, viewModel.NewName))
+                {
+                    Serilog.Log.Information("Le dossier(OU) " + DN + " a été renommé");
+                }
             }
 
             return RedirectToAction("UpdateContent", "Home", new
@@ -287,14 +298,21 @@ namespace HADES.Controllers
                     db.SaveChanges();
 
                 }
-
-                return RedirectToAction("UpdateContent", "Home", new
-                {
-                    selectedPathForContent = viewModel.SelectedPath,
-                    expandedNodeNames = viewModel.ExpandedNodesName
-                });
+            } 
+            else
+            {
+                viewModel.Error = Localizer["CreateGroupError"] + "<br>";
+                viewModel.Error += string.Join("<br>", ModelState.Values
+                                        .SelectMany(x => x.Errors)
+                                        .Select(x => x.ErrorMessage));
+                viewModel.Error += "<br>";
+                TempData["Error"] = viewModel.Error;
             }
-            return View(viewModel);
+            return RedirectToAction("UpdateContent", "Home", new
+            {
+                selectedPathForContent = viewModel.SelectedPath,
+                expandedNodeNames = viewModel.ExpandedNodesName
+            });
         }
 
 
@@ -327,19 +345,18 @@ namespace HADES.Controllers
             if (ModelState.IsValid)
             {
                 DateTime dateExp = viewModel.GroupAD.ExpirationDate;
-
-                //TODO bool
-                ad.modifyGroup(DN, group, viewModel.SelectedNodeName, updatedGroupMembers);
-
-                selectedOwners.ForEach(x => db.Entry(x).State = EntityState.Modified);
-                db.Entry(ownerGroup).State = EntityState.Modified;
-
-                db.SaveChanges();
-                return RedirectToAction("UpdateContent", "Home", new
+                if (ad.modifyGroup(DN, group, viewModel.SelectedNodeName, updatedGroupMembers))
                 {
-                    selectedPathForContent = viewModel.SelectedPath,
-                    expandedNodeNames = viewModel.ExpandedNodesName
-                });
+                    selectedOwners.ForEach(x => db.Entry(x).State = EntityState.Modified);
+                    db.Entry(ownerGroup).State = EntityState.Modified;
+
+                    db.SaveChanges();
+                    return RedirectToAction("UpdateContent", "Home", new
+                    {
+                        selectedPathForContent = viewModel.SelectedPath,
+                        expandedNodeNames = viewModel.ExpandedNodesName
+                    });
+                }
             }
             return View(viewModel.GroupAD);
         }
@@ -354,12 +371,19 @@ namespace HADES.Controllers
             }
             if (ModelState.IsValid)
             {
-                ad.createOU(viewModel.NewName);
-                Serilog.Log.Information("Le dossier(OU) " + viewModel.NewName + " a été créé");
-            }
+                if (ad.createOU(viewModel.NewName))
+                {
+                    Serilog.Log.Information("Le dossier(OU) " + viewModel.NewName + " a été créé");
+                }
+            } 
             else
             {
-                // TODO message erreur
+                viewModel.Error = Localizer["CreateOUError"] + "<br>";
+                viewModel.Error += string.Join("<br>", ModelState.Values
+                                        .SelectMany(x => x.Errors)
+                                        .Select(x => x.ErrorMessage));
+                viewModel.Error += "<br>";
+                TempData["Error"] = viewModel.Error;
             }
             return RedirectToAction("UpdateContent", "Home", new
             {

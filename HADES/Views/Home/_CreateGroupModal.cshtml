@@ -39,7 +39,10 @@
                             <div class="form-group row">
                                 <label asp-for="GroupAD.SamAccountName" class="col-sm-2 col-form-label">Name</label>
                                 <div class="col-sm-10">
-                                    <input asp-for="GroupAD.SamAccountName" class="form-control" placeholder="Name">
+                                    <input asp-for="GroupAD.SamAccountName" class="form-control" placeholder="Name" pattern='^[^/[\]:;|=+*?<>,"\\]*$' required >
+                                    <div class="invalid-tooltip">
+                                        @HADES.Strings.InvalidCharacters
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group row">

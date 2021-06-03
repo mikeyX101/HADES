@@ -2,7 +2,7 @@
 
 namespace HADES.Attributes
 {
-	public class OuNameAttribute : ValidationAttribute
+	public class OuGroupNameAttribute : ValidationAttribute
     {
         private static readonly char[] forbiddenChar = { '"', '[', ']', ':', ';', '|', '=', '+', '*', '?', '<', '>', '/', '\\', ',' };
 
@@ -11,14 +11,15 @@ namespace HADES.Attributes
             if (value is string)
             {
                 
-                var ouNameValue = (string)value;
+                var ouNameValue = (string) value;
                 var match = ouNameValue.IndexOfAny(forbiddenChar) != -1;
                 if (!match)
                 {
                     return ValidationResult.Success;
                 }
             }
-            string defaultErrorMessage = "Caractères interdits: " + string.Join(",", forbiddenChar);
+            string forbChar = string.Join(" ", forbiddenChar);
+            string defaultErrorMessage = string.Format(Strings.OuGroupNameError, forbChar);
             return new ValidationResult(defaultErrorMessage);
         }
     }
