@@ -536,7 +536,7 @@ namespace HADES.Util
             {
                 group.Description = " ";
             }
-            if (group.Email == "")
+            if (string.IsNullOrWhiteSpace(group.Email))
             {
                 group.Email = " ";
             }

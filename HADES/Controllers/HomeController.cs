@@ -96,6 +96,10 @@ namespace HADES.Controllers
         [Authorize]
         public IActionResult UpdateContent(string selectedPathForContent, string expandedNodeNames)
         {
+            if (TempData["Error"] != null)
+            {
+                viewModel.Error = (string)TempData["Error"];
+            }
             //à deplacer dans editowners // rename à getTabsContent
             string users = JsonConvert.SerializeObject(ad.getAllUsers().Select(x => x.SamAccountName));
             viewModel.UsersAD = users;
@@ -299,14 +303,21 @@ namespace HADES.Controllers
                     db.SaveChanges();
 
                 }
-
-                return RedirectToAction("UpdateContent", "Home", new
-                {
-                    selectedPathForContent = viewModel.SelectedPath,
-                    expandedNodeNames = viewModel.ExpandedNodesName
-                });
+            } 
+            else
+            {
+                viewModel.Error = Localizer["CreateGroupError"] + "<br>";
+                viewModel.Error += string.Join("<br>", ModelState.Values
+                                        .SelectMany(x => x.Errors)
+                                        .Select(x => x.ErrorMessage));
+                viewModel.Error += "<br>";
+                TempData["Error"] = viewModel.Error;
             }
-            return View(viewModel);
+            return RedirectToAction("UpdateContent", "Home", new
+            {
+                selectedPathForContent = viewModel.SelectedPath,
+                expandedNodeNames = viewModel.ExpandedNodesName
+            });
         }
 
 
@@ -369,10 +380,15 @@ namespace HADES.Controllers
                 {
                     Serilog.Log.Information("Le dossier(OU) " + viewModel.NewName + " a été créé");
                 }
-            }
+            } 
             else
             {
-                // TODO message erreur
+                viewModel.Error = Localizer["CreateOUError"] + "<br>";
+                viewModel.Error += string.Join("<br>", ModelState.Values
+                                        .SelectMany(x => x.Errors)
+                                        .Select(x => x.ErrorMessage));
+                viewModel.Error += "<br>";
+                TempData["Error"] = viewModel.Error;
             }
             return RedirectToAction("UpdateContent", "Home", new
             {

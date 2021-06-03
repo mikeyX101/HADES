@@ -225,4 +225,10 @@
   <data name="GenericError" xml:space="preserve">
     <value>Opération Invalide</value>
   </data>
+  <data name="Required" xml:space="preserve">
+    <value>Champ recquis</value>
+  </data>
+  <data name="OuGroupNameError" xml:space="preserve">
+    <value>Ces caractères sont interdits: {0}</value>
+  </data>
 </root>

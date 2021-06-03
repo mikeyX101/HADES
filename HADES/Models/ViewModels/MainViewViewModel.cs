@@ -1,6 +1,7 @@
 ﻿using HADES.Attributes;
 using HADES.Util;
 using HADES.Util.ModelAD;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -45,10 +46,12 @@ namespace HADES.Models
         public string UsersAD { get; set; }
 
         [Required]
-        [OuName]
+        [OuGroupName]
         public string NewName { get; set; }
 
         public int Index { get; set; }
+
+        public string Error { get; set; }
 
     }
 }
