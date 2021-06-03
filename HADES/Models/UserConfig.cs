@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HADES.Models
 {
-	[Table("UserConfig_UCF")]
+    [Table("UserConfig_UCF")]
     public class UserConfig
     {
         public UserConfig()

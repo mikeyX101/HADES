@@ -40,8 +40,6 @@ namespace HADES.Models
 
         public string OuGroup { get; set; }
 
-        public ADManager ADManager { get; set; }
-
         public string UsersAD { get; set; }
 
         [Required]

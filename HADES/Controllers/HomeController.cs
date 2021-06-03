@@ -31,7 +31,6 @@ namespace HADES.Controllers
         {
             try
             {
-                viewModel.ADManager = ad;
                 viewModel.ADRoot = ad.getRoot();
                 if (!ConnexionUtil.CurrentUser(User).GetRole().AdCrudAccess) viewModel.ADRoot = CleanUpADRootforOwner(viewModel.ADRoot);
                 viewModel.ADRoot = SortADRoot(viewModel.ADRoot);
@@ -96,11 +95,6 @@ namespace HADES.Controllers
         [Authorize]
         public IActionResult UpdateContent(string selectedPathForContent, string expandedNodeNames)
         {
-            //à deplacer dans editowners // rename à getTabsContent
-            string users = JsonConvert.SerializeObject(ad.getAllUsers().Select(x => x.SamAccountName));
-            viewModel.UsersAD = users;
-            viewModel.ADManager = ad;
-
 
             viewModel.SelectedPath = selectedPathForContent;
             viewModel.ExpandedNodesName = expandedNodeNames;
@@ -333,6 +327,8 @@ namespace HADES.Controllers
             if (ModelState.IsValid)
             {
                 DateTime dateExp = viewModel.GroupAD.ExpirationDate;
+
+                //TODO bool
                 ad.modifyGroup(DN, group, viewModel.SelectedNodeName, updatedGroupMembers);
 
                 selectedOwners.ForEach(x => db.Entry(x).State = EntityState.Modified);
@@ -421,7 +417,7 @@ namespace HADES.Controllers
         }
 
         [Authorize]
-        public IActionResult GetTabsContent(string dn, string selectedPath, string selectedNodeName, int index, string exp)
+        public IActionResult GetTabsContent(string dn, string selectedPath, string selectedNodeName, int index, string expandedNodesName)
         {
             if (!ConnexionUtil.CurrentUser(this.User).GetRole().AdCrudAccess) // ACCESS CONTROL
             {
@@ -435,7 +431,7 @@ namespace HADES.Controllers
             viewModel.GroupAD = group;
             viewModel.SelectedPath = selectedPath;
             viewModel.SelectedNodeName = selectedNodeName;
-            viewModel.ExpandedNodesName = exp;
+            viewModel.ExpandedNodesName = expandedNodesName;
 
 
             if (members.Any())
@@ -459,7 +455,7 @@ namespace HADES.Controllers
                 viewModel.SelectedOwners = JsonConvert.SerializeObject(user);
             else
                 viewModel.SelectedOwners = "";
-            return PartialView("EditOwners", viewModel);
+            return PartialView("_TabContentPartial", viewModel);
         }
     }
 

@@ -536,7 +536,7 @@ namespace HADES.Util
             {
                 group.Description = " ";
             }
-            if (group.Email == "")
+            if (string.IsNullOrWhiteSpace(group.Email))
             {
                 group.Email = " ";
             }
@@ -581,19 +581,17 @@ namespace HADES.Util
             }
         }
 
-
-        //public bool modifyGroup(string dnGroupToModify, string name, string ouGroup, string description, string email, DateTime dateExpiration, string notes, Dictionary<UserAD, Action> members)
         public bool modifyGroup(string dnGroupToModify, GroupAD group, string ouGroup, Dictionary<UserAD, Action> members)
         {
-            if (group.Description == "")
+            if (string.IsNullOrWhiteSpace(group.Description))
             {
                 group.Description = " ";
             }
-            if (group.Email == "")
+            if (string.IsNullOrWhiteSpace(group.Email))
             {
                 group.Email = " ";
             }
-            if (group.Notes == "")
+            if (string.IsNullOrWhiteSpace(group.Notes))
             {
                 group.Notes = " ";
             }

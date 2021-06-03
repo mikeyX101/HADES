@@ -103,10 +103,18 @@
                                 </div>
                             </div>
                         </div>
-                       
+
+                        <!-- Modal editGroup -->
                         <span data-toggle="tooltip" data-html="true" data-placement="right" title="@Model.EditLinkLabel">
                             <a data-ajax="true" data-ajax-method="GET" data-ajax-mode="replace" data-ajax-update="#tabContent@(i)"
-                               href='@Url.Action("GetTabsContent","Home",new { dn = Model.ADRoot[i].Dn, selectedPath = Model.SelectedPath, selectedNodeName = Model.SelectedNodeName, index = i, exp = Model.ExpandedNodesName})' class="btn btn-primary" data-toggle="modal" data-target="@dataTarget" data-backdrop="false">
+                               href='@Url.Action("GetTabsContent","Home",
+                                    new {
+                                    dn = Model.ADRoot[i].Dn,
+                                    selectedPath = Model.SelectedPath,
+                                    selectedNodeName = Model.SelectedNodeName,
+                                    index = Model.Index,
+                                    expandedNodesName = Model.ExpandedNodesName})'
+                               class="btn btn-primary" data-toggle="modal" data-target="@dataTarget" data-backdrop="false">
                                 <i class="fa fa-edit fa-fw"></i>
                             </a>
                         </span>
@@ -115,6 +123,7 @@
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
+                                        @*TODO : localizer*@
                                         <h5 class="modal-title" id="GroupCreateLbl">Edit group</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>

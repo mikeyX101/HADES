@@ -1,0 +1,111 @@
+﻿@model MainViewViewModel
+@{
+    int i = ViewBag.Index;
+
+}
+
+<form asp-action="EditGroupModal" class="needs-validation" asp-controller="Home" data-ajax="true" data-ajax-method="POST" data-ajax-mode="replace" data-ajax-update="#main" novalidate>
+    <div class="modal-body GroupModalBody">
+        <nav>
+            <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                <a class="nav-item nav-link active" id="nav-groupName-tab" data-toggle="tab" href="#nav-groupInfo@(i)"
+                   role="tab" aria-controls="nav-home" aria-selected="true">General</a>
+                <a class="nav-item nav-link" id="nav-members-tab" data-toggle="tab" href="#nav-members@(i)"
+                   role="tab" aria-controls="nav-members" aria-selected="false">Members</a>
+                <a class="nav-item nav-link" id="nav-owners-tab" data-toggle="tab" href="#nav-owners@(i)"
+                   role="tab" aria-controls="nav-owners" aria-selected="false">Owners</a>
+            </div>
+        </nav>
+
+        <div class="tab-content" id="nav-tabContent">
+
+            <!-- General info form -->
+
+            <div class="tab-pane fade show active" id="nav-groupInfo@(i)" role="tabpanel" aria-labelledby="nav-groupName-tab">
+                <input type="hidden" name="SelectedPath" value="@Model.SelectedPath" />
+                <input type="hidden" name="SelectedNodeName" value="@Model.SelectedNodeName" />
+                <input type="hidden" name="SelectedContentName" value="@Model.SelectedContentName" />
+                <input type="hidden" name="Group" value="@Model.GroupAD" />
+                <input type="hidden" name="OuGroup" value="@Model.OuGroup" />
+                <input type="hidden" name="ExpandedNodesName" value="@Model.ExpandedNodesName" />
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="form-group row">
+                    <label asp-for="@Model.GroupAD.SamAccountName" class="col-sm-2 col-form-label">Name</label>
+                    <div class="col-sm-10">
+                        <input asp-for="@Model.GroupAD.SamAccountName" class="form-control" >
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label asp-for="@Model.GroupAD.Description" class="col-sm-2 col-form-label">Description</label>
+                    <div class="col-sm-10">
+                        <input asp-for="@Model.GroupAD.Description" class="form-control" placeholder="">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label asp-for="@Model.GroupAD.Email" class="col-sm-2 col-form-label">Email</label>
+                    <div class="col-sm-10">
+                        <input asp-for="@Model.GroupAD.Email" type="Email" class="form-control" id="Email" placeholder="Email">
+                    </div>
+                </div>
+
+                <script type="text/javascript">
+
+                    var today = new Date();
+                    var nextYear = new Date(today.getFullYear() + 1, today.getMonth(), today.getDate());
+                    var dateExp = new Date(@Model.GroupAD.ExpirationDate.Year,@Model.GroupAD.ExpirationDate.Month, @Model.GroupAD.ExpirationDate.Day);
+
+
+                    $("#datepickerExpIdb@(i)")
+                            .val(dateExp.toISOString().substring(0, 10))
+                        .datepicker({
+                            maxDate: nextYear,
+                            minDate: today,
+                            defaultDate: dateExp,
+                            dateFormat: "yy-mm-dd",
+                        });
+
+                </script>
+
+                <div class="form-group row">
+                    <label asp-for="@Model.GroupAD.ExpirationDate" class="col-sm-2 col-form-label">Expiration Date</label>
+                    <div class="col-sm-10">
+                        <input asp-for="@Model.GroupAD.ExpirationDate" id="datepickerExpIdb@(i)" class="form-control" type="text" value="" readonly />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label asp-for="@Model.GroupAD.Notes">Notes</label>
+                    <textarea asp-for="@Model.GroupAD.Notes" class="form-control" id="Notes" rows="3"></textarea>
+                </div>
+
+            </div>
+            <!-- members form -->
+            <div class="tab-pane fade tab-absolute" id="nav-members@(i)" role="tabpanel" aria-labelledby="nav-members-tab">
+                <input type="hidden" asp-for="@Model.BeforeEditMembers" id="beforeEdit@(i)" />
+                <div>
+                    <div class="directorist-select directorist-select-multi" id="EditMembersMultiSelect@(i)" data-isSearch="true" data-multiSelect='@Model.UsersAD'>
+                        <input type="hidden" asp-for="@Model.SelectedMembers" id="selectedMember@(i)">
+
+                    </div>
+                </div>
+            </div>
+            <!-- Owners form -->
+            <div class="tab-pane fade tab-absolute" id="nav-owners@(i)" role="tabpanel" aria-labelledby="nav-owners-tab">
+                <div class="directorist-select directorist-select-multi" id="EditOwnersMultiSelect@(i)" data-isSearch="true" data-multiSelect='@Model.UsersAD'>
+                    <input id="selectedOwner@(i)" type="hidden" asp-for="@Model.SelectedOwners">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" id="btnSave">Ok</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+    </div>
+</form>
+
+<script type="text/javascript">
+    pureScriptSelect('#EditOwnersMultiSelect@(i)');
+    pureScriptSelect('#EditMembersMultiSelect@(i)');
+</script>
