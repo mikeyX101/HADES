@@ -10,10 +10,12 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Threading;
+using static HADES.Util.EmailHelper;
 
 namespace HADES.Util
 {
-	public enum NotificationType
+    public enum NotificationType
     {
         ExpirationDate,
         GroupCreate,
@@ -24,16 +26,14 @@ namespace HADES.Util
 
     public static class EmailHelper
     {
-        private static List<string> emailsToNotifyFr = new List<string>();
-        private static List<string> emailsToNotifyEng = new List<string>();
-        private static List<string> emailsToNotifyEsp = new List<string>();
-        private static List<string> emailsToNotifyPor = new List<string>();
-        private static string subject = "";
-        private static string message = "";
 
-        public static void SendEmail(NotificationType type,  GroupAD group, string usersAddedorDeleted = "", int nbExpirationDate = -1)
+        public static void SendEmail(NotificationType type, GroupAD group, string usersAddedorDeleted = "", int nbExpirationDate = -1)
         {
             string groupGUID = group.ObjectGUID;
+            List<string> emailsToNotifyFr = new List<string>();
+            List<string> emailsToNotifyEng = new List<string>();
+            List<string> emailsToNotifyEsp = new List<string>();
+            List<string> emailsToNotifyPor = new List<string>();
 
             ApplicationDbContext db = new ApplicationDbContext();
             List<Email> emails = null;
@@ -63,7 +63,22 @@ namespace HADES.Util
                 //Is a DefautUser
                 if (e.UserConfig.DefaultUser != null)
                 {
-                    EmailHelper.addToList(e.Address, e.UserConfig.Language);
+
+                    switch (e.UserConfig.Language)
+                    {
+                        case "fr-CA":
+                            emailsToNotifyFr.Add(e.Address);
+                            break;
+                        case "en-US":
+                            emailsToNotifyEng.Add(e.Address);
+                            break;
+                        case "es-US":
+                            emailsToNotifyEsp.Add(e.Address);
+                            break;
+                        case "pt-BR":
+                            emailsToNotifyPor.Add(e.Address);
+                            break;
+                    }
                     //Is a AD user
                 }
                 else if (e.UserConfig.User != null)
@@ -71,7 +86,21 @@ namespace HADES.Util
                     //Is a SuperAdmin or an Admin
                     if (e.UserConfig.User.Role.Id == (int)RolesID.SuperAdmin || e.UserConfig.User.Role.Id == (int)RolesID.Admin)
                     {
-                        EmailHelper.addToList(e.Address, e.UserConfig.Language);
+                        switch (e.UserConfig.Language)
+                        {
+                            case "fr-CA":
+                                emailsToNotifyFr.Add(e.Address);
+                                break;
+                            case "en-US":
+                                emailsToNotifyEng.Add(e.Address);
+                                break;
+                            case "es-US":
+                                emailsToNotifyEsp.Add(e.Address);
+                                break;
+                            case "pt-BR":
+                                emailsToNotifyPor.Add(e.Address);
+                                break;
+                        }
                     }
                     //Is owner og the group
                     else if (e.UserConfig.User.RoleId == (int)RolesID.Owner)
@@ -80,132 +109,178 @@ namespace HADES.Util
                         {
                             if (g.OwnerGroup.GUID == groupGUID)
                             {
-                                EmailHelper.addToList(e.Address, e.UserConfig.Language);
+                                switch (e.UserConfig.Language)
+                                {
+                                    case "fr-CA":
+                                        emailsToNotifyFr.Add(e.Address);
+                                        break;
+                                    case "en-US":
+                                        emailsToNotifyEng.Add(e.Address);
+                                        break;
+                                    case "es-US":
+                                        emailsToNotifyEsp.Add(e.Address);
+                                        break;
+                                    case "pt-BR":
+                                        emailsToNotifyPor.Add(e.Address);
+                                        break;
+                                }
                             }
                         }
                     }
                 }
             }
 
-            //Save the Current 
-            CultureInfo currentC = Strings.Culture;
-
-            //FR
-            if (EmailHelper.emailsToNotifyFr.Count > 0)
+            try
             {
-                Strings.Culture = new System.Globalization.CultureInfo("fr-CA");
-                EmailHelper.setMsgVariable(type,group, usersAddedorDeleted, nbExpirationDate);
-                using (EmailSink sink = new(EmailHelper.emailsToNotifyFr, EmailHelper.subject))
-                {
-                    sink.AddMessage(LogEventLevel.Information, EmailHelper.message);
-                }
+                ThreadEmail t = new ThreadEmail(type, group, usersAddedorDeleted, nbExpirationDate, emailsToNotifyFr, emailsToNotifyEng, emailsToNotifyEsp, emailsToNotifyPor);
+                Thread thr = new Thread(new ThreadStart(t.sendMailOnThread));
+                thr.Start(); 
+            }
+            catch (Exception e)
+            {
+                Log.Warning(e, "An unexepected error occured while doing an operation in the {Service}", "EmailHelper");
             }
 
-
-            //ENG
-            if (EmailHelper.emailsToNotifyEng.Count > 0)
-            {
-                Strings.Culture = new System.Globalization.CultureInfo("en-US");
-                EmailHelper.setMsgVariable(type, group, usersAddedorDeleted, nbExpirationDate);
-                using (EmailSink sink = new(EmailHelper.emailsToNotifyEng, EmailHelper.subject))
-                {
-                    sink.AddMessage(LogEventLevel.Information, EmailHelper.message);
-                }
-            }
-
-            //ESP
-            if (EmailHelper.emailsToNotifyEsp.Count > 0)
-            {
-                Strings.Culture = new System.Globalization.CultureInfo("es-US");
-                EmailHelper.setMsgVariable(type, group, usersAddedorDeleted, nbExpirationDate);
-                using (EmailSink sink = new(EmailHelper.emailsToNotifyEsp, EmailHelper.subject))
-                {
-                    sink.AddMessage(LogEventLevel.Information, EmailHelper.message);
-                }
-            }
-
-            //PT
-            if (EmailHelper.emailsToNotifyPor.Count > 0)
-            {
-                Strings.Culture = new System.Globalization.CultureInfo("pt-BR");
-                EmailHelper.setMsgVariable(type, group, usersAddedorDeleted, nbExpirationDate);
-                using (EmailSink sink = new(EmailHelper.emailsToNotifyPor, EmailHelper.subject))
-                {
-                    sink.AddMessage(LogEventLevel.Information, EmailHelper.message);
-                }
-            }
-
-            //End Clean up
-            Strings.Culture = currentC;
-            EmailHelper.emailsToNotifyFr = new List<string>();
-            EmailHelper.emailsToNotifyEng = new List<string>();
-            EmailHelper.emailsToNotifyEsp = new List<string>();
-            EmailHelper.emailsToNotifyPor = new List<string>();
         }
 
-        //Add the email to the list base on the language
-        private static void addToList(string email, string langue)
+      
+        private class ThreadEmail
         {
-            switch (langue)
+            private NotificationType type;
+            private GroupAD group;
+            private string usersAddedorDeleted;
+            private int nbExpirationDate;
+            private string subject;
+            private string message;
+            private List<string> emailsToNotifyFr;
+            private List<string> emailsToNotifyEng;
+            private List<string> emailsToNotifyEsp;
+            private List<string> emailsToNotifyPor;
+
+            public ThreadEmail(NotificationType type, GroupAD group, string usersAddedorDeleted, int nbExpirationDate, List<string> emailsToNotifyFr, List<string> emailsToNotifyEng, List<string> emailsToNotifyEsp, List<string> emailsToNotifyPor)
             {
-                case "fr-CA":
-                    EmailHelper.emailsToNotifyFr.Add(email);
-                    break;
-                case "en-US":
-                    EmailHelper.emailsToNotifyEng.Add(email);
-                    break;
-                case "es-US":
-                    EmailHelper.emailsToNotifyEsp.Add(email);
-                    break;
-                case "pt-BR":
-                    EmailHelper.emailsToNotifyPor.Add(email);
-                    break;
+                this.type = type;
+                this.group = group;
+                this.usersAddedorDeleted = usersAddedorDeleted;
+                this.nbExpirationDate = nbExpirationDate;
+                this.subject = "";
+                this.message = "";
+                this.emailsToNotifyFr = emailsToNotifyFr;
+                this.emailsToNotifyEng = emailsToNotifyEng;
+                this.emailsToNotifyEsp = emailsToNotifyEsp;
+                this.emailsToNotifyPor = emailsToNotifyPor;
             }
-        }
 
-        // Set the right subject and the message with the type of the notification
-        private static void setMsgVariable(NotificationType type, GroupAD groupDn, string usersAddedorDeleted, int nbExpirationDate)
-        {
-            String members = "";
-            foreach (var m in groupDn.Members)
+
+            public string Subject { get => subject; set => subject = value; }
+            public string Message { get => message; set => message = value; }
+            public NotificationType Type { get => type; set => type = value; }
+            public GroupAD Group { get => group; set => group = value; }
+            public string UsersAddedorDeleted { get => usersAddedorDeleted; set => usersAddedorDeleted = value; }
+            public int NbExpirationDate { get => nbExpirationDate; set => nbExpirationDate = value; }
+
+            public List<string> EmailsToNotifyFr { get => emailsToNotifyFr; set => emailsToNotifyFr = value; }
+            public List<string> EmailsToNotifyEng { get => emailsToNotifyEng; set => emailsToNotifyEng = value; }
+            public List<string> EmailsToNotifyEsp { get => emailsToNotifyEsp; set => emailsToNotifyEsp = value; }
+            public List<string> EmailsToNotifyPor { get => emailsToNotifyPor; set => emailsToNotifyPor = value; }
+
+            public void sendMailOnThread()
             {
-                members += m.FirstName + " " + m.LastName + ", ";
-            }
+                //Save the Current 
+                CultureInfo currentC = Strings.Culture;
 
-
-            switch (type)
-            {
-                case NotificationType.ExpirationDate:
-                    if (nbExpirationDate == -1)
+                //FR
+                if (this.EmailsToNotifyFr.Count > 0)
+                {
+                    Strings.Culture = new System.Globalization.CultureInfo("fr-CA");
+                    this.setMsgVariable(this.type, this.group, this.usersAddedorDeleted, this.nbExpirationDate);
+                    using (EmailSink sink = new(this.EmailsToNotifyFr, this.Subject))
                     {
-                        EmailHelper.subject = Strings.email_ExpirationDateSubject + " (" + groupDn.SamAccountName + " )"; ;
-                        EmailHelper.message = "\n" + Strings.email_ExpirationDateMessage + "\n" + Strings.email_name + " " + groupDn.SamAccountName + "\n" + Strings.email_Members + members + "\n" + Strings.email_ExpirationDateSubject + ": " + groupDn.ExpirationDate.ToString();
+                        sink.AddMessage(LogEventLevel.Information, this.Message);
+                    }
+                }
 
+
+                //ENG
+                if (this.EmailsToNotifyEng.Count > 0)
+                {
+                    Strings.Culture = new System.Globalization.CultureInfo("en-US");
+                    this.setMsgVariable(this.type, this.group, this.usersAddedorDeleted, this.nbExpirationDate);
+                    using (EmailSink sink = new(this.EmailsToNotifyEng, this.Subject))
+                    {
+                        sink.AddMessage(LogEventLevel.Information, this.Message);
                     }
-                    else {
-                        EmailHelper.subject = Strings.email_ExpirationDateSubject + " (" + groupDn.SamAccountName + " )"; ;
-                        EmailHelper.message = "\n" + Strings.email_ExpirationDateSoonMsg + " " + nbExpirationDate +" " + Strings.email_ExpirationDateSoonMsg02  + "\n" + Strings.email_name + " " + groupDn.SamAccountName + "\n" + Strings.email_Members + members + "\n" + Strings.email_ExpirationDateSubject + ": " + groupDn.ExpirationDate.ToString();
+                }
+
+                //ESP
+                if (this.EmailsToNotifyEsp.Count > 0)
+                {
+                    Strings.Culture = new System.Globalization.CultureInfo("es-US");
+                    this.setMsgVariable(this.type, this.group, this.usersAddedorDeleted, this.nbExpirationDate);
+                    using (EmailSink sink = new(this.EmailsToNotifyEsp, this.Subject))
+                    {
+                        sink.AddMessage(LogEventLevel.Information, this.Message);
                     }
-                    break;
-                case NotificationType.GroupCreate:
-                    EmailHelper.subject = Strings.email_GroupCreateSubject + " (" + groupDn.SamAccountName + " )"; ;
-                    EmailHelper.message = "\n" + Strings.email_GroupCreateMessage + "\n" + Strings.email_name + " " + groupDn.SamAccountName;
-                    break;
-                case NotificationType.GroupDelete:
-                    EmailHelper.subject = Strings.email_GroupDeleteSubject + " (" + groupDn.SamAccountName + " )"; ;
-                    EmailHelper.message = "\n" + Strings.email_GroupDeleteMessage + "\n" + Strings.email_name + " " + groupDn.SamAccountName + "\n" + Strings.email_Members + members;
-                    break;
-                case NotificationType.MemberAdd:
-                    EmailHelper.subject = Strings.email_MemberAddSubject + " (" + groupDn.SamAccountName + " )";
-                    EmailHelper.message = "\n" + Strings.email_MemberAddMessage + "\n" + Strings.email_name + " " + groupDn.SamAccountName + "\n" + Strings.email_Members + members + "\n" + Strings.email_membersaddes + usersAddedorDeleted;
-                    break;
-                case NotificationType.MemberRemoval:
-                    EmailHelper.subject = Strings.email_MemberRemovalSubject + " (" + groupDn.SamAccountName + " )"; ;
-                    EmailHelper.message = "\n" + Strings.email_MemberRemovalMessage + "\n" + Strings.email_name + " " + groupDn.SamAccountName + "\n" + Strings.email_Members + members + "\n" + Strings.email_membersSup + usersAddedorDeleted;
-                    break;
+                }
+
+                //PT
+                if (this.EmailsToNotifyPor.Count > 0)
+                {
+                    Strings.Culture = new System.Globalization.CultureInfo("pt-BR");
+                    this.setMsgVariable(this.type, this.group, this.usersAddedorDeleted, this.nbExpirationDate);
+                    using (EmailSink sink = new(this.EmailsToNotifyPor, this.Subject))
+                    {
+                        sink.AddMessage(LogEventLevel.Information, this.Message);
+                    }
+                }
+
+                //End Clean up
+                Strings.Culture = currentC;
+            }
+
+            // Set the right subject and the message with the type of the notification
+            public void setMsgVariable(NotificationType type, GroupAD groupDn, string usersAddedorDeleted, int nbExpirationDate)
+            {
+                String members = "";
+                foreach (var m in groupDn.Members)
+                {
+                    members += m.FirstName + " " + m.LastName + ", ";
+                }
+
+
+                switch (type)
+                {
+                    case NotificationType.ExpirationDate:
+                        if (nbExpirationDate == -1)
+                        {
+                            this.subject = Strings.email_ExpirationDateSubject + " (" + groupDn.SamAccountName + " )"; ;
+                            this.message = "\n" + Strings.email_ExpirationDateMessage + "\n" + Strings.email_name + " " + groupDn.SamAccountName + "\n" + Strings.email_Members + members + "\n" + Strings.email_ExpirationDateSubject + ": " + groupDn.ExpirationDate.ToString();
+                        }
+                        else
+                        {
+                            this.subject = Strings.email_ExpirationDateSubject + " (" + groupDn.SamAccountName + " )"; ;
+                            this.message = "\n" + Strings.email_ExpirationDateSoonMsg + " " + nbExpirationDate + " " + Strings.email_ExpirationDateSoonMsg02 + "\n" + Strings.email_name + " " + groupDn.SamAccountName + "\n" + Strings.email_Members + members + "\n" + Strings.email_ExpirationDateSubject + ": " + groupDn.ExpirationDate.ToString();
+                        }
+                        break;
+                    case NotificationType.GroupCreate:
+                        this.subject = Strings.email_GroupCreateSubject + " (" + groupDn.SamAccountName + " )"; ;
+                        this.message = "\n" + Strings.email_GroupCreateMessage + "\n" + Strings.email_name + " " + groupDn.SamAccountName;
+                        break;
+                    case NotificationType.GroupDelete:
+                        this.subject = Strings.email_GroupDeleteSubject + " (" + groupDn.SamAccountName + " )"; ;
+                        this.message = "\n" + Strings.email_GroupDeleteMessage + "\n" + Strings.email_name + " " + groupDn.SamAccountName + "\n" + Strings.email_Members + members;
+                        break;
+                    case NotificationType.MemberAdd:
+                        this.subject = Strings.email_MemberAddSubject + " (" + groupDn.SamAccountName + " )";
+                        this.message = "\n" + Strings.email_MemberAddMessage + "\n" + Strings.email_name + " " + groupDn.SamAccountName + "\n" + Strings.email_Members + members + "\n" + Strings.email_membersaddes + usersAddedorDeleted;
+                        break;
+                    case NotificationType.MemberRemoval:
+                        this.subject = Strings.email_MemberRemovalSubject + " (" + groupDn.SamAccountName + " )"; ;
+                        this.message = "\n" + Strings.email_MemberRemovalMessage + "\n" + Strings.email_name + " " + groupDn.SamAccountName + "\n" + Strings.email_Members + members + "\n" + Strings.email_membersSup + usersAddedorDeleted;
+                        break;
+                }
             }
         }
-
         private sealed class EmailSink : IDisposable
         {
 
@@ -231,9 +306,9 @@ namespace HADES.Util
                     EnableSsl = true,
                     MailServer = settings.SMTPServer,
                     Port = settings.SMTPPort,
-                    NetworkCredentials = 
-                        string.IsNullOrWhiteSpace(settings.SMTPUsername) || string.IsNullOrWhiteSpace(settings.SMTPPassword) ? 
-                        null : 
+                    NetworkCredentials =
+                        string.IsNullOrWhiteSpace(settings.SMTPUsername) || string.IsNullOrWhiteSpace(settings.SMTPPassword) ?
+                        null :
                         new NetworkCredential(settings.SMTPUsername, EncryptionUtil.Decrypt(settings.SMTPPassword)),
                     EmailSubject = subject,
                     FromEmail = settings.SMTPFromEmail,
