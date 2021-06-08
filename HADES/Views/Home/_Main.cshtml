@@ -1,14 +1,19 @@
 ﻿@model MainViewViewModel
+
+<div class="text-danger text-center col-12 m-1 p-1">
+    @Html.Raw(@Model.Error)
+</div>
+
 @* Left Side *@
 <div class="col-sm-6 col-xl-4">
     <h3 class="mt-1 mb-4">@Localizer["DossierGroupe"]</h3>
     <div id="leftnav">
         @if (Model.ADConnectionError != null)
         {
-<h6 class="text-center bg-warning mt-lg-5">@Model.ADConnectionError</h6> }
-else
-{
-@await Html.PartialAsync("_LeftNav", Model)}
+            <h6 class="text-center bg-warning mt-lg-5">@Model.ADConnectionError</h6> }
+        else
+        {
+            @await Html.PartialAsync("_LeftNav", Model)}
     </div>
 </div>
 
@@ -16,16 +21,16 @@ else
 <div class="col-sm-6 col-xl-8">
     @if (Model.ADConnectionError != null)
     {
-<h3 class="mt-1 mb-2 pr-2">@Localizer["Dossier"]</h3>
-                <div></div> }
-                            else
-                            {
-                <div id="content">
-                    @await Html.PartialAsync("_Content", Model)
-                </div>}
+        <h3 class="mt-1 mb-2 pr-2">@Localizer["Dossier"]</h3>
+        <div></div> }
+    else
+    {
+        <div id="content">
+            @await Html.PartialAsync("_Content", Model)
+        </div>}
 </div>
 
 @if (Model.ADRootTreeNodeJson != null)
 {
-<script type="text/javascript">showTreeView(@Html.Raw(Model.ADRootTreeNodeJson), '@Model.SelectedNodeName', @Html.Raw(Model.ExpandedNodesName));</script>
+    <script type="text/javascript">showTreeView(@Html.Raw(Model.ADRootTreeNodeJson), '@Model.SelectedNodeName', @Html.Raw(Model.ExpandedNodesName));</script>
 }

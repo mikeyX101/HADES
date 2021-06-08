@@ -1,5 +1,7 @@
-﻿using System;
+﻿using HADES.Attributes;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace HADES.Util.ModelAD
 {
@@ -40,6 +42,8 @@ namespace HADES.Util.ModelAD
         public string Description { get => description; set => description = value; }
         public string Email { get => email; set => email = value; }
         public string Notes { get => notes; set => notes = value; }
+        [Required]
+        [OuGroupName]
         public string SamAccountName { get => samAccountName; set => samAccountName = value; }
         public string ObjectGUID { get => objectGUID; set => objectGUID = value; }
         public DateTime ExpirationDate { get => expirationDate; set => expirationDate = value; }

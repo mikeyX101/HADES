@@ -1,2 +1,18 @@
-﻿<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
-<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+﻿@using System.Globalization;
+@{
+    CultureInfo culture = System.Threading.Thread.CurrentThread.CurrentUICulture;
+    string validateLocalFile = culture.Name.ToLower() switch
+    {
+        "en-us" => null,
+        "es-us" => "es",
+        "pt-br" => "pt-BR",
+        "fr-ca" or _ => "fr"
+    };
+}
+
+<script type="text/javascript" src="~/lib/jquery-validate/jquery.validate.min.js"></script>
+<script type="text/javascript" src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+@if (validateLocalFile != null)
+{
+    <script type="text/javascript" src="~/lib/jquery-validate/localization/messages_@(validateLocalFile).js"></script>
+}

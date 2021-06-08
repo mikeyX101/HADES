@@ -28,16 +28,14 @@ namespace HADES.Controllers
             {
                 new SelectListItem {Text = HADES.Strings.French, Value = "fr-CA"},
                 new SelectListItem {Text = HADES.Strings.English, Value = "en-US"},
-                new SelectListItem {Text = HADES.Strings.Spanish, Value = "es-US"},
-                new SelectListItem {Text = HADES.Strings.Portuguese, Value = "pt-BR"}
+               // new SelectListItem {Text = HADES.Strings.Spanish, Value = "es-US"}, // SUPPORT es-US
+               // new SelectListItem {Text = HADES.Strings.Portuguese, Value = "pt-BR"} // SUPPORT pt-BR
             };
             viewModel.Themes = new List<SelectListItem>() //TODO Translate text with readable and not "technical" names
             {
-                new SelectListItem {Text = "site", Value = "site"},
-                new SelectListItem {Text = "deeppink", Value = "deeppink"},
-                new SelectListItem {Text = "chocolate", Value = "chocolate"},
-                new SelectListItem {Text = "greenmint", Value = "greenmint"},
-                new SelectListItem {Text = "white", Value = "white"}
+                new SelectListItem {Text = "Dark", Value = "site"},
+                new SelectListItem {Text = "Green", Value = "greenmint"},
+                new SelectListItem {Text = "Light", Value = "white"}
             };
 
             return View(viewModel);
@@ -99,11 +97,14 @@ namespace HADES.Controllers
 
 
         [Authorize]
-        public async Task<IActionResult> EmailDelete()
+        public async Task<IActionResult> EmailDelete(string id)
         {
             UserConfigService service = new();
-            int id = ConnexionUtil.CurrentUser(this.User).GetUserConfig().Id;
-            await service.DeleteEmail(id);
+            if (int.TryParse(id, out int emailId))
+			{
+                await service.DeleteEmail(emailId);
+            }
+            
 
             return RedirectToAction("UserConfig");
         }

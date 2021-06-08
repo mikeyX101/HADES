@@ -1,9 +1,5 @@
 ﻿@model HADES.Models.Email
 
-@{
-    ViewData["Title"] = "View";
-}
-
 <br />
 <h4>Email</h4>
 <hr />
@@ -40,9 +36,6 @@
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="MemberRemoval" /> @Html.DisplayNameFor(model => model.MemberRemoval)
                 </label>
-            </div>
-            <div class="form-group">
-                <input type="hidden" asp-for="@Model.UserConfigId" value="@ViewBag.UserConfigId" />
             </div>
             <div class="form-group">
                 <input type="submit" value="@Strings.Save" class="btn btn-primary" />

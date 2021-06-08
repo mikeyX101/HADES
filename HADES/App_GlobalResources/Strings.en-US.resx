@@ -222,4 +222,13 @@
   <data name="InvalidCharacters" xml:space="preserve">
     <value>These characters are not allowed:   " [ ] : ; | = + * ? &lt; &gt; / \ ,</value>
   </data>
+  <data name="GenericError" xml:space="preserve">
+    <value>Invalid Operation</value>
+  </data>
+  <data name="Required" xml:space="preserve">
+    <value>Field required</value>
+  </data>
+  <data name="OuGroupNameError" xml:space="preserve">
+    <value>These characters are forbidden: {0}</value>
+  </data>
 </root>

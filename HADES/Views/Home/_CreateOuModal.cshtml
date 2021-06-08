@@ -14,7 +14,7 @@
                     <form class="needs-validation" id="needs-validation" asp-controller="Home" asp-action="CreateOU" data-ajax="true" data-ajax-method="POST" data-ajax-mode="replace" data-ajax-update="#main" novalidate>
                         <div class="form-group row">
                             <div class="col-10">
-                                <input id="NewName" type="text" name="NewName" value="" class="form-control validate" pattern='^[^/[\]:;|=+*?<>,"\\]*$' required />
+                                <input asp-for="NewName" class="form-control validate" pattern='^[^/[\]:;|=+*?<>,"\\]*$' required />
                                 <input type="hidden" name="SelectedPath" value="@Model.SelectedPath" />
                                 <input type="hidden" name="ExpandedNodesName" value="@Model.ExpandedNodesName" />
                                 <div class="invalid-tooltip">

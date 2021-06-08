@@ -20,22 +20,61 @@
 }
 
 @section scriptsPreBootStrap {
-    <link rel="stylesheet" href="~/lib/jquery-ui/jquery-ui.css" type="text/css" />
     <script type="text/javascript" src="~/lib/jquery-ui/jquery-ui.js"></script>
     <script type="text/javascript" src="~/lib/popper.js/umd/popper.js"></script>
 }
 
 <style>
+    .table {
+        background-color: white !important;
+    }
+
+    .dt-header {
+        background-color: darkgray !important;
+    }
+
+    .dt-cell-verbose {
+        background-color: #17a2b8 !important;
+        color: black !important;
+    }
+
+    .dt-cell-debug {
+        background-color: #20c997 !important;
+        color: black !important;
+    }
+
+    .dt-cell-warning {
+        background-color: #ffc107 !important;
+        color: black !important;
+        font-weight: 700;
+    }
+
+    .dt-cell-error {
+        background-color: #fd7e14 !important;
+        color: black !important;
+        font-weight: 800;
+    }
+
+    .dt-cell-fatal {
+        background-color: #dc3545 !important;
+        color: black !important;
+        font-weight: 900;
+    }
+
     .hidden {
-        display: none;
+        display: none !important;
     }
 
     .table td, .table th {
-        padding: .75rem;
+        padding: .75rem !important;
     }
 
     .wrap-message {
-        word-break: break-all;
+        word-break: break-all !important;
+    }
+
+    .modal-footer {
+        position: relative !important;
     }
 </style>
 

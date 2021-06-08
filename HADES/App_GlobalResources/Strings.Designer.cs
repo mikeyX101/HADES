@@ -286,6 +286,15 @@ namespace HADES {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Opération Invalide.
+        /// </summary>
+        public static string GenericError {
+            get {
+                return ResourceManager.GetString("GenericError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ces caractères sont interdits:   &quot; [ ] : ; | = + * ? &lt; &gt; / \ ,.
         /// </summary>
         public static string InvalidCharacters {
@@ -331,6 +340,15 @@ namespace HADES {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ces caractères sont interdits: {0}.
+        /// </summary>
+        public static string OuGroupNameError {
+            get {
+                return ResourceManager.GetString("OuGroupNameError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Portugais.
         /// </summary>
         public static string Portuguese {
@@ -345,6 +363,15 @@ namespace HADES {
         public static string Remove {
             get {
                 return ResourceManager.GetString("Remove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Champ recquis.
+        /// </summary>
+        public static string Required {
+            get {
+                return ResourceManager.GetString("Required", resourceCulture);
             }
         }
         
