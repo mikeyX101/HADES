@@ -196,7 +196,7 @@
     <value>Link to the Generator</value>
   </data>
   <data name="roleTitle" xml:space="preserve">
-    <value>Role</value>
+    <value>Roles</value>
   </data>
   <data name="DeleteOU" xml:space="preserve">
     <value>Deleting an organizational unit</value>
