@@ -80,10 +80,10 @@
                             }
                             @if (u.GetRole().AppConfigAccess)
                             {
-                        <a class="dropdown-item" asp-action="Documentation" asp-controller="Documentation" asp-area="">
-                            <i class="fa fa-info-circle fa-fw mr-2"></i>
-                            @Localizer["Documentation"]
-                        </a>
+                                <a class="dropdown-item" asp-action="Documentation" asp-controller="Documentation" asp-area="">
+                                    <i class="fa fa-info-circle fa-fw mr-2"></i>
+                                    @Localizer["Documentation"]
+                                </a>
                             }
                         </div>
                     </div>
@@ -110,6 +110,12 @@
             @RenderBody()
         </main>
     </div>
+
+    <script>
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
 
 </body>
 </html>
