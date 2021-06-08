@@ -3,62 +3,85 @@
     int i = ViewBag.Index;
 
 }
-@{ IUser u = HADES.Util.ConnexionUtil.CurrentUser(Context.User);
+
+@{
+    IUser u = HADES.Util.ConnexionUtil.CurrentUser(Context.User);
 }
 
 <form asp-action="EditGroupModal" class="needs-validation" asp-controller="Home" data-ajax="true" data-ajax-method="POST" data-ajax-mode="replace" data-ajax-update="#main" novalidate>
     <div class="modal-body GroupModalBody">
         <nav>
             <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
-                @if (u.GetRole().AdCrudAccess)
-                {
-                    <a class="nav-item nav-link active" id="nav-groupName-tab" data-toggle="tab" href="#nav-groupInfo@(i)"
-                       role="tab" aria-controls="nav-home" aria-selected="true">General</a>
-                }
-                <a class="nav-item nav-link @if (!u.GetRole().AdCrudAccess) {  @Html.Raw("active"); } " id="nav-members-tab" data-toggle="tab" href="#nav-members@(i)"
-                   role="tab" aria-controls="nav-members" aria-selected="@if (!u.GetRole().AdCrudAccess) { @Html.Raw("true"); } else { @Html.Raw("false"); }">Members</a>
-                @if (u.GetRole().AdCrudAccess)
-                {
-                    <a class="nav-item nav-link" id="nav-owners-tab" data-toggle="tab" href="#nav-owners@(i)"
-                       role="tab" aria-controls="nav-owners" aria-selected="false">Owners</a>
-                }
+                <a class="nav-item nav-link active" id="nav-groupName-tab" data-toggle="tab" href="#nav-groupInfo@(i)"
+                   role="tab" aria-controls="nav-home" aria-selected="true">General</a>
+                <a class="nav-item nav-link" id="nav-members-tab" data-toggle="tab" href="#nav-members@(i)"
+                   role="tab" aria-controls="nav-members" aria-selected="false">Members</a>
+                <a class="nav-item nav-link" id="nav-owners-tab" data-toggle="tab" href="#nav-owners@(i)"
+                   role="tab" aria-controls="nav-owners" aria-selected="false">Owners</a>
             </div>
         </nav>
 
         <div class="tab-content" id="nav-tabContent">
 
             <!-- General info form -->
-            @if (u.GetRole().AdCrudAccess)
-            {
-                <div class="tab-pane fade show active" id="nav-groupInfo@(i)" role="tabpanel" aria-labelledby="nav-groupName-tab">
-                    <input type="hidden" name="SelectedPath" value="@Model.SelectedPath" />
-                    <input type="hidden" name="SelectedNodeName" value="@Model.SelectedNodeName" />
-                    <input type="hidden" name="SelectedContentName" value="@Model.SelectedContentName" />
-                    <input type="hidden" name="Group" value="@Model.GroupAD" />
-                    <input type="hidden" name="OuGroup" value="@Model.OuGroup" />
-                    <input type="hidden" name="ExpandedNodesName" value="@Model.ExpandedNodesName" />
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
+            <div class="tab-pane fade show active" id="nav-groupInfo@(i)" role="tabpanel" aria-labelledby="nav-groupName-tab">
+                <input type="hidden" name="SelectedPath" value="@Model.SelectedPath" />
+                <input type="hidden" name="SelectedNodeName" value="@Model.SelectedNodeName" />
+                <input type="hidden" name="SelectedContentName" value="@Model.SelectedContentName" />
+                <input type="hidden" name="Group" value="@Model.GroupAD" />
+                <input type="hidden" name="OuGroup" value="@Model.OuGroup" />
+                <input type="hidden" name="ExpandedNodesName" value="@Model.ExpandedNodesName" />
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                @if (u.GetRole().AdCrudAccess)
+                {
                     <div class="form-group row">
                         <label asp-for="@Model.GroupAD.SamAccountName" class="col-sm-2 col-form-label">Name</label>
                         <div class="col-sm-10">
                             <input asp-for="@Model.GroupAD.SamAccountName" class="form-control">
                         </div>
                     </div>
-
+                }
+                else
+                {
                     <div class="form-group row">
-                        <label asp-for="@Model.GroupAD.Description" class="col-sm-2 col-form-label">Description</label>
+                        <label asp-for="@Model.GroupAD.SamAccountName" class="col-sm-2 col-form-label">Name</label>
                         <div class="col-sm-10">
-                            <input asp-for="@Model.GroupAD.Description" class="form-control" placeholder="">
+                            <input asp-for="@Model.GroupAD.SamAccountName" class="form-control" readonly>
                         </div>
                     </div>
+                }
+
+
+                <div class="form-group row">
+                    <label asp-for="@Model.GroupAD.Description" class="col-sm-2 col-form-label">Description</label>
+                    <div class="col-sm-10">
+                        <input asp-for="@Model.GroupAD.Description" class="form-control" placeholder="">
+                    </div>
+                </div>
+
+                @if (u.GetRole().AdCrudAccess)
+                {
                     <div class="form-group row">
                         <label asp-for="@Model.GroupAD.Email" class="col-sm-2 col-form-label">Email</label>
                         <div class="col-sm-10">
                             <input asp-for="@Model.GroupAD.Email" type="Email" class="form-control" id="Email" placeholder="Email">
                         </div>
                     </div>
+                }
+                else
+                {
+                    <div class="form-group row">
+                        <label asp-for="@Model.GroupAD.Email" class="col-sm-2 col-form-label">Email</label>
+                        <div class="col-sm-10">
+                            <input asp-for="@Model.GroupAD.Email" type="Email" class="form-control" id="Email" placeholder="Email" readonly>
+                        </div>
+                    </div>
+                }
 
+                @if (u.GetRole().AdCrudAccess)
+                {
                     <script type="text/javascript">
 
                     var today = new Date();
@@ -76,23 +99,24 @@
                         });
 
                     </script>
+                }
 
-                    <div class="form-group row">
-                        <label asp-for="@Model.GroupAD.ExpirationDate" class="col-sm-2 col-form-label">Expiration Date</label>
-                        <div class="col-sm-10">
-                            <input asp-for="@Model.GroupAD.ExpirationDate" id="datepickerExpIdb@(i)" class="form-control" type="text" value="" readonly />
-                        </div>
+
+                <div class="form-group row">
+                    <label asp-for="@Model.GroupAD.ExpirationDate" class="col-sm-2 col-form-label">Expiration Date</label>
+                    <div class="col-sm-10">
+                        <input asp-for="@Model.GroupAD.ExpirationDate" id="datepickerExpIdb@(i)" class="form-control" type="text" value="" readonly />
                     </div>
-
-                    <div class="form-group row">
-                        <label asp-for="@Model.GroupAD.Notes">Notes</label>
-                        <textarea asp-for="@Model.GroupAD.Notes" class="form-control" id="Notes" rows="3"></textarea>
-                    </div>
-
                 </div>
-            }
+
+                <div class="form-group row">
+                    <label asp-for="@Model.GroupAD.Notes">Notes</label>
+                    <textarea asp-for="@Model.GroupAD.Notes" class="form-control" id="Notes" rows="3"></textarea>
+                </div>
+
+            </div>
             <!-- members form -->
-            <div class="tab-pane fade tab-absolute @if (!u.GetRole().AdCrudAccess) { @Html.Raw("show active"); }" id="nav-members@(i)" role="tabpanel" aria-labelledby="nav-members-tab">
+            <div class="tab-pane fade tab-absolute" id="nav-members@(i)" role="tabpanel" aria-labelledby="nav-members-tab">
                 <input type="hidden" asp-for="@Model.BeforeEditMembers" id="beforeEdit@(i)" />
                 <div>
                     <div class="directorist-select directorist-select-multi" id="EditMembersMultiSelect@(i)" data-isSearch="true" data-multiSelect='@Model.UsersAD'>
@@ -102,14 +126,14 @@
                 </div>
             </div>
             <!-- Owners form -->
-            @if (u.GetRole().AdCrudAccess)
-            {
-                <div class="tab-pane fade tab-absolute" id="nav-owners@(i)" role="tabpanel" aria-labelledby="nav-owners-tab">
+            <div class="tab-pane fade tab-absolute" id="nav-owners@(i)" role="tabpanel" aria-labelledby="nav-owners-tab">
+                @if (u.GetRole().AdCrudAccess)
+                {
                     <div class="directorist-select directorist-select-multi" id="EditOwnersMultiSelect@(i)" data-isSearch="true" data-multiSelect='@Model.UsersAD'>
                         <input id="selectedOwner@(i)" type="hidden" asp-for="@Model.SelectedOwners">
                     </div>
-                </div>
-            }
+                }
+            </div>
         </div>
     </div>
     <div class="modal-footer">
