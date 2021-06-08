@@ -359,6 +359,10 @@ namespace HADES.Controllers
             }
 
             ModelState.Remove("NewName");
+            if(viewModel.GroupAD.SamAccountName == oldgroup.SamAccountName)
+            {
+                ModelState.Remove("GroupAD.SamAccountName");
+            }
             if (ModelState.IsValid)
             {
                 DateTime dateExp = viewModel.GroupAD.ExpirationDate;
