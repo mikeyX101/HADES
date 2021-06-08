@@ -127,12 +127,9 @@
             </div>
             <!-- Owners form -->
             <div class="tab-pane fade tab-absolute" id="nav-owners@(i)" role="tabpanel" aria-labelledby="nav-owners-tab">
-                @if (u.GetRole().AdCrudAccess)
-                {
-                    <div class="directorist-select directorist-select-multi" id="EditOwnersMultiSelect@(i)" data-isSearch="true" data-multiSelect='@Model.UsersAD'>
-                        <input id="selectedOwner@(i)" type="hidden" asp-for="@Model.SelectedOwners">
-                    </div>
-                }
+                <div class="directorist-select directorist-select-multi" id="EditOwnersMultiSelect@(i)" data-isSearch="true" data-multiSelect='@Model.UsersAD'>
+                    <input id="selectedOwner@(i)" type="hidden" asp-for="@Model.SelectedOwners">
+                </div>
             </div>
         </div>
     </div>

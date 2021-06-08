@@ -329,13 +329,15 @@ namespace HADES.Controllers
             string guid = ad.getGroupGUIDByDn(DN);
             Dictionary<UserAD, Util.Action> updatedGroupMembers = UpdatedGroupMembersKeyValueActions(viewModel);
 
-
-            List<string> selectedOwnersNames = DeserializeUsers(viewModel.SelectedOwners);
-            List<User> selectedOwners = db.User.Where(x => selectedOwnersNames.Contains(x.GetName())).ToList();
-            OwnerGroup ownerGroup = db.OwnerGroup.Where(x => x.GUID == guid).Include(x => x.OwnerGroupUsers).FirstOrDefault();
-
+            List<User> selectedOwners = null;
+            OwnerGroup ownerGroup = null;
             if (ConnexionUtil.CurrentUser(User).GetRole().AdCrudAccess)
             {
+                List<string> selectedOwnersNames = DeserializeUsers(viewModel.SelectedOwners);
+                selectedOwners = db.User.ToList().Where(x => selectedOwnersNames.Contains(x.GetName())).ToList();
+                ownerGroup = db.OwnerGroup.Where(x => x.GUID == guid).Include(x => x.OwnerGroupUsers).FirstOrDefault();
+
+
                 ownerGroup.OwnerGroupUsers.Clear();
                 selectedOwners.ForEach(user => ownerGroup.OwnerGroupUsers.Add(new OwnerGroupUser { User = user, OwnerGroup = ownerGroup }));
             }
@@ -353,10 +355,14 @@ namespace HADES.Controllers
                 DateTime dateExp = viewModel.GroupAD.ExpirationDate;
                 if (ad.modifyGroup(DN, group, viewModel.SelectedNodeName, updatedGroupMembers))
                 {
-                    selectedOwners.ForEach(x => db.Entry(x).State = EntityState.Modified);
-                    db.Entry(ownerGroup).State = EntityState.Modified;
+                    if (ConnexionUtil.CurrentUser(User).GetRole().AdCrudAccess)
+                    {
+                        selectedOwners.ForEach(x => db.Entry(x).State = EntityState.Modified);
+                        db.Entry(ownerGroup).State = EntityState.Modified;
 
-                    db.SaveChanges();
+                        db.SaveChanges();
+                    }
+
                     return RedirectToAction("UpdateContent", "Home", new
                     {
                         selectedPathForContent = viewModel.SelectedPath,
