@@ -232,6 +232,6 @@
     <value>These characters are forbidden: {0}</value>
   </data>
   <data name="EmailsNotUnique" xml:space="preserve">
-    <value>There are identical emails</value>
+    <value>There are identical emails </value>
   </data>
 </root>
