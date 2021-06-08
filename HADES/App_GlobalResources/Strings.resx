@@ -231,4 +231,7 @@
   <data name="OuGroupNameError" xml:space="preserve">
     <value>Ces caractères sont interdits: {0}</value>
   </data>
+  <data name="EmailsNotUnique" xml:space="preserve">
+    <value>Il y a des courriels identiques</value>
+  </data>
 </root>

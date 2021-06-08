@@ -81,8 +81,7 @@
                             <input type="hidden" asp-for="@Model.Emails[i].UserConfigId" />
                             <input type="email" asp-for="@Model.Emails[i].Address" class="form-control" />
                             <div class="col">
-                                <span asp-validation-for="@Model.Emails[i].Address"
-                                      class="text-danger"></span>
+                                <span asp-validation-for="@Model.Emails[i].Address" class="text-danger"></span>
                             </div>
                         </td>
                         <td>
@@ -108,6 +107,9 @@
                 <td colspan="6"><a asp-action="CreateEmail"><h2><i class="fa fa-envelope" style="padding-right: .5rem;"></i><i class="fa fa-plus"></i></h2></a></td>
             </tr>
         </table>
+    </div>
+    <div class="col">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     </div>
     <div class="row">
         <div class="col-sm-12 col-lg-12">
