@@ -12,6 +12,9 @@
     <h1 class="m-3 p-3"><i class="fa fa-users-cog fa-fw mr-3"></i>@HADES.Strings.UserConfig</h1>
 </div>
 
+<div class="text-danger text-center col-12 m-1 p-1">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+</div>
 <form asp-action="UserConfig">
     <div class="form-group row">
         <input type="hidden" asp-for="@Model.UserConfig.Id" />
@@ -107,9 +110,6 @@
                 <td colspan="6"><a asp-action="CreateEmail"><h2><i class="fa fa-envelope" style="padding-right: .5rem;"></i><i class="fa fa-plus"></i></h2></a></td>
             </tr>
         </table>
-    </div>
-    <div class="col">
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     </div>
     <div class="row">
         <div class="col-sm-12 col-lg-12">

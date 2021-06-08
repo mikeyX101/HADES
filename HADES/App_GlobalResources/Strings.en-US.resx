@@ -228,10 +228,16 @@
   <data name="Required" xml:space="preserve">
     <value>Field required</value>
   </data>
-  <data name="OuGroupNameError" xml:space="preserve">
+  <data name="OuGroupNameFobiddenCharactersError" xml:space="preserve">
     <value>These characters are forbidden: {0}</value>
   </data>
   <data name="EmailsNotUnique" xml:space="preserve">
     <value>There are identical emails </value>
+  </data>
+  <data name="OuGroupNameAlreadyExistsError" xml:space="preserve">
+    <value>Folder/Group named '{0}' already exists</value>
+  </data>
+  <data name="CreateOrEditOUGroupError" xml:space="preserve">
+    <value>Creation/Modification of folder/group error</value>
   </data>
 </root>
