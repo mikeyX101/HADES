@@ -13,11 +13,11 @@
         <nav>
             <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
                 <a class="nav-item nav-link active" id="nav-groupName-tab" data-toggle="tab" href="#nav-groupInfo@(i)"
-                   role="tab" aria-controls="nav-home" aria-selected="true">General</a>
+                   role="tab" aria-controls="nav-home" aria-selected="true">@Localizer["General"]</a>
                 <a class="nav-item nav-link" id="nav-members-tab" data-toggle="tab" href="#nav-members@(i)"
-                   role="tab" aria-controls="nav-members" aria-selected="false">Members</a>
+                   role="tab" aria-controls="nav-members" aria-selected="false">@Localizer["Members"]</a>
                 <a class="nav-item nav-link" id="nav-owners-tab" data-toggle="tab" href="#nav-owners@(i)"
-                   role="tab" aria-controls="nav-owners" aria-selected="false">Owners</a>
+                   role="tab" aria-controls="nav-owners" aria-selected="false">@Localizer["Owners"]</a>
             </div>
         </nav>
 
@@ -37,7 +37,7 @@
                 @if (u.GetRole().AdCrudAccess)
                 {
                     <div class="form-group row">
-                        <label asp-for="@Model.GroupAD.SamAccountName" class="col-sm-2 col-form-label">Name</label>
+                        <label asp-for="@Model.GroupAD.SamAccountName" class="col-sm-2 col-form-label">@Localizer["SamAccount"]</label>
                         <div class="col-sm-10">
                             <input asp-for="@Model.GroupAD.SamAccountName" class="form-control">
                         </div>
@@ -46,7 +46,7 @@
                 else
                 {
                     <div class="form-group row">
-                        <label asp-for="@Model.GroupAD.SamAccountName" class="col-sm-2 col-form-label">Name</label>
+                        <label asp-for="@Model.GroupAD.SamAccountName" class="col-sm-2 col-form-label">@Localizer["SamAccount"]</label>
                         <div class="col-sm-10">
                             <input asp-for="@Model.GroupAD.SamAccountName" class="form-control" readonly>
                         </div>
@@ -55,7 +55,7 @@
 
 
                 <div class="form-group row">
-                    <label asp-for="@Model.GroupAD.Description" class="col-sm-2 col-form-label">Description</label>
+                    <label asp-for="@Model.GroupAD.Description" class="col-sm-2 col-form-label">@Localizer["Description"]</label>
                     <div class="col-sm-10">
                         <input asp-for="@Model.GroupAD.Description" class="form-control" placeholder="">
                     </div>
@@ -64,7 +64,7 @@
                 @if (u.GetRole().AdCrudAccess)
                 {
                     <div class="form-group row">
-                        <label asp-for="@Model.GroupAD.Email" class="col-sm-2 col-form-label">Email</label>
+                        <label asp-for="@Model.GroupAD.Email" class="col-sm-2 col-form-label">@Localizer["Email"]</label>
                         <div class="col-sm-10">
                             <input asp-for="@Model.GroupAD.Email" type="Email" class="form-control" id="Email" placeholder="Email">
                         </div>
@@ -73,7 +73,7 @@
                 else
                 {
                     <div class="form-group row">
-                        <label asp-for="@Model.GroupAD.Email" class="col-sm-2 col-form-label">Email</label>
+                        <label asp-for="@Model.GroupAD.Email" class="col-sm-2 col-form-label">@Localizer["Email"]</label>
                         <div class="col-sm-10">
                             <input asp-for="@Model.GroupAD.Email" type="Email" class="form-control" id="Email" placeholder="Email" readonly>
                         </div>
@@ -100,14 +100,14 @@
 
 
                 <div class="form-group row">
-                    <label asp-for="@Model.GroupAD.ExpirationDate" class="col-sm-2 col-form-label">Expiration Date</label>
+                    <label asp-for="@Model.GroupAD.ExpirationDate" class="col-sm-2 col-form-label">@Localizer["Expiration"]</label>
                     <div class="col-sm-10">
                         <input asp-for="@Model.GroupAD.ExpirationDate" id="datepickerExpIdb@(i)" class="form-control" type="text" value="" readonly />
                     </div>
                 </div>
 
                 <div class="form-group row">
-                    <label asp-for="@Model.GroupAD.Notes">Notes</label>
+                    <label asp-for="@Model.GroupAD.Notes">@Localizer["Notes"]</label>
                     <textarea asp-for="@Model.GroupAD.Notes" class="form-control" id="Notes" rows="3"></textarea>
                 </div>
 
@@ -124,6 +124,12 @@
             </div>
             <!-- Owners form -->
             <div class="tab-pane fade tab-absolute" id="nav-owners@(i)" role="tabpanel" aria-labelledby="nav-owners-tab">
+                @if (!u.GetRole().AdCrudAccess)
+                {
+                    <div class="text-danger text-center col-12 m-1 p-1">
+                        @Localizer["Unauthorized"]
+                    </div>
+                }
                 <div class="directorist-select directorist-select-multi" id="EditOwnersMultiSelect@(i)" data-isSearch="true" data-multiSelect='@Model.UsersAD'>
                     <input id="selectedOwner@(i)" type="hidden" asp-for="@Model.SelectedOwners">
                 </div>

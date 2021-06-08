@@ -329,17 +329,26 @@ namespace HADES.Controllers
             string guid = ad.getGroupGUIDByDn(DN);
             Dictionary<UserAD, Util.Action> updatedGroupMembers = UpdatedGroupMembersKeyValueActions(viewModel);
 
-            List<User> selectedOwners = null;
-            OwnerGroup ownerGroup = null;
+            OwnerGroup ownerGroup = db.OwnerGroup.Where(x => x.GUID == guid).Include(x => x.OwnerGroupUsers).FirstOrDefault();
+            List<User> ownersDB = new List<User>();
             if (ConnexionUtil.CurrentUser(User).GetRole().AdCrudAccess)
             {
                 List<string> selectedOwnersNames = DeserializeUsers(viewModel.SelectedOwners);
-                selectedOwners = db.User.ToList().Where(x => selectedOwnersNames.Contains(x.GetName())).ToList();
-                ownerGroup = db.OwnerGroup.Where(x => x.GUID == guid).Include(x => x.OwnerGroupUsers).FirstOrDefault();
+
+                List<UserAD> ownersAD = ad.getAllUsers().Where(x => selectedOwnersNames.Contains(x.SamAccountName)).ToList();
+                ownersDB = new();
+                Role role = db.Role.Where(x => x.Name == "Owner").FirstOrDefault();
 
 
-                ownerGroup.OwnerGroupUsers.Clear();
-                selectedOwners.ForEach(user => ownerGroup.OwnerGroupUsers.Add(new OwnerGroupUser { User = user, OwnerGroup = ownerGroup }));
+                foreach (var owner in ownersAD)
+                {
+                    if (db.User.Where(x => x.GUID == owner.ObjectGUID).Any())
+                    {
+                        ownersDB.Add(db.User.Where(x => x.GUID == owner.ObjectGUID).FirstOrDefault());
+                    }
+                    else
+                        ownersDB.Add(new User { Attempts = 0, Date = DateTime.Now, GUID = owner.ObjectGUID, Role = role, UserConfig = new() });
+                }
             }
 
             if (!ConnexionUtil.CurrentUser(User).GetRole().AdCrudAccess)
@@ -357,8 +366,8 @@ namespace HADES.Controllers
                 {
                     if (ConnexionUtil.CurrentUser(User).GetRole().AdCrudAccess)
                     {
-                        selectedOwners.ForEach(x => db.Entry(x).State = EntityState.Modified);
-                        db.Entry(ownerGroup).State = EntityState.Modified;
+                        ownerGroup.OwnerGroupUsers.Clear();
+                        ownersDB.ForEach(user => ownerGroup.OwnerGroupUsers.Add(new OwnerGroupUser { User = user, OwnerGroup = ownerGroup }));
 
                         db.SaveChanges();
                     }
