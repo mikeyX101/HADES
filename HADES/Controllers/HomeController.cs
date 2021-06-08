@@ -443,11 +443,6 @@ namespace HADES.Controllers
         [Authorize]
         public IActionResult GetTabsContent(string dn, string selectedPath, string selectedNodeName, int index, string expandedNodesName)
         {
-            if (!ConnexionUtil.CurrentUser(this.User).GetRole().AdCrudAccess) // ACCESS CONTROL
-            {
-                return RedirectToAction("MainView", "Home");
-            }
-
             GroupAD group = ad.getGroupInformation(dn);
             IEnumerable<string> members = group.Members.Select(x => x.SamAccountName);
 
