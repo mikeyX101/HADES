@@ -80,9 +80,7 @@
                     </div>
                 }
 
-                @if (u.GetRole().AdCrudAccess)
-                {
-                    <script type="text/javascript">
+                <script type="text/javascript">
 
                     var today = new Date();
                     var nextYear = new Date(today.getFullYear() + 1, today.getMonth(), today.getDate());
@@ -90,16 +88,15 @@
 
 
                     $("#datepickerExpIdb@(i)")
-                            .val(dateExp.toISOString().substring(0, 10))
-                        .datepicker({
-                            maxDate: nextYear,
-                            minDate: today,
-                            defaultDate: dateExp,
-                            dateFormat: "yy-mm-dd",
-                        });
+                        .val(dateExp.toISOString().substring(0, 10))
+                        @if (u.GetRole().AdCrudAccess)
+                        {
+                                Html.Raw(".datepicker({maxDate: nextYear,minDate: today,defaultDate: dateExp,dateFormat: 'yy-mm-dd',});");
+                        }
 
-                    </script>
-                }
+
+                </script>
+
 
 
                 <div class="form-group row">
