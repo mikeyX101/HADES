@@ -231,6 +231,9 @@
   <data name="OuGroupNameError" xml:space="preserve">
     <value>These characters are forbidden: {0}</value>
   </data>
+   <data name="EmailsNotUnique" xml:space="preserve">
+    <value>There are identical emails </value>
+  </data>
   <data name="DeleteOU" xml:space="preserve">
     <value>Deleting an organizational unit</value>
   </data>
