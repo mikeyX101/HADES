@@ -99,7 +99,7 @@ namespace HADES.Controllers
             {
                 viewModel.Error = (string)TempData["Error"];
             }
-            
+
 
             viewModel.SelectedPath = selectedPathForContent;
             viewModel.ExpandedNodesName = expandedNodeNames;
@@ -298,7 +298,7 @@ namespace HADES.Controllers
                     db.SaveChanges();
 
                 }
-            } 
+            }
             else
             {
                 viewModel.Error = Localizer["CreateGroupError"] + "<br>";
@@ -321,25 +321,31 @@ namespace HADES.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult EditGroupModal([Bind("GroupAD, SelectedNodeName, SelectedPath, BeforeEditMembers, SelectedMembers, OuGroup, SelectedOwners, ExpandedNodesName")] MainViewViewModel viewModel)
         {
-            if (!ConnexionUtil.CurrentUser(this.User).GetRole().AdCrudAccess) // ACCESS CONTROL
-            {
-                return RedirectToAction("MainView", "Home");
-            }
-
             ApplicationDbContext db = new ApplicationDbContext();
 
             GroupAD group = viewModel.GroupAD;
             string DN = FindDN(viewModel.SelectedPath, viewModel.OuGroup);
+            GroupAD oldgroup = ad.getGroupInformation(DN);
             string guid = ad.getGroupGUIDByDn(DN);
             Dictionary<UserAD, Util.Action> updatedGroupMembers = UpdatedGroupMembersKeyValueActions(viewModel);
 
 
             List<string> selectedOwnersNames = DeserializeUsers(viewModel.SelectedOwners);
-            List<User> selectedOwners = db.User.ToList().Where(x => selectedOwnersNames.Contains(x.GetName())).ToList();
+            List<User> selectedOwners = db.User.Where(x => selectedOwnersNames.Contains(x.GetName())).ToList();
             OwnerGroup ownerGroup = db.OwnerGroup.Where(x => x.GUID == guid).Include(x => x.OwnerGroupUsers).FirstOrDefault();
 
-            ownerGroup.OwnerGroupUsers.Clear();
-            selectedOwners.ForEach(user => ownerGroup.OwnerGroupUsers.Add(new OwnerGroupUser { User = user, OwnerGroup = ownerGroup }));
+            if (ConnexionUtil.CurrentUser(User).GetRole().AdCrudAccess)
+            {
+                ownerGroup.OwnerGroupUsers.Clear();
+                selectedOwners.ForEach(user => ownerGroup.OwnerGroupUsers.Add(new OwnerGroupUser { User = user, OwnerGroup = ownerGroup }));
+            }
+
+            if (!ConnexionUtil.CurrentUser(User).GetRole().AdCrudAccess)
+            {
+                group.SamAccountName = oldgroup.SamAccountName;
+                group.Email = oldgroup.Email;
+                group.ExpirationDate = oldgroup.ExpirationDate;
+            }
 
             ModelState.Remove("NewName");
             if (ModelState.IsValid)
@@ -375,7 +381,7 @@ namespace HADES.Controllers
                 {
                     Serilog.Log.Information("Le dossier(OU) " + viewModel.NewName + " a été créé");
                 }
-            } 
+            }
             else
             {
                 viewModel.Error = Localizer["CreateOUError"] + "<br>";
