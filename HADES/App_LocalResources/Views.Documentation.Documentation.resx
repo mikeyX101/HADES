@@ -176,6 +176,12 @@
     <value>Lien vers le Genérateur</value>
   </data>
   <data name="roleTitle" xml:space="preserve">
-    <value>Role</value>
+    <value>Rôles</value>
+  </data>
+  <data name="DeleteOU" xml:space="preserve">
+    <value>Suppression d'une unité organisationelle</value>
+  </data>
+  <data name="DeleteOUINFO" xml:space="preserve">
+    <value>Si la case, Protéger l'objet contre la suppression accidentelle, est coché, Hades  ne sera pas en mesure de supprimer l'unité organisationelle dans l'Active Directory, comme c'est cas dans l'Active Directory. </value>
   </data>
 </root>

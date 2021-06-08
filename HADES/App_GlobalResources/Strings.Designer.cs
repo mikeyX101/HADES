@@ -88,6 +88,15 @@ namespace HADES {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Créer.
+        /// </summary>
+        public static string Create {
+            get {
+                return ResourceManager.GetString("Create", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Erreur lors de la création/modification d&apos;un dossier/group.
         /// </summary>
         public static string CreateOrEditOUGroupError {
@@ -106,11 +115,29 @@ namespace HADES {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sombre.
+        /// </summary>
+        public static string Dark {
+            get {
+                return ResourceManager.GetString("Dark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Supprimer.
         /// </summary>
         public static string Delete {
             get {
                 return ResourceManager.GetString("Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Courriel.
+        /// </summary>
+        public static string Email {
+            get {
+                return ResourceManager.GetString("Email", resourceCulture);
             }
         }
         
@@ -313,11 +340,29 @@ namespace HADES {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Vert.
+        /// </summary>
+        public static string Green {
+            get {
+                return ResourceManager.GetString("Green", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ces caractères sont interdits:   &quot; [ ] : ; | = + * ? &lt; &gt; / \ ,.
         /// </summary>
         public static string InvalidCharacters {
             get {
                 return ResourceManager.GetString("InvalidCharacters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clair.
+        /// </summary>
+        public static string Light {
+            get {
+                return ResourceManager.GetString("Light", resourceCulture);
             }
         }
         

@@ -13,11 +13,13 @@
     <link rel="stylesheet" href="~/css/@u.GetUserConfig().ThemeFile/@themeFileCss">
     <link rel="stylesheet" href="~/lib/bootstrap-icons/bootstrap-icons.min.css">
     <link rel="stylesheet" href="~/lib/pureScriptSelect-master/style.css" />
-    <link rel="stylesheet" href="~/css/AppGeneral.css">
+
     <link rel="stylesheet" href="~/css/@u.GetUserConfig().ThemeFile/jquery-ui.css" type="text/css" />
+    <link rel="stylesheet" href="~/css/AppGeneral.css">
 
     <script src="~/lib/jquery/jquery.min.js"></script>
     @RenderSection("scriptsPreBootStrap", false)
+    <script src="~/lib/jquery-ui/jquery-ui.min.js"></script>
     <script src="~/lib/popper.js/umd/popper.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
     @RenderSection("scripts", false)
@@ -80,10 +82,10 @@
                             }
                             @if (u.GetRole().AppConfigAccess)
                             {
-                        <a class="dropdown-item" asp-action="Documentation" asp-controller="Documentation" asp-area="">
-                            <i class="fa fa-info-circle fa-fw mr-2"></i>
-                            @Localizer["Documentation"]
-                        </a>
+                                <a class="dropdown-item" asp-action="Documentation" asp-controller="Documentation" asp-area="">
+                                    <i class="fa fa-info-circle fa-fw mr-2"></i>
+                                    @Localizer["Documentation"]
+                                </a>
                             }
                         </div>
                     </div>
@@ -110,6 +112,12 @@
             @RenderBody()
         </main>
     </div>
+
+    <script>
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
 
 </body>
 </html>

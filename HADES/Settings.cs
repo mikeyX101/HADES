@@ -12,7 +12,7 @@ namespace HADES
 				{
 					return appSettings;
 				}
-				throw new InvalidOperationException("Setting must be initiated before using it. Use Settings.Initiate() on app startup.");
+				throw new InvalidOperationException("Settings must be initiated before using it. Use Settings.Initiate() on app startup.");
 			}
 		}
 

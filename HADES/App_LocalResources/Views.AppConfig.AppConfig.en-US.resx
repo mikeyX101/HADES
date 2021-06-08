@@ -120,8 +120,8 @@
   <data name="AccountDN" xml:space="preserve">
     <value>Account DN</value>
   </data>
-  <data name="AdminGroup" xml:space="preserve">
-    <value>Administrator group</value>
+  <data name="AdminGroups" xml:space="preserve">
+    <value>Administrator groups</value>
   </data>
   <data name="BaseDN" xml:space="preserve">
     <value>Base DN</value>
@@ -174,8 +174,8 @@
   <data name="SMTPServer" xml:space="preserve">
     <value>SMTP Server Adress</value>
   </data>
-  <data name="SuperAdminGroup" xml:space="preserve">
-    <value>Super administrator group</value>
+  <data name="SuperAdminGroups" xml:space="preserve">
+    <value>Super administrator groups</value>
   </data>
   <data name="SyncField" xml:space="preserve">
     <value>Sync field</value>
