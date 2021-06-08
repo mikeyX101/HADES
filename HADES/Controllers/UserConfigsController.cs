@@ -80,7 +80,8 @@ namespace HADES.Controllers
 
         private bool AreEmailAddressesUnique(UserConfigViewModel viewModel)
         {
-            return viewModel.Emails.Select(item => item.Address).Distinct().Count() == viewModel.Emails.Select(item => item.Address).Count();
+            return viewModel.Emails != null ? 
+                viewModel.Emails.Select(item => item.Address).Distinct().Count() == viewModel.Emails.Select(item => item.Address).Count() : true;
         }
 
         [Authorize]
