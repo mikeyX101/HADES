@@ -917,7 +917,7 @@ namespace HADES.Util
                 connection = connectionAlreadyOpen;
             }
 
-            LdapSearchResults lsc = (LdapSearchResults)connection.Search(ADSettingsCache.Ad.BaseDN, LdapConnection.ScopeSub, "(&(objectClass=user)(memberOf=" + groupDN + "))", null, false);
+            LdapSearchResults lsc = (LdapSearchResults)connection.Search(ADSettingsCache.Ad.BaseDN, LdapConnection.ScopeSub, "(&(objectClass=user)(memberOf:1.2.840.113556.1.4.1941:=" + groupDN + "))", null, false);
             List<UserAD> users = new List<UserAD>();
 
             while (lsc.HasMore())

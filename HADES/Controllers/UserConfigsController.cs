@@ -18,27 +18,25 @@ namespace HADES.Controllers
 	public class UserConfigsController : LocalizedController<HomeController>
     {
 
-        public UserConfigsController(IStringLocalizer<HomeController> localizer, ApplicationDbContext context) : base(localizer)
-        {
-        }
+        public UserConfigsController(IStringLocalizer<HomeController> localizer) : base(localizer) { }
 
         [Authorize]
         public IActionResult UserConfig()
         {
             UserConfigService service = new();
-            var viewModel = service.UserConfig(ConnexionUtil.CurrentUser(this.User).GetUserConfig());
+            var viewModel = service.UserConfig(ConnexionUtil.CurrentUser(User).GetUserConfig());
             viewModel.Languages = new List<SelectListItem>()
             {
-                new SelectListItem {Text = HADES.Strings.French, Value = "fr-CA"},
-                new SelectListItem {Text = HADES.Strings.English, Value = "en-US"},
+                new SelectListItem {Text = Strings.French, Value = "fr-CA"},
+                new SelectListItem {Text = Strings.English, Value = "en-US"},
                // new SelectListItem {Text = HADES.Strings.Spanish, Value = "es-US"}, // SUPPORT es-US
                // new SelectListItem {Text = HADES.Strings.Portuguese, Value = "pt-BR"} // SUPPORT pt-BR
             };
             viewModel.Themes = new List<SelectListItem>() //TODO Translate text with readable and not "technical" names
             {
-                new SelectListItem {Text = "Dark", Value = "site"},
-                new SelectListItem {Text = "Green", Value = "greenmint"},
-                new SelectListItem {Text = "Light", Value = "white"}
+                new SelectListItem {Text = Strings.Dark, Value = "site"},
+                new SelectListItem {Text = Strings.Green, Value = "greenmint"},
+                new SelectListItem {Text = Strings.Light, Value = "white"}
             };
 
             return View(viewModel);

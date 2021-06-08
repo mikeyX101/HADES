@@ -1,10 +1,11 @@
 ﻿@model HADES.Models.AdminGroup
 
 @{
-    ViewData["Title"] = "CreateAdminGroup";
+    ViewData["Title"] = Localizer["AdminGroup"];
 }
 
-<h4>Admin Group</h4>
+<br />
+<h4>@Localizer["AdminGroup"]</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -18,14 +19,14 @@
                 <input type="hidden" name="appconfig" value="@ViewBag.AppConfigId" />
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="@Strings.Create" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 <div>
     <p class="text-danger">@ViewBag.Error</p>
-    <a asp-action="AppConfig">@HADES.Strings.Back</a>
+    <a asp-action="AppConfig" class="btn btn-secondary">@Strings.Back</a>
 </div>
 
 @section Scripts {
