@@ -368,8 +368,6 @@ namespace HADES.Util
                     //GUID
                     data.ObjectGUID = getObjectGUID(nextEntry);
 
-                    Console.WriteLine(data);
-
                     root.Add(data);
                 }
                 catch (KeyNotFoundException e)
