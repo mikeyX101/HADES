@@ -334,6 +334,7 @@ namespace HADES.Util
                     {
                         data.Type = "ou";
                         data.SamAccountName = getAttributeValue(nextEntry, "Name");
+                       
                     }
 
                     // PATH OF THE OBJECT
@@ -343,16 +344,18 @@ namespace HADES.Util
 
                         data.Path += "/" + rootOuName[0].Split("=")[1];
                     }
-                    string[] path = nextEntry.Dn.Split(',');
 
-                    for (int i = path.Length - 1; i >= 0; i--)
+                    string[] path = nextEntry.Dn.Split(',');
+                    
+                    // We stop when 1 >= because we don't when the OUname or the GroupName in the path
+                    for (int i = path.Length - 1; i >= 1; i--)
                     {
-                        if (path[i].Contains("DC=") || path[i].Contains("OU=" + data.SamAccountName) || path[i].Contains("CN=" + data.SamAccountName) || ADSettingsCache.Ad.RootOu.Contains(path[i]))
+                        if (path[i].Contains("DC=") || ADSettingsCache.Ad.RootOu.Contains(path[i]))
                         {
-                            path[i] = null;
+                            path[i] = "";
                         }
 
-                        if (path[i] != null)
+                        if (path[i] != "")
                         {
                             data.Path += "/" + path[i].Split("=")[1];
                         }
@@ -364,6 +367,8 @@ namespace HADES.Util
 
                     //GUID
                     data.ObjectGUID = getObjectGUID(nextEntry);
+
+                    Console.WriteLine(data);
 
                     root.Add(data);
                 }
