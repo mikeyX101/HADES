@@ -2,6 +2,8 @@
 
 @{
     IUser u = HADES.Util.ConnexionUtil.CurrentUser(Context.User);
+
+    string pureScriptSelectLocale = System.Threading.Thread.CurrentThread.CurrentUICulture.Name.ToLower().Replace('-', '_');
 }
 
 @section scripts
@@ -12,6 +14,11 @@
     <script src="~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.min.js"></script>
     <script src="~/lib/pureScriptSelect-master/script.js"></script>
 }
+
+@*Pure Script Select Locale*@
+<script type="text/javascript">
+    pureScriptSelectGlobals.locale = "@pureScriptSelectLocale";
+</script>
 
 @* Main *@
 

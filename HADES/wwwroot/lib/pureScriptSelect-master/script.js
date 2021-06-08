@@ -1,4 +1,15 @@
 "use strict";
+
+const pureScriptSelectLocalization = {
+    en_us: "Search...",
+    fr_ca: "Rechercher...",
+    es_us: "Buscar...",
+    pt_br: "Procurar..."
+};
+const pureScriptSelectGlobals = {
+    locale: "en_us"
+};
+
 const pureScriptSelect = (selector) => {
     let selectors = document.querySelectorAll(selector);
 
@@ -49,7 +60,7 @@ const pureScriptSelect = (selector) => {
                 <span class="directorist-select__label--icon"><img src="assets/svg/angle-down-solid.svg" alt=""></span>
             </div>
             <div class="directorist-select__dropdown">
-                <input class='directorist-select__search ${isSearch ? 'directorist-select__search--show' : 'directorist-select__search--hide'}' type='text' class='value' placeholder='Filter Options....' />
+                <input class='directorist-select__search ${isSearch ? 'directorist-select__search--show' : 'directorist-select__search--hide'}' type='text' class='value' placeholder='${pureScriptSelectLocalization[pureScriptSelectGlobals.locale]}' />
                 <div class="directorist-select__dropdown--inner"></div>
             </div>`;
             sibling.innerHTML = html;
@@ -185,7 +196,7 @@ const pureScriptSelect = (selector) => {
             let html = `
             <div class="directorist-select__label">
                 <div class="directorist-select__selected-list"></div>
-                <input type="text" class='directorist-select__search ${isSearch ? 'directorist-select__search--show' : 'directorist-select__search--hide'}' type='text' class='value' placeholder='Filter Options....' />
+                <input type="text" class='directorist-select__search ${isSearch ? 'directorist-select__search--show' : 'directorist-select__search--hide'}' type='text' class='value' placeholder='${pureScriptSelectLocalization[pureScriptSelectGlobals.locale]}' />
             </div>
             <div class="directorist-select__dropdown">            
                 <div class="directorist-select__dropdown--inner"></div>

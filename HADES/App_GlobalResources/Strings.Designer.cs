@@ -133,6 +133,15 @@ namespace HADES {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Description.
+        /// </summary>
+        public static string Description {
+            get {
+                return ResourceManager.GetString("Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Courriel.
         /// </summary>
         public static string Email {
@@ -322,11 +331,29 @@ namespace HADES {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Date d&apos;expiration.
+        /// </summary>
+        public static string ExpirationDate {
+            get {
+                return ResourceManager.GetString("ExpirationDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Français.
         /// </summary>
         public static string French {
             get {
                 return ResourceManager.GetString("French", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Général.
+        /// </summary>
+        public static string General {
+            get {
+                return ResourceManager.GetString("General", resourceCulture);
             }
         }
         
@@ -345,6 +372,15 @@ namespace HADES {
         public static string Green {
             get {
                 return ResourceManager.GetString("Green", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Créer un nouveau groupe.
+        /// </summary>
+        public static string GroupCreate {
+            get {
+                return ResourceManager.GetString("GroupCreate", resourceCulture);
             }
         }
         
@@ -376,6 +412,24 @@ namespace HADES {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Membres.
+        /// </summary>
+        public static string Members {
+            get {
+                return ResourceManager.GetString("Members", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nom.
+        /// </summary>
+        public static string Name {
+            get {
+                return ResourceManager.GetString("Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Une valeur négative à été entrée alors que l&apos;application attendaient une valeur positive.
         /// </summary>
         public static string NegativeValueError {
@@ -390,6 +444,15 @@ namespace HADES {
         public static string NoLog {
             get {
                 return ResourceManager.GetString("NoLog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Notes.
+        /// </summary>
+        public static string Notes {
+            get {
+                return ResourceManager.GetString("Notes", resourceCulture);
             }
         }
         
@@ -417,6 +480,15 @@ namespace HADES {
         public static string OuGroupNameFobiddenCharactersError {
             get {
                 return ResourceManager.GetString("OuGroupNameFobiddenCharactersError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Propriétaires.
+        /// </summary>
+        public static string Owners {
+            get {
+                return ResourceManager.GetString("Owners", resourceCulture);
             }
         }
         

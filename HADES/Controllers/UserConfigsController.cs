@@ -29,7 +29,7 @@ namespace HADES.Controllers
                // new SelectListItem {Text = HADES.Strings.Spanish, Value = "es-US"}, // SUPPORT es-US
                // new SelectListItem {Text = HADES.Strings.Portuguese, Value = "pt-BR"} // SUPPORT pt-BR
             };
-            viewModel.Themes = new List<SelectListItem>() //TODO Translate text with readable and not "technical" names
+            viewModel.Themes = new List<SelectListItem>()
             {
                 new SelectListItem {Text = Strings.Dark, Value = "site"},
                 new SelectListItem {Text = Strings.Green, Value = "greenmint"},
@@ -46,7 +46,7 @@ namespace HADES.Controllers
         public async Task<IActionResult> UserConfig([Bind("UserConfig,Emails")] UserConfigViewModel viewModel)
         {
             UserConfigService service = new();
-            if (!AreEmailAddressesUnique(viewModel))
+            if (viewModel.Emails != null && !AreEmailAddressesUnique(viewModel))
             {
                 ModelState.AddModelError("", HADES.Strings.EmailsNotUnique);
             }

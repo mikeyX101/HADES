@@ -5,7 +5,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="GroupCreateLbl">Create new group</h5>
+                <h5 class="modal-title" id="GroupCreateLbl">@Strings.GroupCreate</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -15,14 +15,14 @@
                     <nav>
                         <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
                             <a class="nav-item nav-link active" id="nav-groupName-tab" data-toggle="tab" href="#nav-groupName"
-                               role="tab" aria-controls="nav-home" aria-selected="true">General</a>
+                               role="tab" aria-controls="nav-home" aria-selected="true">@Strings.General</a>
                             @{
                                 var tabClass = Model != null ? "nav-item nav-link" : "nav-item nav-link disabled";
                             }
-                            <a class="@tabClass" id="nav-members-tab" data-toggle="tab" href="#nav-members"
-                               role="tab" aria-controls="nav-members" aria-selected="false">Members</a>
-                            <a class="@tabClass" id="nav-owners-tab" data-toggle="tab" href="#nav-owners"
-                               role="tab" aria-controls="nav-owners" aria-selected="false">Owners</a>
+                        <a class="@tabClass" id="nav-members-tab" data-toggle="tab" href="#nav-members"
+                           role="tab" aria-controls="nav-members" aria-selected="false">@Strings.Members</a>
+                        <a class="@tabClass" id="nav-owners-tab" data-toggle="tab" href="#nav-owners"
+                           role="tab" aria-controls="nav-owners" aria-selected="false">@Strings.Owners</a>
                         </div>
                     </nav>
 
@@ -37,7 +37,7 @@
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
                             <div class="form-group row">
-                                <label asp-for="GroupAD.SamAccountName" class="col-sm-2 col-form-label">Name</label>
+                                <label asp-for="GroupAD.SamAccountName" class="col-sm-2 col-form-label">@Strings.Name</label>
                                 <div class="col-sm-10">
                                     <input asp-for="GroupAD.SamAccountName" class="form-control" placeholder="Name" pattern='^[^/[\]:;|=+*?<>,"\\]*$' required >
                                     <div class="invalid-tooltip">
@@ -46,15 +46,15 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label asp-for="GroupAD.Description" class="col-sm-2 col-form-label">Description</label>
+                                <label asp-for="GroupAD.Description" class="col-sm-2 col-form-label">@Strings.Description</label>
                                 <div class="col-sm-10">
                                     <input asp-for="GroupAD.Description" class="form-control" placeholder="Description">
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label asp-for="GroupAD.Email" class="col-sm-2 col-form-label">Email</label>
+                                <label asp-for="GroupAD.Email" class="col-sm-2 col-form-label">@Strings.Email</label>
                                 <div class="col-sm-10">
-                                    <input asp-for="GroupAD.Email" type="Email" class="form-control" id="Email" placeholder="Email">
+                                    <input asp-for="GroupAD.Email" type="Email" class="form-control" id="Email" placeholder="@Strings.Email">
                                 </div>
                             </div>
 
@@ -75,7 +75,7 @@
                             </script>
 
                             <div class="form-group row">
-                                <label asp-for="GroupAD.ExpirationDate" class="col-sm-2 col-form-label">Expiration Date</label>
+                                <label asp-for="GroupAD.ExpirationDate" class="col-sm-2 col-form-label">@Strings.ExpirationDate</label>
                                 <div class="col-sm-10">
                                     <input asp-for="GroupAD.ExpirationDate" id="dateExp" class="form-control" type="text" value="" readonly />
                                 </div>
@@ -83,7 +83,7 @@
 
 
                             <div class="form-group row">
-                                <label asp-for="GroupAD.Notes">Notes</label>
+                                <label asp-for="GroupAD.Notes">@Strings.Notes</label>
                                 <textarea asp-for="GroupAD.Notes" class="form-control" id="Notes" rows="3"></textarea>
                             </div>
 
@@ -108,8 +108,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary" id="btnSave">Ok</button>
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="btnSave">@Strings.Create</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">@Strings.Back</button>
                 </div>
             </form>
 

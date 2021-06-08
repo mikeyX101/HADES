@@ -120,4 +120,7 @@
   <data name="Folder" xml:space="preserve">
     <value>Folder</value>
   </data>
+  <data name="EditGroup" xml:space="preserve">
+    <value>Edit a group</value>
+  </data>
 </root>
