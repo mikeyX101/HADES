@@ -144,7 +144,7 @@
 
 <script type="text/javascript">
     @if (u.GetRole().AdCrudAccess) {
-        @Html.Raw("pureScriptSelect('#EditOwnersMultiSelect@(i)');");
+        @Html.Raw("pureScriptSelect('#EditOwnersMultiSelect"+ i +"');");
     }
     pureScriptSelect('#EditMembersMultiSelect@(i)');
 </script>
