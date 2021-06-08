@@ -228,7 +228,7 @@
   <data name="Required" xml:space="preserve">
     <value>Champ recquis</value>
   </data>
-  <data name="OuGroupNameError" xml:space="preserve">
+  <data name="OuGroupNameFobiddenCharactersError" xml:space="preserve">
     <value>Ces caractères sont interdits: {0}</value>
   </data>
   <data name="EmailsNotUnique" xml:space="preserve">
@@ -248,5 +248,11 @@
   </data>
   <data name="Email" xml:space="preserve">
     <value>Courriel</value>
+  </data>
+  <data name="OuGroupNameAlreadyExistsError" xml:space="preserve">
+    <value>Le dossier/groupe '{0}' existe déjà</value>
+  </data>
+  <data name="CreateOrEditOUGroupError" xml:space="preserve">
+    <value>Erreur lors de la création/modification d'un dossier/group</value>
   </data>
 </root>

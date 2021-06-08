@@ -301,7 +301,7 @@ namespace HADES.Controllers
             }
             else
             {
-                viewModel.Error = Localizer["CreateGroupError"] + "<br>";
+                viewModel.Error = HADES.Strings.CreateOrEditOUGroupError + " : ";
                 viewModel.Error += string.Join("<br>", ModelState.Values
                                         .SelectMany(x => x.Errors)
                                         .Select(x => x.ErrorMessage));
@@ -399,7 +399,7 @@ namespace HADES.Controllers
             }
             else
             {
-                viewModel.Error = Localizer["CreateOUError"] + "<br>";
+                viewModel.Error = HADES.Strings.CreateOrEditOUGroupError + " : ";
                 viewModel.Error += string.Join("<br>", ModelState.Values
                                         .SelectMany(x => x.Errors)
                                         .Select(x => x.ErrorMessage));

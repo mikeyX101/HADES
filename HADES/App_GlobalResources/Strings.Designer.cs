@@ -97,6 +97,15 @@ namespace HADES {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Erreur lors de la création/modification d&apos;un dossier/group.
+        /// </summary>
+        public static string CreateOrEditOUGroupError {
+            get {
+                return ResourceManager.GetString("CreateOrEditOUGroupError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Le fichier {0}.css n&apos;existe pas..
         /// </summary>
         public static string CssFileDoesNotExist {
@@ -394,11 +403,20 @@ namespace HADES {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Le dossier/groupe &apos;{0}&apos; existe déjà.
+        /// </summary>
+        public static string OuGroupNameAlreadyExistsError {
+            get {
+                return ResourceManager.GetString("OuGroupNameAlreadyExistsError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ces caractères sont interdits: {0}.
         /// </summary>
-        public static string OuGroupNameError {
+        public static string OuGroupNameFobiddenCharactersError {
             get {
-                return ResourceManager.GetString("OuGroupNameError", resourceCulture);
+                return ResourceManager.GetString("OuGroupNameFobiddenCharactersError", resourceCulture);
             }
         }
         
