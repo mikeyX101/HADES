@@ -198,4 +198,10 @@
   <data name="roleTitle" xml:space="preserve">
     <value>Role</value>
   </data>
+  <data name="DeleteOU" xml:space="preserve">
+    <value>Deleting an organizational unit</value>
+  </data>
+  <data name="DeleteOUINFO" xml:space="preserve">
+    <value>If the box, Protect object against accidental deletion, is checked, Hades will not be able to delete the organizational unit in the Active Directory, as is the case in the Active Directory. </value>
+  </data>
 </root>

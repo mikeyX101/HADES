@@ -106,24 +106,6 @@ namespace HADES {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Suppression d&apos;une unité organisationelle.
-        /// </summary>
-        public static string DeleteOU {
-            get {
-                return ResourceManager.GetString("DeleteOU", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une chaîne localisée semblable à Si la case, Protéger l&apos;objet contre la suppression accidentelle, est coché, Hades  ne sera pas en mesure de supprimer l&apos;unité organisationelle dans l&apos;Active Directory, comme c&apos;est cas dans l&apos;Active Directory. .
-        /// </summary>
-        public static string DeleteOUINFO {
-            get {
-                return ResourceManager.GetString("DeleteOUINFO", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Recherche une chaîne localisée semblable à La date d&apos;expiration est arrivée a échéance pour un groupe..
         /// </summary>
         public static string email_ExpirationDateMessage {
@@ -264,6 +246,15 @@ namespace HADES {
         public static string email_name {
             get {
                 return ResourceManager.GetString("email_name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Il y a des courriels identiques.
+        /// </summary>
+        public static string EmailsNotUnique {
+            get {
+                return ResourceManager.GetString("EmailsNotUnique", resourceCulture);
             }
         }
         
