@@ -250,6 +250,15 @@ namespace HADES {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Il y a des courriels identiques.
+        /// </summary>
+        public static string EmailsNotUnique {
+            get {
+                return ResourceManager.GetString("EmailsNotUnique", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Anglais.
         /// </summary>
         public static string English {

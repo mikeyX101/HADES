@@ -4,10 +4,13 @@ using HADES.Services;
 using HADES.Util;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace HADES.Controllers
@@ -48,6 +51,10 @@ namespace HADES.Controllers
         public async Task<IActionResult> UserConfig([Bind("UserConfig,Emails")] UserConfigViewModel viewModel)
         {
             UserConfigService service = new();
+            if (!AreEmailAddressesUnique(viewModel))
+            {
+                ModelState.AddModelError("", HADES.Strings.EmailsNotUnique);
+            }
             if (ModelState.IsValid)
             {
                 try
@@ -71,6 +78,11 @@ namespace HADES.Controllers
             {
                 return View(viewModel);
             }
+        }
+
+        private bool AreEmailAddressesUnique(UserConfigViewModel viewModel)
+        {
+            return viewModel.Emails.Select(item => item.Address).Distinct().Count() == viewModel.Emails.Select(item => item.Address).Count();
         }
 
         [Authorize]
