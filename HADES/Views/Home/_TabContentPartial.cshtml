@@ -39,7 +39,10 @@
                     <div class="form-group row">
                         <label asp-for="@Model.GroupAD.SamAccountName" class="col-sm-2 col-form-label">@Strings.Name</label>
                         <div class="col-sm-10">
-                            <input asp-for="@Model.GroupAD.SamAccountName" class="form-control">
+                            <input asp-for="@Model.GroupAD.SamAccountName" class="form-control" pattern='^[^/[\]:;|=+*?<>,"\\]*$' required>
+                            <div class="invalid-tooltip">
+                                @HADES.Strings.InvalidCharacters
+                            </div>
                         </div>
                     </div>
                 }
@@ -67,6 +70,9 @@
                         <label asp-for="@Model.GroupAD.Email" class="col-sm-2 col-form-label">@Strings.Email</label>
                         <div class="col-sm-10">
                             <input asp-for="@Model.GroupAD.Email" type="Email" class="form-control" id="Email" placeholder="@Strings.Email">
+                            <div class="invalid-tooltip">
+                                @HADES.Strings.InvalidCharacters
+                            </div>
                         </div>
                     </div>
                 }
@@ -148,3 +154,6 @@
     }
     pureScriptSelect('#EditMembersMultiSelect@(i)');
 </script>
+
+<script type="text/javascript" src="~/js/formValidation.js"></script>
+<script type="text/javascript" src="~/js/formFocus.js"></script>
