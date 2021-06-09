@@ -115,4 +115,10 @@
   <data name="MemberAdd" xml:space="preserve">
     <value>Ajout d'un membre à un groupe</value>
   </data>
+  <data name="AddressError" xml:space="preserve">
+    <value>Veuillez entrer une adresse courriel valide.</value>
+  </data>
+  <data name="AddressRequired" xml:space="preserve">
+    <value>Veuillez entrer une adresse courriel.</value>
+  </data>
 </root>
