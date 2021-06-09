@@ -37,7 +37,7 @@
                 @if (u.GetRole().AdCrudAccess)
                 {
                     <div class="form-group row">
-                        <label asp-for="@Model.GroupAD.SamAccountName" class="col-sm-2 col-form-label">@Strings.Name</label>
+                        <label asp-for="@Model.GroupAD.SamAccountName" class="col-sm-2 col-form-label text-left">@Strings.Name</label>
                         <div class="col-sm-10">
                             <input asp-for="@Model.GroupAD.SamAccountName" class="form-control" pattern='^[^/[\]:;|=+*?<>,"\\]*$' required>
                             <div class="invalid-tooltip">
@@ -49,7 +49,7 @@
                 else
                 {
                     <div class="form-group row">
-                        <label asp-for="@Model.GroupAD.SamAccountName" class="col-sm-2 col-form-label">@Strings.Name</label>
+                        <label asp-for="@Model.GroupAD.SamAccountName" class="col-sm-2 col-form-label text-left">@Strings.Name</label>
                         <div class="col-sm-10">
                             <input asp-for="@Model.GroupAD.SamAccountName" class="form-control" readonly>
                         </div>
@@ -58,7 +58,7 @@
 
 
                 <div class="form-group row">
-                    <label asp-for="@Model.GroupAD.Description" class="col-sm-2 col-form-label">@Strings.Description</label>
+                    <label asp-for="@Model.GroupAD.Description" class="col-sm-2 col-form-label text-left">@Strings.Description</label>
                     <div class="col-sm-10">
                         <input asp-for="@Model.GroupAD.Description" class="form-control" placeholder="">
                     </div>
@@ -67,7 +67,7 @@
                 @if (u.GetRole().AdCrudAccess)
                 {
                     <div class="form-group row">
-                        <label asp-for="@Model.GroupAD.Email" class="col-sm-2 col-form-label">@Strings.Email</label>
+                        <label asp-for="@Model.GroupAD.Email" class="col-sm-2 col-form-label text-left">@Strings.Email</label>
                         <div class="col-sm-10">
                             <input asp-for="@Model.GroupAD.Email" type="Email" class="form-control" id="Email" placeholder="@Strings.Email">
                             <div class="invalid-tooltip">
@@ -79,7 +79,7 @@
                 else
                 {
                     <div class="form-group row">
-                        <label asp-for="@Model.GroupAD.Email" class="col-sm-2 col-form-label">@Strings.Email</label>
+                        <label asp-for="@Model.GroupAD.Email" class="col-sm-2 col-form-label text-left">@Strings.Email</label>
                         <div class="col-sm-10">
                             <input asp-for="@Model.GroupAD.Email" type="Email" class="form-control" id="Email" placeholder="Email" readonly>
                         </div>
@@ -106,15 +106,17 @@
 
 
                 <div class="form-group row">
-                    <label asp-for="@Model.GroupAD.ExpirationDate" class="col-sm-2 col-form-label">@Strings.ExpirationDate</label>
+                    <label asp-for="@Model.GroupAD.ExpirationDate" class="col-sm-2 col-form-label text-left">@Strings.ExpirationDate</label>
                     <div class="col-sm-10">
                         <input asp-for="@Model.GroupAD.ExpirationDate" id="datepickerExpIdb@(i)" class="form-control" type="text" value="" readonly />
                     </div>
                 </div>
 
                 <div class="form-group row">
-                    <label asp-for="@Model.GroupAD.Notes">@Strings.Notes</label>
-                    <textarea asp-for="@Model.GroupAD.Notes" class="form-control" id="Notes" rows="3"></textarea>
+                    <label asp-for="@Model.GroupAD.Notes" class="col-sm-12 text-left">@Strings.Notes</label>
+                    <div class="col-sm-12">
+                        <textarea asp-for="@Model.GroupAD.Notes" class="form-control" id="Notes" rows="3"></textarea>
+                    </div>
                 </div>
 
             </div>
@@ -124,7 +126,6 @@
                 <div>
                     <div class="directorist-select directorist-select-multi" id="EditMembersMultiSelect@(i)" data-isSearch="true" data-multiSelect='@Model.UsersAD'>
                         <input type="hidden" asp-for="@Model.SelectedMembers" id="selectedMember@(i)">
-
                     </div>
                 </div>
             </div>

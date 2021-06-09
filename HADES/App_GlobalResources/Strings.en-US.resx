@@ -232,7 +232,7 @@
     <value>These characters are forbidden: {0}</value>
   </data>
   <data name="EmailsNotUnique" xml:space="preserve">
-    <value>There are identical emails</value>
+    <value>Informations not saved because there are identical emails</value>
   </data>
   <data name="Create" xml:space="preserve">
     <value>Create</value>

@@ -304,7 +304,7 @@ namespace HADES {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Il y a des courriels identiques.
+        ///   Looks up a localized string similar to Sauvegarde des informations non réalisée car il y a des courriels identiques.
         /// </summary>
         public static string EmailsNotUnique {
             get {
