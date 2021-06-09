@@ -196,4 +196,7 @@
   <data name="MailINFO" xml:space="preserve">
     <value>HADES gère un service de notification par courriel, si vous avez configuré un serveur SMTP, HADES déclenchera un service de messages en arrière-plan à chaque fois qu'une de ces actions est faites à partir d'HADES: &lt;ul&gt;&lt;li&gt;Création d'un groupe&lt;/li&gt;&lt;li&gt;Suppression d'un groupe&lt;/li&gt;&lt;li&gt;Ajout d'un membre à un groupe&lt;/li&gt;&lt;li&gt;Suppression d'un membre à un groupe&lt;/li&gt;&lt;/ul&gt;Ce service peut prendre un certain temps à s'exécuter, car il envoie un courriel à chacun des courriels souscrits.</value>
   </data>
+  <data name="MailINFO2" xml:space="preserve">
+    <value>À chaque 24h (à l'heure où le serveur a été démarré) HADES vérifiera la date d'expiration des groupes pour envoyer une notification aux courriels souscrits.</value>
+  </data>
 </root>

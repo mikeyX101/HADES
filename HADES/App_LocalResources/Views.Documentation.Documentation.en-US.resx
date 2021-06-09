@@ -213,4 +213,10 @@
   <data name="MailTitle" xml:space="preserve">
     <value>Email Notification Service</value>
   </data>
+  <data name="MailINFO" xml:space="preserve">
+    <value>HADES manages an email notification service, if you have configured an SMTP server, HADES will trigger a background message service every time one of these actions is done from HADES: &lt;ul&gt;&lt;li&gt;Creating a group&lt;/li&gt;&lt;li&gt;Deleting a group&lt;/li&gt;&lt;li&gt;Adding a member to a group&lt;/li&gt;&lt;li&gt;Removing a member from a group&lt;/li&gt;&lt;/ul&gt;This service may take some time to run, as it sends an email to each of the subscribed emails.</value>
+  </data>
+  <data name="MailINFO2" xml:space="preserve">
+    <value>Every 24 hours (at the time the server was started) HADES will check the expiration date of the groups to send a notification to the subscribed emails.</value>
+  </data>
 </root>
