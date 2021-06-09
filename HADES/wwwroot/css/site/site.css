@@ -8,8 +8,8 @@
 }
 
 .btn-primary {
-    border-color: darkgrey;
-    background: linear-gradient(dimgrey,#212529,dimgrey);
+    border-color: darkgrey ;
+    background: linear-gradient(dimgrey,#212529,dimgrey) ;
 }
 
 .bg-primary {
@@ -37,5 +37,7 @@ a {
 
 .ui-state-highlight {
     background: none !important;
-} 
+}
+
+
 
