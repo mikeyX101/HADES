@@ -768,12 +768,9 @@ namespace HADES.Util
             {
                 LdapSearchResults lsc = (LdapSearchResults)connection.Search(getBaseAd(), LdapConnection.ScopeSub, "(objectGUID =" + GUID + ")", null, false);
                 LdapEntry nextEntry = null;
-                while (lsc.HasMore())
-                {
-
-                    nextEntry = lsc.Next();
-                    samAccountName = getAttributeValue(nextEntry, "sAMAccountName"); ;
-                }
+                nextEntry = lsc.Next();
+                samAccountName = getAttributeValue(nextEntry, "sAMAccountName"); ;
+                
             }
             catch (Exception e)
             {
