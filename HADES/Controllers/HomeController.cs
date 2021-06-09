@@ -100,7 +100,7 @@ namespace HADES.Controllers
                 viewModel.Error = (string)TempData["Error"];
             }
 
-
+            viewModel.UsersAD = JsonConvert.SerializeObject(ad.getAllUsers().Select(x => x.SamAccountName));
             viewModel.SelectedPath = selectedPathForContent;
             viewModel.ExpandedNodesName = expandedNodeNames;
             viewModel.ADRoot = ad.getRoot();

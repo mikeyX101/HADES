@@ -250,7 +250,7 @@
     <value>Credentials for SMTP user. Leave password field empty if you don't want to change password</value>
   </data>
   <data name="LogFreqToolTip" xml:space="preserve">
-    <value>Log deletion frequency in days</value>
+    <value>Log deletion frequency in days. &lt;b&gt;WARNING:&lt;/b&gt; Entering a smaller number than the current one can result in a loss of old event logs.</value>
   </data>
   <data name="LogMaxToolTip" xml:space="preserve">
     <value>Max size of a log file in bytes&lt;br&gt;&lt;i&gt;2147483648&lt;i&gt;</value>
