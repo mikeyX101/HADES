@@ -250,7 +250,7 @@
     <value>Les informations de connexion de l'utilisateur SMTP. Laisser le champs mot de passe vide si vous ne souhaiter pas le modifier</value>
   </data>
   <data name="LogFreqToolTip" xml:space="preserve">
-    <value>La fréquence de suppressions des logs en jour</value>
+    <value>La fréquence de suppressions des logs en jours. &lt;b&gt;AVERTISSEMENT:&lt;/b&gt; Entrer un chiffre plus petit que le chiffre courant peut entraîner une perte d'anciens journaux.</value>
   </data>
   <data name="LogMaxToolTip" xml:space="preserve">
     <value>Taille maximale d'un fichier de log en octets&lt;br&gt;&lt;i&gt;2147483648&lt;i&gt;</value>

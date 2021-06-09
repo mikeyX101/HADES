@@ -240,8 +240,19 @@ function deleteGroup(form) {
         revealResults: true,    // reveal matching nodes
     }]);
 
-    // Group is valid if 
-    isValid = foundNodes[0] && foundNodes[0].parentId !== 0 && typeof foundNodes[0].nodes === 'undefined';
+    if (foundNodes.length > 1 && foundNodes[0].parentId === 0)  {
+        // Group is valid if 
+        isValid = foundNodes[1] && foundNodes[1].parentId !== 0 && typeof foundNodes[1].nodes === 'undefined';
+    }
+    else if (foundNodes.length > 1 && foundNodes[1].parentId === 0) {
+        // Group is valid if 
+        isValid = foundNodes[0] && foundNodes[0].parentId !== 0 && typeof foundNodes[0].nodes === 'undefined';
+    } else if (foundNodes.length == 1) {
+        isValid = foundNodes[0] && foundNodes[0].parentId !== 0 && typeof foundNodes[0].nodes === 'undefined';
+    } else {
+        isValid = false;
+    }
+    
 
     if (isValid) {
         $("#dialog-confirmation-delete").empty();

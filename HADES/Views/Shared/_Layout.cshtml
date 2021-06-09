@@ -8,20 +8,24 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>HADES</title>
+
+    <script src="~/lib/jquery/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="~/lib/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="~/lib/fontawesome/css/all.min.css">
     <link rel="stylesheet" href="~/css/@u.GetUserConfig().ThemeFile/@themeFileCss">
     <link rel="stylesheet" href="~/lib/bootstrap-icons/bootstrap-icons.min.css">
     <link rel="stylesheet" href="~/lib/pureScriptSelect-master/style.css" />
-
     <link rel="stylesheet" href="~/css/@u.GetUserConfig().ThemeFile/jquery-ui.css" type="text/css" />
+    <link rel="stylesheet" href="~/css/@u.GetUserConfig().ThemeFile/theme.css" type="text/css" />
     <link rel="stylesheet" href="~/css/AppGeneral.css">
 
-    <script src="~/lib/jquery/jquery.min.js"></script>
+
     @RenderSection("scriptsPreBootStrap", false)
     <script src="~/lib/jquery-ui/jquery-ui.min.js"></script>
     <script src="~/lib/popper.js/umd/popper.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+
+
     @RenderSection("scripts", false)
 </head>
 <body>
@@ -116,6 +120,11 @@
     <script>
         $(document).ready(function () {
             $('[data-toggle="tooltip"]').tooltip();
+
+            $(".ui-dialog .ui-dialog-buttonset button:first-child").addClass("btn btn-primary");
+            $(".ui-dialog .ui-dialog-buttonset button:nth-child(2)").addClass("btn btn-danger");
+            $(".ui-dialog .ui-dialog-titlebar-close").addClass("btn btn-danger");
+            $(".ui-dialog .ui-dialog-titlebar-close").html("<span style=' display: flex; text-align: center; margin-left: 4px;'><i style='font-size: 10px; ' class='fas fa-times'></i></span>");
         });
     </script>
 

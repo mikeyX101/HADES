@@ -11,8 +11,8 @@ namespace HADES.Models
         [Column("EMA_id")]
         public int Id { get; set; }
 
-        [Required]
-        [EmailAddress]
+        [Required(ErrorMessage = "AddressRequired")]
+        [EmailAddress(ErrorMessage = "AddressError")]
         [Column("EMA_email")]
         [Display(Name = "Address")]
         public string Address { get; set; }
