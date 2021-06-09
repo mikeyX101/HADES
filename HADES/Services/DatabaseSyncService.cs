@@ -204,6 +204,7 @@ namespace HADES.Services
                     {
                         db.User.Update(u);
                         u.RoleId = (int)RolesID.SuperAdmin;
+                        continue;
                     }
                     else
                     {
@@ -216,6 +217,7 @@ namespace HADES.Services
                     {
                         db.User.Update(u);
                         u.RoleId = (int)RolesID.Admin;
+                        continue;
                     }
                     else
                     {
