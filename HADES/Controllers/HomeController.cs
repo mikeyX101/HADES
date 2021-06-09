@@ -383,7 +383,20 @@ namespace HADES.Controllers
                     });
                 }
             }
-            return View(viewModel.GroupAD);
+            else
+            {
+                viewModel.Error = HADES.Strings.CreateOrEditOUGroupError + "<br>";
+                viewModel.Error += string.Join("<br>", ModelState.Values
+                                        .SelectMany(x => x.Errors)
+                                        .Select(x => x.ErrorMessage));
+                viewModel.Error += "<br>";
+                TempData["Error"] = viewModel.Error;
+            }
+            return RedirectToAction("UpdateContent", "Home", new
+            {
+                selectedPathForContent = viewModel.SelectedPath,
+                expandedNodeNames = viewModel.ExpandedNodesName
+            });
         }
 
         [HttpPost]
