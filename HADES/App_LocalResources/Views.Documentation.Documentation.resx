@@ -190,4 +190,10 @@
   <data name="SyncINFO" xml:space="preserve">
     <value>HADES possède un service de synchronisation qui s'exécute toutes les 5 minutes lorsqu'il y a de l'activité sur la plateforme HADES &lt;i&gt;(Database Sync Service)&lt;/i&gt;. Ce service essaie de mettre à jour la base de données HADES à l'Active Directory connecté. Dans l'ordre, Database Sync Service synchronisera : &lt;ul&gt;&lt;li&gt;Les groupes se trouvant sous la racine d'HADES&lt;/li&gt;&lt;li&gt;Les groupes Administrateur et SuperAdministrateur&lt;/li&gt;&lt;li&gt;Les Utilisateurs et leurs rôles respectifs.&lt;/li&gt;&lt;/ul&gt;Le service détermine le rôle d'un utilisateur selon son appartenance à l'un des groupes Administrateur déterminés dans les paramètres d'HADES dans le cas où un utilisateur ne fait pas partie d'un de ses groupes et n'est pas propriétaire d'aucun groupe, il sera marqué comme inactif.</value>
   </data>
+  <data name="MailTitle" xml:space="preserve">
+    <value>Service Notification Courriel</value>
+  </data>
+  <data name="MailINFO" xml:space="preserve">
+    <value>HADES gère un service de notification par courriel, si vous avez configuré un serveur SMTP, HADES déclenchera un service de messages en arrière-plan à chaque fois qu'une de ces actions est faites à partir d'HADES: &lt;ul&gt;&lt;li&gt;Création d'un groupe&lt;/li&gt;&lt;li&gt;Suppression d'un groupe&lt;/li&gt;&lt;li&gt;Ajout d'un membre à un groupe&lt;/li&gt;&lt;li&gt;Suppression d'un membre à un groupe&lt;/li&gt;&lt;/ul&gt;Ce service peut prendre un certain temps à s'exécuter, car il envoie un courriel à chacun des courriels souscrits.</value>
+  </data>
 </root>
