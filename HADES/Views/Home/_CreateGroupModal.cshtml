@@ -55,6 +55,9 @@
                                 <label asp-for="GroupAD.Email" class="col-sm-2 col-form-label">@Strings.Email</label>
                                 <div class="col-sm-10">
                                     <input asp-for="GroupAD.Email" type="Email" class="form-control" id="Email" placeholder="@Strings.Email">
+                                    <div class="invalid-tooltip">
+                                        @HADES.Strings.email_Invalid_error
+                                    </div>
                                 </div>
                             </div>
 

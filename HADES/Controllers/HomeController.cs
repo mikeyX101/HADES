@@ -301,7 +301,7 @@ namespace HADES.Controllers
             }
             else
             {
-                viewModel.Error = HADES.Strings.CreateOrEditOUGroupError + " : ";
+                viewModel.Error = HADES.Strings.CreateOrEditOUGroupError + "<br>";
                 viewModel.Error += string.Join("<br>", ModelState.Values
                                         .SelectMany(x => x.Errors)
                                         .Select(x => x.ErrorMessage));
@@ -403,7 +403,7 @@ namespace HADES.Controllers
             }
             else
             {
-                viewModel.Error = HADES.Strings.CreateOrEditOUGroupError + " : ";
+                viewModel.Error = HADES.Strings.CreateOrEditOUGroupError + "<br>";
                 viewModel.Error += string.Join("<br>", ModelState.Values
                                         .SelectMany(x => x.Errors)
                                         .Select(x => x.ErrorMessage));

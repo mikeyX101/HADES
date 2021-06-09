@@ -120,7 +120,4 @@
   <data name="NewFolderName" xml:space="preserve">
     <value>New folder's name</value>
   </data>
-  <data name="InvalidCharacters" xml:space="preserve">
-    <value>These characters are not allowed:   " [ ] : ; | = + * ? &lt; &gt; / \ ,</value>
-  </data>
 </root>

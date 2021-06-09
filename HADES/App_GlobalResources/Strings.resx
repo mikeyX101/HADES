@@ -220,7 +220,7 @@
     <value>Le fichier {0}.css n'existe pas.</value>
   </data>
   <data name="InvalidCharacters" xml:space="preserve">
-    <value>Ces caractères sont interdits:   " [ ] : ; | = + * ? &lt; &gt; / \ ,</value>
+    <value>Les noms vides et ces caractères sont interdits: " [ ] : ; | = + * ? &lt; &gt; / \ ,</value>
   </data>
   <data name="GenericError" xml:space="preserve">
     <value>Opération Invalide</value>
@@ -278,5 +278,8 @@
   </data>
   <data name="ExpirationDate" xml:space="preserve">
     <value>Date d'expiration</value>
+  </data>
+  <data name="email_Invalid_error" xml:space="preserve">
+    <value>Le courriel n'a pas le bon format: caractère '@' manquant</value>
   </data>
 </root>

@@ -223,6 +223,15 @@ namespace HADES {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Le courriel n&apos;a pas le bon format: caractère &apos;@&apos; manquant.
+        /// </summary>
+        public static string email_Invalid_error {
+            get {
+                return ResourceManager.GetString("email_Invalid_error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Des membres ont été ajouté à un groupe..
         /// </summary>
         public static string email_MemberAddMessage {
@@ -385,7 +394,7 @@ namespace HADES {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ces caractères sont interdits:   &quot; [ ] : ; | = + * ? &lt; &gt; / \ ,.
+        ///   Looks up a localized string similar to Les noms vides et ces caractères sont interdits: &quot; [ ] : ; | = + * ? &lt; &gt; / \ ,.
         /// </summary>
         public static string InvalidCharacters {
             get {
