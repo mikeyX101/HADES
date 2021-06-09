@@ -204,9 +204,7 @@ const pureScriptSelect = (selector) => {
             <span class="directorist-error__msg"></span>`;
 
             function insertSearchItem() {
-                //Show selected users in a bubble
-                //"data-key" attribute must match the two dropdowns below
-                item.querySelector('.directorist-select__selected-list').innerHTML = defaultValues[arraySelector].map(item => `<span class="directorist-select__selected-list--item">${JSON.parse(item).FirstName} ${JSON.parse(item).LastName} (${JSON.parse(item).SamAccountName})&nbsp;&nbsp;<a href="#" data-key='${item}' class="directorist-item-remove"><i class="fa fa-times"></i></a></span>`).join("")
+                item.querySelector('.directorist-select__selected-list').innerHTML = defaultValues[arraySelector].map(item => `<span class="directorist-select__selected-list--item">${item}&nbsp;&nbsp;<a href="#" data-key="${item}" class="directorist-item-remove"><i class="fa fa-times"></i></a></span>`).join("")
             }
 
             sibling.innerHTML = html;
@@ -234,10 +232,9 @@ const pureScriptSelect = (selector) => {
 
                 var popUp = item.querySelector('.directorist-select__dropdown--inner');
 
-                //dropdown data-key & view
                 var item2 = '<ul>';
                 option.forEach((el, key) => {
-                    item2 += `<li data-key='${JSON.stringify(el)}' class="directorist-select-item-hide">${el.FirstName} ${el.LastName} (${el.SamAccountName})</li>`;
+                    item2 += `<li data-key="${el}" class="directorist-select-item-hide">${el}</li>`;
                 });
                 item2 += '</ul>';
 
@@ -301,10 +298,10 @@ const pureScriptSelect = (selector) => {
                             }
                         });
                     });
-                    //dropdown data-key & view
+
                     var item2 = '<ul>';
                     elem.forEach((el) => {
-                        item2 += `<li data-key="${JSON.stringify(el)}" class="directorist-select-item-hide">${el.FirstName} ${el.LastName} ${el.SamAccountName}</li>`;
+                        item2 += `<li data-key="${el}" class="directorist-select-item-hide">${el}</li>`;
                     });
                     item2 += '</ul>';
 
