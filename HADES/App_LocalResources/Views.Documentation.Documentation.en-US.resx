@@ -204,4 +204,10 @@
   <data name="DeleteOUINFO" xml:space="preserve">
     <value>If the box, Protect object against accidental deletion, is checked, Hades will not be able to delete the organizational unit in the Active Directory, as is the case in the Active Directory. </value>
   </data>
+  <data name="SyncTitle" xml:space="preserve">
+    <value>Synchronization Services</value>
+  </data>
+  <data name="SyncINFO" xml:space="preserve">
+    <value>HADES has a synchronization service that runs every 5 minutes when there is activity on the HADES platform &lt;i&gt;(Database Sync Service)&lt;/i&gt;. This service tries to update the HADES database to the connected Active Directory. In order, Database Sync Service will Synchronize: &lt;ul&gt;&lt;li&gt;The groups under the root of HADES&lt;/li&gt;&lt;li&gt;The Administrator and Super Administrator groups&lt;/li&gt;&lt;li&gt; The Users and their respective roles.&lt;/li&gt;&lt;/ul&gt; The service determines the role of a user according to his membership in one of the Administrator groups determined in the settings of HADES, in the case a user is not part of one of these groups and does not own any group, it will be marked as inactive.</value>
+  </data>
 </root>
