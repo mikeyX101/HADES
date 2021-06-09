@@ -494,7 +494,8 @@ namespace HADES.Controllers
             var user = db.User.Where(x => x.OwnerGroupUsers.Select(x => x.OwnerGroup.GUID).Contains(group.ObjectGUID)).ToList().Select(x => x.GetName());
             ViewBag.Index = index;
 
-            viewModel.UsersAD = JsonConvert.SerializeObject(ad.getAllUsers().Select(x => x.SamAccountName));
+            //viewModel.UsersAD = JsonConvert.SerializeObject(ad.getAllUsers().Select(x => x.SamAccountName));
+            viewModel.UsersAD = JsonConvert.SerializeObject(ad.getAllUsers());
             if (user.Any())
                 viewModel.SelectedOwners = JsonConvert.SerializeObject(user);
             else
