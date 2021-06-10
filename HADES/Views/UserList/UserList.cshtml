@@ -11,6 +11,21 @@
     <script src="~/js/dialogConfirmUser.js"></script>
 }
 
+<style>
+    .table th, .table td {
+        width: 15%;
+    }
+
+    th:nth-last-child(2), td:nth-last-child(2) {
+        width: 30%;
+    }
+
+    th:nth-last-child(1), td:nth-last-child(1) {
+        width: 10%;
+        text-align: right;
+    }
+</style>
+
 @if (Model == null)
 {
     <h6 class="text-center bg-warning mt-lg-5">@Localizer["ADError"]</h6>
