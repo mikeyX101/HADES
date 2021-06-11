@@ -232,7 +232,7 @@
     <value>Ces caractères sont interdits: {0}</value>
   </data>
   <data name="EmailsNotUnique" xml:space="preserve">
-    <value>Il y a des courriels identiques</value>
+    <value>Sauvegarde des informations non réalisée car il y a des courriels identiques</value>
   </data>
   <data name="Create" xml:space="preserve">
     <value>Créer</value>

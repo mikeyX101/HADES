@@ -17,12 +17,12 @@
                             <a class="nav-item nav-link active" id="nav-groupName-tab" data-toggle="tab" href="#nav-groupName"
                                role="tab" aria-controls="nav-home" aria-selected="true">@Strings.General</a>
                             @{
-                                var tabClass = Model != null ? "nav-item nav-link" : "nav-item nav-link disabled";
+                            var tabClass = Model != null ? "nav-item nav-link" : "nav-item nav-link disabled";
                             }
-                        <a class="@tabClass" id="nav-members-tab" data-toggle="tab" href="#nav-members"
-                           role="tab" aria-controls="nav-members" aria-selected="false">@Strings.Members</a>
-                        <a class="@tabClass" id="nav-owners-tab" data-toggle="tab" href="#nav-owners"
-                           role="tab" aria-controls="nav-owners" aria-selected="false">@Strings.Owners</a>
+                            <a class="@tabClass" id="nav-members-tab" data-toggle="tab" href="#nav-members"
+                               role="tab" aria-controls="nav-members" aria-selected="false">@Strings.Members</a>
+                            <a class="@tabClass" id="nav-owners-tab" data-toggle="tab" href="#nav-owners"
+                               role="tab" aria-controls="nav-owners" aria-selected="false">@Strings.Owners</a>
                         </div>
                     </nav>
 
@@ -39,7 +39,7 @@
                             <div class="form-group row">
                                 <label asp-for="GroupAD.SamAccountName" class="col-sm-2 col-form-label">@Strings.Name</label>
                                 <div class="col-sm-10">
-                                    <input asp-for="GroupAD.SamAccountName" class="form-control" placeholder="@Strings.Name" pattern='^[^/[\]:;|=+*?<>,"\\]*$' required >
+                                    <input asp-for="GroupAD.SamAccountName" class="form-control" placeholder="@Strings.Name" pattern='^[^/[\]:;|=+*?<>,"\\]*$' required>
                                     <div class="invalid-tooltip">
                                         @HADES.Strings.InvalidCharacters
                                     </div>
@@ -84,11 +84,8 @@
                                 </div>
                             </div>
 
-
-                            <div class="form-group row">
-                                <label asp-for="GroupAD.Notes">@Strings.Notes</label>
-                                <textarea asp-for="GroupAD.Notes" class="form-control" id="Notes" rows="3"></textarea>
-                            </div>
+                            <label asp-for="GroupAD.Notes" class="col-sm-12 col-form-label row">@Strings.Notes</label>
+                            <textarea asp-for="GroupAD.Notes" class="form-control" id="Notes" rows="3"></textarea>
 
                         </div>
 
