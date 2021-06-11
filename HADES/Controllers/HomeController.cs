@@ -100,7 +100,11 @@ namespace HADES.Controllers
                 viewModel.Error = (string)TempData["Error"];
             }
 
-            viewModel.UsersAD = JsonConvert.SerializeObject(ad.getAllUsers().Select(x => x.SamAccountName));
+            List<string> usersAD = new();
+            ad.getAllUsers().ForEach(user => usersAD.Add(string.Format("{0} {1} ({2})", user.FirstName, user.LastName, user.SamAccountName)));
+            usersAD.Sort();
+            viewModel.UsersAD = JsonConvert.SerializeObject(usersAD);
+
             viewModel.SelectedPath = selectedPathForContent;
             viewModel.ExpandedNodesName = expandedNodeNames;
             viewModel.ADRoot = ad.getRoot();
@@ -256,7 +260,7 @@ namespace HADES.Controllers
             string[] split = viewModel.SelectedPath.Split('/');
             string selectedNodeName = split.Length == 2 ? split[1] : split[2];
             GroupAD group = viewModel.GroupAD;
-            List<UserAD> members = GetSelectedUsersSamAccount(viewModel);
+            List<UserAD> members = GetSelectedUsers(viewModel);
 
 
 
@@ -359,7 +363,7 @@ namespace HADES.Controllers
             }
 
             ModelState.Remove("NewName");
-            if(viewModel.GroupAD.SamAccountName == oldgroup.SamAccountName)
+            if (viewModel.GroupAD.SamAccountName == oldgroup.SamAccountName)
             {
                 ModelState.Remove("GroupAD.SamAccountName");
             }
@@ -461,18 +465,30 @@ namespace HADES.Controllers
         }
 
 
-        private List<String> DeserializeUsers(string serializedUsers)
+        private static List<String> DeserializeUsers(string serializedUsers)
         {
-            return serializedUsers != null ? JsonConvert.DeserializeObject<List<string>>(serializedUsers) : new();
+            List<string> deserializedUsers = serializedUsers != null ? JsonConvert.DeserializeObject<List<string>>(serializedUsers) : new();
+            List<string> usersSamAccountName = new();
+            int subFrom;
+            int subTo;
+
+            foreach (var user in deserializedUsers)
+            {
+                subFrom = user.IndexOf("(") + "(".Length;
+                subTo = user.LastIndexOf(")") - subFrom;
+                usersSamAccountName.Add(user.Substring(subFrom, subTo));
+            }
+
+            return usersSamAccountName;
         }
 
 
-        public List<UserAD> GetSelectedUsersSamAccount(MainViewViewModel viewModel)
+        public List<UserAD> GetSelectedUsers(MainViewViewModel viewModel)
         {
             List<UserAD> members = new();
             if (viewModel.SelectedMembers != null)
             {
-                List<string> selectedUsers = JsonConvert.DeserializeObject<List<string>>(viewModel.SelectedMembers);
+                List<string> selectedUsers = DeserializeUsers(viewModel.SelectedMembers);
                 members = ad.getAllUsers().Where(x => selectedUsers.Contains(x.SamAccountName)).ToList();
             }
             return members;
@@ -481,20 +497,30 @@ namespace HADES.Controllers
         [Authorize]
         public IActionResult GetTabsContent(string dn, string selectedPath, string selectedNodeName, int index, string expandedNodesName)
         {
+            ApplicationDbContext db = new ApplicationDbContext();
             GroupAD group = ad.getGroupInformation(dn);
-            IEnumerable<string> members = group.Members.Select(x => x.SamAccountName);
 
-            viewModel.OuGroup = group.SamAccountName;
-            viewModel.GroupAD = group;
-            viewModel.SelectedPath = selectedPath;
-            viewModel.SelectedNodeName = selectedNodeName;
-            viewModel.ExpandedNodesName = expandedNodesName;
+            var usersDB = db.User.Where(x => x.OwnerGroupUsers.Select(x => x.OwnerGroup.GUID).Contains(group.ObjectGUID)).ToList();
+            var owners = ad.getAllUsers().Where(user => usersDB.Select(x => x.GUID).Contains(user.ObjectGUID)).ToList();
 
+            List<string> selectedMembers = new();
+            List<string> selectedOwners = new();
+            List<string> usersAD = new();
 
-            if (members.Any())
+            group.Members.ForEach(member => selectedMembers.Add(string.Format("{0} {1} ({2})", member.FirstName, member.LastName, member.SamAccountName)));
+            owners.ForEach(owner => selectedOwners.Add(string.Format("{0} {1} ({2})", owner.FirstName, owner.LastName, owner.SamAccountName)));
+            ad.getAllUsers().ForEach(user => usersAD.Add(string.Format("{0} {1} ({2})", user.FirstName, user.LastName, user.SamAccountName)));
+
+            selectedMembers.Sort();
+            selectedOwners.Sort();
+            usersAD.Sort();
+
+            viewModel.UsersAD = JsonConvert.SerializeObject(usersAD);
+
+            if (selectedMembers.Any())
             {
-                viewModel.SelectedMembers = Newtonsoft.Json.JsonConvert.SerializeObject(members);
-                viewModel.BeforeEditMembers = Newtonsoft.Json.JsonConvert.SerializeObject(members);
+                viewModel.SelectedMembers = Newtonsoft.Json.JsonConvert.SerializeObject(selectedMembers);
+                viewModel.BeforeEditMembers = Newtonsoft.Json.JsonConvert.SerializeObject(selectedMembers);
             }
             else
             {
@@ -502,16 +528,18 @@ namespace HADES.Controllers
                 viewModel.BeforeEditMembers = "";
             }
 
-            ApplicationDbContext db = new ApplicationDbContext();
-
-            var user = db.User.Where(x => x.OwnerGroupUsers.Select(x => x.OwnerGroup.GUID).Contains(group.ObjectGUID)).ToList().Select(x => x.GetName());
-            ViewBag.Index = index;
-
-            viewModel.UsersAD = JsonConvert.SerializeObject(ad.getAllUsers().Select(x => x.SamAccountName));
-            if (user.Any())
-                viewModel.SelectedOwners = JsonConvert.SerializeObject(user);
+            if (selectedOwners.Any())
+                viewModel.SelectedOwners = JsonConvert.SerializeObject(selectedOwners);
             else
                 viewModel.SelectedOwners = "";
+
+            viewModel.Index = index;
+            viewModel.OuGroup = group.SamAccountName;
+            viewModel.GroupAD = group;
+            viewModel.SelectedPath = selectedPath;
+            viewModel.SelectedNodeName = selectedNodeName;
+            viewModel.ExpandedNodesName = expandedNodesName;
+
             return PartialView("_TabContentPartial", viewModel);
         }
     }
