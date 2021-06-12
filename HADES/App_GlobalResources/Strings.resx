@@ -282,4 +282,7 @@
   <data name="email_Invalid_error" xml:space="preserve">
     <value>Le courriel n'a pas le bon format: caractère '@' manquant</value>
   </data>
+  <data name="EmailAddressAlreadyExists" xml:space="preserve">
+    <value>L'adresse courriel existe déjà</value>
+  </data>
 </root>
