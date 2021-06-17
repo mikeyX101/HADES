@@ -43,9 +43,7 @@ namespace HADES.Services
                 TimeSpan.Zero,
 #if DEBUG
                 TimeSpan.FromSeconds(30)
-#endif
-
-#if RELEASE
+#else
                 TimeSpan.FromMinutes(5)
 #endif
             );
