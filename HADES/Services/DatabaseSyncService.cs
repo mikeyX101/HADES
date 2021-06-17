@@ -58,7 +58,7 @@ namespace HADES.Services
             return Task.CompletedTask;
         }
 
-        private static void UpdateDatabase(object? state, bool forced = false)
+        private static void UpdateDatabase(object state, bool forced = false)
         {
             ApplicationDbContext db = new();
             if (db.Database.GetAppliedMigrations().Any())
@@ -94,7 +94,6 @@ namespace HADES.Services
                 Log.Information("Tried to run {Service}, but migrations have not ran yet. Waiting for next interval.", "Database Sync Service");
 			}
         }
-
         private static void UpdateAdminSuperAdmin(ApplicationDbContext db)
         {
             List<SuperAdminGroup> sulist = db.SuperAdminGroup.ToList();
