@@ -667,7 +667,7 @@ namespace HADES.Util
 
                 LdapModification[] mods = new LdapModification[modList.Count];
                 mods = modList.ToArray();
-                connection.Modify(dnGroupToModify, mods);
+                connection.Modify(dnGroupToModify, mods, null as LdapResponseQueue).GetResponse();
 
                 
 
@@ -1029,7 +1029,7 @@ namespace HADES.Util
                 mods = modList.ToArray();
 
                 //Modify the entry in the directory
-                connection.Modify(groupDn, mods);
+                connection.Modify(groupDn, mods, null as LdapResponseQueue).GetResponse();
 
                 if (connectionAlreadyOpen == null)
                 {
@@ -1078,7 +1078,7 @@ namespace HADES.Util
                 mods = modList.ToArray();
 
                 //Modify the entry in the directory
-                connection.Modify(groupDn, mods);
+                connection.Modify(groupDn, mods, null as LdapResponseQueue).GetResponse();
 
                 EmailHelper.SendEmail(NotificationType.MemberRemoval, this.getGroupInformation(groupDn), usersDeleted);
                 return true;
