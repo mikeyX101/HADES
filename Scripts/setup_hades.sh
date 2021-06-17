@@ -121,6 +121,9 @@ executeAsHadesUser "git clone git@github.com:ShaiLynx/HADES.git /var/www/hades <
 # Copy the HADES Kestrel Server service and start it
 cp /var/www/hades/Scripts/configs/systemd/hades-kestrel-server.service /etc/systemd/system/hades-kestrel-server.service
 
+# Copy the HADES Kestrel Server profiling service for performance reviews
+cp /var/www/hades/Scripts/configs/systemd/profiling-hades-kestrel-server.service /etc/systemd/system/profiling-hades-kestrel-server.service
+
 # Copy new Nginx config and start Nginx
 cp /var/www/hades/Scripts/configs/nginx/nginxHttps.conf /etc/nginx/nginx.conf
 
