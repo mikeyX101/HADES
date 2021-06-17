@@ -19,6 +19,8 @@ span.icon {
 .treeview .list-group-item {
     padding: .15rem 1.25rem .15rem .5rem !important;
     text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 /* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
