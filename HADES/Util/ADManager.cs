@@ -305,6 +305,10 @@ namespace HADES.Util
          ******************************************************/
         public List<RootDataInformation> getRoot()
         {
+
+            System.Diagnostics.Stopwatch stopWatch = new();
+            stopWatch.Start();
+
             List<RootDataInformation> root = new List<RootDataInformation>();
 
             //Creating an LdapConnection instance
@@ -383,6 +387,12 @@ namespace HADES.Util
 
             connection.Disconnect();
 
+            stopWatch.Stop();
+            TimeSpan ts = stopWatch.Elapsed;
+            string elapsedTime = string.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+                ts.Hours, ts.Minutes, ts.Seconds,
+                ts.Milliseconds / 10);
+            Console.WriteLine("GetRoot " + elapsedTime);
 
             return root;
         }
@@ -535,6 +545,9 @@ namespace HADES.Util
          ******************************************************/
         public bool createGroup(string ouName, GroupAD group, List<UserAD> members)
         {
+            System.Diagnostics.Stopwatch stopWatch = new();
+            stopWatch.Start();
+
             if (string.IsNullOrWhiteSpace(group.Description))
             {
                 group.Description = " ";
@@ -573,7 +586,12 @@ namespace HADES.Util
 
                 //Add members
                 addMemberToGroup(dn, members);
-
+                stopWatch.Stop();
+                TimeSpan ts = stopWatch.Elapsed;
+                string elapsedTime = string.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+                    ts.Hours, ts.Minutes, ts.Seconds,
+                    ts.Milliseconds / 10);
+                Console.WriteLine("Create Groupe" + elapsedTime);
                 return true;
             }
             catch (Exception e)
@@ -586,6 +604,8 @@ namespace HADES.Util
 
         public bool modifyGroup(string dnGroupToModify, GroupAD group, string ouGroup, Dictionary<UserAD, Action> members)
         {
+            System.Diagnostics.Stopwatch stopWatch = new();
+            stopWatch.Start();
             if (string.IsNullOrWhiteSpace(group.Description))
             {
                 group.Description = " ";
@@ -663,6 +683,13 @@ namespace HADES.Util
                 {
                     deleteMemberToGroup(dnGroupToModify, delete);
                 }
+                stopWatch.Stop();
+                TimeSpan ts = stopWatch.Elapsed;
+                string elapsedTime = string.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+                    ts.Hours, ts.Minutes, ts.Seconds,
+                    ts.Milliseconds / 10);
+                Console.WriteLine("Modify Groupe" + elapsedTime);
+
                 return true;
             }
             catch (Exception e)
