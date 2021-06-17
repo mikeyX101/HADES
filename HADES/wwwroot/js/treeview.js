@@ -1,7 +1,4 @@
-﻿const { Console, debug } = require("console");
-const { default: Alert } = require("../lib/bootstrap/js/src/alert");
-
-var selectedPath;
+﻿var selectedPath;
 var selectedPathForContent;
 var selectedNode;
 var selectedDepth;
@@ -78,13 +75,12 @@ function showTreeView(userObj, nodeName, expandNodesName) {
             selectedPath = "";
             selectedNode = data;
             selectedPath = "/" + selectedNode.text;
-          
             selectedDepth = 1;
             while (typeof selectedNode.parentId !== 'undefined') {
                 selectedNode = $('#mytreeview').treeview('getNode', selectedNode.parentId);
                 selectedPath = "/" + selectedNode.text + selectedPath;
                 selectedDepth++;
-            } 
+            }
             console.log(selectedPath);
 
             // backup selectedNode and expandedNodes
