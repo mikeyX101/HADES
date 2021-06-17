@@ -26,10 +26,14 @@ span.icon {
     white-space: nowrap;
     overflow: hidden;
 }
+.titleH3 {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
 
 /* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
-
 .table td, .table th {
     vertical-align: middle;
     padding: 1px;
