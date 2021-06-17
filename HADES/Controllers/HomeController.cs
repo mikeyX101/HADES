@@ -10,6 +10,7 @@ using Microsoft.Extensions.Localization;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace HADES.Controllers
@@ -272,8 +273,15 @@ namespace HADES.Controllers
 
                 if (ad.createGroup(selectedNodeName, group, members))
                 {
-
-                    string DN = FindDN(viewModel.SelectedPath, group.SamAccountName);
+                    string DN = null;
+                    Stopwatch sw = new Stopwatch();
+                    sw.Start();
+                    while (DN == null)
+                    {
+                        DN = FindDN(viewModel.SelectedPath, group.SamAccountName);
+                        if (sw.ElapsedMilliseconds > 5000) throw new TimeoutException();
+                    }
+                    
                     string guid = ad.getGroupGUIDByDn(DN);
 
                     List<string> selectedOwnersNames = DeserializeUsers(viewModel.SelectedOwners);
@@ -437,7 +445,7 @@ namespace HADES.Controllers
         private string FindDN(string selectedPath, string selectedContentName)
         {
             viewModel.ADRoot = ad.getRoot();
-            return viewModel.ADRoot.Find(e => e.Path == selectedPath && e.SamAccountName == selectedContentName).Dn;
+            return viewModel.ADRoot.Find(e => e.Path == selectedPath && e.SamAccountName == selectedContentName)?.Dn;
         }
 
         private List<RootDataInformation> SortADRoot(List<RootDataInformation> adRoot)
