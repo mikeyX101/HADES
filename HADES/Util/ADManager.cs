@@ -394,6 +394,10 @@ namespace HADES.Util
                 ts.Hours, ts.Minutes, ts.Seconds,
                 ts.Milliseconds / 10);
             Console.WriteLine("GetRoot " + elapsedTime);
+            foreach (var item in root)
+            {
+                Console.WriteLine(item);
+            }
 #endif
 
             return root;
