@@ -1,10 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <UserSecretsId>aspnet-HADES-06ADED60-2BAD-4A86-9F4C-87D3BC8AC4B3</UserSecretsId>
     <CopyRefAssembliesToPublishDirectory>false</CopyRefAssembliesToPublishDirectory>
     <NeutralLanguage>fr-CA</NeutralLanguage>
+    <Configurations>Debug;Release;Release-Profiling</Configurations>
   </PropertyGroup>
 
   <ItemGroup>

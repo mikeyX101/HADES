@@ -45,7 +45,7 @@ namespace HADES.Controllers
 
                         // File is deleted in OneTimeFileAttribute after the download is finished
                         result = File(fileBuffer, file.MimeType, file.PublicFileName);
-                        Serilog.Log.Information("File {PhysicalFile} with a type of {MimeType} has been served as {PublicFileName} by FileController", file.FilePath, file.MimeType, file.PublicFileName);
+                        Serilog.Log.Information("File {PhysicalFile} with a type of {MimeType} has been served as {PublicFileName} by FileController.", file.FilePath, file.MimeType, file.PublicFileName);
                     }
                     else
                     {
@@ -55,13 +55,13 @@ namespace HADES.Controllers
                 }
                 else
 				{
-                    Serilog.Log.Warning("A request to FileController ended because {Reason}", "a user tried to access a file only another user has access to");
+                    Serilog.Log.Warning("A request to FileController ended because {Reason}", "a user tried to access a file only another user has access to.");
                     result = Unauthorized();
                 }
             }
             else
 			{
-                Serilog.Log.Warning("A request to FileController ended because {Reason}", "of invalid data in the id query string");
+                Serilog.Log.Warning("A request to FileController ended because {Reason}", "of invalid data in the id query string.");
                 result = BadRequest();
             }
             
