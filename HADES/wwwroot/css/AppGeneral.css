@@ -11,10 +11,14 @@ span.icon {
     padding-right: .5em;
 }
 
-.table td, .table th {
+.tableHomeView td, .table th {
     vertical-align: middle;
-    padding: 8px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: 300px;
 }
+
 
 .treeview .list-group-item {
     padding: .15rem 1.25rem .15rem .5rem !important;
