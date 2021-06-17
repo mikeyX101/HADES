@@ -583,8 +583,7 @@ namespace HADES.Util
                 string dn = "CN=" + group.SamAccountName + "," + "OU=" + ouName + "," + ADSettingsCache.Ad.RootOu;
                 LdapEntry newEntry = new LdapEntry(dn, attributeSet);
                 //Add the entry to the directory
-                connection.Add(newEntry);
-              
+                connection.Add(newEntry, null as LdapResponseQueue).GetResponse();
 
                 EmailHelper.SendEmail(NotificationType.GroupCreate, this.getGroupInformation(dn));
 
