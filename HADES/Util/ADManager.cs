@@ -305,9 +305,10 @@ namespace HADES.Util
          ******************************************************/
         public List<RootDataInformation> getRoot()
         {
-
+#if RELEASE_PROFILING
             System.Diagnostics.Stopwatch stopWatch = new();
             stopWatch.Start();
+#endif
 
             List<RootDataInformation> root = new List<RootDataInformation>();
 
@@ -386,13 +387,14 @@ namespace HADES.Util
             }
 
             connection.Disconnect();
-
+#if RELEASE_PROFILING
             stopWatch.Stop();
             TimeSpan ts = stopWatch.Elapsed;
             string elapsedTime = string.Format("{0:00}:{1:00}:{2:00}.{3:00}",
                 ts.Hours, ts.Minutes, ts.Seconds,
                 ts.Milliseconds / 10);
             Console.WriteLine("GetRoot " + elapsedTime);
+#endif
 
             return root;
         }
@@ -545,8 +547,10 @@ namespace HADES.Util
          ******************************************************/
         public bool createGroup(string ouName, GroupAD group, List<UserAD> members)
         {
+#if RELEASE_PROFILING
             System.Diagnostics.Stopwatch stopWatch = new();
             stopWatch.Start();
+#endif
 
             if (string.IsNullOrWhiteSpace(group.Description))
             {
@@ -586,12 +590,7 @@ namespace HADES.Util
 
                 //Add members
                 addMemberToGroup(dn, members);
-                stopWatch.Stop();
-                TimeSpan ts = stopWatch.Elapsed;
-                string elapsedTime = string.Format("{0:00}:{1:00}:{2:00}.{3:00}",
-                    ts.Hours, ts.Minutes, ts.Seconds,
-                    ts.Milliseconds / 10);
-                Console.WriteLine("Create Groupe" + elapsedTime);
+
                 return true;
             }
             catch (Exception e)
@@ -600,12 +599,24 @@ namespace HADES.Util
                 connection.Disconnect();
                 return false;
             }
+            finally {
+#if RELEASE_PROFILING
+                stopWatch.Stop();
+                TimeSpan ts = stopWatch.Elapsed;
+                string elapsedTime = string.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+                    ts.Hours, ts.Minutes, ts.Seconds,
+                    ts.Milliseconds / 10);
+                Console.WriteLine("Create Groupe" + elapsedTime);
+#endif
+            }
         }
 
         public bool modifyGroup(string dnGroupToModify, GroupAD group, string ouGroup, Dictionary<UserAD, Action> members)
         {
+#if RELEASE_PROFILING
             System.Diagnostics.Stopwatch stopWatch = new();
             stopWatch.Start();
+#endif
             if (string.IsNullOrWhiteSpace(group.Description))
             {
                 group.Description = " ";
@@ -683,12 +694,6 @@ namespace HADES.Util
                 {
                     deleteMemberToGroup(dnGroupToModify, delete);
                 }
-                stopWatch.Stop();
-                TimeSpan ts = stopWatch.Elapsed;
-                string elapsedTime = string.Format("{0:00}:{1:00}:{2:00}.{3:00}",
-                    ts.Hours, ts.Minutes, ts.Seconds,
-                    ts.Milliseconds / 10);
-                Console.WriteLine("Modify Groupe" + elapsedTime);
 
                 return true;
             }
@@ -696,6 +701,17 @@ namespace HADES.Util
             {
                 Log.Warning(e, GenericErrorLogTemplate, "modifyGroup()");
                 return false;
+            }
+            finally {
+#if RELEASE_PROFILING
+                stopWatch.Stop();
+                TimeSpan ts = stopWatch.Elapsed;
+                string elapsedTime = string.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+                    ts.Hours, ts.Minutes, ts.Seconds,
+                    ts.Milliseconds / 10);
+                Console.WriteLine("Modify Groupe" + elapsedTime);
+#endif
+
             }
         }
 
