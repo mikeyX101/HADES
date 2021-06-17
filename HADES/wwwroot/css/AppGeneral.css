@@ -131,16 +131,6 @@ html {
     width: 100%;
 }
 
-.GroupModalBody {
-    min-height: 520px;
-}
-
-.modal-footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-}
-
 .docPane {
     padding: 5px;
 }
