@@ -9,7 +9,7 @@ using System.Globalization;
 
 namespace HADES.Util
 {
-    public enum Action
+	public enum Action
     {
         ADD,
         DELETE
@@ -482,7 +482,10 @@ namespace HADES.Util
 
         public bool createOU(string name)
         {
-
+#if RELEASE_PROFILING
+            System.Diagnostics.Stopwatch stopWatch = new();
+            stopWatch.Start();
+#endif
             LdapConnection connection = createConnection();
             try
             {
@@ -504,10 +507,25 @@ namespace HADES.Util
                 connection.Disconnect();
                 return false;
             }
+#if RELEASE_PROFILING
+            finally
+			{
+                stopWatch.Stop();
+                TimeSpan ts = stopWatch.Elapsed;
+                string elapsedTime = string.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+                    ts.Hours, ts.Minutes, ts.Seconds,
+                    ts.Milliseconds / 10);
+                Console.WriteLine("CreateOU " + elapsedTime);
+            }
+#endif
         }
 
         public bool renameOU(string dnOUToRename, string newName)
         {
+#if RELEASE_PROFILING
+            System.Diagnostics.Stopwatch stopWatch = new();
+            stopWatch.Start();
+#endif
             LdapConnection connection = createConnection();
             try
             {
@@ -523,10 +541,25 @@ namespace HADES.Util
                 Log.Warning(e, GenericErrorLogTemplate, "renameOU()");
                 return false;
             }
+#if RELEASE_PROFILING
+            finally
+            {
+                stopWatch.Stop();
+                TimeSpan ts = stopWatch.Elapsed;
+                string elapsedTime = string.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+                    ts.Hours, ts.Minutes, ts.Seconds,
+                    ts.Milliseconds / 10);
+                Console.WriteLine("RenameOU " + elapsedTime);
+            }
+#endif
         }
 
         public bool deleteOU(string dnOUToDelete)
         {
+#if RELEASE_PROFILING
+            System.Diagnostics.Stopwatch stopWatch = new();
+            stopWatch.Start();
+#endif
             LdapConnection connection = createConnection();
             try
             {
@@ -540,6 +573,17 @@ namespace HADES.Util
                 Log.Warning(e, GenericErrorLogTemplate, "deleteOU()");
                 return false;
             }
+#if RELEASE_PROFILING
+            finally
+            {
+                stopWatch.Stop();
+                TimeSpan ts = stopWatch.Elapsed;
+                string elapsedTime = string.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+                    ts.Hours, ts.Minutes, ts.Seconds,
+                    ts.Milliseconds / 10);
+                Console.WriteLine("DeleteOU " + elapsedTime);
+            }
+#endif
         }
 
         /*****************************************************
@@ -667,9 +711,8 @@ namespace HADES.Util
 
                 LdapModification[] mods = new LdapModification[modList.Count];
                 mods = modList.ToArray();
-                connection.Modify(dnGroupToModify, mods, null as LdapResponseQueue).GetResponse();
+                LdapResponseQueue queue = connection.Modify(dnGroupToModify, mods, null as LdapResponseQueue);
 
-                
 
                 List<UserAD> add = new List<UserAD>();
                 List<UserAD> delete = new List<UserAD>();
@@ -689,11 +732,18 @@ namespace HADES.Util
 
                 if (add.Count > 0)
                 {
-                    addMemberToGroup(dnGroupToModify, add,connection);
+                    addMemberToGroup(dnGroupToModify, add,connection, queue);
                 }
                 if (delete.Count > 0)
                 {
-                    deleteMemberToGroup(dnGroupToModify, delete,connection);
+                    deleteMemberToGroup(dnGroupToModify, delete,connection, queue);
+                }
+
+
+                while (queue.IsResponseReceived() || queue.MessageIDs.Length > 0)
+                {
+                    LdapMessage message = queue.GetResponse();
+                    Console.WriteLine(message);
                 }
 
                 return true;
@@ -719,11 +769,20 @@ namespace HADES.Util
 
         public bool deleteGroup(string dnGroupToDelete)
         {
+#if RELEASE_PROFILING
+            System.Diagnostics.Stopwatch stopWatch = new();
+            stopWatch.Start();
+#endif
             LdapConnection connection = createConnection();
             try
             {
                 EmailHelper.SendEmail(NotificationType.GroupDelete, this.getGroupInformation(dnGroupToDelete));
-                connection.Delete(dnGroupToDelete, null as LdapResponseQueue).GetResponse();
+                LdapResponseQueue queue = connection.Delete(dnGroupToDelete, null as LdapResponseQueue);
+                while(queue.IsResponseReceived() || queue.MessageIDs.Length > 0)
+				{
+                    LdapMessage message = queue.GetResponse();
+                    Console.WriteLine(message);
+				}
                 connection.Disconnect();
                 return true;
             }
@@ -733,6 +792,17 @@ namespace HADES.Util
                 Log.Warning(e, GenericErrorLogTemplate, "deleteGroup()");
                 return false;
             }
+#if RELEASE_PROFILING
+            finally
+            {
+                stopWatch.Stop();
+                TimeSpan ts = stopWatch.Elapsed;
+                string elapsedTime = string.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+                    ts.Hours, ts.Minutes, ts.Seconds,
+                    ts.Milliseconds / 10);
+                Console.WriteLine("DeleteGroup " + elapsedTime);
+            }
+#endif
         }
 
         public bool doesGroupExist(string GUID)
@@ -997,7 +1067,7 @@ namespace HADES.Util
             return users;
         }
 
-        public bool addMemberToGroup(string groupDn, List<UserAD> users, LdapConnection connectionAlreadyOpen)
+        public bool addMemberToGroup(string groupDn, List<UserAD> users, LdapConnection connectionAlreadyOpen, LdapResponseQueue queue = null)
         {
             LdapConnection connection;
             if (connectionAlreadyOpen == null)
@@ -1029,7 +1099,7 @@ namespace HADES.Util
                 mods = modList.ToArray();
 
                 //Modify the entry in the directory
-                connection.Modify(groupDn, mods, null as LdapResponseQueue).GetResponse();
+                connection.Modify(groupDn, mods, queue);
 
                 if (connectionAlreadyOpen == null)
                 {
@@ -1047,7 +1117,7 @@ namespace HADES.Util
             }
         }
 
-        public bool deleteMemberToGroup(string groupDn, List<UserAD> users, LdapConnection connectionAlreadyOpen)
+        public bool deleteMemberToGroup(string groupDn, List<UserAD> users, LdapConnection connectionAlreadyOpen, LdapResponseQueue queue = null)
         {
             LdapConnection connection;
             if (connectionAlreadyOpen == null)
@@ -1078,7 +1148,7 @@ namespace HADES.Util
                 mods = modList.ToArray();
 
                 //Modify the entry in the directory
-                connection.Modify(groupDn, mods, null as LdapResponseQueue).GetResponse();
+                connection.Modify(groupDn, mods, queue);
 
                 EmailHelper.SendEmail(NotificationType.MemberRemoval, this.getGroupInformation(groupDn), usersDeleted);
                 return true;
