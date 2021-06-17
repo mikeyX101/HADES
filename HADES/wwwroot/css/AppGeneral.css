@@ -27,9 +27,11 @@ span.icon {
     overflow: hidden;
 }
 .titleH3 {
-    text-overflow: ellipsis;
-    white-space: nowrap;
     overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 65%;
+    display: inline-block;
 }
 
 /* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
@@ -129,11 +131,6 @@ html {
     min-height: 520px;
 }
 
-.modal-footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-}
 
 .docPane {
     padding: 5px;
