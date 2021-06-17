@@ -584,12 +584,12 @@ namespace HADES.Util
                 LdapEntry newEntry = new LdapEntry(dn, attributeSet);
                 //Add the entry to the directory
                 connection.Add(newEntry);
-                connection.Disconnect();
+              
 
                 EmailHelper.SendEmail(NotificationType.GroupCreate, this.getGroupInformation(dn));
 
                 //Add members
-                addMemberToGroup(dn, members);
+                addMemberToGroup(dn, members,connection);
 
                 return true;
             }
@@ -600,6 +600,7 @@ namespace HADES.Util
                 return false;
             }
             finally {
+                connection.Disconnect();
 #if RELEASE_PROFILING
                 stopWatch.Stop();
                 TimeSpan ts = stopWatch.Elapsed;
@@ -629,9 +630,10 @@ namespace HADES.Util
             {
                 group.Notes = " ";
             }
+            LdapConnection connection = null;
             try
             {
-                LdapConnection connection = createConnection();
+                 connection = createConnection();
 
                 //Rename 
                 string newRdn = "CN=" + group.SamAccountName;
@@ -668,7 +670,7 @@ namespace HADES.Util
                 mods = modList.ToArray();
                 connection.Modify(dnGroupToModify, mods);
 
-                connection.Disconnect();
+                
 
                 List<UserAD> add = new List<UserAD>();
                 List<UserAD> delete = new List<UserAD>();
@@ -688,11 +690,11 @@ namespace HADES.Util
 
                 if (add.Count > 0)
                 {
-                    addMemberToGroup(dnGroupToModify, add);
+                    addMemberToGroup(dnGroupToModify, add,connection);
                 }
                 if (delete.Count > 0)
                 {
-                    deleteMemberToGroup(dnGroupToModify, delete);
+                    deleteMemberToGroup(dnGroupToModify, delete,connection);
                 }
 
                 return true;
@@ -703,6 +705,7 @@ namespace HADES.Util
                 return false;
             }
             finally {
+                connection.Disconnect();
 #if RELEASE_PROFILING
                 stopWatch.Stop();
                 TimeSpan ts = stopWatch.Elapsed;
@@ -995,9 +998,17 @@ namespace HADES.Util
             return users;
         }
 
-        public bool addMemberToGroup(string groupDn, List<UserAD> users)
+        public bool addMemberToGroup(string groupDn, List<UserAD> users, LdapConnection connectionAlreadyOpen)
         {
-            LdapConnection connection = createConnection();
+            LdapConnection connection;
+            if (connectionAlreadyOpen == null)
+            {
+                connection = createConnection();
+            }
+            else
+            {
+                connection = connectionAlreadyOpen;
+            }
             try
             {
                 string usersAdded = "";
@@ -1021,7 +1032,10 @@ namespace HADES.Util
                 //Modify the entry in the directory
                 connection.Modify(groupDn, mods);
 
-                connection.Disconnect();
+                if (connectionAlreadyOpen == null)
+                {
+                    connection.Disconnect();
+                }
 
                 EmailHelper.SendEmail(NotificationType.MemberAdd, this.getGroupInformation(groupDn), usersAdded);
                 return true;
@@ -1034,9 +1048,17 @@ namespace HADES.Util
             }
         }
 
-        public bool deleteMemberToGroup(string groupDn, List<UserAD> users)
+        public bool deleteMemberToGroup(string groupDn, List<UserAD> users, LdapConnection connectionAlreadyOpen)
         {
-            LdapConnection connection = createConnection();
+            LdapConnection connection;
+            if (connectionAlreadyOpen == null)
+            {
+                connection = createConnection();
+            }
+            else
+            {
+                connection = connectionAlreadyOpen;
+            }
             try
             {
                 List<LdapModification> modList = new List<LdapModification>();
@@ -1059,7 +1081,6 @@ namespace HADES.Util
                 //Modify the entry in the directory
                 connection.Modify(groupDn, mods);
 
-                connection.Disconnect();
                 EmailHelper.SendEmail(NotificationType.MemberRemoval, this.getGroupInformation(groupDn), usersDeleted);
                 return true;
             }
@@ -1068,6 +1089,13 @@ namespace HADES.Util
                 Log.Warning(e, GenericErrorLogTemplate, "deleteMemberToGroup()");
                 connection.Disconnect();
                 return false;
+            }
+            finally {
+
+                if (connectionAlreadyOpen == null)
+                {
+                    connection.Disconnect();
+                }
             }
         }
 
