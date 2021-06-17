@@ -50,7 +50,7 @@ function showTreeView(userObj, nodeName, expandNodesName) {
         setIcons();
 
         // expand previous expanded nodes
-        if (typeof expandedNodesName == 'undefined') {
+  /*      if (typeof expandedNodesName == 'undefined') {
             expandedNodesName = [];
         }
         else {
@@ -64,7 +64,7 @@ function showTreeView(userObj, nodeName, expandNodesName) {
             }]);
             expandedNodesId[i] = foundNodeName[0].nodeId;
             $('#mytreeview').treeview('expandNode', [expandedNodesId[i], { silent: true }]);
-        }
+        }*/
 
         // select selected node
         $('#mytreeview').treeview('selectNode', [foundNodes[0].nodeId, { silent: true }]);
