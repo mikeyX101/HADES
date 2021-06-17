@@ -193,7 +193,14 @@ namespace HADES.Controllers
             {
                 return RedirectToAction("MainView", "Home");
             }
-            var DN = FindDN(viewModel.SelectedPath, viewModel.SelectedContentName);
+            string DN = null;
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            while (DN == null)
+            {
+                DN = FindDN(viewModel.SelectedPath, viewModel.SelectedContentName);
+                if (sw.ElapsedMilliseconds > 5000) throw new TimeoutException();
+            }
             var split = viewModel.SelectedPath.Split('/');
             var selectedNodeName = split.Length == 2 ? split[1] : split[2];
             // Delete OU, an empty OU has split.Length == 2
@@ -228,7 +235,14 @@ namespace HADES.Controllers
             {
                 return RedirectToAction("MainView", "Home");
             }
-            var DN = FindDN(viewModel.SelectedPath, viewModel.SelectedContentName);
+            string DN = null;
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            while (DN == null)
+            {
+                DN = FindDN(viewModel.SelectedPath, viewModel.SelectedContentName);
+                if (sw.ElapsedMilliseconds > 5000) throw new TimeoutException();
+            }
             if (ModelState.IsValid)
             {
                 if (ad.renameOU(DN, viewModel.NewName))
@@ -336,7 +350,14 @@ namespace HADES.Controllers
             ApplicationDbContext db = new ApplicationDbContext();
 
             GroupAD group = viewModel.GroupAD;
-            string DN = FindDN(viewModel.SelectedPath, viewModel.OuGroup);
+            string DN = null;
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            while (DN == null)
+            {
+                DN = FindDN(viewModel.SelectedPath, viewModel.OuGroup);
+                if (sw.ElapsedMilliseconds > 5000) throw new TimeoutException();
+            }
             GroupAD oldgroup = ad.getGroupInformation(DN);
             string guid = ad.getGroupGUIDByDn(DN);
             Dictionary<UserAD, Util.Action> updatedGroupMembers = UpdatedGroupMembersKeyValueActions(viewModel);
