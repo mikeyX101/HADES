@@ -494,7 +494,7 @@ namespace HADES.Util
                 string dn = "OU=" + name + "," + ADSettingsCache.Ad.RootOu;
                 LdapEntry newEntry = new LdapEntry(dn, attributeSet);
                 //Add the entry to the directory
-                connection.Add(newEntry);
+                connection.Add(newEntry, null as LdapResponseQueue).GetResponse();
                 connection.Disconnect();
                 return true;
             }
@@ -513,7 +513,7 @@ namespace HADES.Util
             {
                 string newRdn = "OU=" + newName;
 
-                connection.Rename(dnOUToRename, newRdn, true);
+                connection.Rename(dnOUToRename, newRdn, true, null as LdapResponseQueue).GetResponse();
                 connection.Disconnect();
                 return true;
             }
@@ -530,7 +530,7 @@ namespace HADES.Util
             LdapConnection connection = createConnection();
             try
             {
-                connection.Delete(dnOUToDelete);
+                connection.Delete(dnOUToDelete, null as LdapResponseQueue).GetResponse();
                 connection.Disconnect();
                 return true;
             }
@@ -723,7 +723,7 @@ namespace HADES.Util
             try
             {
                 EmailHelper.SendEmail(NotificationType.GroupDelete, this.getGroupInformation(dnGroupToDelete));
-                connection.Delete(dnGroupToDelete);
+                connection.Delete(dnGroupToDelete, null as LdapResponseQueue).GetResponse();
                 connection.Disconnect();
                 return true;
             }
