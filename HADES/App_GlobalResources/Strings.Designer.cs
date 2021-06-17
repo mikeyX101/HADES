@@ -304,6 +304,15 @@ namespace HADES {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to L&apos;adresse courriel existe déjà.
+        /// </summary>
+        public static string EmailAddressAlreadyExists {
+            get {
+                return ResourceManager.GetString("EmailAddressAlreadyExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sauvegarde des informations non réalisée car il y a des courriels identiques.
         /// </summary>
         public static string EmailsNotUnique {

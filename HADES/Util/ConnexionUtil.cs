@@ -149,11 +149,11 @@ namespace HADES.Util
 
                 if (bool.Parse(user.Claims.Where(c => c.Type == "isDefault").FirstOrDefault().Value))
                 {
-                    return db.DefaultUser.Include(a=>a.Role).Include(a=> a.UserConfig).Where((a) => a.Id == id).FirstOrDefault();
+                    return db.DefaultUser.Include(a=>a.Role).Include(a=> a.UserConfig).ThenInclude(a=>a.Emails).Where((a) => a.Id == id).FirstOrDefault();
                 }
                 else
                 {
-                    return db.User.Include(a => a.Role).Include(a => a.UserConfig).Include(a=>a.OwnerGroupUsers).ThenInclude(a=>a.OwnerGroup).Where((a) => a.Id == id).FirstOrDefault();
+                    return db.User.Include(a => a.Role).Include(a => a.UserConfig).ThenInclude(a => a.Emails).Include(a=>a.OwnerGroupUsers).ThenInclude(a=>a.OwnerGroup).Where((a) => a.Id == id).FirstOrDefault();
                 }
 
             }

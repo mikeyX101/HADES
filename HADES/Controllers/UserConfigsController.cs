@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace HADES.Controllers
 {
-	public class UserConfigsController : LocalizedController<HomeController>
+    public class UserConfigsController : LocalizedController<HomeController>
     {
 
         public UserConfigsController(IStringLocalizer<HomeController> localizer) : base(localizer) { }
@@ -69,10 +69,20 @@ namespace HADES.Controllers
                 }
                 return RedirectToAction("UserConfig");
             }
-            else
+            viewModel.Languages = new List<SelectListItem>()
             {
-                return View(viewModel);
-            }
+                new SelectListItem {Text = Strings.French, Value = "fr-CA"},
+                new SelectListItem {Text = Strings.English, Value = "en-US"},
+               // new SelectListItem {Text = HADES.Strings.Spanish, Value = "es-US"}, // SUPPORT es-US
+               // new SelectListItem {Text = HADES.Strings.Portuguese, Value = "pt-BR"} // SUPPORT pt-BR
+            };
+            viewModel.Themes = new List<SelectListItem>()
+            {
+                new SelectListItem {Text = Strings.Dark, Value = "site"},
+                new SelectListItem {Text = Strings.Green, Value = "greenmint"},
+                new SelectListItem {Text = Strings.Light, Value = "white"}
+            };
+            return View(viewModel);
         }
 
         private bool AreEmailAddressesUnique(UserConfigViewModel viewModel)
@@ -93,25 +103,29 @@ namespace HADES.Controllers
         public async Task<IActionResult> CreateEmail([Bind("Id,Address,ExpirationDate,GroupCreate,GroupDelete,MemberAdd,MemberRemoval")] Email email)
         {
             UserConfigService service = new();
+            UserConfig userConfig = ConnexionUtil.CurrentUser(this.User).GetUserConfig();
+            if (userConfig.Emails != null && userConfig.Emails.Select(item => item.Address).Contains(email.Address))
+            {
+                ModelState.AddModelError("Address", HADES.Strings.EmailAddressAlreadyExists);
+            }
             if (ModelState.IsValid)
             {
-                email.UserConfigId = ConnexionUtil.CurrentUser(this.User).GetUserConfig().Id;
+                email.UserConfigId = userConfig.Id;
                 await service.AddEmail(email);
                 return RedirectToAction("UserConfig");
             }
             return View(email);
         }
 
-
         [Authorize]
         public async Task<IActionResult> EmailDelete(string id)
         {
             UserConfigService service = new();
             if (int.TryParse(id, out int emailId))
-			{
+            {
                 await service.DeleteEmail(emailId);
             }
-            
+
 
             return RedirectToAction("UserConfig");
         }
