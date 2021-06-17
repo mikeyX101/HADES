@@ -740,7 +740,7 @@ namespace HADES.Util
                 }
 
 
-                while (queue.IsResponseReceived() || queue.MessageIDs.Length > 0)
+                while (queue.MessageIDs.Length > 0)
                 {
                     LdapMessage message = queue.GetResponse();
                     Console.WriteLine(message);
