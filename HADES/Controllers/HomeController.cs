@@ -15,7 +15,7 @@ using System.Linq;
 
 namespace HADES.Controllers
 {
-    [ResponseCache(NoStore = true)]
+    [ResponseCache(Location = ResponseCacheLocation.None,NoStore = true)]
     public class HomeController : LocalizedController<HomeController>
     {
         private ADManager ad;

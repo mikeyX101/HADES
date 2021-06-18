@@ -19,6 +19,9 @@ span.icon {
     max-width: 300px;
 }
 
+.hidden {
+    display: none !important;
+}
 
 .treeview .list-group-item {
     padding: .15rem 1.25rem .15rem .5rem !important;

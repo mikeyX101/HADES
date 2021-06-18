@@ -285,4 +285,7 @@
   <data name="EmailAddressAlreadyExists" xml:space="preserve">
     <value>L'adresse courriel existe déjà</value>
   </data>
+  <data name="PleaseWait" xml:space="preserve">
+    <value>Veuillez patienter...</value>
+  </data>
 </root>

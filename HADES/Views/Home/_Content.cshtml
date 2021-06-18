@@ -1,6 +1,5 @@
 ﻿@model MainViewViewModel
 
-@{ HADES.Data.ApplicationDbContext tempdb = new(); }
 @{ IUser u = HADES.Util.ConnexionUtil.CurrentUser(Context.User); }
 
 
@@ -93,7 +92,7 @@
                             </span>
                         }
 
-                        <div class="modal fade" id="b@(i)" tabindex="-1" role="dialog" aria-labelledby="GroupCreateLbl"
+                        <div class="modal fade edit-modal" id="b@(i)" tabindex="-1" role="dialog" aria-labelledby="GroupCreateLbl"
                              aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered" role="document">
                                 <div class="modal-content">

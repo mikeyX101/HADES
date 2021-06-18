@@ -39,7 +39,7 @@
                     <div class="form-group row">
                         <label asp-for="@Model.GroupAD.SamAccountName" class="col-sm-2 col-form-label text-left">@Strings.Name</label>
                         <div class="col-sm-10">
-                            <input asp-for="@Model.GroupAD.SamAccountName" class="form-control" pattern='^[^/[\]:;|=+*?<>,"\\]*$' required>
+                            <input asp-for="@Model.GroupAD.SamAccountName" class="form-control sam-account-name" pattern='^[^/[\]:;|=+*?<>,"\\]*$' required>
                             <div class="invalid-tooltip">
                                 @HADES.Strings.InvalidCharacters
                             </div>
@@ -69,7 +69,7 @@
                     <div class="form-group row">
                         <label asp-for="@Model.GroupAD.Email" class="col-sm-2 col-form-label text-left">@Strings.Email</label>
                         <div class="col-sm-10">
-                            <input asp-for="@Model.GroupAD.Email" type="Email" class="form-control" id="Email" placeholder="@Strings.Email">
+                            <input asp-for="@Model.GroupAD.Email" type="Email" class="form-control email-field" id="Email" placeholder="@Strings.Email">
                             <div class="invalid-tooltip">
                                 @HADES.Strings.InvalidCharacters
                             </div>
@@ -81,7 +81,7 @@
                     <div class="form-group row">
                         <label asp-for="@Model.GroupAD.Email" class="col-sm-2 col-form-label text-left">@Strings.Email</label>
                         <div class="col-sm-10">
-                            <input asp-for="@Model.GroupAD.Email" type="Email" class="form-control" id="Email" placeholder="Email" readonly>
+                            <input asp-for="@Model.GroupAD.Email" type="Email" class="form-control email-field" id="Email" placeholder="Email" readonly>
                         </div>
                     </div>
                 }
@@ -144,7 +144,10 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button type="submit" class="btn btn-primary" id="btnSave">@Strings.OK</button>
+        <div class="edit-loading-indicator hidden">
+            <span><i class="fa fa-spinner fa-spin" style="font-size:24px"></i></span><span>@Strings.PleaseWait</span>
+        </div>
+        <button type="submit" class="btn btn-primary" id="btnEditSave">@Strings.OK</button>
         <button type="button" class="btn btn-danger" data-dismiss="modal">@Strings.Back</button>
     </div>
 </form>
@@ -154,6 +157,24 @@
         @Html.Raw("pureScriptSelect('#EditOwnersMultiSelect"+ i +"');");
     }
     pureScriptSelect('#EditMembersMultiSelect@(i)');
+
+    $("#btnEditSave").click(e => {
+        let samRegExp = /^[^/[\]:;|=+*?<>,"\\]*$/;
+        //https://www.emailregex.com/
+        let emailRegExp = /^(([^<>()\[\]\\.,;:\s@@"]+(\.[^<>()\[\]\\.,;:\s@@"]+)*)|(".+"))@@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+        let sam = $(".sam-account-name").val();
+        let email = $(".email-field").val();
+
+        if (sam != "" && samRegExp.test(sam) && (!email || email == "" || emailRegExp.test(email))) {
+            $(".edit-loading-indicator").removeClass("hidden");
+        }
+    });
+
+    $(".edit-modal").on("hidden.bs.modal", () => {
+        $(".edit-modal").off("hidden.bs.modal");
+        $(".edit-loading-indicator").addClass("hidden");
+    });
 </script>
 
 <script type="text/javascript" src="~/js/formValidation.js"></script>

@@ -108,6 +108,9 @@
                     </div>
                 </div>
                 <div class="modal-footer">
+                    <div id="createLoadingIndicator" class="hidden">
+                        <span><i class="fa fa-spinner fa-spin" style="font-size:24px"></i></span><span>@Strings.PleaseWait</span>
+                    </div>
                     <button type="submit" class="btn btn-primary" id="btnSave">@Strings.Create</button>
                     <button type="button" class="btn btn-danger" data-dismiss="modal">@Strings.Back</button>
                 </div>
@@ -119,4 +122,21 @@
 <script type="text/javascript">
     pureScriptSelect('#CreateMembersMultiSelect');
     pureScriptSelect('#CreateOwnersMultiSelect');
+
+    $("#btnSave").click(e => {
+        let samRegExp = /^[^/[\]:;|=+*?<>,"\\]*$/;
+        //https://www.emailregex.com/
+        let emailRegExp = /^(([^<>()\[\]\\.,;:\s@@"]+(\.[^<>()\[\]\\.,;:\s@@"]+)*)|(".+"))@@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+        let sam = $("#GroupAD_SamAccountName").val();
+        let email = $("#GroupAD_Email").val();
+
+        if (sam != "" && samRegExp.test(sam) && (!email || email == "" || emailRegExp.test(email))) {
+            $("#createLoadingIndicator").removeClass("hidden");
+        }
+    });
+
+    $("#GroupCreate").on("hidden.bs.modal", () => {
+        $("#createLoadingIndicator").addClass("hidden");
+    });
 </script>
