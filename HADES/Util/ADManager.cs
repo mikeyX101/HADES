@@ -1,4 +1,5 @@
-﻿using HADES.Services;
+﻿using HADES.Extensions;
+using HADES.Services;
 using HADES.Util.Exceptions;
 using HADES.Util.ModelAD;
 using Novell.Directory.Ldap;
@@ -497,7 +498,7 @@ namespace HADES.Util
                 string dn = "OU=" + name + "," + ADSettingsCache.Ad.RootOu;
                 LdapEntry newEntry = new LdapEntry(dn, attributeSet);
                 //Add the entry to the directory
-                connection.Add(newEntry, null as LdapResponseQueue).GetResponse();
+                connection.Add(newEntry, null as LdapResponseQueue).WaitForEmpty();
                 connection.Disconnect();
                 return true;
             }
@@ -531,7 +532,7 @@ namespace HADES.Util
             {
                 string newRdn = "OU=" + newName;
 
-                connection.Rename(dnOUToRename, newRdn, true, null as LdapResponseQueue).GetResponse();
+                connection.Rename(dnOUToRename, newRdn, true, null as LdapResponseQueue).WaitForEmpty();
                 connection.Disconnect();
                 return true;
             }
@@ -563,7 +564,7 @@ namespace HADES.Util
             LdapConnection connection = createConnection();
             try
             {
-                connection.Delete(dnOUToDelete, null as LdapResponseQueue).GetResponse();
+                connection.Delete(dnOUToDelete, null as LdapResponseQueue).WaitForEmpty();
                 connection.Disconnect();
                 return true;
             }
@@ -627,12 +628,14 @@ namespace HADES.Util
                 string dn = "CN=" + group.SamAccountName + "," + "OU=" + ouName + "," + ADSettingsCache.Ad.RootOu;
                 LdapEntry newEntry = new LdapEntry(dn, attributeSet);
                 //Add the entry to the directory
-                connection.Add(newEntry, null as LdapResponseQueue).GetResponse();
+                LdapResponseQueue queue = connection.Add(newEntry, null as LdapResponseQueue);
 
                 EmailHelper.SendEmail(NotificationType.GroupCreate, this.getGroupInformation(dn));
 
                 //Add members
-                addMemberToGroup(dn, members,connection);
+                addMemberToGroup(dn, members, connection, queue);
+
+                queue.WaitForEmpty();
 
                 return true;
             }
@@ -732,19 +735,14 @@ namespace HADES.Util
 
                 if (add.Count > 0)
                 {
-                    addMemberToGroup(dnGroupToModify, add,connection, queue);
+                    addMemberToGroup(dnGroupToModify, add, connection, queue);
                 }
                 if (delete.Count > 0)
                 {
-                    deleteMemberToGroup(dnGroupToModify, delete,connection, queue);
+                    deleteMemberToGroup(dnGroupToModify, delete, connection, queue);
                 }
 
-
-                while (queue.MessageIDs.Length > 0)
-                {
-                    LdapMessage message = queue.GetResponse();
-                    Console.WriteLine(message);
-                }
+                queue.WaitForEmpty();
 
                 return true;
             }
@@ -777,12 +775,7 @@ namespace HADES.Util
             try
             {
                 EmailHelper.SendEmail(NotificationType.GroupDelete, this.getGroupInformation(dnGroupToDelete));
-                LdapResponseQueue queue = connection.Delete(dnGroupToDelete, null as LdapResponseQueue);
-                while(queue.IsResponseReceived() || queue.MessageIDs.Length > 0)
-				{
-                    LdapMessage message = queue.GetResponse();
-                    Console.WriteLine(message);
-				}
+                connection.Delete(dnGroupToDelete, null as LdapResponseQueue).WaitForEmpty();
                 connection.Disconnect();
                 return true;
             }
@@ -968,7 +961,7 @@ namespace HADES.Util
             return groupsname;
         }
 
-        public List<String> GetGroupsDNforUser(string userDn, LdapConnection connectionAlreadyOpen)
+        public List<string> GetGroupsDNforUser(string userDn, LdapConnection connectionAlreadyOpen)
         {
             LdapConnection connection;
             if (connectionAlreadyOpen == null)
@@ -1098,8 +1091,15 @@ namespace HADES.Util
                 LdapModification[] mods = new LdapModification[modList.Count];
                 mods = modList.ToArray();
 
-                //Modify the entry in the directory
+                bool waitForQueue = queue == null;
+
+                // Modify the entry in the directory
                 connection.Modify(groupDn, mods, queue);
+
+                if (waitForQueue)
+				{
+                    queue.WaitForEmpty();
+				}
 
                 if (connectionAlreadyOpen == null)
                 {
@@ -1147,8 +1147,20 @@ namespace HADES.Util
                 LdapModification[] mods = new LdapModification[modList.Count];
                 mods = modList.ToArray();
 
+                bool waitForQueue = queue == null;
+
                 //Modify the entry in the directory
                 connection.Modify(groupDn, mods, queue);
+
+                if (waitForQueue)
+                {
+                    queue.WaitForEmpty();
+                }
+
+                if (connectionAlreadyOpen == null)
+                {
+                    connection.Disconnect();
+                }
 
                 EmailHelper.SendEmail(NotificationType.MemberRemoval, this.getGroupInformation(groupDn), usersDeleted);
                 return true;
@@ -1159,15 +1171,6 @@ namespace HADES.Util
                 connection.Disconnect();
                 return false;
             }
-            finally {
-
-                if (connectionAlreadyOpen == null)
-                {
-                    connection.Disconnect();
-                }
-            }
         }
-
-
     }
 }

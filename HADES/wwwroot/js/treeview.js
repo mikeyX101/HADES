@@ -81,7 +81,6 @@ function showTreeView(userObj, nodeName, expandNodesName) {
                 selectedPath = "/" + selectedNode.text + selectedPath;
                 selectedDepth++;
             }
-            console.log(selectedPath);
 
             // backup selectedNode and expandedNodes
             selectedNode = data;
