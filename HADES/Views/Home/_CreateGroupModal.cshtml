@@ -37,8 +37,8 @@
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
                             <div class="form-group row">
-                                <label asp-for="GroupAD.SamAccountName" class="col-sm-2 col-form-label">@Strings.Name</label>
-                                <div class="col-sm-10">
+                                <label asp-for="GroupAD.SamAccountName" class="col-sm-3 col-form-label">@Strings.Name</label>
+                                <div class="col-sm-9">
                                     <input asp-for="GroupAD.SamAccountName" class="form-control" placeholder="@Strings.Name" pattern='^[^/[\]:;|=+*?<>,"\\]*$' required>
                                     <div class="invalid-tooltip">
                                         @HADES.Strings.InvalidCharacters
@@ -46,14 +46,14 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label asp-for="GroupAD.Description" class="col-sm-2 col-form-label">@Strings.Description</label>
-                                <div class="col-sm-10">
+                                <label asp-for="GroupAD.Description" class="col-sm-3 col-form-label">@Strings.Description</label>
+                                <div class="col-sm-9">
                                     <input asp-for="GroupAD.Description" class="form-control" placeholder="@Strings.Description">
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label asp-for="GroupAD.Email" class="col-sm-2 col-form-label">@Strings.Email</label>
-                                <div class="col-sm-10">
+                                <label asp-for="GroupAD.Email" class="col-sm-3 col-form-label">@Strings.Email</label>
+                                <div class="col-sm-9">
                                     <input asp-for="GroupAD.Email" type="Email" class="form-control" id="Email" placeholder="@Strings.Email">
                                     <div class="invalid-tooltip">
                                         @HADES.Strings.email_Invalid_error
@@ -78,8 +78,8 @@
                             </script>
 
                             <div class="form-group row">
-                                <label asp-for="GroupAD.ExpirationDate" class="col-sm-2 col-form-label">@Strings.ExpirationDate</label>
-                                <div class="col-sm-10">
+                                <label asp-for="GroupAD.ExpirationDate" class="col-sm-3 col-form-label">@Strings.ExpirationDate</label>
+                                <div class="col-sm-9">
                                     <input asp-for="GroupAD.ExpirationDate" id="dateExp" class="form-control" type="text" value="" readonly />
                                 </div>
                             </div>

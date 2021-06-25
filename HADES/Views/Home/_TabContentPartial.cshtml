@@ -37,8 +37,8 @@
                 @if (u.GetRole().AdCrudAccess)
                 {
                     <div class="form-group row">
-                        <label asp-for="@Model.GroupAD.SamAccountName" class="col-sm-2 col-form-label text-left">@Strings.Name</label>
-                        <div class="col-sm-10">
+                        <label asp-for="@Model.GroupAD.SamAccountName" class="col-sm-3 col-form-label text-left">@Strings.Name</label>
+                        <div class="col-sm-9">
                             <input asp-for="@Model.GroupAD.SamAccountName" class="form-control sam-account-name" pattern='^[^/[\]:;|=+*?<>,"\\]*$' required>
                             <div class="invalid-tooltip">
                                 @HADES.Strings.InvalidCharacters
@@ -49,8 +49,8 @@
                 else
                 {
                     <div class="form-group row">
-                        <label asp-for="@Model.GroupAD.SamAccountName" class="col-sm-2 col-form-label text-left">@Strings.Name</label>
-                        <div class="col-sm-10">
+                        <label asp-for="@Model.GroupAD.SamAccountName" class="col-sm-3 col-form-label text-left">@Strings.Name</label>
+                        <div class="col-sm-9">
                             <input asp-for="@Model.GroupAD.SamAccountName" class="form-control" readonly>
                         </div>
                     </div>
@@ -58,8 +58,8 @@
 
 
                 <div class="form-group row">
-                    <label asp-for="@Model.GroupAD.Description" class="col-sm-2 col-form-label text-left">@Strings.Description</label>
-                    <div class="col-sm-10">
+                    <label asp-for="@Model.GroupAD.Description" class="col-sm-3 col-form-label text-left">@Strings.Description</label>
+                    <div class="col-sm-9">
                         <input asp-for="@Model.GroupAD.Description" class="form-control" placeholder="">
                     </div>
                 </div>
@@ -67,8 +67,8 @@
                 @if (u.GetRole().AdCrudAccess)
                 {
                     <div class="form-group row">
-                        <label asp-for="@Model.GroupAD.Email" class="col-sm-2 col-form-label text-left">@Strings.Email</label>
-                        <div class="col-sm-10">
+                        <label asp-for="@Model.GroupAD.Email" class="col-sm-3 col-form-label text-left">@Strings.Email</label>
+                        <div class="col-sm-9">
                             <input asp-for="@Model.GroupAD.Email" type="Email" class="form-control email-field" id="Email" placeholder="@Strings.Email">
                             <div class="invalid-tooltip">
                                 @HADES.Strings.InvalidCharacters
@@ -79,8 +79,8 @@
                 else
                 {
                     <div class="form-group row">
-                        <label asp-for="@Model.GroupAD.Email" class="col-sm-2 col-form-label text-left">@Strings.Email</label>
-                        <div class="col-sm-10">
+                        <label asp-for="@Model.GroupAD.Email" class="col-sm-3 col-form-label text-left">@Strings.Email</label>
+                        <div class="col-sm-9">
                             <input asp-for="@Model.GroupAD.Email" type="Email" class="form-control email-field" id="Email" placeholder="Email" readonly>
                         </div>
                     </div>
@@ -95,19 +95,24 @@
 
                     $("#datepickerExpIdb@(i)")
                         .val(dateExp.toISOString().substring(0, 10))
-                        @if (u.GetRole().AdCrudAccess)
-                        {
-                                Html.Raw(".datepicker({maxDate: nextYear,minDate: today,defaultDate: dateExp,dateFormat: 'yy-mm-dd',});");
-                        }
+                    @{
+                    string datePickerT = "";
+                    }
 
+                    @if (u.GetRole().AdCrudAccess)
+                        {
+                            datePickerT = ".datepicker({maxDate: nextYear,minDate: today,defaultDate: dateExp,dateFormat: 'yy-mm-dd',});";
+                            
+                        }
+                          @Html.Raw(datePickerT) 
 
                 </script>
 
 
 
                 <div class="form-group row">
-                    <label asp-for="@Model.GroupAD.ExpirationDate" class="col-sm-2 col-form-label text-left">@Strings.ExpirationDate</label>
-                    <div class="col-sm-10">
+                    <label asp-for="@Model.GroupAD.ExpirationDate" class="col-sm-3 col-form-label">@Strings.ExpirationDate</label>
+                    <div class="col-sm-9">
                         <input asp-for="@Model.GroupAD.ExpirationDate" id="datepickerExpIdb@(i)" class="form-control" type="text" value="" readonly />
                     </div>
                 </div>
